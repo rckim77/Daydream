@@ -41,6 +41,11 @@ class SearchViewController: UIViewController {
         searchController?.searchBar.placeholder = "e.g., Tokyo"
         searchController?.delegate = self
         
+        // filter autocomplete results by only showing cities
+        let autocompleteFilter = GMSAutocompleteFilter()
+        autocompleteFilter.type = .city
+        resultsViewController?.autocompleteFilter = autocompleteFilter
+        
         let yCoordinate = view.bounds.height
         
         searchBarView = UIView(frame: CGRect(x: 0, y: (yCoordinate / 2) - (searchBarViewHeight / 2), width: view.bounds.width, height: searchBarViewHeight))

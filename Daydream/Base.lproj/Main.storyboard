@@ -67,17 +67,18 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tokyo" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.75" translatesAutoresizingMaskIntoConstraints="NO" id="pmy-BK-jFt">
-                                <rect key="frame" x="16" y="52" width="284" height="43"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="36"/>
+                                <rect key="frame" x="16" y="68" width="287" height="43"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="36"/>
                                 <color key="textColor" red="0.45882352939999999" green="0.42352941179999998" blue="0.51372549020000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WRK-EC-lm4">
-                                <rect key="frame" x="308" y="58" width="48" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WRK-EC-lm4">
+                                <rect key="frame" x="311" y="77" width="48" height="25"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="48" id="Zez-dM-49l"/>
                                 </constraints>
-                                <state key="normal" title="Home"/>
+                                <color key="tintColor" red="0.45882352939999999" green="0.42352941179999998" blue="0.51372549020000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal" image="HomeCustomPurple"/>
                                 <connections>
                                     <action selector="homeBtnTapped:" destination="mAC-Ym-g6i" eventType="touchUpInside" id="toF-2b-2gK"/>
                                 </connections>
@@ -87,8 +88,8 @@
                         <constraints>
                             <constraint firstItem="WRK-EC-lm4" firstAttribute="leading" secondItem="pmy-BK-jFt" secondAttribute="trailing" constant="8" id="2hq-Sc-I3c"/>
                             <constraint firstItem="WRK-EC-lm4" firstAttribute="centerY" secondItem="pmy-BK-jFt" secondAttribute="centerY" id="qFj-J0-rQ9"/>
-                            <constraint firstItem="1tM-WJ-sOR" firstAttribute="trailing" secondItem="WRK-EC-lm4" secondAttribute="trailing" constant="19" id="qjI-og-jtI"/>
-                            <constraint firstItem="pmy-BK-jFt" firstAttribute="top" secondItem="1tM-WJ-sOR" secondAttribute="top" constant="8" id="sBK-cj-clE"/>
+                            <constraint firstItem="1tM-WJ-sOR" firstAttribute="trailing" secondItem="WRK-EC-lm4" secondAttribute="trailing" constant="16" id="qjI-og-jtI"/>
+                            <constraint firstItem="pmy-BK-jFt" firstAttribute="top" secondItem="1tM-WJ-sOR" secondAttribute="top" constant="24" id="sBK-cj-clE"/>
                             <constraint firstItem="pmy-BK-jFt" firstAttribute="leading" secondItem="1tM-WJ-sOR" secondAttribute="leading" constant="16" id="y6Z-jz-M2w"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="1tM-WJ-sOR"/>
@@ -102,4 +103,7 @@
             <point key="canvasLocation" x="904.79999999999995" y="132.26600985221674"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="HomeCustomPurple" width="28" height="25"/>
+    </resources>
 </document>

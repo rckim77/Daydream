@@ -8,12 +8,14 @@
 
 import UIKit
 import GooglePlaces
+import GoogleMaps
 
 class SearchDetailViewController: UIViewController {
 
     var resultsViewController: GMSAutocompleteResultsViewController?
     var searchController: UISearchController?
     var resultView: UITextView?
+    var mapView: GMSMapView?
     var placeData: GMSPlace?
     
     @IBOutlet weak var titleLabel: UILabel!
@@ -27,7 +29,7 @@ class SearchDetailViewController: UIViewController {
         addSearchController()
         
         if let place = placeData {
-            showMap(withCoordinates: place.coordinate)
+            showMap(withPlace: place)
             titleLabel.text = place.name
         } else {
             // show error screen
@@ -46,7 +48,12 @@ class SearchDetailViewController: UIViewController {
         searchController?.searchBar.searchBarStyle = .minimal
         searchController?.searchBar.placeholder = "e.g., Tokyo"
         
-        let subView = UIView(frame: CGRect(x: 0, y: 96.0, width: view.bounds.width, height: 45.0))
+        // filter autocomplete results by only showing cities
+        let autocompleteFilter = GMSAutocompleteFilter()
+        autocompleteFilter.type = .city
+        resultsViewController?.autocompleteFilter = autocompleteFilter
+        
+        let subView = UIView(frame: CGRect(x: 0, y: 128.0, width: view.bounds.width, height: 45.0))
         subView.addSubview((searchController?.searchBar)!)
         view.addSubview(subView)
         searchController?.searchBar.sizeToFit()
@@ -56,8 +63,26 @@ class SearchDetailViewController: UIViewController {
         definesPresentationContext = true
     }
     
-    private func showMap(withCoordinates coordinate: CLLocationCoordinate2D) {
+    private func showMap(withPlace place: GMSPlace) {
         
+        mapView?.removeFromSuperview()
+        
+        let camera = GMSCameraPosition.camera(withLatitude: place.coordinate.latitude, longitude: place.coordinate.longitude, zoom: 14.0)
+        mapView = GMSMapView.map(withFrame: CGRect(x: 0, y: 220, width: view.bounds.width, height: 280), camera: camera)
+        view.addSubview(mapView!)
+        
+        // Creates a marker in the center of the map.
+        let marker = GMSMarker()
+        marker.position = CLLocationCoordinate2D(latitude: place.coordinate.latitude, longitude: place.coordinate.longitude)
+        marker.title = place.name
+        marker.snippet = place.formattedAddress
+        marker.map = mapView!
+        
+    }
+    
+    private func updateUI(withPlace place: GMSPlace) {
+        titleLabel.text = place.name
+        showMap(withPlace: place)
     }
 }
 
@@ -66,11 +91,13 @@ extension SearchDetailViewController: GMSAutocompleteResultsViewControllerDelega
     // Handle user's selection
     func resultsController(_ resultsController: GMSAutocompleteResultsViewController,
                            didAutocompleteWith place: GMSPlace) {
-        searchController?.isActive = false
-        // Do something with the selected place.
-        print("Place name: \(place.name)")
-        print("Place address: \(place.formattedAddress)")
-        print("Place attributions: \(place.attributions)")
+        
+        searchController?.searchBar.text = nil // reset to search bar text
+        
+        dismiss(animated: true, completion: {
+            self.placeData = place
+            self.updateUI(withPlace: place)
+        })
     }
     
     func resultsController(_ resultsController: GMSAutocompleteResultsViewController,

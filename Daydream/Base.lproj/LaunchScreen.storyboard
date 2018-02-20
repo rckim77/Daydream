@@ -18,8 +18,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="lights" translatesAutoresizingMaskIntoConstraints="NO" id="yJf-vz-hyq">
+                                <rect key="frame" x="127.66666666666669" y="346.33333333333331" width="120" height="120"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="120" id="nPl-bP-fm6"/>
+                                    <constraint firstAttribute="height" constant="120" id="uXW-9e-Nbw"/>
+                                </constraints>
+                            </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Daydream" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aUZ-vs-fmI">
-                                <rect key="frame" x="82.666666666666671" y="377.33333333333331" width="209.66666666666663" height="57.333333333333314"/>
+                                <rect key="frame" x="82.999999999999986" y="246.00000000000003" width="209.66666666666663" height="57.333333333333343"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="48"/>
                                 <color key="textColor" red="0.45882352941176469" green="0.42352941176470588" blue="0.51372549019607838" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -28,7 +35,9 @@
                         <color key="backgroundColor" red="0.72549019607843135" green="0.88235294117647056" blue="0.86274509803921573" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="aUZ-vs-fmI" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="8Qu-ib-pVP"/>
-                            <constraint firstItem="aUZ-vs-fmI" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="Chj-MR-YmY"/>
+                            <constraint firstItem="yJf-vz-hyq" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="H1Z-xL-U8m"/>
+                            <constraint firstItem="yJf-vz-hyq" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="O1d-RF-hFh"/>
+                            <constraint firstItem="yJf-vz-hyq" firstAttribute="top" secondItem="aUZ-vs-fmI" secondAttribute="bottom" constant="43" id="kbc-8t-3vD"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -38,4 +47,7 @@
             <point key="canvasLocation" x="52" y="374.6305418719212"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="lights" width="189" height="189"/>
+    </resources>
 </document>
