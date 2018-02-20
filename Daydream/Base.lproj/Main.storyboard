@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina5_9" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Search View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="SearchViewController" customModule="Daydream" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Where do you want to go?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JHi-Ty-WLR">
+                                <rect key="frame" x="12" y="204" width="351" height="86"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="36"/>
+                                <color key="textColor" red="0.45882352939999999" green="0.42352941179999998" blue="0.51372549020000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="0.72549019609999998" green="0.88235294119999996" blue="0.86274509799999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="JHi-Ty-WLR" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="12" id="TBw-zr-FEF"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="JHi-Ty-WLR" secondAttribute="trailing" constant="12" id="Uja-pT-Azc"/>
+                            <constraint firstItem="JHi-Ty-WLR" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="160" id="uaT-q1-ITf"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                    </view>
+                    <connections>
+                        <outlet property="searchDisplayController" destination="3QI-pJ-GPe" id="vse-jb-lwP"/>
+                        <segue destination="mAC-Ym-g6i" kind="presentation" identifier="toSearchDetailVCSegue" id="0Kk-Mo-0ud"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <searchDisplayController id="49S-dF-W2l">
+                    <connections>
+                        <outlet property="delegate" destination="BYZ-38-t0r" id="ErZ-FO-jP3"/>
+                        <outlet property="searchContentsController" destination="BYZ-38-t0r" id="VS3-LZ-O28"/>
+                        <outlet property="searchResultsDataSource" destination="BYZ-38-t0r" id="tRe-S8-w7J"/>
+                        <outlet property="searchResultsDelegate" destination="BYZ-38-t0r" id="3vX-YB-2zi"/>
+                    </connections>
+                </searchDisplayController>
+                <searchDisplayController id="3QI-pJ-GPe">
+                    <connections>
+                        <outlet property="delegate" destination="BYZ-38-t0r" id="FbW-uv-itq"/>
+                        <outlet property="searchContentsController" destination="BYZ-38-t0r" id="raN-xN-drU"/>
+                        <outlet property="searchResultsDataSource" destination="BYZ-38-t0r" id="mMu-6l-KkE"/>
+                        <outlet property="searchResultsDelegate" destination="BYZ-38-t0r" id="wh0-Ns-IJq"/>
+                    </connections>
+                </searchDisplayController>
+            </objects>
+            <point key="canvasLocation" x="140" y="133.00492610837438"/>
+        </scene>
+        <!--Search Detail View Controller-->
+        <scene sceneID="Zbz-uR-xUS">
+            <objects>
+                <viewController id="mAC-Ym-g6i" customClass="SearchDetailViewController" customModule="Daydream" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="ngt-Nd-jYB">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tokyo" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.75" translatesAutoresizingMaskIntoConstraints="NO" id="pmy-BK-jFt">
+                                <rect key="frame" x="16" y="52" width="284" height="43"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="36"/>
+                                <color key="textColor" red="0.45882352939999999" green="0.42352941179999998" blue="0.51372549020000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WRK-EC-lm4">
+                                <rect key="frame" x="308" y="58" width="48" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="48" id="Zez-dM-49l"/>
+                                </constraints>
+                                <state key="normal" title="Home"/>
+                                <connections>
+                                    <action selector="homeBtnTapped:" destination="mAC-Ym-g6i" eventType="touchUpInside" id="toF-2b-2gK"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="0.72549019609999998" green="0.88235294119999996" blue="0.86274509799999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="WRK-EC-lm4" firstAttribute="leading" secondItem="pmy-BK-jFt" secondAttribute="trailing" constant="8" id="2hq-Sc-I3c"/>
+                            <constraint firstItem="WRK-EC-lm4" firstAttribute="centerY" secondItem="pmy-BK-jFt" secondAttribute="centerY" id="qFj-J0-rQ9"/>
+                            <constraint firstItem="1tM-WJ-sOR" firstAttribute="trailing" secondItem="WRK-EC-lm4" secondAttribute="trailing" constant="19" id="qjI-og-jtI"/>
+                            <constraint firstItem="pmy-BK-jFt" firstAttribute="top" secondItem="1tM-WJ-sOR" secondAttribute="top" constant="8" id="sBK-cj-clE"/>
+                            <constraint firstItem="pmy-BK-jFt" firstAttribute="leading" secondItem="1tM-WJ-sOR" secondAttribute="leading" constant="16" id="y6Z-jz-M2w"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="1tM-WJ-sOR"/>
+                    </view>
+                    <connections>
+                        <outlet property="titleLabel" destination="pmy-BK-jFt" id="R44-PT-FbE"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hOa-Hv-SgJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="904.79999999999995" y="132.26600985221674"/>
+        </scene>
+    </scenes>
+</document>
