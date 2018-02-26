@@ -13,6 +13,8 @@
 		94380ACD203BAE1D00684863 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 94380ACB203BAE1D00684863 /* Main.storyboard */; };
 		94380ACF203BAE1D00684863 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 94380ACE203BAE1D00684863 /* Assets.xcassets */; };
 		94380AD2203BAE1D00684863 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 94380AD0203BAE1D00684863 /* LaunchScreen.storyboard */; };
+		947EC6522043F28F004A911D /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 947EC6512043F28F004A911D /* Extensions.swift */; };
+		947EC6542043F5B2004A911D /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 947EC6532043F5B2004A911D /* Color.swift */; };
 		949630BA203BCBBD007139CA /* SearchDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949630B9203BCBBD007139CA /* SearchDetailViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -27,6 +29,8 @@
 		94380ACE203BAE1D00684863 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		94380AD1203BAE1D00684863 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		94380AD3203BAE1D00684863 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		947EC6512043F28F004A911D /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		947EC6532043F5B2004A911D /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		949630B9203BCBBD007139CA /* SearchDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDetailViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -74,6 +78,8 @@
 				94380AC7203BAE1D00684863 /* AppDelegate.swift */,
 				94380AC9203BAE1D00684863 /* SearchViewController.swift */,
 				949630B9203BCBBD007139CA /* SearchDetailViewController.swift */,
+				947EC6512043F28F004A911D /* Extensions.swift */,
+				947EC6532043F5B2004A911D /* Color.swift */,
 				94380ACB203BAE1D00684863 /* Main.storyboard */,
 				94380ACE203BAE1D00684863 /* Assets.xcassets */,
 				94380AD0203BAE1D00684863 /* LaunchScreen.storyboard */,
@@ -226,8 +232,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				94380ACA203BAE1D00684863 /* SearchViewController.swift in Sources */,
+				947EC6542043F5B2004A911D /* Color.swift in Sources */,
 				949630BA203BCBBD007139CA /* SearchDetailViewController.swift in Sources */,
 				94380AC8203BAE1D00684863 /* AppDelegate.swift in Sources */,
+				947EC6522043F28F004A911D /* Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

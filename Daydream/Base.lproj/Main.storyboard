@@ -22,12 +22,12 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Where do you want to go?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JHi-Ty-WLR">
-                                <rect key="frame" x="12" y="204" width="351" height="88"/>
+                                <rect key="frame" x="12" y="204" width="351" height="87"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="36"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
-                                <color key="shadowColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <size key="shadowOffset" width="0.0" height="2"/>
+                                <color key="shadowColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <size key="shadowOffset" width="0.0" height="1"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" red="0.72549019609999998" green="0.88235294119999996" blue="0.86274509799999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -76,31 +76,36 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="NX7-bA-oV6">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                            </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tokyo" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.75" translatesAutoresizingMaskIntoConstraints="NO" id="pmy-BK-jFt">
-                                <rect key="frame" x="16" y="68" width="287" height="43"/>
+                                <rect key="frame" x="16" y="68" width="287" height="44"/>
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="36"/>
-                                <color key="textColor" red="0.45882352939999999" green="0.42352941179999998" blue="0.51372549020000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
+                                <color key="shadowColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <size key="shadowOffset" width="0.0" height="1"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WRK-EC-lm4">
-                                <rect key="frame" x="311" y="77" width="48" height="25"/>
+                                <rect key="frame" x="311" y="76.666666666666671" width="48" height="27"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="48" id="Zez-dM-49l"/>
                                 </constraints>
                                 <color key="tintColor" red="0.45882352939999999" green="0.42352941179999998" blue="0.51372549020000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <state key="normal" image="HomeCustomPurple"/>
+                                <state key="normal" image="homeWhiteShadow"/>
                                 <connections>
                                     <action selector="homeBtnTapped:" destination="mAC-Ym-g6i" eventType="touchUpInside" id="toF-2b-2gK"/>
                                 </connections>
                             </button>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NX7-bA-oV6">
-                                <rect key="frame" x="0.0" y="164" width="375" height="255"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="0.72549019609999998" green="0.88235294119999996" blue="0.86274509799999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="WRK-EC-lm4" firstAttribute="leading" secondItem="pmy-BK-jFt" secondAttribute="trailing" constant="8" id="2hq-Sc-I3c"/>
+                            <constraint firstAttribute="bottom" secondItem="NX7-bA-oV6" secondAttribute="bottom" id="D6x-Xs-oES"/>
+                            <constraint firstItem="NX7-bA-oV6" firstAttribute="trailing" secondItem="1tM-WJ-sOR" secondAttribute="trailing" id="EGj-lD-O7M"/>
+                            <constraint firstItem="NX7-bA-oV6" firstAttribute="leading" secondItem="ngt-Nd-jYB" secondAttribute="leading" id="NuE-9z-ofD"/>
+                            <constraint firstItem="NX7-bA-oV6" firstAttribute="top" secondItem="ngt-Nd-jYB" secondAttribute="top" id="aTE-cH-bvu"/>
                             <constraint firstItem="WRK-EC-lm4" firstAttribute="centerY" secondItem="pmy-BK-jFt" secondAttribute="centerY" id="qFj-J0-rQ9"/>
                             <constraint firstItem="1tM-WJ-sOR" firstAttribute="trailing" secondItem="WRK-EC-lm4" secondAttribute="trailing" constant="16" id="qjI-og-jtI"/>
                             <constraint firstItem="pmy-BK-jFt" firstAttribute="top" secondItem="1tM-WJ-sOR" secondAttribute="top" constant="24" id="sBK-cj-clE"/>
@@ -109,6 +114,7 @@
                         <viewLayoutGuide key="safeArea" id="1tM-WJ-sOR"/>
                     </view>
                     <connections>
+                        <outlet property="placeImageView" destination="NX7-bA-oV6" id="dS6-Yy-Ut3"/>
                         <outlet property="titleLabel" destination="pmy-BK-jFt" id="R44-PT-FbE"/>
                     </connections>
                 </viewController>
@@ -118,7 +124,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="HomeCustomPurple" width="28" height="25"/>
+        <image name="homeWhiteShadow" width="30" height="27"/>
         <image name="sunriseJungle" width="2246" height="3644"/>
     </resources>
 </document>

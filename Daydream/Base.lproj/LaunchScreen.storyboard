@@ -33,8 +33,8 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="48"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
-                                <color key="shadowColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <size key="shadowOffset" width="0.0" height="2"/>
+                                <color key="shadowColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <size key="shadowOffset" width="0.0" height="1"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" red="0.72549019607843135" green="0.88235294117647056" blue="0.86274509803921573" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

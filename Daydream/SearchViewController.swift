@@ -25,12 +25,11 @@ class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        fadeInTitle()
-        
         resultsViewController = GMSAutocompleteResultsViewController()
         resultsViewController?.delegate = self
         
         addSearchController()
+        fadeInTitle()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -51,27 +50,19 @@ class SearchViewController: UIViewController {
         searchController = UISearchController(searchResultsController: resultsViewController)
         searchController?.searchResultsUpdater = resultsViewController
         searchController?.searchBar.searchBarStyle = .minimal
-        
-        // make search icon, placeholder text, search text, and cancel button all white
-        let cancelBtnAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
-        UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes(cancelBtnAttributes, for: .normal)
-        
-        searchController?.searchBar.setImage(#imageLiteral(resourceName: "searchIconWhite"), for: .search, state: .normal)
-        let searchBarTextField = searchController?.searchBar.value(forKey: "searchField") as? UITextField
-        searchBarTextField?.textColor = .white
-        let placeholderTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
-        searchBarTextField?.attributedPlaceholder = NSAttributedString(string: "e.g., Tokyo", attributes: placeholderTextAttributes)
-        
+        searchController?.setStyle()
         searchController?.delegate = self
         
-        // filter autocomplete results by only showing cities
+        // filter autocomplete results by only showing cities and set styling
         let autocompleteFilter = GMSAutocompleteFilter()
         autocompleteFilter.type = .city
         resultsViewController?.autocompleteFilter = autocompleteFilter
+        resultsViewController?.setStyle()
         
         let yCoordinate = view.bounds.height
         
         searchBarView = UIView(frame: CGRect(x: 0, y: (yCoordinate / 2) - (searchBarViewHeight / 2), width: view.bounds.width, height: searchBarViewHeight))
+        searchBarView.alpha = 0
         searchBarView.addSubview((searchController?.searchBar)!)
         view.addSubview(searchBarView)
         searchController?.searchBar.sizeToFit()
@@ -79,6 +70,10 @@ class SearchViewController: UIViewController {
         // When UISearchController presents the results view, present it in
         // this view controller, not one further up the chain.
         definesPresentationContext = true
+        
+        UIView.animate(withDuration: 0.8, delay: 0.3, options: .curveEaseInOut, animations: {
+            self.searchBarView.alpha = 1
+        }, completion: nil)
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -128,6 +123,7 @@ extension SearchViewController: UISearchControllerDelegate {
     func willPresentSearchController(_ searchController: UISearchController) {
         UIView.animate(withDuration: 0.3, animations: {
             self.searchBarView.frame.origin.y = 65.0
+            self.titleLabel.alpha = 0
         })
     }
     
@@ -135,6 +131,7 @@ extension SearchViewController: UISearchControllerDelegate {
         UIView.animate(withDuration: 0.3, animations: {
             let yCoordinate = self.view.bounds.height
             self.searchBarView.frame.origin.y = (yCoordinate / 2) - (self.searchBarViewHeight / 2)
+            self.titleLabel.alpha = 1
         })
     }
     

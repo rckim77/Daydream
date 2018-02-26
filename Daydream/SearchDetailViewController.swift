@@ -19,6 +19,7 @@ class SearchDetailViewController: UIViewController {
     var placeData: GMSPlace?
     
     @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var placeImageView: UIImageView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,7 +30,7 @@ class SearchDetailViewController: UIViewController {
         addSearchController()
         
         if let place = placeData {
-            showMap(withPlace: place)
+//            showMap(withPlace: place)
             titleLabel.text = place.name
         } else {
             // show error screen
@@ -43,15 +44,17 @@ class SearchDetailViewController: UIViewController {
     
     // MARK: - Search
     private func addSearchController() {
+        
         searchController = UISearchController(searchResultsController: resultsViewController)
         searchController?.searchResultsUpdater = resultsViewController
         searchController?.searchBar.searchBarStyle = .minimal
-        searchController?.searchBar.placeholder = "e.g., Tokyo"
+        searchController?.setStyle()
         
-        // filter autocomplete results by only showing cities
+        // filter autocomplete results by only showing cities and set styling
         let autocompleteFilter = GMSAutocompleteFilter()
         autocompleteFilter.type = .city
         resultsViewController?.autocompleteFilter = autocompleteFilter
+        resultsViewController?.setStyle()
         
         let subView = UIView(frame: CGRect(x: 0, y: 128.0, width: view.bounds.width, height: 45.0))
         subView.addSubview((searchController?.searchBar)!)
@@ -82,7 +85,7 @@ class SearchDetailViewController: UIViewController {
     
     private func updateUI(withPlace place: GMSPlace) {
         titleLabel.text = place.name
-        showMap(withPlace: place)
+//        showMap(withPlace: place)
     }
 }
 
