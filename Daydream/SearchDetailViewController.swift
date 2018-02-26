@@ -32,6 +32,10 @@ class SearchDetailViewController: UIViewController {
         if let place = placeData {
 //            showMap(withPlace: place)
             titleLabel.text = place.name
+            loadPhotoForPlace(placeId: place.placeID, completion: { photo in
+                self.placeImageView.image = photo
+                self.placeImageView.contentMode = .scaleAspectFill
+            })
         } else {
             // show error screen
         }
@@ -85,7 +89,33 @@ class SearchDetailViewController: UIViewController {
     
     private func updateUI(withPlace place: GMSPlace) {
         titleLabel.text = place.name
+        loadPhotoForPlace(placeId: place.placeID) { photo in
+            self.placeImageView.image = photo
+            self.placeImageView.contentMode = .scaleAspectFill
+        }
 //        showMap(withPlace: place)
+    }
+    
+    private func loadPhotoForPlace(placeId: String, completion: @escaping(_ photo: UIImage?) -> Void) {
+        GMSPlacesClient.shared().lookUpPhotos(forPlaceID: placeId) { (photos, error) in
+            if let error = error {
+                // TODO: handle error
+                print("Error: \(error.localizedDescription)")
+                completion(nil)
+            } else {
+                if let firstPhoto = photos?.results.first {
+                    GMSPlacesClient.shared().loadPlacePhoto(firstPhoto, callback: { (photo, error) in
+                        if let error = error {
+                            // TODO: handle error
+                            print("Error: \(error.localizedDescription)")
+                            completion(nil)
+                        } else {
+                            completion(photo)
+                        }
+                    })
+                }
+            }
+        }
     }
 }
 
