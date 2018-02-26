@@ -8,6 +8,7 @@
 
 import UIKit
 import GooglePlaces
+import MBProgressHUD
 
 class SearchViewController: UIViewController {
     
@@ -19,8 +20,12 @@ class SearchViewController: UIViewController {
     
     var placeData: GMSPlace?
 
+    @IBOutlet weak var titleLabel: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        fadeInTitle()
         
         resultsViewController = GMSAutocompleteResultsViewController()
         resultsViewController?.delegate = self
@@ -34,11 +39,29 @@ class SearchViewController: UIViewController {
         searchBarView.frame.origin.y = (yCoordinate / 2) - (searchBarViewHeight / 2)
     }
     
+    private func fadeInTitle() {
+        titleLabel.alpha = 0
+        
+        UIView.animate(withDuration: 0.8, delay: 0.3, options: .curveEaseInOut, animations: {
+            self.titleLabel.alpha = 1
+        }, completion: nil)
+    }
+    
     private func addSearchController() {
         searchController = UISearchController(searchResultsController: resultsViewController)
         searchController?.searchResultsUpdater = resultsViewController
         searchController?.searchBar.searchBarStyle = .minimal
-        searchController?.searchBar.placeholder = "e.g., Tokyo"
+        
+        // make search icon, placeholder text, search text, and cancel button all white
+        let cancelBtnAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
+        UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes(cancelBtnAttributes, for: .normal)
+        
+        searchController?.searchBar.setImage(#imageLiteral(resourceName: "searchIconWhite"), for: .search, state: .normal)
+        let searchBarTextField = searchController?.searchBar.value(forKey: "searchField") as? UITextField
+        searchBarTextField?.textColor = .white
+        let placeholderTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
+        searchBarTextField?.attributedPlaceholder = NSAttributedString(string: "e.g., Tokyo", attributes: placeholderTextAttributes)
+        
         searchController?.delegate = self
         
         // filter autocomplete results by only showing cities

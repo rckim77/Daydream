@@ -8,5 +8,5 @@ target 'Daydream' do
   # Pods for Daydream
   pod 'GooglePlaces'
   pod 'GoogleMaps'
-
+  pod 'MBProgressHUD', '~> 1.1.0'
 end
