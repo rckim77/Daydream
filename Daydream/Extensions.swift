@@ -51,8 +51,8 @@ extension UISearchController {
         // style search icon
         searchBar.setImage(#imageLiteral(resourceName: "searchIconWhite"), for: .search, state: .normal)
         
-        // TODO: replace clear text icon with white version
-//        searchBar.setImage(#imageLiteral(resourceName: "searchIconWhite"), for: .clear, state: .normal)
+        // style clear text icon
+        searchBar.setImage(#imageLiteral(resourceName: "clearIcon"), for: .clear, state: .normal)
     }
 }
 
