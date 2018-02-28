@@ -20,6 +20,7 @@ class SearchDetailViewController: UIViewController {
     
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var placeImageView: UIImageView!
+    @IBOutlet weak var placeCardsTableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,6 +29,12 @@ class SearchDetailViewController: UIViewController {
         resultsViewController?.delegate = self
         
         addSearchController()
+        
+        placeCardsTableView.dataSource = self
+        placeCardsTableView.delegate = self
+        
+        // remove bottom empty cells for table view
+        placeCardsTableView.tableFooterView = UIView()
         
         if let place = placeData {
 //            showMap(withPlace: place)
@@ -116,6 +123,35 @@ class SearchDetailViewController: UIViewController {
                 }
             }
         }
+    }
+}
+
+extension SearchDetailViewController: UITableViewDataSource, UITableViewDelegate {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 172
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if let cell = tableView.dequeueReusableCell(withIdentifier: "mapCardCell", for: indexPath) as? MapCardCell {
+            
+            cell.place = placeData
+            
+            return cell
+        } else {
+            return UITableViewCell()
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("tapped a row!")
     }
 }
 
