@@ -110,11 +110,8 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BOs-hL-CLp" customClass="DesignableView" customModule="Daydream" customModuleProvider="target">
-                                                    <rect key="frame" x="24" y="16" width="327" height="139.66666666666666"/>
+                                                    <rect key="frame" x="16" y="8" width="343" height="156"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="140" id="EkB-FS-dIc"/>
-                                                    </constraints>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="color" keyPath="shadowColor">
                                                             <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -135,15 +132,15 @@
                                                 </view>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="BOs-hL-CLp" firstAttribute="top" secondItem="Cew-so-fED" secondAttribute="top" constant="16" id="H1H-Hp-bIc"/>
-                                                <constraint firstAttribute="bottom" secondItem="BOs-hL-CLp" secondAttribute="bottom" constant="16" id="o09-8n-g84"/>
-                                                <constraint firstAttribute="trailing" secondItem="BOs-hL-CLp" secondAttribute="trailing" constant="24" id="pAX-6l-IDI"/>
-                                                <constraint firstItem="BOs-hL-CLp" firstAttribute="leading" secondItem="Cew-so-fED" secondAttribute="leading" constant="24" id="zUW-Pb-hwx"/>
+                                                <constraint firstAttribute="bottom" secondItem="BOs-hL-CLp" secondAttribute="bottom" constant="8" id="o09-8n-g84"/>
+                                                <constraint firstAttribute="trailing" secondItem="BOs-hL-CLp" secondAttribute="trailing" constant="16" id="pAX-6l-IDI"/>
+                                                <constraint firstItem="BOs-hL-CLp" firstAttribute="top" secondItem="Cew-so-fED" secondAttribute="top" constant="8" id="w3n-am-yhO"/>
+                                                <constraint firstItem="BOs-hL-CLp" firstAttribute="leading" secondItem="Cew-so-fED" secondAttribute="leading" constant="16" id="zUW-Pb-hwx"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
-                                            <outlet property="mainView" destination="BOs-hL-CLp" id="HK6-RT-w3I"/>
+                                            <outlet property="mainView" destination="BOs-hL-CLp" id="eKh-cq-Lie"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>

@@ -26,26 +26,18 @@ class SearchDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        resultsViewController = GMSAutocompleteResultsViewController()
-        resultsViewController?.delegate = self
-        
+        configureAutocompleteVC()
+        configureTableView()
         addSearchController()
         
-        placeCardsTableView.dataSource = self
-        placeCardsTableView.delegate = self
-        
-        // remove bottom empty cells for table view
-        placeCardsTableView.tableFooterView = UIView()
-        
         if let place = placeData {
-//            showMap(withPlace: place)
             titleLabel.text = place.name
             loadPhotoForPlace(placeId: place.placeID, completion: { photo in
                 self.placeImageView.image = photo
                 self.placeImageView.contentMode = .scaleAspectFill
             })
         } else {
-            // show error screen
+            // show default background screen
         }
     }
     
@@ -78,30 +70,15 @@ class SearchDetailViewController: UIViewController {
         definesPresentationContext = true
     }
     
-    private func showMap(withPlace place: GMSPlace) {
-        
-        mapView?.removeFromSuperview()
-        
-        let camera = GMSCameraPosition.camera(withLatitude: place.coordinate.latitude, longitude: place.coordinate.longitude, zoom: 14.0)
-        mapView = GMSMapView.map(withFrame: CGRect(x: 0, y: 220, width: view.bounds.width, height: 280), camera: camera)
-        view.addSubview(mapView!)
-        
-        // Creates a marker in the center of the map.
-        let marker = GMSMarker()
-        marker.position = CLLocationCoordinate2D(latitude: place.coordinate.latitude, longitude: place.coordinate.longitude)
-        marker.title = place.name
-        marker.snippet = place.formattedAddress
-        marker.map = mapView!
-        
-    }
-    
     private func updateUI(withPlace place: GMSPlace) {
         titleLabel.text = place.name
+        placeCardsTableView.reloadData()
+        
         loadPhotoForPlace(placeId: place.placeID) { photo in
             self.placeImageView.image = photo
             self.placeImageView.contentMode = .scaleAspectFill
         }
-//        showMap(withPlace: place)
+
     }
     
     private func loadPhotoForPlace(placeId: String, completion: @escaping(_ photo: UIImage?) -> Void) {
@@ -124,6 +101,17 @@ class SearchDetailViewController: UIViewController {
                 }
             }
         }
+    }
+    
+    private func configureAutocompleteVC() {
+        resultsViewController = GMSAutocompleteResultsViewController()
+        resultsViewController?.delegate = self
+    }
+    
+    private func configureTableView() {
+        placeCardsTableView.dataSource = self
+        placeCardsTableView.delegate = self
+        placeCardsTableView.tableFooterView = UIView()
     }
 }
 
@@ -198,7 +186,7 @@ extension SearchDetailViewController: GMSAutocompleteResultsViewControllerDelega
 // MARK: - GooglePlacePicker methods
 extension SearchDetailViewController: GMSPlacePickerViewControllerDelegate {
     func placePicker(_ viewController: GMSPlacePickerViewController, didPick place: GMSPlace) {
-        viewController.dismiss(animated: true, completion: nil)
+//        viewController.dismiss(animated: true, completion: nil)
         
         print("Place name \(place.name)")
         print("Place address \(place.formattedAddress)")
