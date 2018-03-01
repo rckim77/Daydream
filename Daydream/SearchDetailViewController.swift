@@ -8,6 +8,7 @@
 
 import UIKit
 import GooglePlaces
+import GooglePlacePicker
 import GoogleMaps
 
 class SearchDetailViewController: UIViewController {
@@ -126,6 +127,7 @@ class SearchDetailViewController: UIViewController {
     }
 }
 
+// MARK: - UITableView datasource and delegate methods
 extension SearchDetailViewController: UITableViewDataSource, UITableViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -151,10 +153,18 @@ extension SearchDetailViewController: UITableViewDataSource, UITableViewDelegate
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("tapped a row!")
+        // for viewport, enter GMSCoordinateBounds object
+        guard let viewport = placeData?.viewport else { return }
+        
+        let config = GMSPlacePickerConfig(viewport: viewport)
+        let placePicker = GMSPlacePickerViewController(config: config)
+        placePicker.delegate = self
+        
+        present(placePicker, animated: true, completion: nil)
     }
 }
 
+// MARK: - GooglePlaces Autocomplete methods
 extension SearchDetailViewController: GMSAutocompleteResultsViewControllerDelegate {
     
     // Handle user's selection
@@ -182,5 +192,20 @@ extension SearchDetailViewController: GMSAutocompleteResultsViewControllerDelega
     
     func didUpdateAutocompletePredictions(_ viewController: GMSAutocompleteViewController) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = false
+    }
+}
+
+// MARK: - GooglePlacePicker methods
+extension SearchDetailViewController: GMSPlacePickerViewControllerDelegate {
+    func placePicker(_ viewController: GMSPlacePickerViewController, didPick place: GMSPlace) {
+        viewController.dismiss(animated: true, completion: nil)
+        
+        print("Place name \(place.name)")
+        print("Place address \(place.formattedAddress)")
+        print("Place attributions \(place.attributions)")
+    }
+    
+    func placePickerDidCancel(_ viewController: GMSPlacePickerViewController) {
+        viewController.dismiss(animated: true, completion: nil)
     }
 }
