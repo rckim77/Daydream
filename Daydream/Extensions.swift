@@ -13,23 +13,23 @@ extension UIColor {
     convenience init(hexString: String) {
         let hexString = hexString.trimmingCharacters(in: .whitespacesAndNewlines)
         let scanner = Scanner(string: hexString)
-        
+
         if hexString.hasPrefix("#") {
             scanner.scanLocation = 1
         }
-        
+
         var color: UInt32 = 0
         scanner.scanHexInt32(&color)
-        
+
         let mask = 0x000000FF
         let r = Int(color >> 16) & mask
         let g = Int(color >> 8) & mask
         let b = Int(color) & mask
-        
+
         let red = CGFloat(r) / 255
         let green = CGFloat(g) / 255
         let blue = CGFloat(b) / 255
-        
+
         self.init(red: red, green: green, blue: blue, alpha: 1)
     }
 }
@@ -39,18 +39,18 @@ extension UISearchController {
         // style cancel button
         let cancelBtnAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
         UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes(cancelBtnAttributes, for: .normal)
-        
+
         // style search bar text color
         let searchBarTextField = self.searchBar.value(forKey: "searchField") as? UITextField
         searchBarTextField?.textColor = .white
-        
+
         // style placeholder text color
         let placeholderTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
         searchBarTextField?.attributedPlaceholder = NSAttributedString(string: "e.g., Tokyo", attributes: placeholderTextAttributes)
-        
+
         // style search icon
         searchBar.setImage(#imageLiteral(resourceName: "searchIconWhite"), for: .search, state: .normal)
-        
+
         // style clear text icon
         searchBar.setImage(#imageLiteral(resourceName: "clearIcon"), for: .clear, state: .normal)
     }
@@ -62,7 +62,7 @@ extension GMSAutocompleteResultsViewController {
         primaryTextHighlightColor = .white
         primaryTextColor = .lightGray
         secondaryTextColor = .lightGray
-        
+
     }
 }
 
@@ -80,7 +80,7 @@ extension UIView {
             layer.cornerRadius = newValue
         }
     }
-    
+
     @IBInspectable
     var shadowRadius: CGFloat {
         get {
@@ -90,7 +90,7 @@ extension UIView {
             layer.shadowRadius = newValue
         }
     }
-    
+
     @IBInspectable
     var shadowOpacity: Float {
         get {
@@ -100,7 +100,7 @@ extension UIView {
             layer.shadowOpacity = newValue
         }
     }
-    
+
     @IBInspectable
     var shadowOffset: CGSize {
         get {
@@ -110,7 +110,7 @@ extension UIView {
             layer.shadowOffset = newValue
         }
     }
-    
+
     @IBInspectable
     var shadowColor: UIColor? {
         get {
@@ -125,7 +125,7 @@ extension UIView {
             }
         }
     }
-    
+
     func addRoundedCorners() {
         layer.cornerRadius = 10
         layer.masksToBounds = true

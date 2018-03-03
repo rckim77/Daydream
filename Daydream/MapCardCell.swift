@@ -14,11 +14,11 @@ class MapCardCell: UITableViewCell {
 
     @IBOutlet weak var mainView: DesignableView!
     var mapView: GMSMapView?
-    
+
     var place: GMSPlace? {
         didSet {
             guard let place = place else { return }
-            
+
             if let mapView = mapView {
                 update(mapView, with: place)
             } else {
@@ -30,21 +30,21 @@ class MapCardCell: UITableViewCell {
     private func addMapView(with place: GMSPlace) {
         let camera = GMSCameraPosition.camera(withLatitude: place.coordinate.latitude, longitude: place.coordinate.longitude, zoom: 14.0)
         let mapViewNew = GMSMapView.map(withFrame: mainView.frame, camera: camera)
-        
+
         mapViewNew.addRoundedCorners()
-        
+
         createMarkerFor(mapViewNew, with: place)
-        
+
         mainView.addSubview(mapViewNew)
-        
+
         mapView = mapViewNew
     }
     
     private func update(_ mapView: GMSMapView, with place: GMSPlace) {
         let camera = GMSCameraPosition.camera(withLatitude: place.coordinate.latitude, longitude: place.coordinate.longitude, zoom: 14.0)
-        
+
         createMarkerFor(mapView, with: place)
-        
+
         mapView.animate(to: camera)
     }
     

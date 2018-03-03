@@ -10,19 +10,22 @@ PODS:
   - GooglePlaces (2.5.0):
     - GoogleMaps/Base (= 2.5.0)
   - MBProgressHUD (1.1.0)
+  - SwiftLint (0.24.2)
 
 DEPENDENCIES:
   - GoogleMaps
   - GooglePlacePicker
   - GooglePlaces
   - MBProgressHUD (~> 1.1.0)
+  - SwiftLint
 
 SPEC CHECKSUMS:
   GoogleMaps: c087b8e5dfe87ca6ebf59adb9b4894a4146bec4f
   GooglePlacePicker: 1573e644ab54564d95c2643edc0f29091609e966
   GooglePlaces: dd70d9d71ea1c7944846afe67de3712c99b30a77
   MBProgressHUD: e7baa36a220447d8aeb12769bf0585582f3866d9
+  SwiftLint: 2aa21b96c8d13396a051bc1cb659d2ce1e0075b0
 
-PODFILE CHECKSUM: 70192db90f538d03f8107ebaef3bb18b05163349
+PODFILE CHECKSUM: dc9847a1fac52d7efe6bcdcd62fd4b44ddb68007
 
 COCOAPODS: 1.4.0

@@ -116,6 +116,7 @@
 				94380AC2203BAE1D00684863 /* Resources */,
 				2C1A16EE59777786F623EDDF /* [CP] Embed Pods Frameworks */,
 				8007B826663EE312D427A181 /* [CP] Copy Pods Resources */,
+				947EC659204B27CC004A911D /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -213,6 +214,19 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Daydream/Pods-Daydream-resources.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		947EC659204B27CC004A911D /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "${PODS_ROOT}/SwiftLint/swiftlint";
 		};
 		D6A2015AAA6AF20C92D43CDC /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;

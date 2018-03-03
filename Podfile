@@ -10,4 +10,5 @@ target 'Daydream' do
   pod 'GooglePlacePicker'
   pod 'GoogleMaps'
   pod 'MBProgressHUD', '~> 1.1.0'
+  pod 'SwiftLint'
 end
