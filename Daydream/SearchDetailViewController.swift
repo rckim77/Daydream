@@ -155,14 +155,16 @@ extension SearchDetailViewController: UITableViewDataSource, UITableViewDelegate
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // for viewport, enter GMSCoordinateBounds object
-        guard let viewport = placeData?.viewport else { return }
+        if indexPath.row == 0 {
+            // for viewport, enter GMSCoordinateBounds object
+            guard let viewport = placeData?.viewport else { return }
 
-        let config = GMSPlacePickerConfig(viewport: viewport)
-        let placePicker = GMSPlacePickerViewController(config: config)
-        placePicker.delegate = self
+            let config = GMSPlacePickerConfig(viewport: viewport)
+            let placePicker = GMSPlacePickerViewController(config: config)
+            placePicker.delegate = self
 
-        present(placePicker, animated: true, completion: nil)
+            present(placePicker, animated: true, completion: nil)
+        }
     }
 }
 
