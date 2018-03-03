@@ -17,6 +17,7 @@
 		947EC6542043F5B2004A911D /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 947EC6532043F5B2004A911D /* Color.swift */; };
 		947EC656204667EB004A911D /* MapCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 947EC655204667EB004A911D /* MapCardCell.swift */; };
 		947EC658204673BF004A911D /* ShadowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 947EC657204673BF004A911D /* ShadowView.swift */; };
+		9481EC5A204B358C00863A5A /* SightsCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9481EC59204B358C00863A5A /* SightsCardCell.swift */; };
 		949630BA203BCBBD007139CA /* SearchDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949630B9203BCBBD007139CA /* SearchDetailViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -35,6 +36,7 @@
 		947EC6532043F5B2004A911D /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		947EC655204667EB004A911D /* MapCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCardCell.swift; sourceTree = "<group>"; };
 		947EC657204673BF004A911D /* ShadowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowView.swift; sourceTree = "<group>"; };
+		9481EC59204B358C00863A5A /* SightsCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SightsCardCell.swift; sourceTree = "<group>"; };
 		949630B9203BCBBD007139CA /* SearchDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDetailViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -83,6 +85,7 @@
 				94380AC9203BAE1D00684863 /* SearchViewController.swift */,
 				949630B9203BCBBD007139CA /* SearchDetailViewController.swift */,
 				947EC655204667EB004A911D /* MapCardCell.swift */,
+				9481EC59204B358C00863A5A /* SightsCardCell.swift */,
 				947EC6512043F28F004A911D /* Extensions.swift */,
 				947EC657204673BF004A911D /* ShadowView.swift */,
 				947EC6532043F5B2004A911D /* Color.swift */,
@@ -256,6 +259,7 @@
 				94380ACA203BAE1D00684863 /* SearchViewController.swift in Sources */,
 				947EC6542043F5B2004A911D /* Color.swift in Sources */,
 				949630BA203BCBBD007139CA /* SearchDetailViewController.swift in Sources */,
+				9481EC5A204B358C00863A5A /* SightsCardCell.swift in Sources */,
 				94380AC8203BAE1D00684863 /* AppDelegate.swift in Sources */,
 				947EC656204667EB004A911D /* MapCardCell.swift in Sources */,
 				947EC6522043F28F004A911D /* Extensions.swift in Sources */,

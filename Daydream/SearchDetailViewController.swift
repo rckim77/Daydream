@@ -18,6 +18,8 @@ class SearchDetailViewController: UIViewController {
     var resultView: UITextView?
     var mapView: GMSMapView?
     var placeData: GMSPlace?
+    private let mapCardCellHeight: CGFloat = 180
+    private let sightsCardCellHeight: CGFloat = 411
     
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var placeImageView: UIImageView!
@@ -122,20 +124,32 @@ extension SearchDetailViewController: UITableViewDataSource, UITableViewDelegate
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return 2
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 172
+        return indexPath.row == 0 ? mapCardCellHeight : sightsCardCellHeight
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let cell = tableView.dequeueReusableCell(withIdentifier: "mapCardCell", for: indexPath) as? MapCardCell {
+        // TODO: add generic cell for when error occurs
+        switch indexPath.row {
+        case 0:
+            if let cell = tableView.dequeueReusableCell(withIdentifier: "mapCardCell", for: indexPath) as? MapCardCell {
 
-            cell.place = placeData
+                cell.place = placeData
 
-            return cell
-        } else {
+                return cell
+            } else {
+                return UITableViewCell()
+            }
+        case 1:
+            if let cell = tableView.dequeueReusableCell(withIdentifier: "sightsCardCell", for: indexPath) as? SightsCardCell {
+                return cell
+            } else {
+                return UITableViewCell()
+            }
+        default:
             return UITableViewCell()
         }
     }
