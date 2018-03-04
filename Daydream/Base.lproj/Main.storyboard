@@ -117,7 +117,7 @@
                                                             <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         </userDefinedRuntimeAttribute>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="shadowRadius">
-                                                            <real key="value" value="2"/>
+                                                            <real key="value" value="3"/>
                                                         </userDefinedRuntimeAttribute>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                                             <real key="value" value="10"/>
@@ -126,7 +126,7 @@
                                                             <real key="value" value="0.29999999999999999"/>
                                                         </userDefinedRuntimeAttribute>
                                                         <userDefinedRuntimeAttribute type="size" keyPath="shadowOffset">
-                                                            <size key="value" width="0.0" height="2"/>
+                                                            <size key="value" width="0.0" height="3"/>
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                 </view>
@@ -152,67 +152,17 @@
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yAK-rP-dIf" userLabel="Main View" customClass="DesignableView" customModule="Daydream" customModuleProvider="target">
                                                     <rect key="frame" x="16" y="16" width="343" height="379"/>
-                                                    <subviews>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Top Sights" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9b8-lt-6O1">
-                                                            <rect key="frame" x="16" y="24" width="311" height="36"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="width" constant="311" id="adA-kQ-p2B"/>
-                                                                <constraint firstAttribute="height" constant="36" id="rO7-3m-3GN"/>
-                                                            </constraints>
-                                                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="28"/>
-                                                            <nil key="textColor"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Landmark 1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tTb-Ek-aN0">
-                                                            <rect key="frame" x="16" y="124" width="311" height="21"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="height" constant="21" id="U7M-lB-Shn"/>
-                                                                <constraint firstAttribute="width" constant="311" id="XzX-Zh-KVL"/>
-                                                            </constraints>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                                            <nil key="textColor"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Landmark 2" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VqV-Iv-kvb">
-                                                            <rect key="frame" x="16" y="209" width="311" height="21"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="height" constant="21" id="TNz-rx-hKu"/>
-                                                                <constraint firstAttribute="width" constant="311" id="mpQ-Xz-hWP"/>
-                                                            </constraints>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                                            <nil key="textColor"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Landmark 3" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Gd-KM-LIM">
-                                                            <rect key="frame" x="16" y="294" width="311" height="21"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="width" constant="311" id="HYg-G8-C9q"/>
-                                                                <constraint firstAttribute="height" constant="21" id="vwN-bU-i7C"/>
-                                                            </constraints>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                                            <nil key="textColor"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
-                                                    </subviews>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
-                                                        <constraint firstItem="tTb-Ek-aN0" firstAttribute="top" secondItem="9b8-lt-6O1" secondAttribute="bottom" constant="64" id="0Xw-ky-m67"/>
-                                                        <constraint firstItem="tTb-Ek-aN0" firstAttribute="leading" secondItem="yAK-rP-dIf" secondAttribute="leading" constant="16" id="7bQ-w0-Ogf"/>
-                                                        <constraint firstItem="VqV-Iv-kvb" firstAttribute="leading" secondItem="yAK-rP-dIf" secondAttribute="leading" constant="16" id="I3Z-p8-FtI"/>
-                                                        <constraint firstItem="4Gd-KM-LIM" firstAttribute="leading" secondItem="yAK-rP-dIf" secondAttribute="leading" constant="16" id="Orx-Jz-Uej"/>
-                                                        <constraint firstAttribute="trailing" secondItem="9b8-lt-6O1" secondAttribute="trailing" constant="16" id="UnJ-2q-Ne2"/>
-                                                        <constraint firstAttribute="bottom" secondItem="4Gd-KM-LIM" secondAttribute="bottom" constant="64" id="YuP-HQ-duR"/>
-                                                        <constraint firstItem="4Gd-KM-LIM" firstAttribute="top" secondItem="VqV-Iv-kvb" secondAttribute="bottom" constant="64" id="Z3j-ta-4ec"/>
-                                                        <constraint firstItem="9b8-lt-6O1" firstAttribute="top" secondItem="yAK-rP-dIf" secondAttribute="top" constant="24" id="al4-rO-w3F"/>
-                                                        <constraint firstItem="9b8-lt-6O1" firstAttribute="leading" secondItem="yAK-rP-dIf" secondAttribute="leading" constant="16" id="dOZ-yc-NH9"/>
-                                                        <constraint firstItem="VqV-Iv-kvb" firstAttribute="top" secondItem="tTb-Ek-aN0" secondAttribute="bottom" constant="64" id="ug3-Ss-Oy4"/>
+                                                        <constraint firstAttribute="width" constant="343" id="FnJ-bE-1WX"/>
+                                                        <constraint firstAttribute="height" constant="379" id="RHa-EZ-H7U"/>
                                                     </constraints>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="color" keyPath="shadowColor">
                                                             <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         </userDefinedRuntimeAttribute>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="shadowRadius">
-                                                            <real key="value" value="2"/>
+                                                            <real key="value" value="3"/>
                                                         </userDefinedRuntimeAttribute>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                                             <real key="value" value="10"/>
@@ -221,7 +171,7 @@
                                                             <real key="value" value="0.29999999999999999"/>
                                                         </userDefinedRuntimeAttribute>
                                                         <userDefinedRuntimeAttribute type="size" keyPath="shadowOffset">
-                                                            <size key="value" width="0.0" height="2"/>
+                                                            <size key="value" width="0.0" height="3"/>
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                 </view>
