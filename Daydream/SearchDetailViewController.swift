@@ -124,7 +124,7 @@ extension SearchDetailViewController: UITableViewDataSource, UITableViewDelegate
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        return 3
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -145,6 +145,12 @@ extension SearchDetailViewController: UITableViewDataSource, UITableViewDelegate
             }
         case 1:
             if let cell = tableView.dequeueReusableCell(withIdentifier: "sightsCardCell", for: indexPath) as? SightsCardCell {
+                return cell
+            } else {
+                return UITableViewCell()
+            }
+        case 2:
+            if let cell = tableView.dequeueReusableCell(withIdentifier: "eateriesCardCell", for: indexPath) as? EateriesCardCell {
                 return cell
             } else {
                 return UITableViewCell()

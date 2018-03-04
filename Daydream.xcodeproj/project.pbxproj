@@ -19,6 +19,7 @@
 		947EC658204673BF004A911D /* ShadowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 947EC657204673BF004A911D /* ShadowView.swift */; };
 		9481EC5A204B358C00863A5A /* SightsCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9481EC59204B358C00863A5A /* SightsCardCell.swift */; };
 		949630BA203BCBBD007139CA /* SearchDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949630B9203BCBBD007139CA /* SearchDetailViewController.swift */; };
+		94DB8FE7204B946200FA7CF7 /* EateriesCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94DB8FE6204B946200FA7CF7 /* EateriesCardCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +39,7 @@
 		947EC657204673BF004A911D /* ShadowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowView.swift; sourceTree = "<group>"; };
 		9481EC59204B358C00863A5A /* SightsCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SightsCardCell.swift; sourceTree = "<group>"; };
 		949630B9203BCBBD007139CA /* SearchDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDetailViewController.swift; sourceTree = "<group>"; };
+		94DB8FE6204B946200FA7CF7 /* EateriesCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EateriesCardCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +88,7 @@
 				949630B9203BCBBD007139CA /* SearchDetailViewController.swift */,
 				947EC655204667EB004A911D /* MapCardCell.swift */,
 				9481EC59204B358C00863A5A /* SightsCardCell.swift */,
+				94DB8FE6204B946200FA7CF7 /* EateriesCardCell.swift */,
 				947EC6512043F28F004A911D /* Extensions.swift */,
 				947EC657204673BF004A911D /* ShadowView.swift */,
 				947EC6532043F5B2004A911D /* Color.swift */,
@@ -257,6 +260,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				94380ACA203BAE1D00684863 /* SearchViewController.swift in Sources */,
+				94DB8FE7204B946200FA7CF7 /* EateriesCardCell.swift in Sources */,
 				947EC6542043F5B2004A911D /* Color.swift in Sources */,
 				949630BA203BCBBD007139CA /* SearchDetailViewController.swift in Sources */,
 				9481EC5A204B358C00863A5A /* SightsCardCell.swift in Sources */,

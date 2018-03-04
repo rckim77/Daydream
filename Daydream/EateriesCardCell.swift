@@ -1,5 +1,5 @@
 //
-//  SightsCardCell.swift
+//  EateriesCardCell.swift
 //  Daydream
 //
 //  Created by Raymond Kim on 3/3/18.
@@ -8,6 +8,6 @@
 
 import UIKit
 
-class SightsCardCell: UITableViewCell {
+class EateriesCardCell: UITableViewCell {
 
 }

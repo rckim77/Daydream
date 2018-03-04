@@ -143,29 +143,36 @@
                                             <outlet property="mainView" destination="BOs-hL-CLp" id="RW9-Qh-nvG"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="sightsCardCell" rowHeight="411" id="15e-4f-7he" customClass="SightsCardCell" customModule="Daydream" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="sightsCardCell" rowHeight="411" id="u45-7M-3W5" customClass="SightsCardCell" customModule="Daydream" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="208" width="375" height="411"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="15e-4f-7he" id="nN4-Fi-333" customClass="SightsCardCell" customModule="Daydream" customModuleProvider="target">
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="u45-7M-3W5" id="uZ4-RN-RBL">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="411"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yAK-rP-dIf" userLabel="Main View" customClass="DesignableView" customModule="Daydream" customModuleProvider="target">
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0af-yr-VQQ" customClass="DesignableView" customModule="Daydream" customModuleProvider="target">
                                                     <rect key="frame" x="16" y="16" width="343" height="379"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Top Sights" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PMS-z4-Vl0">
+                                                            <rect key="frame" x="16" y="16" width="311" height="28.666666666666671"/>
+                                                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="24"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="343" id="FnJ-bE-1WX"/>
-                                                        <constraint firstAttribute="height" constant="379" id="RHa-EZ-H7U"/>
+                                                        <constraint firstAttribute="height" constant="379" id="Ozc-Kn-Obx"/>
+                                                        <constraint firstAttribute="trailing" secondItem="PMS-z4-Vl0" secondAttribute="trailing" constant="16" id="aIP-87-gbf"/>
+                                                        <constraint firstItem="PMS-z4-Vl0" firstAttribute="top" secondItem="0af-yr-VQQ" secondAttribute="top" constant="16" id="dyP-rj-SG0"/>
+                                                        <constraint firstItem="PMS-z4-Vl0" firstAttribute="leading" secondItem="0af-yr-VQQ" secondAttribute="leading" constant="16" id="zxN-tC-1tV"/>
                                                     </constraints>
                                                     <userDefinedRuntimeAttributes>
-                                                        <userDefinedRuntimeAttribute type="color" keyPath="shadowColor">
-                                                            <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                            <real key="value" value="10"/>
                                                         </userDefinedRuntimeAttribute>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="shadowRadius">
                                                             <real key="value" value="3"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                            <real key="value" value="10"/>
                                                         </userDefinedRuntimeAttribute>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="shadowOpacity">
                                                             <real key="value" value="0.29999999999999999"/>
@@ -173,20 +180,62 @@
                                                         <userDefinedRuntimeAttribute type="size" keyPath="shadowOffset">
                                                             <size key="value" width="0.0" height="3"/>
                                                         </userDefinedRuntimeAttribute>
+                                                        <userDefinedRuntimeAttribute type="color" keyPath="shadowColor">
+                                                            <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                 </view>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="yAK-rP-dIf" firstAttribute="leading" secondItem="nN4-Fi-333" secondAttribute="leading" constant="16" id="1Ma-GG-D7R"/>
-                                                <constraint firstItem="yAK-rP-dIf" firstAttribute="top" secondItem="nN4-Fi-333" secondAttribute="top" constant="16" id="7AV-1l-gsH"/>
-                                                <constraint firstAttribute="bottom" secondItem="yAK-rP-dIf" secondAttribute="bottom" constant="16" id="gkI-Dk-w6B"/>
-                                                <constraint firstAttribute="trailing" secondItem="yAK-rP-dIf" secondAttribute="trailing" constant="16" id="r9M-sT-y5C"/>
+                                                <constraint firstAttribute="trailing" secondItem="0af-yr-VQQ" secondAttribute="trailing" constant="16" id="7MV-Ul-USx"/>
+                                                <constraint firstItem="0af-yr-VQQ" firstAttribute="top" secondItem="uZ4-RN-RBL" secondAttribute="top" constant="16" id="iJM-EJ-0ho"/>
+                                                <constraint firstItem="0af-yr-VQQ" firstAttribute="leading" secondItem="uZ4-RN-RBL" secondAttribute="leading" constant="16" id="o4t-jy-SSc"/>
+                                                <constraint firstAttribute="bottom" secondItem="0af-yr-VQQ" secondAttribute="bottom" constant="16" id="tlF-ZZ-U4y"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <connections>
-                                            <outlet property="mainView" destination="yAK-rP-dIf" id="1sr-EP-GWj"/>
-                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="eateriesCardCell" rowHeight="411" id="rPE-Bq-m44" customClass="EateriesCardCell" customModule="Daydream" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="619" width="375" height="411"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="rPE-Bq-m44" id="nkI-M7-1OO">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="411"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="S4O-10-Qll" customClass="DesignableView" customModule="Daydream" customModuleProvider="target">
+                                                    <rect key="frame" x="16" y="16" width="343" height="379"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="379" id="5cf-tu-7fL"/>
+                                                        <constraint firstAttribute="width" constant="343" id="mWo-Ss-jKa"/>
+                                                    </constraints>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                            <real key="value" value="10"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="shadowRadius">
+                                                            <real key="value" value="3"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                        <userDefinedRuntimeAttribute type="color" keyPath="shadowColor">
+                                                            <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                        <userDefinedRuntimeAttribute type="size" keyPath="shadowOffset">
+                                                            <size key="value" width="0.0" height="3"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="shadowOpacity">
+                                                            <real key="value" value="0.29999999999999999"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
+                                                </view>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="bottom" secondItem="S4O-10-Qll" secondAttribute="bottom" constant="16" id="Tub-jJ-Fje"/>
+                                                <constraint firstItem="S4O-10-Qll" firstAttribute="leading" secondItem="nkI-M7-1OO" secondAttribute="leading" constant="16" id="s6l-eg-ATm"/>
+                                                <constraint firstAttribute="trailing" secondItem="S4O-10-Qll" secondAttribute="trailing" constant="16" id="vdu-Oa-waI"/>
+                                                <constraint firstItem="S4O-10-Qll" firstAttribute="top" secondItem="nkI-M7-1OO" secondAttribute="top" constant="16" id="wRU-h5-Ve3"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
