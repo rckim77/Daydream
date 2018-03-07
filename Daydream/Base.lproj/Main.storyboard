@@ -159,15 +159,27 @@
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kYN-ty-kYt">
-                                                            <rect key="frame" x="16" y="85" width="311" height="36"/>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="kYN-ty-kYt">
+                                                            <rect key="frame" x="16" y="85" width="311" height="72"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" constant="72" id="Kzo-cN-Lnn"/>
+                                                            </constraints>
                                                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
                                                             <state key="normal" title="Point of Interest 1"/>
+                                                            <connections>
+                                                                <action selector="pointOfInterest1BtnTapped:" destination="u45-7M-3W5" eventType="touchUpInside" id="oy5-n9-XBg"/>
+                                                            </connections>
                                                         </button>
-                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AUr-1a-5At">
-                                                            <rect key="frame" x="16" y="161" width="311" height="36"/>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="AUr-1a-5At">
+                                                            <rect key="frame" x="16" y="197" width="311" height="72"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" constant="72" id="GJG-kx-1U1"/>
+                                                            </constraints>
                                                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
                                                             <state key="normal" title="Point of Interest 2"/>
+                                                            <connections>
+                                                                <action selector="pointOfInterest2BtnTapped:" destination="u45-7M-3W5" eventType="touchUpInside" id="FNp-KT-qAN"/>
+                                                            </connections>
                                                         </button>
                                                     </subviews>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

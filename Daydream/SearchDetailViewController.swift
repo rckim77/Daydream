@@ -141,6 +141,14 @@ class SearchDetailViewController: UIViewController {
         return url
     }
 
+    private func presentPlacePicker(with viewport: GMSCoordinateBounds) {
+        let config = GMSPlacePickerConfig(viewport: viewport)
+        let placePicker = GMSPlacePickerViewController(config: config)
+        placePicker.delegate = self
+
+        present(placePicker, animated: true, completion: nil)
+    }
+
     private func configureAutocompleteVC() {
         resultsViewController = GMSAutocompleteResultsViewController()
         resultsViewController?.delegate = self
@@ -182,12 +190,8 @@ extension SearchDetailViewController: UITableViewDataSource, UITableViewDelegate
         case 1:
             if let cell = tableView.dequeueReusableCell(withIdentifier: "sightsCardCell", for: indexPath) as? SightsCardCell {
 
-                guard let pointsOfInterest = pointsOfInterest else { return cell }
-
-                let pointOfInterest1 = pointsOfInterest[0].dictionaryValue["name"]?.stringValue
-                let pointOfInterest2 = pointsOfInterest[1].dictionaryValue["name"]?.stringValue
-                cell.pointOfInterest1Btn.setTitle(pointOfInterest1, for: .normal)
-                cell.pointOfInterest2Btn.setTitle(pointOfInterest2, for: .normal)
+                cell.delegate = self
+                cell.pointsOfInterest = pointsOfInterest
 
                 return cell
             } else {
@@ -262,4 +266,12 @@ extension SearchDetailViewController: GMSPlacePickerViewControllerDelegate {
     func placePickerDidCancel(_ viewController: GMSPlacePickerViewController) {
         viewController.dismiss(animated: true, completion: nil)
     }
+}
+
+extension SearchDetailViewController: SightsCardCellDelegate {
+    func didSelectPointOfInterest(with viewport: GMSCoordinateBounds) {
+        presentPlacePicker(with: viewport)
+    }
+
+
 }
