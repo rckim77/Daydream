@@ -11,4 +11,6 @@ target 'Daydream' do
   pod 'GoogleMaps'
   pod 'MBProgressHUD', '~> 1.1.0'
   pod 'SwiftLint'
+  pod 'Alamofire', '~> 4.7'
+  pod 'SwiftyJSON'
 end

@@ -23,13 +23,17 @@ class SearchViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
         resultsViewController = GMSAutocompleteResultsViewController()
         resultsViewController?.delegate = self
         addSearchController()
         fadeInTitle()
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        fadeInTitle()
         let yCoordinate = view.bounds.height
         searchBarView.frame.origin.y = (yCoordinate / 2) - (searchBarViewHeight / 2)
     }

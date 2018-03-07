@@ -10,6 +10,7 @@ import UIKit
 import GooglePlaces
 import GooglePlacePicker
 import GoogleMaps
+import Alamofire
 
 class SearchDetailViewController: UIViewController {
 
@@ -38,6 +39,7 @@ class SearchDetailViewController: UIViewController {
                 self.placeImageView.image = photo
                 self.placeImageView.contentMode = .scaleAspectFill
             })
+            loadTopSights(with: place)
         } else {
             // show default background screen
         }
@@ -102,6 +104,33 @@ class SearchDetailViewController: UIViewController {
                     })
                 }
             }
+        }
+    }
+
+    private func loadTopSights(with place: GMSPlace) {
+        // must be latitude,longitude
+        let locationParam = "location=\(place.coordinate.latitude),\(place.coordinate.longitude)"
+        let radiusParam = "radius=500"
+        let typeParam = "type=point_of_interest"
+        let keyParam = "key=\(AppDelegate.googleAPIKey)"
+
+        let url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?\(locationParam)&\(radiusParam)&\(typeParam)&\(keyParam)"
+
+        Alamofire.request(url).validate().responseJSON { response in
+            switch response.result {
+            case .success:
+                print("validation successful")
+                print("request: \(String(describing: response.request))")
+                print("response: \(String(describing: response.response))")
+                print("result: \(response.result)")
+
+                if let json = response.result.value {
+                    print("JSON: \(json)")
+                }
+            case .failure(let error):
+                print(error)
+            }
+
         }
     }
 

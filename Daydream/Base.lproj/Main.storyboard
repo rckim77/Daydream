@@ -22,8 +22,8 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Where do you want to go?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JHi-Ty-WLR">
-                                <rect key="frame" x="12" y="204" width="351" height="87"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="36"/>
+                                <rect key="frame" x="12" y="204" width="351" height="96.666666666666686"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="40"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                                 <color key="shadowColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -204,9 +204,20 @@
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="S4O-10-Qll" customClass="DesignableView" customModule="Daydream" customModuleProvider="target">
                                                     <rect key="frame" x="16" y="16" width="343" height="379"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Top Eateries" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Qn-ZQ-k3h">
+                                                            <rect key="frame" x="16" y="16" width="311" height="28.666666666666671"/>
+                                                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="24"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="379" id="5cf-tu-7fL"/>
+                                                        <constraint firstAttribute="trailing" secondItem="7Qn-ZQ-k3h" secondAttribute="trailing" constant="16" id="D4B-yv-frA"/>
+                                                        <constraint firstItem="7Qn-ZQ-k3h" firstAttribute="top" secondItem="S4O-10-Qll" secondAttribute="top" constant="16" id="Jsd-Fa-mzq"/>
+                                                        <constraint firstItem="7Qn-ZQ-k3h" firstAttribute="leading" secondItem="S4O-10-Qll" secondAttribute="leading" constant="16" id="bOA-C6-Qfn"/>
                                                         <constraint firstAttribute="width" constant="343" id="mWo-Ss-jKa"/>
                                                     </constraints>
                                                     <userDefinedRuntimeAttributes>

@@ -14,12 +14,12 @@ import GoogleMaps
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    let googleAPIKey = "AIzaSyDEeCMHsp6PBaoeKTQo7lvS9JCOzvQ-T8U"
+    static let googleAPIKey = "AIzaSyDEeCMHsp6PBaoeKTQo7lvS9JCOzvQ-T8U"
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        GMSPlacesClient.provideAPIKey(googleAPIKey)
-        GMSServices.provideAPIKey(googleAPIKey)
+        GMSPlacesClient.provideAPIKey(AppDelegate.googleAPIKey)
+        GMSServices.provideAPIKey(AppDelegate.googleAPIKey)
         return true
     }
 
