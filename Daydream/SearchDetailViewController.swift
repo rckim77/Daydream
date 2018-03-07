@@ -11,6 +11,7 @@ import GooglePlaces
 import GooglePlacePicker
 import GoogleMaps
 import Alamofire
+import SwiftyJSON
 
 class SearchDetailViewController: UIViewController {
 
@@ -19,6 +20,7 @@ class SearchDetailViewController: UIViewController {
     var resultView: UITextView?
     var mapView: GMSMapView?
     var placeData: GMSPlace?
+    var pointsOfInterest: [JSON]?
     private let mapCardCellHeight: CGFloat = 180
     private let sightsCardCellHeight: CGFloat = 411
     
@@ -76,7 +78,10 @@ class SearchDetailViewController: UIViewController {
 
     private func updateUI(withPlace place: GMSPlace) {
         titleLabel.text = place.name
-        placeCardsTableView.reloadData()
+
+        placeCardsTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
+
+        loadTopSights(with: place)
 
         loadPhotoForPlace(placeId: place.placeID) { photo in
             self.placeImageView.image = photo
@@ -108,30 +113,32 @@ class SearchDetailViewController: UIViewController {
     }
 
     private func loadTopSights(with place: GMSPlace) {
-        // must be latitude,longitude
-        let locationParam = "location=\(place.coordinate.latitude),\(place.coordinate.longitude)"
-        let radiusParam = "radius=500"
-        let typeParam = "type=point_of_interest"
-        let keyParam = "key=\(AppDelegate.googleAPIKey)"
+        let url = createUrl(with: place.coordinate, and: "point_of_interest")
 
-        let url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?\(locationParam)&\(radiusParam)&\(typeParam)&\(keyParam)"
-
-        Alamofire.request(url).validate().responseJSON { response in
+        Alamofire.request(url).validate().responseJSON { [weak self] response in
             switch response.result {
-            case .success:
-                print("validation successful")
-                print("request: \(String(describing: response.request))")
-                print("response: \(String(describing: response.response))")
-                print("result: \(response.result)")
+            case .success(let value):
+                let json = JSON(value)
+                self?.pointsOfInterest = json["results"].arrayValue
+                self?.placeCardsTableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .automatic)
 
-                if let json = response.result.value {
-                    print("JSON: \(json)")
-                }
             case .failure(let error):
                 print(error)
             }
 
         }
+    }
+
+    private func createUrl(with coordinate: CLLocationCoordinate2D, and type: String) -> String {
+        // must be latitude,longitude
+        let locationParam = "location=\(coordinate.latitude),\(coordinate.longitude)"
+        let radiusParam = "radius=500"
+        let typeParam = "type=\(type)"
+        let keyParam = "key=\(AppDelegate.googleAPIKey)"
+
+        let url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?\(locationParam)&\(radiusParam)&\(typeParam)&\(keyParam)"
+
+        return url
     }
 
     private func configureAutocompleteVC() {
@@ -174,6 +181,14 @@ extension SearchDetailViewController: UITableViewDataSource, UITableViewDelegate
             }
         case 1:
             if let cell = tableView.dequeueReusableCell(withIdentifier: "sightsCardCell", for: indexPath) as? SightsCardCell {
+
+                guard let pointsOfInterest = pointsOfInterest else { return cell }
+
+                let pointOfInterest1 = pointsOfInterest[0].dictionaryValue["name"]?.stringValue
+                let pointOfInterest2 = pointsOfInterest[1].dictionaryValue["name"]?.stringValue
+                cell.pointOfInterest1Btn.setTitle(pointOfInterest1, for: .normal)
+                cell.pointOfInterest2Btn.setTitle(pointOfInterest2, for: .normal)
+
                 return cell
             } else {
                 return UITableViewCell()

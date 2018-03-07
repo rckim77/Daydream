@@ -10,4 +10,6 @@ import UIKit
 
 class SightsCardCell: UITableViewCell {
 
+    @IBOutlet weak var pointOfInterest1Btn: UIButton!
+    @IBOutlet weak var pointOfInterest2Btn: UIButton!
 }

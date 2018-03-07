@@ -153,17 +153,33 @@
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0af-yr-VQQ" customClass="DesignableView" customModule="Daydream" customModuleProvider="target">
                                                     <rect key="frame" x="16" y="16" width="343" height="379"/>
                                                     <subviews>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Top Sights" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PMS-z4-Vl0">
-                                                            <rect key="frame" x="16" y="16" width="311" height="28.666666666666671"/>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Points of Interest" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PMS-z4-Vl0">
+                                                            <rect key="frame" x="16" y="16" width="311" height="29"/>
                                                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="24"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kYN-ty-kYt">
+                                                            <rect key="frame" x="16" y="85" width="311" height="36"/>
+                                                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
+                                                            <state key="normal" title="Point of Interest 1"/>
+                                                        </button>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AUr-1a-5At">
+                                                            <rect key="frame" x="16" y="161" width="311" height="36"/>
+                                                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
+                                                            <state key="normal" title="Point of Interest 2"/>
+                                                        </button>
                                                     </subviews>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
+                                                        <constraint firstAttribute="trailing" secondItem="AUr-1a-5At" secondAttribute="trailing" constant="16" id="1Rz-am-97z"/>
+                                                        <constraint firstAttribute="trailing" secondItem="kYN-ty-kYt" secondAttribute="trailing" constant="16" id="Dza-g4-Gb3"/>
                                                         <constraint firstAttribute="height" constant="379" id="Ozc-Kn-Obx"/>
+                                                        <constraint firstItem="kYN-ty-kYt" firstAttribute="leading" secondItem="0af-yr-VQQ" secondAttribute="leading" constant="16" id="TE2-YD-CbZ"/>
+                                                        <constraint firstItem="AUr-1a-5At" firstAttribute="top" secondItem="kYN-ty-kYt" secondAttribute="bottom" constant="40" id="UW1-C0-BN9"/>
+                                                        <constraint firstItem="AUr-1a-5At" firstAttribute="leading" secondItem="0af-yr-VQQ" secondAttribute="leading" constant="16" id="WQn-cA-Z8b"/>
                                                         <constraint firstAttribute="trailing" secondItem="PMS-z4-Vl0" secondAttribute="trailing" constant="16" id="aIP-87-gbf"/>
+                                                        <constraint firstItem="kYN-ty-kYt" firstAttribute="top" secondItem="PMS-z4-Vl0" secondAttribute="bottom" constant="40" id="crG-T1-ghP"/>
                                                         <constraint firstItem="PMS-z4-Vl0" firstAttribute="top" secondItem="0af-yr-VQQ" secondAttribute="top" constant="16" id="dyP-rj-SG0"/>
                                                         <constraint firstItem="PMS-z4-Vl0" firstAttribute="leading" secondItem="0af-yr-VQQ" secondAttribute="leading" constant="16" id="zxN-tC-1tV"/>
                                                     </constraints>
@@ -194,6 +210,10 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <connections>
+                                            <outlet property="pointOfInterest1Btn" destination="kYN-ty-kYt" id="xmy-Ou-zwY"/>
+                                            <outlet property="pointOfInterest2Btn" destination="AUr-1a-5At" id="aUN-af-rSf"/>
+                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="eateriesCardCell" rowHeight="411" id="rPE-Bq-m44" customClass="EateriesCardCell" customModule="Daydream" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="619" width="375" height="411"/>
