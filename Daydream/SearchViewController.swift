@@ -36,6 +36,7 @@ class SearchViewController: UIViewController {
         fadeInTitle()
         let yCoordinate = view.bounds.height
         searchBarView.frame.origin.y = (yCoordinate / 2) - (searchBarViewHeight / 2)
+        searchController?.searchBar.text = ""
     }
 
     private func fadeInTitle() {
