@@ -29,7 +29,8 @@ class MapCardCell: UITableViewCell {
 
     private func addMapView(with place: GMSPlace) {
         let camera = GMSCameraPosition.camera(withLatitude: place.coordinate.latitude, longitude: place.coordinate.longitude, zoom: 14.0)
-        let mapViewNew = GMSMapView.map(withFrame: mainView.frame, camera: camera)
+        let frame = calculateFrame()
+        let mapViewNew = GMSMapView.map(withFrame: frame, camera: camera)
 
         mapViewNew.addRoundedCorners()
 
@@ -47,10 +48,20 @@ class MapCardCell: UITableViewCell {
 
         mapView.animate(to: camera)
     }
+
+    private func calculateFrame() -> CGRect {
+        let leftMargin: CGFloat = 16
+        let rightMargin: CGFloat = 16
+        let width = UIScreen.main.bounds.width - leftMargin - rightMargin
+        let frame = CGRect(x: mainView.frame.minX, y: mainView.frame.minY, width: width, height: mainView.frame.height)
+
+        return frame
+    }
     
     // Creates a marker in center of map
     private func createMarkerFor(_ mapView: GMSMapView, with place: GMSPlace) {
         let marker = GMSMarker()
+        
         marker.position = CLLocationCoordinate2D(latitude: place.coordinate.latitude, longitude: place.coordinate.longitude)
         marker.title = place.name
         marker.snippet = place.formattedAddress

@@ -22,8 +22,8 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Where do you want to go?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JHi-Ty-WLR">
-                                <rect key="frame" x="12" y="204" width="351" height="96.666666666666686"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="40"/>
+                                <rect key="frame" x="12" y="198" width="351" height="87"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="36"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                                 <color key="shadowColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -38,7 +38,7 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="JHi-Ty-WLR" secondAttribute="trailing" constant="12" id="Uja-pT-Azc"/>
                             <constraint firstItem="dpb-Nn-lH0" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="r9u-vR-P5E"/>
                             <constraint firstItem="dpb-Nn-lH0" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="tZf-8I-pK3"/>
-                            <constraint firstItem="JHi-Ty-WLR" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="160" id="uaT-q1-ITf"/>
+                            <constraint firstItem="JHi-Ty-WLR" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="154" id="uaT-q1-ITf"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -109,21 +109,24 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="180"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BOs-hL-CLp" customClass="DesignableView" customModule="Daydream" customModuleProvider="target">
-                                                    <rect key="frame" x="16" y="8" width="343" height="156"/>
+                                                <view contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="0Pv-YR-4mM" customClass="DesignableView" customModule="Daydream" customModuleProvider="target">
+                                                    <rect key="frame" x="16" y="8" width="343" height="164"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="164" id="78s-5H-GaN"/>
+                                                    </constraints>
                                                     <userDefinedRuntimeAttributes>
-                                                        <userDefinedRuntimeAttribute type="color" keyPath="shadowColor">
-                                                            <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                            <real key="value" value="10"/>
                                                         </userDefinedRuntimeAttribute>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="shadowRadius">
                                                             <real key="value" value="3"/>
                                                         </userDefinedRuntimeAttribute>
-                                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                            <real key="value" value="10"/>
-                                                        </userDefinedRuntimeAttribute>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="shadowOpacity">
                                                             <real key="value" value="0.29999999999999999"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                        <userDefinedRuntimeAttribute type="color" keyPath="shadowColor">
+                                                            <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         </userDefinedRuntimeAttribute>
                                                         <userDefinedRuntimeAttribute type="size" keyPath="shadowOffset">
                                                             <size key="value" width="0.0" height="3"/>
@@ -132,15 +135,15 @@
                                                 </view>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="bottom" secondItem="BOs-hL-CLp" secondAttribute="bottom" constant="16" id="o09-8n-g84"/>
-                                                <constraint firstAttribute="trailing" secondItem="BOs-hL-CLp" secondAttribute="trailing" constant="16" id="pAX-6l-IDI"/>
-                                                <constraint firstItem="BOs-hL-CLp" firstAttribute="top" secondItem="Cew-so-fED" secondAttribute="top" constant="8" id="w3n-am-yhO"/>
-                                                <constraint firstItem="BOs-hL-CLp" firstAttribute="leading" secondItem="Cew-so-fED" secondAttribute="leading" constant="16" id="zUW-Pb-hwx"/>
+                                                <constraint firstAttribute="bottom" secondItem="0Pv-YR-4mM" secondAttribute="bottom" constant="8" id="5bQ-jT-m15"/>
+                                                <constraint firstItem="0Pv-YR-4mM" firstAttribute="top" secondItem="Cew-so-fED" secondAttribute="top" constant="8" id="6zd-qZ-Ifv"/>
+                                                <constraint firstAttribute="trailing" secondItem="0Pv-YR-4mM" secondAttribute="trailing" constant="16" id="DwJ-Te-6aq"/>
+                                                <constraint firstItem="0Pv-YR-4mM" firstAttribute="leading" secondItem="Cew-so-fED" secondAttribute="leading" constant="16" id="JNz-ju-cLc"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
-                                            <outlet property="mainView" destination="BOs-hL-CLp" id="RW9-Qh-nvG"/>
+                                            <outlet property="mainView" destination="0Pv-YR-4mM" id="7ez-CA-yHk"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="sightsCardCell" rowHeight="411" id="u45-7M-3W5" customClass="SightsCardCell" customModule="Daydream" customModuleProvider="target">
@@ -165,7 +168,7 @@
                                                                 <constraint firstAttribute="height" constant="72" id="Kzo-cN-Lnn"/>
                                                             </constraints>
                                                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
-                                                            <state key="normal" title="Point of Interest 1"/>
+                                                            <state key="normal" title="..."/>
                                                             <connections>
                                                                 <action selector="pointOfInterest1BtnTapped:" destination="u45-7M-3W5" eventType="touchUpInside" id="oy5-n9-XBg"/>
                                                             </connections>
@@ -176,7 +179,7 @@
                                                                 <constraint firstAttribute="height" constant="72" id="GJG-kx-1U1"/>
                                                             </constraints>
                                                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
-                                                            <state key="normal" title="Point of Interest 2"/>
+                                                            <state key="normal" title="..."/>
                                                             <connections>
                                                                 <action selector="pointOfInterest2BtnTapped:" destination="u45-7M-3W5" eventType="touchUpInside" id="FNp-KT-qAN"/>
                                                             </connections>
@@ -238,7 +241,7 @@
                                                     <rect key="frame" x="16" y="16" width="343" height="379"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Top Eateries" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Qn-ZQ-k3h">
-                                                            <rect key="frame" x="16" y="16" width="311" height="28.666666666666671"/>
+                                                            <rect key="frame" x="16" y="16" width="311" height="29"/>
                                                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="24"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
@@ -250,7 +253,6 @@
                                                         <constraint firstAttribute="trailing" secondItem="7Qn-ZQ-k3h" secondAttribute="trailing" constant="16" id="D4B-yv-frA"/>
                                                         <constraint firstItem="7Qn-ZQ-k3h" firstAttribute="top" secondItem="S4O-10-Qll" secondAttribute="top" constant="16" id="Jsd-Fa-mzq"/>
                                                         <constraint firstItem="7Qn-ZQ-k3h" firstAttribute="leading" secondItem="S4O-10-Qll" secondAttribute="leading" constant="16" id="bOA-C6-Qfn"/>
-                                                        <constraint firstAttribute="width" constant="343" id="mWo-Ss-jKa"/>
                                                     </constraints>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
@@ -309,7 +311,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hOa-Hv-SgJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="904.79999999999995" y="132.26600985221674"/>
+            <point key="canvasLocation" x="903.75" y="132.04225352112675"/>
         </scene>
     </scenes>
     <resources>

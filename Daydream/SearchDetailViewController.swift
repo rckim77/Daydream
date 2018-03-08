@@ -103,18 +103,16 @@ class SearchDetailViewController: UIViewController {
                 // TODO: handle error
                 print("Error: \(error.localizedDescription)")
                 completion(nil)
-            } else {
-                if let firstPhoto = photos?.results.first {
-                    GMSPlacesClient.shared().loadPlacePhoto(firstPhoto, callback: { (photo, error) in
-                        if let error = error {
-                            // TODO: handle error
-                            print("Error: \(error.localizedDescription)")
-                            completion(nil)
-                        } else {
-                            completion(photo)
-                        }
-                    })
-                }
+            } else if let firstPhoto = photos?.results.first {
+                GMSPlacesClient.shared().loadPlacePhoto(firstPhoto, callback: { (photo, error) in
+                    if let error = error {
+                        // TODO: handle error
+                        print("Error: \(error.localizedDescription)")
+                        completion(nil)
+                    } else {
+                        completion(photo)
+                    }
+                })
             }
         }
     }
@@ -128,7 +126,6 @@ class SearchDetailViewController: UIViewController {
                 let json = JSON(value)
                 self?.pointsOfInterest = json["results"].arrayValue
                 self?.placeCardsTableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .automatic)
-
             case .failure(let error):
                 print(error)
             }
