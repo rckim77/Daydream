@@ -37,10 +37,17 @@ class SearchDetailViewController: UIViewController {
         
         if let place = placeData {
             titleLabel.text = place.name
+
             loadPhotoForPlace(placeId: place.placeID, completion: { photo in
                 self.placeImageView.image = photo
                 self.placeImageView.contentMode = .scaleAspectFill
+
+                // add a blur for now since resolution isn't great
+                let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.regular))
+                visualEffectView.frame = self.placeImageView.bounds
+                self.placeImageView.addSubview(visualEffectView)
             })
+
             loadTopSights(with: place)
         } else {
             // show default background screen

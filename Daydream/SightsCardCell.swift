@@ -10,7 +10,7 @@ import UIKit
 import SwiftyJSON
 import GooglePlaces
 
-protocol SightsCardCellDelegate {
+protocol SightsCardCellDelegate: class {
     func didSelectPointOfInterest(with viewport: GMSCoordinateBounds)
 }
 
@@ -19,7 +19,7 @@ class SightsCardCell: UITableViewCell {
     @IBOutlet weak var pointOfInterest1Btn: UIButton!
     @IBOutlet weak var pointOfInterest2Btn: UIButton!
 
-    var delegate: SightsCardCellDelegate?
+    weak var delegate: SightsCardCellDelegate?
     var pointsOfInterest: [JSON]? {
         didSet {
             guard let pointsOfInterest = pointsOfInterest else { return }
