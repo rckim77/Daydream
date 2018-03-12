@@ -25,15 +25,26 @@ class SightsCardCell: UITableViewCell {
         didSet {
             guard let pointsOfInterest = pointsOfInterest else { return }
 
-            let pointOfInterest1 = pointsOfInterest[0].dictionaryValue["name"]?.stringValue
-            let pointOfInterest2 = pointsOfInterest[1].dictionaryValue["name"]?.stringValue
-            let pointOfInterest3 = pointsOfInterest[2].dictionaryValue["name"]?.stringValue
-            pointOfInterest1Btn.setTitle(pointOfInterest1, for: .normal)
-            pointOfInterest2Btn.setTitle(pointOfInterest2, for: .normal)
-            pointOfInterest3Btn.setTitle(pointOfInterest3, for: .normal)
+            let pointOfInterest1 = pointsOfInterest[0]
+            let pointOfInterest2 = pointsOfInterest[1]
+            let pointOfInterest3 = pointsOfInterest[2]
 
+            pointOfInterest1Btn.setTitle(pointOfInterest1.dictionaryValue["name"]?.stringValue, for: .normal)
+            pointOfInterest2Btn.setTitle(pointOfInterest2.dictionaryValue["name"]?.stringValue, for: .normal)
+            pointOfInterest3Btn.setTitle(pointOfInterest3.dictionaryValue["name"]?.stringValue, for: .normal)
+
+            loadBackgroundImage(for: 1, with: pointOfInterest1)
+            loadBackgroundImage(for: 2, with: pointOfInterest2)
+            loadBackgroundImage(for: 3, with: pointOfInterest3)
         }
     }
+
+    override func awakeFromNib() {
+        super.awakeFromNib()
+
+        pointOfInterest3Btn.addBottomRoundedCorners()
+    }
+
     @IBAction func pointOfInterest1BtnTapped(_ sender: UIButton) {
         guard let pointsOfInterest = pointsOfInterest, let viewport = getViewport(for: pointsOfInterest[0]) else { return }
 
@@ -60,5 +71,21 @@ class SightsCardCell: UITableViewCell {
         let southwest = CLLocationCoordinate2D(latitude: southwestRaw["lat"].doubleValue, longitude: southwestRaw["lng"].doubleValue)
 
         return GMSCoordinateBounds(coordinate: northeast, coordinate: southwest)
+    }
+
+    private func loadBackgroundImage(for button: Int, with pointOfInterest: JSON) {
+        let placeId = pointOfInterest["place_id"].stringValue
+
+        loadPhotoForPlace(placeId: placeId, completion: { [weak self] image in
+            guard let strongSelf = self else { return }
+
+            if button == 1 {
+                strongSelf.pointOfInterest1Btn.setBackgroundImage(image, for: .normal)
+            } else if button == 2 {
+                strongSelf.pointOfInterest2Btn.setBackgroundImage(image, for: .normal)
+            } else if button == 3 {
+                strongSelf.pointOfInterest3Btn.setBackgroundImage(image, for: .normal)
+            }
+        })
     }
 }

@@ -130,4 +130,42 @@ extension UIView {
         layer.cornerRadius = 10
         layer.masksToBounds = true
     }
+
+    func addBottomRoundedCorners() {
+        let rectShape = CAShapeLayer()
+        rectShape.bounds = frame
+        rectShape.position = center
+        rectShape.path = UIBezierPath(roundedRect: bounds, byRoundingCorners: [.bottomLeft, .bottomRight], cornerRadii: CGSize(width: 10, height: 10)).cgPath
+
+        layer.mask = rectShape
+    }
 }
+
+protocol PhotoLoadable {
+    func loadPhotoForPlace(placeId: String, completion: @escaping(_ photo: UIImage?) -> Void)
+}
+
+extension PhotoLoadable {
+    func loadPhotoForPlace(placeId: String, completion: @escaping(_ photo: UIImage?) -> Void) {
+        GMSPlacesClient.shared().lookUpPhotos(forPlaceID: placeId) { (photos, error) in
+            if let error = error {
+                // TODO: handle error
+                print("Error: \(error.localizedDescription)")
+                completion(nil)
+            } else if let firstPhoto = photos?.results.first {
+                GMSPlacesClient.shared().loadPlacePhoto(firstPhoto, callback: { (photo, error) in
+                    if let error = error {
+                        // TODO: handle error
+                        print("Error: \(error.localizedDescription)")
+                        completion(nil)
+                    } else {
+                        completion(photo)
+                    }
+                })
+            }
+        }
+    }
+}
+
+extension UIViewController: PhotoLoadable {}
+extension UITableViewCell: PhotoLoadable {}

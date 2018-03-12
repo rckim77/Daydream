@@ -22,7 +22,7 @@ class SearchDetailViewController: UIViewController {
     var placeData: GMSPlace?
     var pointsOfInterest: [JSON]?
     private let mapCardCellHeight: CGFloat = 180
-    private let sightsCardCellHeight: CGFloat = 411
+    private let sightsCardCellHeight: CGFloat = 539
     
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var placeImageView: UIImageView!
@@ -95,26 +95,6 @@ class SearchDetailViewController: UIViewController {
             self.placeImageView.contentMode = .scaleAspectFill
         }
 
-    }
-    
-    private func loadPhotoForPlace(placeId: String, completion: @escaping(_ photo: UIImage?) -> Void) {
-        GMSPlacesClient.shared().lookUpPhotos(forPlaceID: placeId) { (photos, error) in
-            if let error = error {
-                // TODO: handle error
-                print("Error: \(error.localizedDescription)")
-                completion(nil)
-            } else if let firstPhoto = photos?.results.first {
-                GMSPlacesClient.shared().loadPlacePhoto(firstPhoto, callback: { (photo, error) in
-                    if let error = error {
-                        // TODO: handle error
-                        print("Error: \(error.localizedDescription)")
-                        completion(nil)
-                    } else {
-                        completion(photo)
-                    }
-                })
-            }
-        }
     }
 
     private func loadTopSights(with place: GMSPlace) {
