@@ -18,6 +18,7 @@ class SightsCardCell: UITableViewCell {
 
     @IBOutlet weak var pointOfInterest1Btn: UIButton!
     @IBOutlet weak var pointOfInterest2Btn: UIButton!
+    @IBOutlet weak var pointOfInterest3Btn: UIButton!
 
     weak var delegate: SightsCardCellDelegate?
     var pointsOfInterest: [JSON]? {
@@ -26,25 +27,38 @@ class SightsCardCell: UITableViewCell {
 
             let pointOfInterest1 = pointsOfInterest[0].dictionaryValue["name"]?.stringValue
             let pointOfInterest2 = pointsOfInterest[1].dictionaryValue["name"]?.stringValue
+            let pointOfInterest3 = pointsOfInterest[2].dictionaryValue["name"]?.stringValue
             pointOfInterest1Btn.setTitle(pointOfInterest1, for: .normal)
             pointOfInterest2Btn.setTitle(pointOfInterest2, for: .normal)
+            pointOfInterest3Btn.setTitle(pointOfInterest3, for: .normal)
+
         }
     }
     @IBAction func pointOfInterest1BtnTapped(_ sender: UIButton) {
-        guard let pointsOfInterest = pointsOfInterest else { return }
-
-        let viewportRaw = pointsOfInterest[0]["geometry"]["viewport"]
-        let northeastRaw = viewportRaw["northeast"]
-        let southwestRaw = viewportRaw["southwest"]
-        let northeast = CLLocationCoordinate2D(latitude: northeastRaw["lat"].doubleValue, longitude: northeastRaw["lng"].doubleValue)
-        let southwest = CLLocationCoordinate2D(latitude: southwestRaw["lat"].doubleValue, longitude: southwestRaw["lng"].doubleValue)
-        let viewport = GMSCoordinateBounds(coordinate: northeast, coordinate: southwest)
+        guard let pointsOfInterest = pointsOfInterest, let viewport = getViewport(for: pointsOfInterest[0]) else { return }
 
         delegate?.didSelectPointOfInterest(with: viewport)
     }
 
     @IBAction func pointOfInterest2BtnTapped(_ sender: UIButton) {
+        guard let pointsOfInterest = pointsOfInterest, let viewport = getViewport(for: pointsOfInterest[1]) else { return }
 
+        delegate?.didSelectPointOfInterest(with: viewport)
     }
 
+    @IBAction func pointOfInterest3BtnTapped(_ sender: UIButton) {
+        guard let pointsOfInterest = pointsOfInterest, let viewport = getViewport(for: pointsOfInterest[2]) else { return }
+
+        delegate?.didSelectPointOfInterest(with: viewport)
+    }
+
+    private func getViewport(for pointOfInterest: JSON) -> GMSCoordinateBounds? {
+        let viewportRaw = pointOfInterest["geometry"]["viewport"]
+        let northeastRaw = viewportRaw["northeast"]
+        let southwestRaw = viewportRaw["southwest"]
+        let northeast = CLLocationCoordinate2D(latitude: northeastRaw["lat"].doubleValue, longitude: northeastRaw["lng"].doubleValue)
+        let southwest = CLLocationCoordinate2D(latitude: southwestRaw["lat"].doubleValue, longitude: southwestRaw["lng"].doubleValue)
+
+        return GMSCoordinateBounds(coordinate: northeast, coordinate: southwest)
+    }
 }

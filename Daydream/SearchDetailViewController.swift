@@ -261,6 +261,7 @@ extension SearchDetailViewController: GMSAutocompleteResultsViewControllerDelega
 extension SearchDetailViewController: GMSPlacePickerViewControllerDelegate {
     func placePicker(_ viewController: GMSPlacePickerViewController, didPick place: GMSPlace) {
 //        viewController.dismiss(animated: true, completion: nil)
+        // TODO: zoom into that place and show more info
 
         print("Place name \(place.name)")
         print("Place address \(place.formattedAddress)")
@@ -270,6 +271,7 @@ extension SearchDetailViewController: GMSPlacePickerViewControllerDelegate {
     func placePickerDidCancel(_ viewController: GMSPlacePickerViewController) {
         viewController.dismiss(animated: true, completion: nil)
     }
+
 }
 
 extension SearchDetailViewController: SightsCardCellDelegate {

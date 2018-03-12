@@ -163,39 +163,65 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="kYN-ty-kYt">
-                                                            <rect key="frame" x="16" y="85" width="311" height="72"/>
+                                                            <rect key="frame" x="0.0" y="65" width="343" height="100"/>
+                                                            <color key="backgroundColor" red="0.20392156859999999" green="0.28627450980000002" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="height" constant="72" id="Kzo-cN-Lnn"/>
+                                                                <constraint firstAttribute="height" constant="100" id="Kzo-cN-Lnn"/>
                                                             </constraints>
                                                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
-                                                            <state key="normal" title="..."/>
+                                                            <inset key="titleEdgeInsets" minX="16" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                            <state key="normal" title="Point of Interest 1">
+                                                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            </state>
                                                             <connections>
-                                                                <action selector="pointOfInterest1BtnTapped:" destination="u45-7M-3W5" eventType="touchUpInside" id="oy5-n9-XBg"/>
+                                                                <action selector="pointOfInterest1BtnTapped:" destination="u45-7M-3W5" eventType="touchUpInside" id="7zo-6J-UoC"/>
                                                             </connections>
                                                         </button>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="AUr-1a-5At">
-                                                            <rect key="frame" x="16" y="197" width="311" height="72"/>
+                                                            <rect key="frame" x="0.0" y="165" width="343" height="100"/>
+                                                            <color key="backgroundColor" red="0.20392156859999999" green="0.28627450980000002" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="height" constant="72" id="GJG-kx-1U1"/>
+                                                                <constraint firstAttribute="height" constant="100" id="GJG-kx-1U1"/>
                                                             </constraints>
                                                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
-                                                            <state key="normal" title="..."/>
+                                                            <inset key="titleEdgeInsets" minX="16" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                            <state key="normal" title="Point of Interest 2">
+                                                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            </state>
                                                             <connections>
-                                                                <action selector="pointOfInterest2BtnTapped:" destination="u45-7M-3W5" eventType="touchUpInside" id="FNp-KT-qAN"/>
+                                                                <action selector="pointOfInterest2BtnTapped:" destination="u45-7M-3W5" eventType="touchUpInside" id="UcL-HX-ODP"/>
+                                                            </connections>
+                                                        </button>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="psK-y2-9Cy">
+                                                            <rect key="frame" x="0.0" y="265" width="343" height="100"/>
+                                                            <color key="backgroundColor" red="0.20392156859999999" green="0.28627450980000002" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" constant="100" id="RiQ-Vb-hw1"/>
+                                                            </constraints>
+                                                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
+                                                            <inset key="titleEdgeInsets" minX="16" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                            <state key="normal" title="Point of Interest 3">
+                                                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            </state>
+                                                            <connections>
+                                                                <action selector="pointOfInterest3BtnTapped:" destination="u45-7M-3W5" eventType="touchUpInside" id="xrp-yY-muY"/>
                                                             </connections>
                                                         </button>
                                                     </subviews>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="trailing" secondItem="AUr-1a-5At" secondAttribute="trailing" constant="16" id="1Rz-am-97z"/>
-                                                        <constraint firstAttribute="trailing" secondItem="kYN-ty-kYt" secondAttribute="trailing" constant="16" id="Dza-g4-Gb3"/>
+                                                        <constraint firstAttribute="trailing" secondItem="AUr-1a-5At" secondAttribute="trailing" id="1Rz-am-97z"/>
+                                                        <constraint firstAttribute="trailing" secondItem="kYN-ty-kYt" secondAttribute="trailing" id="Dza-g4-Gb3"/>
                                                         <constraint firstAttribute="height" constant="379" id="Ozc-Kn-Obx"/>
-                                                        <constraint firstItem="kYN-ty-kYt" firstAttribute="leading" secondItem="0af-yr-VQQ" secondAttribute="leading" constant="16" id="TE2-YD-CbZ"/>
-                                                        <constraint firstItem="AUr-1a-5At" firstAttribute="top" secondItem="kYN-ty-kYt" secondAttribute="bottom" constant="40" id="UW1-C0-BN9"/>
-                                                        <constraint firstItem="AUr-1a-5At" firstAttribute="leading" secondItem="0af-yr-VQQ" secondAttribute="leading" constant="16" id="WQn-cA-Z8b"/>
+                                                        <constraint firstItem="psK-y2-9Cy" firstAttribute="leading" secondItem="0af-yr-VQQ" secondAttribute="leading" id="Rja-hQ-RCI"/>
+                                                        <constraint firstItem="kYN-ty-kYt" firstAttribute="leading" secondItem="0af-yr-VQQ" secondAttribute="leading" id="TE2-YD-CbZ"/>
+                                                        <constraint firstItem="AUr-1a-5At" firstAttribute="top" secondItem="kYN-ty-kYt" secondAttribute="bottom" id="UW1-C0-BN9"/>
+                                                        <constraint firstItem="psK-y2-9Cy" firstAttribute="top" secondItem="AUr-1a-5At" secondAttribute="bottom" id="Ufp-30-tm2"/>
+                                                        <constraint firstItem="AUr-1a-5At" firstAttribute="leading" secondItem="0af-yr-VQQ" secondAttribute="leading" id="WQn-cA-Z8b"/>
                                                         <constraint firstAttribute="trailing" secondItem="PMS-z4-Vl0" secondAttribute="trailing" constant="16" id="aIP-87-gbf"/>
-                                                        <constraint firstItem="kYN-ty-kYt" firstAttribute="top" secondItem="PMS-z4-Vl0" secondAttribute="bottom" constant="40" id="crG-T1-ghP"/>
+                                                        <constraint firstItem="kYN-ty-kYt" firstAttribute="top" secondItem="PMS-z4-Vl0" secondAttribute="bottom" constant="20" id="crG-T1-ghP"/>
                                                         <constraint firstItem="PMS-z4-Vl0" firstAttribute="top" secondItem="0af-yr-VQQ" secondAttribute="top" constant="16" id="dyP-rj-SG0"/>
+                                                        <constraint firstAttribute="trailing" secondItem="psK-y2-9Cy" secondAttribute="trailing" id="qu0-Ym-jEp"/>
                                                         <constraint firstItem="PMS-z4-Vl0" firstAttribute="leading" secondItem="0af-yr-VQQ" secondAttribute="leading" constant="16" id="zxN-tC-1tV"/>
                                                     </constraints>
                                                     <userDefinedRuntimeAttributes>
@@ -228,6 +254,7 @@
                                         <connections>
                                             <outlet property="pointOfInterest1Btn" destination="kYN-ty-kYt" id="xmy-Ou-zwY"/>
                                             <outlet property="pointOfInterest2Btn" destination="AUr-1a-5At" id="aUN-af-rSf"/>
+                                            <outlet property="pointOfInterest3Btn" destination="psK-y2-9Cy" id="Rdw-bB-DPG"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="eateriesCardCell" rowHeight="411" id="rPE-Bq-m44" customClass="EateriesCardCell" customModule="Daydream" customModuleProvider="target">
@@ -311,7 +338,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hOa-Hv-SgJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="903.75" y="132.04225352112675"/>
+            <point key="canvasLocation" x="903.20000000000005" y="131.52709359605913"/>
         </scene>
     </scenes>
     <resources>
