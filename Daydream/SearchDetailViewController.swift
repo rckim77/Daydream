@@ -160,33 +160,35 @@ extension SearchDetailViewController: UITableViewDataSource, UITableViewDelegate
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // TODO: add generic cell for when error occurs
         switch indexPath.row {
         case 0:
-            if let cell = tableView.dequeueReusableCell(withIdentifier: "mapCardCell", for: indexPath) as? MapCardCell {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "mapCardCell", for: indexPath)
 
-                cell.place = placeData
+            if let mapCardCell = cell as? MapCardCell {
 
-                return cell
-            } else {
-                return UITableViewCell()
+                mapCardCell.place = placeData
+
+                return mapCardCell
             }
+            return cell
         case 1:
-            if let cell = tableView.dequeueReusableCell(withIdentifier: "sightsCardCell", for: indexPath) as? SightsCardCell {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "sightsCardCell", for: indexPath)
 
-                cell.delegate = self
-                cell.pointsOfInterest = pointsOfInterest
+            if let sightsCardCell = cell as? SightsCardCell {
 
-                return cell
-            } else {
-                return UITableViewCell()
+                sightsCardCell.delegate = self
+                sightsCardCell.pointsOfInterest = pointsOfInterest
+
+                return sightsCardCell
             }
+            return cell
         case 2:
-            if let cell = tableView.dequeueReusableCell(withIdentifier: "eateriesCardCell", for: indexPath) as? EateriesCardCell {
-                return cell
-            } else {
-                return UITableViewCell()
+            let cell = tableView.dequeueReusableCell(withIdentifier: "eateriesCardCell", for: indexPath)
+
+            if let eateriesCardCell = cell as? EateriesCardCell {
+                return eateriesCardCell
             }
+            return cell
         default:
             return UITableViewCell()
         }

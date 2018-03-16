@@ -44,6 +44,11 @@ class SightsCardCell: UITableViewCell {
 
         pointOfInterest1Btn.addTopRoundedCorners()
         pointOfInterest3Btn.addBottomRoundedCorners()
+
+        // reset image (to prevent background images being reused due to dequeueing reusable cells)
+        pointOfInterest1Btn.setBackgroundImage(nil, for: .normal)
+        pointOfInterest2Btn.setBackgroundImage(nil, for: .normal)
+        pointOfInterest3Btn.setBackgroundImage(nil, for: .normal)
     }
 
     @IBAction func pointOfInterest1BtnTapped(_ sender: UIButton) {

@@ -161,7 +161,7 @@
                                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
                                                             <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <inset key="titleEdgeInsets" minX="16" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                            <inset key="titleEdgeInsets" minX="16" minY="104" maxX="0.0" maxY="0.0"/>
                                                             <size key="titleShadowOffset" width="0.0" height="1"/>
                                                             <state key="normal" title="Point of Interest 1">
                                                                 <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -179,7 +179,7 @@
                                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
                                                             <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <inset key="titleEdgeInsets" minX="16" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                            <inset key="titleEdgeInsets" minX="16" minY="104" maxX="0.0" maxY="0.0"/>
                                                             <size key="titleShadowOffset" width="0.0" height="1"/>
                                                             <state key="normal" title="Point of Interest 2">
                                                                 <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -194,7 +194,7 @@
                                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
                                                             <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <inset key="titleEdgeInsets" minX="16" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                            <inset key="titleEdgeInsets" minX="16" minY="104" maxX="0.0" maxY="0.0"/>
                                                             <size key="titleShadowOffset" width="0.0" height="1"/>
                                                             <state key="normal" title="Point of Interest 3">
                                                                 <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -268,29 +268,18 @@
                                             <outlet property="pointOfInterest3Btn" destination="psK-y2-9Cy" id="Rdw-bB-DPG"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="eateriesCardCell" rowHeight="411" id="rPE-Bq-m44" customClass="EateriesCardCell" customModule="Daydream" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="788" width="375" height="411"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="eateriesCardCell" rowHeight="570" id="rPE-Bq-m44" customClass="EateriesCardCell" customModule="Daydream" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="788" width="375" height="570"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="rPE-Bq-m44" id="nkI-M7-1OO">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="411"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="570"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="S4O-10-Qll" customClass="DesignableView" customModule="Daydream" customModuleProvider="target">
-                                                    <rect key="frame" x="16" y="16" width="343" height="379"/>
-                                                    <subviews>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Top Eateries" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Qn-ZQ-k3h">
-                                                            <rect key="frame" x="16" y="16" width="311" height="29"/>
-                                                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="24"/>
-                                                            <nil key="textColor"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
-                                                    </subviews>
+                                                    <rect key="frame" x="16" y="69" width="343" height="485"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="379" id="5cf-tu-7fL"/>
-                                                        <constraint firstAttribute="trailing" secondItem="7Qn-ZQ-k3h" secondAttribute="trailing" constant="16" id="D4B-yv-frA"/>
-                                                        <constraint firstItem="7Qn-ZQ-k3h" firstAttribute="top" secondItem="S4O-10-Qll" secondAttribute="top" constant="16" id="Jsd-Fa-mzq"/>
-                                                        <constraint firstItem="7Qn-ZQ-k3h" firstAttribute="leading" secondItem="S4O-10-Qll" secondAttribute="leading" constant="16" id="bOA-C6-Qfn"/>
+                                                        <constraint firstAttribute="height" constant="485" id="Pc8-Jr-2PZ"/>
                                                     </constraints>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
@@ -310,12 +299,25 @@
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                 </view>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Top Eateries" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Qn-ZQ-k3h">
+                                                    <rect key="frame" x="16" y="16" width="130.33333333333334" height="29"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="29" id="jJL-cF-kXi"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="24"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <size key="shadowOffset" width="0.0" height="1"/>
+                                                </label>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstItem="S4O-10-Qll" firstAttribute="top" secondItem="7Qn-ZQ-k3h" secondAttribute="bottom" constant="24" id="6cd-hm-G4V"/>
                                                 <constraint firstAttribute="bottom" secondItem="S4O-10-Qll" secondAttribute="bottom" constant="16" id="Tub-jJ-Fje"/>
+                                                <constraint firstItem="7Qn-ZQ-k3h" firstAttribute="leading" secondItem="nkI-M7-1OO" secondAttribute="leading" constant="16" id="hGJ-qh-trW"/>
+                                                <constraint firstItem="7Qn-ZQ-k3h" firstAttribute="top" secondItem="nkI-M7-1OO" secondAttribute="top" constant="16" id="qnT-dt-8xJ"/>
                                                 <constraint firstItem="S4O-10-Qll" firstAttribute="leading" secondItem="nkI-M7-1OO" secondAttribute="leading" constant="16" id="s6l-eg-ATm"/>
                                                 <constraint firstAttribute="trailing" secondItem="S4O-10-Qll" secondAttribute="trailing" constant="16" id="vdu-Oa-waI"/>
-                                                <constraint firstItem="S4O-10-Qll" firstAttribute="top" secondItem="nkI-M7-1OO" secondAttribute="top" constant="16" id="wRU-h5-Ve3"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
