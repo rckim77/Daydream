@@ -21,8 +21,8 @@ class SearchDetailViewController: UIViewController {
     var mapView: GMSMapView?
     var placeData: GMSPlace?
     var pointsOfInterest: [JSON]?
-    private let mapCardCellHeight: CGFloat = 180
-    private let sightsCardCellHeight: CGFloat = 560
+    private let mapCardCellHeight: CGFloat = 190
+    private let sightsCardCellHeight: CGFloat = 570
     
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var placeImageView: UIImageView!

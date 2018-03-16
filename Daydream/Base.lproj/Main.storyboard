@@ -102,18 +102,18 @@
                                 <rect key="frame" x="0.0" y="204" width="375" height="608"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="mapCardCell" rowHeight="180" id="MYb-IR-Ts9" customClass="MapCardCell" customModule="Daydream" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="375" height="180"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="mapCardCell" rowHeight="190" id="MYb-IR-Ts9" customClass="MapCardCell" customModule="Daydream" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="375" height="190"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="MYb-IR-Ts9" id="Cew-so-fED" customClass="MapCardCell" customModule="Daydream" customModuleProvider="target">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="180"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="190"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="0Pv-YR-4mM" customClass="DesignableView" customModule="Daydream" customModuleProvider="target">
-                                                    <rect key="frame" x="16" y="8" width="343" height="164"/>
+                                                    <rect key="frame" x="16" y="8" width="343" height="174"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="164" id="78s-5H-GaN"/>
+                                                        <constraint firstAttribute="height" constant="174" id="Wdz-Zp-4GR"/>
                                                     </constraints>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
@@ -146,65 +146,59 @@
                                             <outlet property="mainView" destination="0Pv-YR-4mM" id="7ez-CA-yHk"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="sightsCardCell" rowHeight="560" id="u45-7M-3W5" customClass="SightsCardCell" customModule="Daydream" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="208" width="375" height="560"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="sightsCardCell" rowHeight="570" id="u45-7M-3W5" customClass="SightsCardCell" customModule="Daydream" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="218" width="375" height="570"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="u45-7M-3W5" id="uZ4-RN-RBL">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="560"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="570"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0af-yr-VQQ" customClass="DesignableView" customModule="Daydream" customModuleProvider="target">
-                                                    <rect key="frame" x="16" y="16" width="343" height="528"/>
+                                                    <rect key="frame" x="16" y="69" width="343" height="485"/>
                                                     <subviews>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Points of Interest" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PMS-z4-Vl0">
-                                                            <rect key="frame" x="16" y="16" width="311" height="29"/>
-                                                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="24"/>
-                                                            <nil key="textColor"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
-                                                        <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="kYN-ty-kYt">
-                                                            <rect key="frame" x="0.0" y="70" width="343" height="153"/>
-                                                            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="height" constant="153" id="Kzo-cN-Lnn"/>
-                                                            </constraints>
+                                                        <button opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="kYN-ty-kYt">
+                                                            <rect key="frame" x="0.0" y="0.0" width="343" height="161.66666666666666"/>
+                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
                                                             <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <inset key="titleEdgeInsets" minX="16" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                            <size key="titleShadowOffset" width="0.0" height="1"/>
                                                             <state key="normal" title="Point of Interest 1">
                                                                 <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                <color key="titleShadowColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             </state>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="boolean" keyPath="clipsToBounds" value="NO"/>
+                                                            </userDefinedRuntimeAttributes>
                                                             <connections>
                                                                 <action selector="pointOfInterest1BtnTapped:" destination="u45-7M-3W5" eventType="touchUpInside" id="7zo-6J-UoC"/>
                                                             </connections>
                                                         </button>
                                                         <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="AUr-1a-5At">
-                                                            <rect key="frame" x="0.0" y="223" width="343" height="153"/>
-                                                            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="height" constant="153" id="GJG-kx-1U1"/>
-                                                            </constraints>
+                                                            <rect key="frame" x="0.0" y="161.66666666666669" width="343" height="161.66666666666669"/>
+                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
                                                             <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <inset key="titleEdgeInsets" minX="16" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                            <size key="titleShadowOffset" width="0.0" height="1"/>
                                                             <state key="normal" title="Point of Interest 2">
                                                                 <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                <color key="titleShadowColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             </state>
                                                             <connections>
                                                                 <action selector="pointOfInterest2BtnTapped:" destination="u45-7M-3W5" eventType="touchUpInside" id="UcL-HX-ODP"/>
                                                             </connections>
                                                         </button>
                                                         <button opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="psK-y2-9Cy">
-                                                            <rect key="frame" x="0.0" y="376" width="343" height="153"/>
-                                                            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="height" constant="153" id="RiQ-Vb-hw1"/>
-                                                            </constraints>
+                                                            <rect key="frame" x="0.0" y="323.33333333333331" width="343" height="161.66666666666669"/>
+                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
                                                             <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <inset key="titleEdgeInsets" minX="16" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                            <size key="titleShadowOffset" width="0.0" height="1"/>
                                                             <state key="normal" title="Point of Interest 3">
                                                                 <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                <color key="titleShadowColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             </state>
                                                             <connections>
                                                                 <action selector="pointOfInterest3BtnTapped:" destination="u45-7M-3W5" eventType="touchUpInside" id="xrp-yY-muY"/>
@@ -215,17 +209,17 @@
                                                     <constraints>
                                                         <constraint firstAttribute="trailing" secondItem="AUr-1a-5At" secondAttribute="trailing" id="1Rz-am-97z"/>
                                                         <constraint firstAttribute="trailing" secondItem="kYN-ty-kYt" secondAttribute="trailing" id="Dza-g4-Gb3"/>
+                                                        <constraint firstItem="AUr-1a-5At" firstAttribute="height" secondItem="kYN-ty-kYt" secondAttribute="height" id="Gby-fc-1n2"/>
                                                         <constraint firstItem="psK-y2-9Cy" firstAttribute="leading" secondItem="0af-yr-VQQ" secondAttribute="leading" id="Rja-hQ-RCI"/>
                                                         <constraint firstItem="kYN-ty-kYt" firstAttribute="leading" secondItem="0af-yr-VQQ" secondAttribute="leading" id="TE2-YD-CbZ"/>
                                                         <constraint firstItem="AUr-1a-5At" firstAttribute="top" secondItem="kYN-ty-kYt" secondAttribute="bottom" id="UW1-C0-BN9"/>
                                                         <constraint firstItem="psK-y2-9Cy" firstAttribute="top" secondItem="AUr-1a-5At" secondAttribute="bottom" id="Ufp-30-tm2"/>
                                                         <constraint firstItem="AUr-1a-5At" firstAttribute="leading" secondItem="0af-yr-VQQ" secondAttribute="leading" id="WQn-cA-Z8b"/>
-                                                        <constraint firstAttribute="trailing" secondItem="PMS-z4-Vl0" secondAttribute="trailing" constant="16" id="aIP-87-gbf"/>
-                                                        <constraint firstAttribute="height" constant="528" id="akz-gm-2VW"/>
-                                                        <constraint firstItem="kYN-ty-kYt" firstAttribute="top" secondItem="PMS-z4-Vl0" secondAttribute="bottom" constant="25" id="crG-T1-ghP"/>
-                                                        <constraint firstItem="PMS-z4-Vl0" firstAttribute="top" secondItem="0af-yr-VQQ" secondAttribute="top" constant="16" id="dyP-rj-SG0"/>
+                                                        <constraint firstItem="kYN-ty-kYt" firstAttribute="top" secondItem="0af-yr-VQQ" secondAttribute="top" id="YJm-Dc-YCI"/>
+                                                        <constraint firstItem="psK-y2-9Cy" firstAttribute="height" secondItem="AUr-1a-5At" secondAttribute="height" id="b8p-LD-IPS"/>
+                                                        <constraint firstAttribute="height" constant="485" id="hp0-59-yhY"/>
+                                                        <constraint firstAttribute="bottom" secondItem="psK-y2-9Cy" secondAttribute="bottom" id="lkH-Fa-CjZ"/>
                                                         <constraint firstAttribute="trailing" secondItem="psK-y2-9Cy" secondAttribute="trailing" id="qu0-Ym-jEp"/>
-                                                        <constraint firstItem="PMS-z4-Vl0" firstAttribute="leading" secondItem="0af-yr-VQQ" secondAttribute="leading" constant="16" id="zxN-tC-1tV"/>
                                                     </constraints>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
@@ -246,10 +240,23 @@
                                                         <userDefinedRuntimeAttribute type="boolean" keyPath="clipsToBounds" value="NO"/>
                                                     </userDefinedRuntimeAttributes>
                                                 </view>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Top Sights" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KKi-EJ-6t6">
+                                                    <rect key="frame" x="16.000000000000007" y="16" width="112.66666666666669" height="29"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="29" id="jUG-kb-XYh"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="24"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <color key="shadowColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <size key="shadowOffset" width="0.0" height="1"/>
+                                                </label>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstItem="0af-yr-VQQ" firstAttribute="top" secondItem="KKi-EJ-6t6" secondAttribute="bottom" constant="24" id="5lb-Mg-AVi"/>
                                                 <constraint firstAttribute="trailing" secondItem="0af-yr-VQQ" secondAttribute="trailing" constant="16" id="7MV-Ul-USx"/>
-                                                <constraint firstItem="0af-yr-VQQ" firstAttribute="top" secondItem="uZ4-RN-RBL" secondAttribute="top" constant="16" id="iJM-EJ-0ho"/>
+                                                <constraint firstItem="KKi-EJ-6t6" firstAttribute="leading" secondItem="uZ4-RN-RBL" secondAttribute="leading" constant="16" id="k2z-IV-bma"/>
+                                                <constraint firstItem="KKi-EJ-6t6" firstAttribute="top" secondItem="uZ4-RN-RBL" secondAttribute="top" constant="16" id="lHD-xr-m0N"/>
                                                 <constraint firstItem="0af-yr-VQQ" firstAttribute="leading" secondItem="uZ4-RN-RBL" secondAttribute="leading" constant="16" id="o4t-jy-SSc"/>
                                                 <constraint firstAttribute="bottom" secondItem="0af-yr-VQQ" secondAttribute="bottom" constant="16" id="tlF-ZZ-U4y"/>
                                             </constraints>
@@ -262,7 +269,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="eateriesCardCell" rowHeight="411" id="rPE-Bq-m44" customClass="EateriesCardCell" customModule="Daydream" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="768" width="375" height="411"/>
+                                        <rect key="frame" x="0.0" y="788" width="375" height="411"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="rPE-Bq-m44" id="nkI-M7-1OO">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="411"/>

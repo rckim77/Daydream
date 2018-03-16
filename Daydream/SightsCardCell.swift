@@ -42,6 +42,7 @@ class SightsCardCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
 
+        pointOfInterest1Btn.addTopRoundedCorners()
         pointOfInterest3Btn.addBottomRoundedCorners()
     }
 

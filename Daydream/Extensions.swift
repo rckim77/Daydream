@@ -139,6 +139,15 @@ extension UIView {
 
         layer.mask = rectShape
     }
+
+    func addTopRoundedCorners() {
+        let rectShape = CAShapeLayer()
+        rectShape.bounds = frame
+        rectShape.position = center
+        rectShape.path = UIBezierPath(roundedRect: bounds, byRoundingCorners: [.topLeft, .topRight], cornerRadii: CGSize(width: 10, height: 10)).cgPath
+
+        layer.mask = rectShape
+    }
 }
 
 protocol PhotoLoadable {
