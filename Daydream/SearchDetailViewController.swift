@@ -21,6 +21,7 @@ class SearchDetailViewController: UIViewController {
     var mapView: GMSMapView?
     var placeData: GMSPlace?
     var pointsOfInterest: [JSON]?
+    var eateries: [JSON]?
     private let mapCardCellHeight: CGFloat = 190
     private let sightsCardCellHeight: CGFloat = 570
     
@@ -49,6 +50,7 @@ class SearchDetailViewController: UIViewController {
             })
 
             loadTopSights(with: place)
+            loadTopEateries(with: place)
         } else {
             // show default background screen
         }
@@ -89,6 +91,7 @@ class SearchDetailViewController: UIViewController {
         placeCardsTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
 
         loadTopSights(with: place)
+        loadTopEateries(with: place)
 
         loadPhotoForPlace(placeId: place.placeID) { photo in
             self.placeImageView.image = photo
@@ -113,16 +116,44 @@ class SearchDetailViewController: UIViewController {
         }
     }
 
+    private func loadTopEateries(with place: GMSPlace) {
+        let url = createUrl(with: place.coordinate, and: "eateries")
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(AppDelegate.yelpAPIKey)"
+        ]
+
+        Alamofire.request(url, headers: headers).validate().responseJSON { [weak self] response in
+            switch response.result {
+            case .success(let value):
+                let json = JSON(value)
+                self?.eateries = json["businesses"].arrayValue
+                self?.placeCardsTableView.reloadRows(at: [IndexPath(row: 2, section: 0)], with: .automatic)
+            case .failure(let error):
+                print(error)
+            }
+
+        }
+    }
+
     private func createUrl(with coordinate: CLLocationCoordinate2D, and type: String) -> String {
-        // must be latitude,longitude
-        let locationParam = "location=\(coordinate.latitude),\(coordinate.longitude)"
-        let radiusParam = "radius=500"
-        let typeParam = "type=\(type)"
-        let keyParam = "key=\(AppDelegate.googleAPIKey)"
+        if type == "point_of_interest" {
+            let locationParam = "location=\(coordinate.latitude),\(coordinate.longitude)"
+            let radiusParam = "radius=500"
+            let typeParam = "type=\(type)"
+            let keyParam = "key=\(AppDelegate.googleAPIKey)"
 
-        let url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?\(locationParam)&\(radiusParam)&\(typeParam)&\(keyParam)"
+            let url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?\(locationParam)&\(radiusParam)&\(typeParam)&\(keyParam)"
 
-        return url
+            return url
+        } else if type == "eateries" {
+            let latitude = coordinate.latitude
+            let longitude = coordinate.longitude
+            let url = "https://api.yelp.com/v3/businesses/search?latitude=\(latitude)&longitude=\(longitude)"
+
+            return url
+        } else {
+            return ""
+        }
     }
 
     private func presentPlacePicker(with viewport: GMSCoordinateBounds) {
@@ -186,6 +217,10 @@ extension SearchDetailViewController: UITableViewDataSource, UITableViewDelegate
             let cell = tableView.dequeueReusableCell(withIdentifier: "eateriesCardCell", for: indexPath)
 
             if let eateriesCardCell = cell as? EateriesCardCell {
+
+                eateriesCardCell.delegate = self
+                eateriesCardCell.eateries = eateries
+
                 return eateriesCardCell
             }
             return cell
@@ -226,7 +261,7 @@ extension SearchDetailViewController: GMSAutocompleteResultsViewControllerDelega
     func resultsController(_ resultsController: GMSAutocompleteResultsViewController,
                            didFailAutocompleteWithError error: Error) {
         // TODO: handle the error
-        print("Error: ", error.localizedDescription)
+        print("Autocomplete Error: ", error.localizedDescription)
     }
 
     // Turn the network activity indicator on and off again
@@ -260,6 +295,10 @@ extension SearchDetailViewController: SightsCardCellDelegate {
     func didSelectPointOfInterest(with viewport: GMSCoordinateBounds) {
         presentPlacePicker(with: viewport)
     }
+}
 
-
+extension SearchDetailViewController: EateriesCardCellDelegate {
+    func didSelectEatery() {
+        print("Did select eatery")
+    }
 }

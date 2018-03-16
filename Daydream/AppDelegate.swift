@@ -15,6 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     static let googleAPIKey = "AIzaSyDEeCMHsp6PBaoeKTQo7lvS9JCOzvQ-T8U"
+    static let yelpAPIKey = "Zvdn64KWWEH-ViFv95YV-38j5BXwRcuaE4G_9VYlfSqrWGa_TBS3bW_kf1YxJyrDjVtXkSb4eav0W3iZ1km00j39vAbvGIbs5iP4ok3uEC2XIH_h79eNAV_fIUyrWnYx"
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.

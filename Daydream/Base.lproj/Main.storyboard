@@ -158,10 +158,10 @@
                                                     <subviews>
                                                         <button opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="kYN-ty-kYt">
                                                             <rect key="frame" x="0.0" y="0.0" width="343" height="161.66666666666666"/>
-                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
                                                             <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <inset key="titleEdgeInsets" minX="16" minY="104" maxX="0.0" maxY="0.0"/>
+                                                            <inset key="titleEdgeInsets" minX="16" minY="108" maxX="0.0" maxY="0.0"/>
                                                             <size key="titleShadowOffset" width="0.0" height="1"/>
                                                             <state key="normal" title="Point of Interest 1">
                                                                 <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -176,10 +176,10 @@
                                                         </button>
                                                         <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="AUr-1a-5At">
                                                             <rect key="frame" x="0.0" y="161.66666666666669" width="343" height="161.66666666666669"/>
-                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
                                                             <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <inset key="titleEdgeInsets" minX="16" minY="104" maxX="0.0" maxY="0.0"/>
+                                                            <inset key="titleEdgeInsets" minX="16" minY="108" maxX="0.0" maxY="0.0"/>
                                                             <size key="titleShadowOffset" width="0.0" height="1"/>
                                                             <state key="normal" title="Point of Interest 2">
                                                                 <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -191,10 +191,10 @@
                                                         </button>
                                                         <button opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="psK-y2-9Cy">
                                                             <rect key="frame" x="0.0" y="323.33333333333331" width="343" height="161.66666666666669"/>
-                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
                                                             <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <inset key="titleEdgeInsets" minX="16" minY="104" maxX="0.0" maxY="0.0"/>
+                                                            <inset key="titleEdgeInsets" minX="16" minY="108" maxX="0.0" maxY="0.0"/>
                                                             <size key="titleShadowOffset" width="0.0" height="1"/>
                                                             <state key="normal" title="Point of Interest 3">
                                                                 <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -205,7 +205,7 @@
                                                             </connections>
                                                         </button>
                                                     </subviews>
-                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
                                                         <constraint firstAttribute="trailing" secondItem="AUr-1a-5At" secondAttribute="trailing" id="1Rz-am-97z"/>
                                                         <constraint firstAttribute="trailing" secondItem="kYN-ty-kYt" secondAttribute="trailing" id="Dza-g4-Gb3"/>
@@ -277,9 +277,71 @@
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="S4O-10-Qll" customClass="DesignableView" customModule="Daydream" customModuleProvider="target">
                                                     <rect key="frame" x="16" y="69" width="343" height="485"/>
-                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <subviews>
+                                                        <button opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="Qse-2j-Rh2">
+                                                            <rect key="frame" x="0.0" y="0.0" width="343" height="161.66666666666666"/>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
+                                                            <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <inset key="titleEdgeInsets" minX="16" minY="108" maxX="0.0" maxY="0.0"/>
+                                                            <size key="titleShadowOffset" width="0.0" height="1"/>
+                                                            <state key="normal" title="Eatery 1">
+                                                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                <color key="titleShadowColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            </state>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="boolean" keyPath="clipsToBounds" value="NO"/>
+                                                            </userDefinedRuntimeAttributes>
+                                                            <connections>
+                                                                <action selector="eatery1BtnTapped:" destination="rPE-Bq-m44" eventType="touchUpInside" id="jLa-B1-hcD"/>
+                                                            </connections>
+                                                        </button>
+                                                        <button opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="Y0b-qV-kge">
+                                                            <rect key="frame" x="0.0" y="323.33333333333331" width="343" height="161.66666666666669"/>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
+                                                            <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <inset key="titleEdgeInsets" minX="16" minY="108" maxX="0.0" maxY="0.0"/>
+                                                            <size key="titleShadowOffset" width="0.0" height="1"/>
+                                                            <state key="normal" title="Eatery 3">
+                                                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                <color key="titleShadowColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            </state>
+                                                            <connections>
+                                                                <action selector="eatery3BtnTapped:" destination="rPE-Bq-m44" eventType="touchUpInside" id="DeL-3J-Uzv"/>
+                                                            </connections>
+                                                        </button>
+                                                        <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="QDY-Zf-770" userLabel="Eatery2 Btn">
+                                                            <rect key="frame" x="0.0" y="161.66666666666669" width="343" height="161.66666666666669"/>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
+                                                            <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <inset key="titleEdgeInsets" minX="16" minY="108" maxX="0.0" maxY="0.0"/>
+                                                            <size key="titleShadowOffset" width="0.0" height="1"/>
+                                                            <state key="normal" title="Eatery 2">
+                                                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                <color key="titleShadowColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            </state>
+                                                            <connections>
+                                                                <action selector="eatery2BtnTapped:" destination="rPE-Bq-m44" eventType="touchUpInside" id="h0v-rO-ZjR"/>
+                                                            </connections>
+                                                        </button>
+                                                    </subviews>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
+                                                        <constraint firstItem="Y0b-qV-kge" firstAttribute="leading" secondItem="S4O-10-Qll" secondAttribute="leading" id="4Ae-uj-7r1"/>
+                                                        <constraint firstItem="Y0b-qV-kge" firstAttribute="top" secondItem="QDY-Zf-770" secondAttribute="bottom" id="5JP-xB-MIP"/>
+                                                        <constraint firstItem="Qse-2j-Rh2" firstAttribute="leading" secondItem="S4O-10-Qll" secondAttribute="leading" id="8OM-yn-Uym"/>
+                                                        <constraint firstAttribute="trailing" secondItem="Qse-2j-Rh2" secondAttribute="trailing" id="BaF-jM-Oxy"/>
+                                                        <constraint firstItem="QDY-Zf-770" firstAttribute="leading" secondItem="S4O-10-Qll" secondAttribute="leading" id="Dqo-z3-RMl"/>
+                                                        <constraint firstAttribute="trailing" secondItem="Y0b-qV-kge" secondAttribute="trailing" id="Eeq-wJ-8IO"/>
                                                         <constraint firstAttribute="height" constant="485" id="Pc8-Jr-2PZ"/>
+                                                        <constraint firstAttribute="trailing" secondItem="QDY-Zf-770" secondAttribute="trailing" id="W5j-nP-E4v"/>
+                                                        <constraint firstItem="Qse-2j-Rh2" firstAttribute="height" secondItem="QDY-Zf-770" secondAttribute="height" id="gpX-ua-Sdu"/>
+                                                        <constraint firstItem="Qse-2j-Rh2" firstAttribute="top" secondItem="S4O-10-Qll" secondAttribute="top" id="ngq-kz-ROX"/>
+                                                        <constraint firstAttribute="bottom" secondItem="Y0b-qV-kge" secondAttribute="bottom" id="o8i-ap-yAM"/>
+                                                        <constraint firstItem="QDY-Zf-770" firstAttribute="height" secondItem="Y0b-qV-kge" secondAttribute="height" id="pAd-Z5-rcp"/>
+                                                        <constraint firstItem="QDY-Zf-770" firstAttribute="top" secondItem="Qse-2j-Rh2" secondAttribute="bottom" id="uY1-Jp-PWZ"/>
                                                     </constraints>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
@@ -321,6 +383,11 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <connections>
+                                            <outlet property="eatery1Btn" destination="Qse-2j-Rh2" id="qlw-Fd-ZHY"/>
+                                            <outlet property="eatery2Btn" destination="QDY-Zf-770" id="2GH-iq-rDm"/>
+                                            <outlet property="eatery3Btn" destination="Y0b-qV-kge" id="Gya-By-6Mr"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
