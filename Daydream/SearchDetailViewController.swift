@@ -298,7 +298,14 @@ extension SearchDetailViewController: SightsCardCellDelegate {
 }
 
 extension SearchDetailViewController: EateriesCardCellDelegate {
-    func didSelectEatery() {
-        print("Did select eatery")
+    func didSelectEatery(_ eatery: JSON) {
+        if let urlString = eatery.dictionaryValue["url"]?.stringValue,
+            let url = URL(string: urlString) {
+            if #available(iOS 10.0, *) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            } else {
+                UIApplication.shared.openURL(url)
+            }
+        }
     }
 }

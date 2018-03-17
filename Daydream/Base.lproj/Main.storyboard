@@ -255,10 +255,11 @@
                                             <constraints>
                                                 <constraint firstItem="0af-yr-VQQ" firstAttribute="top" secondItem="KKi-EJ-6t6" secondAttribute="bottom" constant="24" id="5lb-Mg-AVi"/>
                                                 <constraint firstAttribute="trailing" secondItem="0af-yr-VQQ" secondAttribute="trailing" constant="16" id="7MV-Ul-USx"/>
+                                                <constraint firstItem="KKi-EJ-6t6" firstAttribute="top" secondItem="uZ4-RN-RBL" secondAttribute="top" constant="16" id="Mcx-Hb-I9a"/>
                                                 <constraint firstItem="KKi-EJ-6t6" firstAttribute="leading" secondItem="uZ4-RN-RBL" secondAttribute="leading" constant="16" id="k2z-IV-bma"/>
-                                                <constraint firstItem="KKi-EJ-6t6" firstAttribute="top" secondItem="uZ4-RN-RBL" secondAttribute="top" constant="16" id="lHD-xr-m0N"/>
                                                 <constraint firstItem="0af-yr-VQQ" firstAttribute="leading" secondItem="uZ4-RN-RBL" secondAttribute="leading" constant="16" id="o4t-jy-SSc"/>
                                                 <constraint firstAttribute="bottom" secondItem="0af-yr-VQQ" secondAttribute="bottom" constant="16" id="tlF-ZZ-U4y"/>
+                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="KKi-EJ-6t6" secondAttribute="trailing" id="v3o-u1-KLD"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -374,6 +375,7 @@
                                                 </label>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="7Qn-ZQ-k3h" secondAttribute="trailing" id="1Zq-g9-Sbr"/>
                                                 <constraint firstItem="S4O-10-Qll" firstAttribute="top" secondItem="7Qn-ZQ-k3h" secondAttribute="bottom" constant="24" id="6cd-hm-G4V"/>
                                                 <constraint firstAttribute="bottom" secondItem="S4O-10-Qll" secondAttribute="bottom" constant="16" id="Tub-jJ-Fje"/>
                                                 <constraint firstItem="7Qn-ZQ-k3h" firstAttribute="leading" secondItem="nkI-M7-1OO" secondAttribute="leading" constant="16" id="hGJ-qh-trW"/>

@@ -11,7 +11,7 @@ import SwiftyJSON
 import GooglePlaces
 
 protocol EateriesCardCellDelegate: class {
-    func didSelectEatery()
+    func didSelectEatery(_ eatery: JSON)
 }
 
 class EateriesCardCell: UITableViewCell {
@@ -58,20 +58,17 @@ class EateriesCardCell: UITableViewCell {
 
     @IBAction func eatery1BtnTapped(_ sender: Any) {
         guard let eateries = eateries else { return }
-
-        delegate?.didSelectEatery()
+        delegate?.didSelectEatery(eateries[0])
     }
 
     @IBAction func eatery2BtnTapped(_ sender: Any) {
         guard let eateries = eateries else { return }
-
-        delegate?.didSelectEatery()
+        delegate?.didSelectEatery(eateries[1])
     }
 
     @IBAction func eatery3BtnTapped(_ sender: Any) {
         guard let eateries = eateries else { return }
-
-        delegate?.didSelectEatery()
+        delegate?.didSelectEatery(eateries[2])
     }
 
     private func loadBackgroundImage(for button: Int, with pointOfInterest: JSON) {
