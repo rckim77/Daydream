@@ -172,7 +172,7 @@
                                                                     <size key="shadowOffset" width="0.0" height="1"/>
                                                                 </label>
                                                             </subviews>
-                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <gestureRecognizers/>
                                                             <constraints>
                                                                 <constraint firstAttribute="bottom" secondItem="yHN-6d-7DC" secondAttribute="bottom" constant="16" id="bnj-gm-jrb"/>
@@ -199,7 +199,7 @@
                                                                     <size key="shadowOffset" width="0.0" height="1"/>
                                                                 </label>
                                                             </subviews>
-                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <constraints>
                                                                 <constraint firstItem="1VR-CS-te4" firstAttribute="leading" secondItem="cCe-zg-RYa" secondAttribute="leading" id="4KI-cS-N9R"/>
                                                                 <constraint firstAttribute="bottom" secondItem="ezb-Nw-YUk" secondAttribute="bottom" constant="16" id="A4B-gw-enK"/>
@@ -225,7 +225,7 @@
                                                                     <size key="shadowOffset" width="0.0" height="1"/>
                                                                 </label>
                                                             </subviews>
-                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="trailing" secondItem="P01-u6-tgK" secondAttribute="trailing" id="4qG-yc-fKF"/>
                                                                 <constraint firstAttribute="bottom" secondItem="4Ot-hh-287" secondAttribute="bottom" constant="16" id="BQy-V7-Lpj"/>
@@ -343,7 +343,7 @@
                                                                     <size key="shadowOffset" width="0.0" height="1"/>
                                                                 </label>
                                                             </subviews>
-                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="bottom" secondItem="fWx-Dg-Obi" secondAttribute="bottom" id="9r8-pQ-ctT"/>
                                                                 <constraint firstAttribute="trailing" secondItem="hMl-U2-MRA" secondAttribute="trailing" constant="16" id="GkG-j3-RMF"/>
@@ -369,7 +369,7 @@
                                                                     <size key="shadowOffset" width="0.0" height="1"/>
                                                                 </label>
                                                             </subviews>
-                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <constraints>
                                                                 <constraint firstItem="T2T-CZ-Lqm" firstAttribute="top" secondItem="qCj-Lu-ZCV" secondAttribute="top" id="0c9-Fg-su6"/>
                                                                 <constraint firstItem="T2T-CZ-Lqm" firstAttribute="leading" secondItem="qCj-Lu-ZCV" secondAttribute="leading" id="IOp-B3-FTj"/>
@@ -395,7 +395,7 @@
                                                                     <size key="shadowOffset" width="0.0" height="1"/>
                                                                 </label>
                                                             </subviews>
-                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="bottom" secondItem="Lqu-VO-YGn" secondAttribute="bottom" constant="16" id="113-HV-HD3"/>
                                                                 <constraint firstAttribute="trailing" secondItem="vYf-LJ-afM" secondAttribute="trailing" id="81c-bJ-ere"/>

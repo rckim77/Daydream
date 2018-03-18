@@ -40,6 +40,11 @@ class SightsCardCell: UITableViewCell {
                     pointOfInterest2Label.text = pointsOfInterest[1].name
                     pointOfInterest3Label.text = pointsOfInterest[2].name
 
+                    // reset image (to prevent background images being reused due to dequeueing reusable cells)
+                    pointOfInterest1ImageView.image = nil
+                    pointOfInterest2ImageView.image = nil
+                    pointOfInterest3ImageView.image = nil
+
                     loadBackgroundImage(for: 1, with: pointsOfInterest[0])
                     loadBackgroundImage(for: 2, with: pointsOfInterest[1])
                     loadBackgroundImage(for: 3, with: pointsOfInterest[2])

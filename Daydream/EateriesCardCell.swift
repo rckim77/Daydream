@@ -40,6 +40,11 @@ class EateriesCardCell: UITableViewCell {
                     eatery2Label.text = eateries[1].name
                     eatery3Label.text = eateries[2].name
 
+                    // reset image (to prevent background images being reused due to dequeueing reusable cells)
+                    eatery1ImageView.image = nil
+                    eatery2ImageView.image = nil
+                    eatery3ImageView.image = nil
+
                     loadBackgroundImage(for: 1, with: eateries[0])
                     loadBackgroundImage(for: 2, with: eateries[1])
                     loadBackgroundImage(for: 3, with: eateries[2])

@@ -88,7 +88,7 @@ class SearchDetailViewController: UIViewController {
     private func updateUI(withPlace place: GMSPlace) {
         titleLabel.text = place.name
 
-        placeCardsTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
+        placeCardsTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .fade)
 
         loadTopSights(with: place)
         loadTopEateries(with: place)
