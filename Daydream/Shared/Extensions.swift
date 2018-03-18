@@ -58,7 +58,7 @@ extension UISearchController {
 
 extension GMSAutocompleteResultsViewController {
     func setStyle() {
-        tableCellBackgroundColor = UIColor.black.withAlphaComponent(0.1)
+        tableCellBackgroundColor = UIColor.black.withAlphaComponent(0.3)
         primaryTextHighlightColor = .white
         primaryTextColor = .lightGray
         secondaryTextColor = .lightGray
