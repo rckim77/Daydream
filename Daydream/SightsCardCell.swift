@@ -25,18 +25,13 @@ class SightsCardCell: UITableViewCell {
         didSet {
             // POSTLAUNCH: - Update comparison with placeId
             if let pointsOfInterest = pointsOfInterest, pointsOfInterest.count >= 3, pointsOfInterest[0].placeId != oldValue?[0].placeId {
+                pointOfInterest1Btn.setTitle(pointsOfInterest[0].name, for: .normal)
+                pointOfInterest2Btn.setTitle(pointsOfInterest[1].name, for: .normal)
+                pointOfInterest3Btn.setTitle(pointsOfInterest[2].name, for: .normal)
 
-                let pointOfInterest1 = pointsOfInterest[0]
-                let pointOfInterest2 = pointsOfInterest[1]
-                let pointOfInterest3 = pointsOfInterest[2]
-
-                pointOfInterest1Btn.setTitle(pointOfInterest1.name, for: .normal)
-                pointOfInterest2Btn.setTitle(pointOfInterest2.name, for: .normal)
-                pointOfInterest3Btn.setTitle(pointOfInterest3.name, for: .normal)
-
-                loadBackgroundImage(for: 1, with: pointOfInterest1)
-                loadBackgroundImage(for: 2, with: pointOfInterest2)
-                loadBackgroundImage(for: 3, with: pointOfInterest3)
+                loadBackgroundImage(for: 1, with: pointsOfInterest[0])
+                loadBackgroundImage(for: 2, with: pointsOfInterest[1])
+                loadBackgroundImage(for: 3, with: pointsOfInterest[2])
             }
         }
     }

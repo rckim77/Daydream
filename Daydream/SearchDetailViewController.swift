@@ -21,7 +21,7 @@ class SearchDetailViewController: UIViewController {
     var mapView: GMSMapView?
     var placeData: GMSPlace?
     var pointsOfInterest: [PointOfInterest]?
-    var eateries: [JSON]?
+    var eateries: [Eatery]?
     private let mapCardCellHeight: CGFloat = 190
     private let sightsCardCellHeight: CGFloat = 570
     
@@ -140,7 +140,14 @@ class SearchDetailViewController: UIViewController {
             switch response.result {
             case .success(let value):
                 let json = JSON(value)
-                self?.eateries = json["businesses"].arrayValue
+                let results = json["businesses"].arrayValue.map({ json -> Eatery in
+                    let name = json["name"].stringValue
+                    let imageUrl = json["image_url"].stringValue
+                    let url = json["url"].stringValue
+                    return Eatery(name: name, imageUrl: imageUrl, url: url)
+                })
+
+                self?.eateries = results
                 self?.placeCardsTableView.reloadRows(at: [IndexPath(row: 2, section: 0)], with: .automatic)
             case .failure(let error):
                 print(error)
@@ -311,9 +318,8 @@ extension SearchDetailViewController: SightsCardCellDelegate {
 }
 
 extension SearchDetailViewController: EateriesCardCellDelegate {
-    func didSelectEatery(_ eatery: JSON) {
-        if let urlString = eatery.dictionaryValue["url"]?.stringValue,
-            let url = URL(string: urlString) {
+    func didSelectEatery(_ eatery: Eatery) {
+        if let url = URL(string: eatery.url) {
             if #available(iOS 10.0, *) {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             } else {

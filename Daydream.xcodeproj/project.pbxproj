@@ -21,6 +21,7 @@
 		949630BA203BCBBD007139CA /* SearchDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949630B9203BCBBD007139CA /* SearchDetailViewController.swift */; };
 		94B7DB55205DEDFF0040D61C /* PointOfInterest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B7DB54205DEDFF0040D61C /* PointOfInterest.swift */; };
 		94B7DB57205DEE980040D61C /* Viewport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B7DB56205DEE980040D61C /* Viewport.swift */; };
+		94B7DB59205E06080040D61C /* Eatery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B7DB58205E06080040D61C /* Eatery.swift */; };
 		94DB8FE7204B946200FA7CF7 /* EateriesCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94DB8FE6204B946200FA7CF7 /* EateriesCardCell.swift */; };
 /* End PBXBuildFile section */
 
@@ -43,6 +44,7 @@
 		949630B9203BCBBD007139CA /* SearchDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDetailViewController.swift; sourceTree = "<group>"; };
 		94B7DB54205DEDFF0040D61C /* PointOfInterest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointOfInterest.swift; sourceTree = "<group>"; };
 		94B7DB56205DEE980040D61C /* Viewport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Viewport.swift; sourceTree = "<group>"; };
+		94B7DB58205E06080040D61C /* Eatery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Eatery.swift; sourceTree = "<group>"; };
 		94DB8FE6204B946200FA7CF7 /* EateriesCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EateriesCardCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -94,6 +96,7 @@
 				9481EC59204B358C00863A5A /* SightsCardCell.swift */,
 				94B7DB56205DEE980040D61C /* Viewport.swift */,
 				94B7DB54205DEDFF0040D61C /* PointOfInterest.swift */,
+				94B7DB58205E06080040D61C /* Eatery.swift */,
 				94DB8FE6204B946200FA7CF7 /* EateriesCardCell.swift */,
 				947EC6512043F28F004A911D /* Extensions.swift */,
 				947EC657204673BF004A911D /* ShadowView.swift */,
@@ -278,6 +281,7 @@
 				947EC656204667EB004A911D /* MapCardCell.swift in Sources */,
 				94B7DB55205DEDFF0040D61C /* PointOfInterest.swift in Sources */,
 				94B7DB57205DEE980040D61C /* Viewport.swift in Sources */,
+				94B7DB59205E06080040D61C /* Eatery.swift in Sources */,
 				947EC6522043F28F004A911D /* Extensions.swift in Sources */,
 				947EC658204673BF004A911D /* ShadowView.swift in Sources */,
 			);
