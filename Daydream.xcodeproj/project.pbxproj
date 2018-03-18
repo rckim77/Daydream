@@ -94,19 +94,35 @@
 				949630B9203BCBBD007139CA /* SearchDetailViewController.swift */,
 				947EC655204667EB004A911D /* MapCardCell.swift */,
 				9481EC59204B358C00863A5A /* SightsCardCell.swift */,
-				94B7DB56205DEE980040D61C /* Viewport.swift */,
-				94B7DB54205DEDFF0040D61C /* PointOfInterest.swift */,
-				94B7DB58205E06080040D61C /* Eatery.swift */,
 				94DB8FE6204B946200FA7CF7 /* EateriesCardCell.swift */,
-				947EC6512043F28F004A911D /* Extensions.swift */,
-				947EC657204673BF004A911D /* ShadowView.swift */,
-				947EC6532043F5B2004A911D /* Color.swift */,
+				94B7DB5A205E2C800040D61C /* Models */,
+				94B7DB5B205E2C920040D61C /* Shared */,
 				94380ACB203BAE1D00684863 /* Main.storyboard */,
 				94380ACE203BAE1D00684863 /* Assets.xcassets */,
 				94380AD0203BAE1D00684863 /* LaunchScreen.storyboard */,
 				94380AD3203BAE1D00684863 /* Info.plist */,
 			);
 			path = Daydream;
+			sourceTree = "<group>";
+		};
+		94B7DB5A205E2C800040D61C /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				94B7DB56205DEE980040D61C /* Viewport.swift */,
+				94B7DB54205DEDFF0040D61C /* PointOfInterest.swift */,
+				94B7DB58205E06080040D61C /* Eatery.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		94B7DB5B205E2C920040D61C /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				947EC6512043F28F004A911D /* Extensions.swift */,
+				947EC657204673BF004A911D /* ShadowView.swift */,
+				947EC6532043F5B2004A911D /* Color.swift */,
+			);
+			path = Shared;
 			sourceTree = "<group>";
 		};
 		C82D49DAB7A4A35EC3FA2142 /* Pods */ = {
