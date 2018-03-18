@@ -23,7 +23,7 @@ class EateriesCardCell: UITableViewCell {
     weak var delegate: EateriesCardCellDelegate?
     var eateries: [JSON]? {
         didSet {
-            guard let eateries = eateries, eateries.count > 0 else {
+            guard let eateries = eateries, eateries.count >= 3 else {
                 isHidden = true
                 return
             }

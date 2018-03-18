@@ -23,7 +23,9 @@ class SightsCardCell: UITableViewCell {
     weak var delegate: SightsCardCellDelegate?
     var pointsOfInterest: [JSON]? {
         didSet {
-            guard let pointsOfInterest = pointsOfInterest else { return }
+            guard let pointsOfInterest = pointsOfInterest, pointsOfInterest.count >= 3 else {
+                return
+            }
 
             let pointOfInterest1 = pointsOfInterest[0]
             let pointOfInterest2 = pointsOfInterest[1]

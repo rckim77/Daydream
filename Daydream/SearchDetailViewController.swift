@@ -137,12 +137,12 @@ class SearchDetailViewController: UIViewController {
 
     private func createUrl(with coordinate: CLLocationCoordinate2D, and type: String) -> String {
         if type == "point_of_interest" {
-            let locationParam = "location=\(coordinate.latitude),\(coordinate.longitude)"
-            let radiusParam = "radius=500"
-            let typeParam = "type=\(type)"
-            let keyParam = "key=\(AppDelegate.googleAPIKey)"
+            guard let place = placeData else { return "" }
+            let keyParam = AppDelegate.googleAPIKey
+            let placeName = place.name
+            let queryParam = "tourist+spots+in+\(placeName)"
 
-            let url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?\(locationParam)&\(radiusParam)&\(typeParam)&\(keyParam)"
+            let url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=\(queryParam)&key=\(keyParam)"
 
             return url
         } else if type == "eateries" {
