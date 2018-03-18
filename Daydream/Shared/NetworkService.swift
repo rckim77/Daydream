@@ -11,6 +11,7 @@ import GooglePlaces
 import SwiftyJSON
 
 class NetworkService {
+
     func loadTopSights(with place: GMSPlace, success: @escaping(_ pointsOfInterest: [PointOfInterest]) -> Void,
                        failure: @escaping(_ error: Error) -> Void) {
         let url = createUrl(with: place, and: "point_of_interest")
@@ -61,6 +62,22 @@ class NetworkService {
 
                 success(results)
             case .failure(let error):
+                failure(error)
+            }
+        }
+    }
+
+    func loadPhoto(with placeId: String, success: @escaping(_ photo: UIImage) -> Void, failure: @escaping(_ error: Error) -> Void) {
+        GMSPlacesClient.shared().lookUpPhotos(forPlaceID: placeId) { (photos, error) in
+            if let firstPhoto = photos?.results.first {
+                GMSPlacesClient.shared().loadPlacePhoto(firstPhoto) { photo, error in
+                    if let photo = photo {
+                        success(photo)
+                    } else if let error = error {
+                        failure(error)
+                    }
+                }
+            } else if let error = error {
                 failure(error)
             }
         }

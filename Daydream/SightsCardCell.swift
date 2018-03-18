@@ -103,7 +103,7 @@ class SightsCardCell: UITableViewCell {
     }
 
     private func loadBackgroundImage(for button: Int, with pointOfInterest: PointOfInterest) {
-        loadPhotoForPlace(placeId: pointOfInterest.placeId, completion: { [weak self] image in
+        NetworkService().loadPhoto(with: pointOfInterest.placeId, success: { [weak self] image in
             guard let strongSelf = self else { return }
 
             if button == 1 {
@@ -113,6 +113,9 @@ class SightsCardCell: UITableViewCell {
             } else if button == 3 {
                 strongSelf.pointOfInterest3ImageView.image = image
             }
+            
+        }, failure: { error in
+            print(error)
         })
     }
 

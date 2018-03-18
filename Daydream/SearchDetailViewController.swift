@@ -71,7 +71,9 @@ class SearchDetailViewController: UIViewController {
         if let place = place {
             titleLabel.text = place.name
 
-            loadPhotoForPlace(placeId: place.placeID, completion: { [weak self] photo in
+            let networkService = NetworkService()
+
+            networkService.loadPhoto(with: place.placeID, success: { [weak self] photo in
                 guard let strongSelf = self else { return }
                 strongSelf.placeImageView.image = photo
                 strongSelf.placeImageView.contentMode = .scaleAspectFill
@@ -80,9 +82,10 @@ class SearchDetailViewController: UIViewController {
                 let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .regular))
                 visualEffectView.frame = strongSelf.placeImageView.bounds
                 strongSelf.placeImageView.addSubview(visualEffectView)
-            })
-
-            let networkService = NetworkService()
+                }, failure: { error in
+                    print(error)
+                }
+            )
 
             networkService.loadTopSights(with: place, success: { [weak self] pointsOfInterest in
                 guard let strongSelf = self else { return }

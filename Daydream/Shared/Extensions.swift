@@ -153,32 +153,3 @@ extension UIView {
         layer.mask = rectShape
     }
 }
-
-protocol PhotoLoadable {
-    func loadPhotoForPlace(placeId: String, completion: @escaping(_ photo: UIImage?) -> Void)
-}
-
-extension PhotoLoadable {
-    func loadPhotoForPlace(placeId: String, completion: @escaping(_ photo: UIImage?) -> Void) {
-        GMSPlacesClient.shared().lookUpPhotos(forPlaceID: placeId) { (photos, error) in
-            if let error = error {
-                // TODO: handle error
-                print("Error: \(error.localizedDescription)")
-                completion(nil)
-            } else if let firstPhoto = photos?.results.first {
-                GMSPlacesClient.shared().loadPlacePhoto(firstPhoto, callback: { (photo, error) in
-                    if let error = error {
-                        // TODO: handle error
-                        print("Error: \(error.localizedDescription)")
-                        completion(nil)
-                    } else {
-                        completion(photo)
-                    }
-                })
-            }
-        }
-    }
-}
-
-extension UIViewController: PhotoLoadable {}
-extension UITableViewCell: PhotoLoadable {}
