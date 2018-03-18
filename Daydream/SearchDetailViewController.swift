@@ -160,8 +160,11 @@ class SearchDetailViewController: UIViewController {
         if type == "point_of_interest" {
             guard let place = placeData else { return "" }
             let keyParam = AppDelegate.googleAPIKey
-            let placeName = place.name
-            let queryParam = "tourist+spots+in+\(placeName)"
+            let placeName = place.name.split(separator: " ")
+            var queryParam = "tourist+spots+in"
+            placeName.forEach({ word in
+                queryParam += "+" + word
+            })
 
             let url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=\(queryParam)&key=\(keyParam)"
 

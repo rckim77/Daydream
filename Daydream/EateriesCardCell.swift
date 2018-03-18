@@ -16,9 +16,15 @@ protocol EateriesCardCellDelegate: class {
 
 class EateriesCardCell: UITableViewCell {
 
-    @IBOutlet weak var eatery1Btn: UIButton!
-    @IBOutlet weak var eatery2Btn: UIButton!
-    @IBOutlet weak var eatery3Btn: UIButton!
+    @IBOutlet weak var eatery1View: UIView!
+    @IBOutlet weak var eatery1ImageView: UIImageView!
+    @IBOutlet weak var eatery1Label: UILabel!
+    @IBOutlet weak var eatery2View: UIView!
+    @IBOutlet weak var eatery2ImageView: UIImageView!
+    @IBOutlet weak var eatery2Label: UILabel!
+    @IBOutlet weak var eatery3View: UIView!
+    @IBOutlet weak var eatery3ImageView: UIImageView!
+    @IBOutlet weak var eatery3Label: UILabel!
 
     weak var delegate: EateriesCardCellDelegate?
     var eateries: [Eatery]? {
@@ -29,9 +35,9 @@ class EateriesCardCell: UITableViewCell {
                 oldValue?.count != 0,
                 eateries[0].url != oldValue?[0].url { // don't set when user is simply scrolling
 
-                eatery1Btn.setTitle(eateries[0].name, for: .normal)
-                eatery2Btn.setTitle(eateries[1].name, for: .normal)
-                eatery3Btn.setTitle(eateries[2].name, for: .normal)
+                eatery1Label.text = eateries[0].name
+                eatery2Label.text = eateries[1].name
+                eatery3Label.text = eateries[2].name
 
                 loadBackgroundImage(for: 1, with: eateries[0])
                 loadBackgroundImage(for: 2, with: eateries[1])
@@ -43,28 +49,38 @@ class EateriesCardCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
 
-        eatery1Btn.addTopRoundedCorners()
-        eatery3Btn.addBottomRoundedCorners()
+        eatery1View.addTopRoundedCorners()
+        eatery2View.layer.masksToBounds = true
+        eatery3View.addBottomRoundedCorners()
+
+        let tapGesture1 = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(withSender:)))
+        eatery1View.addGestureRecognizer(tapGesture1)
+        let tapGesture2 = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(withSender:)))
+        eatery2View.addGestureRecognizer(tapGesture2)
+        let tapGesture3 = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(withSender:)))
+        eatery3View.addGestureRecognizer(tapGesture3)
 
         // reset image (to prevent background images being reused due to dequeueing reusable cells)
-        eatery1Btn.setBackgroundImage(nil, for: .normal)
-        eatery2Btn.setBackgroundImage(nil, for: .normal)
-        eatery3Btn.setBackgroundImage(nil, for: .normal)
+        eatery1ImageView.image = nil
+        eatery2ImageView.image = nil
+        eatery3ImageView.image = nil
     }
 
-    @IBAction func eatery1BtnTapped(_ sender: Any) {
+    @objc
+    private func handleTapGesture(withSender sender: UITapGestureRecognizer) {
         guard let eateries = eateries else { return }
-        delegate?.didSelectEatery(eateries[0])
-    }
 
-    @IBAction func eatery2BtnTapped(_ sender: Any) {
-        guard let eateries = eateries else { return }
-        delegate?.didSelectEatery(eateries[1])
-    }
+        var eatery = eateries[0]
 
-    @IBAction func eatery3BtnTapped(_ sender: Any) {
-        guard let eateries = eateries else { return }
-        delegate?.didSelectEatery(eateries[2])
+        if sender.view  == eatery1View {
+            eatery = eateries[0]
+        } else if sender.view == eatery2View {
+            eatery = eateries[1]
+        } else if sender.view == eatery3View {
+            eatery = eateries[2]
+        }
+
+       delegate?.didSelectEatery(eatery)
     }
 
     private func loadBackgroundImage(for button: Int, with eatery: Eatery) {
@@ -74,11 +90,11 @@ class EateriesCardCell: UITableViewCell {
 
                 DispatchQueue.main.async {
                     if button == 1 {
-                        strongSelf.eatery1Btn.setBackgroundImage(UIImage(data: data), for: .normal)
+                        strongSelf.eatery1ImageView.image = UIImage(data: data)
                     } else if button == 2 {
-                        strongSelf.eatery2Btn.setBackgroundImage(UIImage(data: data), for: .normal)
+                        strongSelf.eatery2ImageView.image = UIImage(data: data)
                     } else if button == 3 {
-                        strongSelf.eatery3Btn.setBackgroundImage(UIImage(data: data), for: .normal)
+                        strongSelf.eatery3ImageView.image = UIImage(data: data)
                     }
 
                 }
