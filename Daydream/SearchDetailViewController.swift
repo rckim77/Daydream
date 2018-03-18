@@ -122,7 +122,7 @@ class SearchDetailViewController: UIViewController {
                 })
 
                 self?.pointsOfInterest = results
-                self?.placeCardsTableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .automatic)
+                self?.placeCardsTableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .fade)
             case .failure(let error):
                 print(error)
             }
@@ -148,7 +148,7 @@ class SearchDetailViewController: UIViewController {
                 })
 
                 self?.eateries = results
-                self?.placeCardsTableView.reloadRows(at: [IndexPath(row: 2, section: 0)], with: .automatic)
+                self?.placeCardsTableView.reloadRows(at: [IndexPath(row: 2, section: 0)], with: .fade)
             case .failure(let error):
                 print(error)
             }
