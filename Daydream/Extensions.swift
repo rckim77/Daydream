@@ -135,7 +135,9 @@ extension UIView {
         let rectShape = CAShapeLayer()
         rectShape.bounds = frame
         rectShape.position = center
-        rectShape.path = UIBezierPath(roundedRect: bounds, byRoundingCorners: [.bottomLeft, .bottomRight], cornerRadii: CGSize(width: 10, height: 10)).cgPath
+        rectShape.path = UIBezierPath(roundedRect: bounds,
+                                      byRoundingCorners: [.bottomLeft, .bottomRight],
+                                      cornerRadii: CGSize(width: 10, height: 10)).cgPath
 
         layer.mask = rectShape
     }
@@ -144,7 +146,9 @@ extension UIView {
         let rectShape = CAShapeLayer()
         rectShape.bounds = frame
         rectShape.position = center
-        rectShape.path = UIBezierPath(roundedRect: bounds, byRoundingCorners: [.topLeft, .topRight], cornerRadii: CGSize(width: 10, height: 10)).cgPath
+        rectShape.path = UIBezierPath(roundedRect: bounds,
+                                      byRoundingCorners: [.topLeft, .topRight],
+                                      cornerRadii: CGSize(width: 10, height: 10)).cgPath
 
         layer.mask = rectShape
     }

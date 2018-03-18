@@ -260,7 +260,6 @@ extension SearchDetailViewController: GMSAutocompleteResultsViewControllerDelega
 
     func resultsController(_ resultsController: GMSAutocompleteResultsViewController,
                            didFailAutocompleteWithError error: Error) {
-        // TODO: handle the error
         print("Autocomplete Error: ", error.localizedDescription)
     }
 

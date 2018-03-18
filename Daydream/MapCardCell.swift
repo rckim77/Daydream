@@ -17,12 +17,12 @@ class MapCardCell: UITableViewCell {
 
     var place: GMSPlace? {
         didSet {
-            guard let place = place else { return }
-
-            if let mapView = mapView {
-                update(mapView, with: place)
-            } else {
-                addMapView(with: place)
+            if let place = place, place !== oldValue {
+                if let mapView = mapView {
+                    update(mapView, with: place)
+                } else {
+                    addMapView(with: place)
+                }
             }
         }
     }
