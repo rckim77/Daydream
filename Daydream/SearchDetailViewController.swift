@@ -20,7 +20,7 @@ class SearchDetailViewController: UIViewController {
     var resultView: UITextView?
     var mapView: GMSMapView?
     var placeData: GMSPlace?
-    var pointsOfInterest: [JSON]?
+    var pointsOfInterest: [PointOfInterest]?
     var eateries: [JSON]?
     private let mapCardCellHeight: CGFloat = 190
     private let sightsCardCellHeight: CGFloat = 570
@@ -107,7 +107,21 @@ class SearchDetailViewController: UIViewController {
             switch response.result {
             case .success(let value):
                 let json = JSON(value)
-                self?.pointsOfInterest = json["results"].arrayValue
+                // POSTLAUNCH: - refactor into a JSON init method
+                let results = json["results"].arrayValue.map({ json -> PointOfInterest in
+                    let name = json["name"].stringValue
+                    let placeId = json["place_id"].stringValue
+                    let viewportRaw = json["geometry"]["viewport"]
+                    let northeastRaw = viewportRaw["northeast"]
+                    let southwestRaw = viewportRaw["southwest"]
+                    let viewport = Viewport(northeastLat: northeastRaw["lat"].doubleValue,
+                                            northeastLng: northeastRaw["lng"].doubleValue,
+                                            southeastLat: southwestRaw["lat"].doubleValue,
+                                            southeastLng: southwestRaw["lng"].doubleValue)
+                    return PointOfInterest(name: name, viewport: viewport, placeId: placeId)
+                })
+
+                self?.pointsOfInterest = results
                 self?.placeCardsTableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .automatic)
             case .failure(let error):
                 print(error)

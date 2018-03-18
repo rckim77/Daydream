@@ -21,23 +21,23 @@ class SightsCardCell: UITableViewCell {
     @IBOutlet weak var pointOfInterest3Btn: UIButton!
 
     weak var delegate: SightsCardCellDelegate?
-    var pointsOfInterest: [JSON]? {
+    var pointsOfInterest: [PointOfInterest]? {
         didSet {
-            guard let pointsOfInterest = pointsOfInterest, pointsOfInterest.count >= 3 else {
-                return
+            // POSTLAUNCH: - Update comparison with placeId
+            if let pointsOfInterest = pointsOfInterest, pointsOfInterest.count >= 3, pointsOfInterest[0].placeId != oldValue?[0].placeId {
+
+                let pointOfInterest1 = pointsOfInterest[0]
+                let pointOfInterest2 = pointsOfInterest[1]
+                let pointOfInterest3 = pointsOfInterest[2]
+
+                pointOfInterest1Btn.setTitle(pointOfInterest1.name, for: .normal)
+                pointOfInterest2Btn.setTitle(pointOfInterest2.name, for: .normal)
+                pointOfInterest3Btn.setTitle(pointOfInterest3.name, for: .normal)
+
+                loadBackgroundImage(for: 1, with: pointOfInterest1)
+                loadBackgroundImage(for: 2, with: pointOfInterest2)
+                loadBackgroundImage(for: 3, with: pointOfInterest3)
             }
-
-            let pointOfInterest1 = pointsOfInterest[0]
-            let pointOfInterest2 = pointsOfInterest[1]
-            let pointOfInterest3 = pointsOfInterest[2]
-
-            pointOfInterest1Btn.setTitle(pointOfInterest1.dictionaryValue["name"]?.stringValue, for: .normal)
-            pointOfInterest2Btn.setTitle(pointOfInterest2.dictionaryValue["name"]?.stringValue, for: .normal)
-            pointOfInterest3Btn.setTitle(pointOfInterest3.dictionaryValue["name"]?.stringValue, for: .normal)
-
-            loadBackgroundImage(for: 1, with: pointOfInterest1)
-            loadBackgroundImage(for: 2, with: pointOfInterest2)
-            loadBackgroundImage(for: 3, with: pointOfInterest3)
         }
     }
 
@@ -71,20 +71,16 @@ class SightsCardCell: UITableViewCell {
         delegate?.didSelectPointOfInterest(with: viewport)
     }
 
-    private func getViewport(for pointOfInterest: JSON) -> GMSCoordinateBounds? {
-        let viewportRaw = pointOfInterest["geometry"]["viewport"]
-        let northeastRaw = viewportRaw["northeast"]
-        let southwestRaw = viewportRaw["southwest"]
-        let northeast = CLLocationCoordinate2D(latitude: northeastRaw["lat"].doubleValue, longitude: northeastRaw["lng"].doubleValue)
-        let southwest = CLLocationCoordinate2D(latitude: southwestRaw["lat"].doubleValue, longitude: southwestRaw["lng"].doubleValue)
+    private func getViewport(for pointOfInterest: PointOfInterest) -> GMSCoordinateBounds? {
+        let viewport = pointOfInterest.viewport
+        let northeast = CLLocationCoordinate2D(latitude: viewport.northeastLat, longitude: viewport.northeastLng)
+        let southwest = CLLocationCoordinate2D(latitude: viewport.southeastLat, longitude: viewport.southeastLng)
 
         return GMSCoordinateBounds(coordinate: northeast, coordinate: southwest)
     }
 
-    private func loadBackgroundImage(for button: Int, with pointOfInterest: JSON) {
-        let placeId = pointOfInterest["place_id"].stringValue
-
-        loadPhotoForPlace(placeId: placeId, completion: { [weak self] image in
+    private func loadBackgroundImage(for button: Int, with pointOfInterest: PointOfInterest) {
+        loadPhotoForPlace(placeId: pointOfInterest.placeId, completion: { [weak self] image in
             guard let strongSelf = self else { return }
 
             if button == 1 {
