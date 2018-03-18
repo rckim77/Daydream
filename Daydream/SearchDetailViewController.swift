@@ -35,25 +35,7 @@ class SearchDetailViewController: UIViewController {
         configureAutocompleteVC()
         configureTableView()
         addSearchController()
-        
-        if let place = placeData {
-            titleLabel.text = place.name
-
-            loadPhotoForPlace(placeId: place.placeID, completion: { photo in
-                self.placeImageView.image = photo
-                self.placeImageView.contentMode = .scaleAspectFill
-
-                // add a blur for now since resolution isn't great
-                let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.regular))
-                visualEffectView.frame = self.placeImageView.bounds
-                self.placeImageView.addSubview(visualEffectView)
-            })
-
-            loadTopSights(with: place)
-            loadTopEateries(with: place)
-        } else {
-            // show default background screen
-        }
+        loadContent(for: placeData)
     }
 
     // MARK: - IBActions
@@ -85,98 +67,40 @@ class SearchDetailViewController: UIViewController {
         definesPresentationContext = true
     }
 
-    private func updateUI(withPlace place: GMSPlace) {
-        titleLabel.text = place.name
+    private func loadContent(for place: GMSPlace?) {
+        if let place = place {
+            titleLabel.text = place.name
 
-        placeCardsTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .fade)
+            loadPhotoForPlace(placeId: place.placeID, completion: { [weak self] photo in
+                guard let strongSelf = self else { return }
+                strongSelf.placeImageView.image = photo
+                strongSelf.placeImageView.contentMode = .scaleAspectFill
 
-        loadTopSights(with: place)
-        loadTopEateries(with: place)
-
-        loadPhotoForPlace(placeId: place.placeID) { photo in
-            self.placeImageView.image = photo
-            self.placeImageView.contentMode = .scaleAspectFill
-        }
-
-    }
-
-    private func loadTopSights(with place: GMSPlace) {
-        let url = createUrl(with: place.coordinate, and: "point_of_interest")
-
-        Alamofire.request(url).validate().responseJSON { [weak self] response in
-            switch response.result {
-            case .success(let value):
-                let json = JSON(value)
-                // POSTLAUNCH: - refactor into a JSON init method
-                let results = json["results"].arrayValue.map({ json -> PointOfInterest in
-                    let name = json["name"].stringValue
-                    let placeId = json["place_id"].stringValue
-                    let viewportRaw = json["geometry"]["viewport"]
-                    let northeastRaw = viewportRaw["northeast"]
-                    let southwestRaw = viewportRaw["southwest"]
-                    let viewport = Viewport(northeastLat: northeastRaw["lat"].doubleValue,
-                                            northeastLng: northeastRaw["lng"].doubleValue,
-                                            southeastLat: southwestRaw["lat"].doubleValue,
-                                            southeastLng: southwestRaw["lng"].doubleValue)
-                    return PointOfInterest(name: name, viewport: viewport, placeId: placeId)
-                })
-
-                self?.pointsOfInterest = results
-                self?.placeCardsTableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .fade)
-            case .failure(let error):
-                print(error)
-            }
-
-        }
-    }
-
-    private func loadTopEateries(with place: GMSPlace) {
-        let url = createUrl(with: place.coordinate, and: "eateries")
-        let headers: HTTPHeaders = [
-            "Authorization": "Bearer \(AppDelegate.yelpAPIKey)"
-        ]
-
-        Alamofire.request(url, headers: headers).validate().responseJSON { [weak self] response in
-            switch response.result {
-            case .success(let value):
-                let json = JSON(value)
-                let results = json["businesses"].arrayValue.map({ json -> Eatery in
-                    let name = json["name"].stringValue
-                    let imageUrl = json["image_url"].stringValue
-                    let url = json["url"].stringValue
-                    return Eatery(name: name, imageUrl: imageUrl, url: url)
-                })
-
-                self?.eateries = results
-                self?.placeCardsTableView.reloadRows(at: [IndexPath(row: 2, section: 0)], with: .fade)
-            case .failure(let error):
-                print(error)
-            }
-
-        }
-    }
-
-    private func createUrl(with coordinate: CLLocationCoordinate2D, and type: String) -> String {
-        if type == "point_of_interest" {
-            guard let place = placeData else { return "" }
-            let keyParam = AppDelegate.googleAPIKey
-            let placeName = place.name.split(separator: " ")
-            var queryParam = "tourist+spots+in"
-            placeName.forEach({ word in
-                queryParam += "+" + word
+                // add a blur for now since resolution isn't great
+                let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .regular))
+                visualEffectView.frame = strongSelf.placeImageView.bounds
+                strongSelf.placeImageView.addSubview(visualEffectView)
             })
 
-            let url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=\(queryParam)&key=\(keyParam)"
+            let networkService = NetworkService()
 
-            return url
-        } else if type == "eateries" {
-            let latitude = coordinate.latitude
-            let longitude = coordinate.longitude
-            let url = "https://api.yelp.com/v3/businesses/search?latitude=\(latitude)&longitude=\(longitude)"
+            networkService.loadTopSights(with: place, success: { [weak self] pointsOfInterest in
+                guard let strongSelf = self else { return }
+                strongSelf.pointsOfInterest = pointsOfInterest
+                strongSelf.placeCardsTableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .fade)
+                }, failure: { error in
+                    print(error)
+            })
 
-            return url
+            networkService.loadTopEateries(with: place, success: { [weak self] eateries in
+                guard let strongSelf = self else { return }
+                strongSelf.eateries = eateries
+                strongSelf.placeCardsTableView.reloadRows(at: [IndexPath(row: 2, section: 0)], with: .fade)
+                }, failure: { error in
+                    print(error)
+            })
         } else {
-            return ""
+            // TODO: show default background screen
         }
     }
 
@@ -278,7 +202,7 @@ extension SearchDetailViewController: GMSAutocompleteResultsViewControllerDelega
 
         dismiss(animated: true, completion: {
             self.placeData = place
-            self.updateUI(withPlace: place)
+            self.loadContent(for: place)
         })
     }
 
