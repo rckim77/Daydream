@@ -25,19 +25,27 @@ class SightsCardCell: UITableViewCell {
     @IBOutlet weak var pointOfInterest3View: UIView!
     @IBOutlet weak var pointOfInterest3Label: UILabel!
     @IBOutlet weak var pointOfInterest3ImageView: UIImageView!
-
+    @IBOutlet weak var noContentLabel: UILabel!
+    
     weak var delegate: SightsCardCellDelegate?
     var pointsOfInterest: [PointOfInterest]? {
         didSet {
-            // POSTLAUNCH: - Update comparison with placeId
-            if let pointsOfInterest = pointsOfInterest, pointsOfInterest.count >= 3, pointsOfInterest[0].placeId != oldValue?[0].placeId {
-                pointOfInterest1Label.text = pointsOfInterest[0].name
-                pointOfInterest2Label.text = pointsOfInterest[1].name
-                pointOfInterest3Label.text = pointsOfInterest[2].name
+            if let pointsOfInterest = pointsOfInterest, pointsOfInterest.count >= 3 {
+                // display content only if we've made another API call, otherwise do nothing
+                // POSTLAUNCH: - Update comparison with placeId
+                if pointsOfInterest[0].placeId != oldValue?[0].placeId {
+                    toggleViews([pointOfInterest1View, pointOfInterest2View, pointOfInterest3View], willHide: false)
 
-                loadBackgroundImage(for: 1, with: pointsOfInterest[0])
-                loadBackgroundImage(for: 2, with: pointsOfInterest[1])
-                loadBackgroundImage(for: 3, with: pointsOfInterest[2])
+                    pointOfInterest1Label.text = pointsOfInterest[0].name
+                    pointOfInterest2Label.text = pointsOfInterest[1].name
+                    pointOfInterest3Label.text = pointsOfInterest[2].name
+
+                    loadBackgroundImage(for: 1, with: pointsOfInterest[0])
+                    loadBackgroundImage(for: 2, with: pointsOfInterest[1])
+                    loadBackgroundImage(for: 3, with: pointsOfInterest[2])
+                }
+            } else { // before response from API or error
+                toggleViews([pointOfInterest1View, pointOfInterest2View, pointOfInterest3View], willHide: true)
             }
         }
     }
@@ -101,5 +109,13 @@ class SightsCardCell: UITableViewCell {
                 strongSelf.pointOfInterest3ImageView.image = image
             }
         })
+    }
+
+    private func toggleViews(_ views: [UIView], willHide: Bool) {
+        noContentLabel.isHidden = !willHide
+
+        for view in views {
+            view.isHidden = willHide
+        }
     }
 }

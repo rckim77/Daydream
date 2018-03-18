@@ -25,23 +25,27 @@ class EateriesCardCell: UITableViewCell {
     @IBOutlet weak var eatery3View: UIView!
     @IBOutlet weak var eatery3ImageView: UIImageView!
     @IBOutlet weak var eatery3Label: UILabel!
+    @IBOutlet weak var noContentLabel: UILabel!
 
     weak var delegate: EateriesCardCellDelegate?
     var eateries: [Eatery]? {
         didSet {
-            // POSTLAUNCH: - Update url comparison
-            if let eateries = eateries,
-                eateries.count >= 3,
-                oldValue?.count != 0,
-                eateries[0].url != oldValue?[0].url { // don't set when user is simply scrolling
+            if let eateries = eateries, eateries.count >= 3, oldValue?.count != 0 {
+                // display content only if we've made another API call, otherwise do nothing
+                // POSTLAUNCH: - Update url comparison
+                if eateries[0].url != oldValue?[0].url {
+                    toggleViews([eatery1View, eatery2View, eatery3View], willHide: false)
 
-                eatery1Label.text = eateries[0].name
-                eatery2Label.text = eateries[1].name
-                eatery3Label.text = eateries[2].name
+                    eatery1Label.text = eateries[0].name
+                    eatery2Label.text = eateries[1].name
+                    eatery3Label.text = eateries[2].name
 
-                loadBackgroundImage(for: 1, with: eateries[0])
-                loadBackgroundImage(for: 2, with: eateries[1])
-                loadBackgroundImage(for: 3, with: eateries[2])
+                    loadBackgroundImage(for: 1, with: eateries[0])
+                    loadBackgroundImage(for: 2, with: eateries[1])
+                    loadBackgroundImage(for: 3, with: eateries[2])
+                }
+            } else { // before response from API or error
+                toggleViews([eatery1View, eatery2View, eatery3View], willHide: true)
             }
         }
     }
@@ -99,6 +103,14 @@ class EateriesCardCell: UITableViewCell {
 
                 }
             }.resume()
+        }
+    }
+    
+    private func toggleViews(_ views: [UIView], willHide: Bool) {
+        noContentLabel.isHidden = !willHide
+
+        for view in views {
+            view.isHidden = willHide
         }
     }
 }
