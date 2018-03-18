@@ -16,18 +16,24 @@ protocol SightsCardCellDelegate: class {
 
 class SightsCardCell: UITableViewCell {
 
-    @IBOutlet weak var pointOfInterest1Btn: UIButton!
-    @IBOutlet weak var pointOfInterest2Btn: UIButton!
-    @IBOutlet weak var pointOfInterest3Btn: UIButton!
+    @IBOutlet weak var pointOfInterest1View: UIView!
+    @IBOutlet weak var pointOfInterest1Label: UILabel!
+    @IBOutlet weak var pointOfInterest1ImageView: UIImageView!
+    @IBOutlet weak var pointOfInterest2View: UIView!
+    @IBOutlet weak var pointOfInterest2Label: UILabel!
+    @IBOutlet weak var pointOfInterest2ImageView: UIImageView!
+    @IBOutlet weak var pointOfInterest3View: UIView!
+    @IBOutlet weak var pointOfInterest3Label: UILabel!
+    @IBOutlet weak var pointOfInterest3ImageView: UIImageView!
 
     weak var delegate: SightsCardCellDelegate?
     var pointsOfInterest: [PointOfInterest]? {
         didSet {
             // POSTLAUNCH: - Update comparison with placeId
             if let pointsOfInterest = pointsOfInterest, pointsOfInterest.count >= 3, pointsOfInterest[0].placeId != oldValue?[0].placeId {
-                pointOfInterest1Btn.setTitle(pointsOfInterest[0].name, for: .normal)
-                pointOfInterest2Btn.setTitle(pointsOfInterest[1].name, for: .normal)
-                pointOfInterest3Btn.setTitle(pointsOfInterest[2].name, for: .normal)
+                pointOfInterest1Label.text = pointsOfInterest[0].name
+                pointOfInterest2Label.text = pointsOfInterest[1].name
+                pointOfInterest3Label.text = pointsOfInterest[2].name
 
                 loadBackgroundImage(for: 1, with: pointsOfInterest[0])
                 loadBackgroundImage(for: 2, with: pointsOfInterest[1])
@@ -39,31 +45,40 @@ class SightsCardCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
 
-        pointOfInterest1Btn.addTopRoundedCorners()
-        pointOfInterest3Btn.addBottomRoundedCorners()
+        pointOfInterest1View.addTopRoundedCorners()
+        pointOfInterest2View.layer.masksToBounds = true
+        pointOfInterest3View.addBottomRoundedCorners()
+
+        let tapGesture1 = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(withSender:)))
+        pointOfInterest1View.addGestureRecognizer(tapGesture1)
+        let tapGesture2 = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(withSender:)))
+        pointOfInterest2View.addGestureRecognizer(tapGesture2)
+        let tapGesture3 = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(withSender:)))
+        pointOfInterest3View.addGestureRecognizer(tapGesture3)
 
         // reset image (to prevent background images being reused due to dequeueing reusable cells)
-        pointOfInterest1Btn.setBackgroundImage(nil, for: .normal)
-        pointOfInterest2Btn.setBackgroundImage(nil, for: .normal)
-        pointOfInterest3Btn.setBackgroundImage(nil, for: .normal)
+        pointOfInterest1ImageView.image = nil
+        pointOfInterest2ImageView.image = nil
+        pointOfInterest3ImageView.image = nil
     }
 
-    @IBAction func pointOfInterest1BtnTapped(_ sender: UIButton) {
-        guard let pointsOfInterest = pointsOfInterest, let viewport = getViewport(for: pointsOfInterest[0]) else { return }
+    @objc
+    private func handleTapGesture(withSender sender: UITapGestureRecognizer) {
+        guard let pointsOfInterest = pointsOfInterest else { return }
 
-        delegate?.didSelectPointOfInterest(with: viewport)
-    }
+        var pointOfInterest = pointsOfInterest[0]
 
-    @IBAction func pointOfInterest2BtnTapped(_ sender: UIButton) {
-        guard let pointsOfInterest = pointsOfInterest, let viewport = getViewport(for: pointsOfInterest[1]) else { return }
+        if sender.view  == pointOfInterest1View {
+            pointOfInterest = pointsOfInterest[0]
+        } else if sender.view == pointOfInterest2View {
+            pointOfInterest = pointsOfInterest[1]
+        } else if sender.view == pointOfInterest3View {
+            pointOfInterest = pointsOfInterest[2]
+        }
 
-        delegate?.didSelectPointOfInterest(with: viewport)
-    }
-
-    @IBAction func pointOfInterest3BtnTapped(_ sender: UIButton) {
-        guard let pointsOfInterest = pointsOfInterest, let viewport = getViewport(for: pointsOfInterest[2]) else { return }
-
-        delegate?.didSelectPointOfInterest(with: viewport)
+        if let viewport = getViewport(for: pointOfInterest) {
+            delegate?.didSelectPointOfInterest(with: viewport)
+        }
     }
 
     private func getViewport(for pointOfInterest: PointOfInterest) -> GMSCoordinateBounds? {
@@ -79,11 +94,11 @@ class SightsCardCell: UITableViewCell {
             guard let strongSelf = self else { return }
 
             if button == 1 {
-                strongSelf.pointOfInterest1Btn.setBackgroundImage(image, for: .normal)
+                strongSelf.pointOfInterest1ImageView.image = image
             } else if button == 2 {
-                strongSelf.pointOfInterest2Btn.setBackgroundImage(image, for: .normal)
+                strongSelf.pointOfInterest2ImageView.image = image
             } else if button == 3 {
-                strongSelf.pointOfInterest3Btn.setBackgroundImage(image, for: .normal)
+                strongSelf.pointOfInterest3ImageView.image = image
             }
         })
     }

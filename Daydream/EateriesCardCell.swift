@@ -24,7 +24,11 @@ class EateriesCardCell: UITableViewCell {
     var eateries: [Eatery]? {
         didSet {
             // POSTLAUNCH: - Update url comparison
-            if let eateries = eateries, eateries.count >= 3, eateries[0].url != oldValue?[0].url {
+            if let eateries = eateries,
+                eateries.count >= 3,
+                oldValue?.count != 0,
+                eateries[0].url != oldValue?[0].url { // don't set when user is simply scrolling
+
                 eatery1Btn.setTitle(eateries[0].name, for: .normal)
                 eatery2Btn.setTitle(eateries[1].name, for: .normal)
                 eatery3Btn.setTitle(eateries[2].name, for: .normal)
