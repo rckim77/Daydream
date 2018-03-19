@@ -88,8 +88,9 @@
                                 <size key="shadowOffset" width="0.0" height="1"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WRK-EC-lm4">
-                                <rect key="frame" x="311" y="76.666666666666671" width="48" height="27"/>
+                                <rect key="frame" x="311" y="66.333333333333329" width="48" height="48"/>
                                 <constraints>
+                                    <constraint firstAttribute="height" constant="48" id="I2R-0U-FQD"/>
                                     <constraint firstAttribute="width" constant="48" id="Zez-dM-49l"/>
                                 </constraints>
                                 <color key="tintColor" red="0.45882352939999999" green="0.42352941179999998" blue="0.51372549020000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -144,6 +145,7 @@
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
                                             <outlet property="mainView" destination="0Pv-YR-4mM" id="7ez-CA-yHk"/>
+                                            <segue destination="CGg-aC-4y8" kind="presentation" identifier="mapCardSegue" id="yu5-G9-f8N"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="sightsCardCell" rowHeight="570" id="u45-7M-3W5" customClass="SightsCardCell" customModule="Daydream" customModuleProvider="target">
@@ -442,7 +444,7 @@
                                                     </userDefinedRuntimeAttributes>
                                                 </view>
                                                 <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No content" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AOG-LH-mgj">
-                                                    <rect key="frame" x="126" y="269" width="122.66666666666669" height="31"/>
+                                                    <rect key="frame" x="126" y="269.66666666666669" width="122.66666666666669" height="31"/>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="25"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
@@ -518,9 +520,60 @@
             </objects>
             <point key="canvasLocation" x="903.20000000000005" y="131.52709359605913"/>
         </scene>
+        <!--Map View Controller-->
+        <scene sceneID="Wgs-uz-Bis">
+            <objects>
+                <viewController id="CGg-aC-4y8" customClass="MapViewController" customModule="Daydream" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="HRt-hV-c7A">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3Ar-Lq-hGN">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7yK-lk-pp6">
+                                        <rect key="frame" x="295" y="54" width="48" height="48"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="48" id="5pn-ZJ-310"/>
+                                            <constraint firstAttribute="width" constant="48" id="mlZ-Cg-JY2"/>
+                                        </constraints>
+                                        <state key="normal" image="mapCloseIconSoftShadow"/>
+                                        <connections>
+                                            <action selector="closeBtnTapped:" destination="CGg-aC-4y8" eventType="touchUpInside" id="TQp-Y3-dqo"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="7yK-lk-pp6" firstAttribute="top" secondItem="3Ar-Lq-hGN" secondAttribute="top" constant="54" id="QX9-K4-cyo"/>
+                                    <constraint firstAttribute="trailing" secondItem="7yK-lk-pp6" secondAttribute="trailing" constant="32" id="xkx-bf-VD1"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="3Ar-Lq-hGN" firstAttribute="leading" secondItem="Yii-Ue-V4b" secondAttribute="leading" id="BDu-dE-hb6"/>
+                            <constraint firstItem="3Ar-Lq-hGN" firstAttribute="trailing" secondItem="Yii-Ue-V4b" secondAttribute="trailing" id="ifc-cf-Ht7"/>
+                            <constraint firstAttribute="bottom" secondItem="3Ar-Lq-hGN" secondAttribute="bottom" id="oqE-YO-GyQ"/>
+                            <constraint firstItem="3Ar-Lq-hGN" firstAttribute="top" secondItem="HRt-hV-c7A" secondAttribute="top" id="rkF-xC-NNQ"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Yii-Ue-V4b"/>
+                    </view>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="isHeroEnabled" value="YES"/>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <outlet property="mapView" destination="3Ar-Lq-hGN" id="DhJ-iV-IK0"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1lm-RG-AHt" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1676" y="131.52709359605913"/>
+        </scene>
     </scenes>
     <resources>
         <image name="homeWhiteShadow" width="30" height="27"/>
+        <image name="mapCloseIconSoftShadow" width="32" height="32"/>
         <image name="sunriseJungle" width="2246" height="3644"/>
     </resources>
 </document>

@@ -9,8 +9,8 @@ target 'Daydream' do
   pod 'GooglePlaces'
   pod 'GooglePlacePicker'
   pod 'GoogleMaps'
-  pod 'MBProgressHUD', '~> 1.1.0'
   pod 'SwiftLint'
   pod 'Alamofire', '~> 4.7'
   pod 'SwiftyJSON'
+  pod 'Hero'
 end

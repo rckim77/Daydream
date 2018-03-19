@@ -10,7 +10,7 @@ PODS:
     - GooglePlaces (= 2.5.0)
   - GooglePlaces (2.5.0):
     - GoogleMaps/Base (= 2.5.0)
-  - MBProgressHUD (1.1.0)
+  - Hero (1.1.0)
   - SwiftLint (0.24.2)
   - SwiftyJSON (4.0.0)
 
@@ -19,7 +19,7 @@ DEPENDENCIES:
   - GoogleMaps
   - GooglePlacePicker
   - GooglePlaces
-  - MBProgressHUD (~> 1.1.0)
+  - Hero
   - SwiftLint
   - SwiftyJSON
 
@@ -28,10 +28,10 @@ SPEC CHECKSUMS:
   GoogleMaps: c087b8e5dfe87ca6ebf59adb9b4894a4146bec4f
   GooglePlacePicker: 1573e644ab54564d95c2643edc0f29091609e966
   GooglePlaces: dd70d9d71ea1c7944846afe67de3712c99b30a77
-  MBProgressHUD: e7baa36a220447d8aeb12769bf0585582f3866d9
+  Hero: ce59e81c79390613d97b43da7179e2c5e1017e04
   SwiftLint: 2aa21b96c8d13396a051bc1cb659d2ce1e0075b0
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
 
-PODFILE CHECKSUM: 566e62733648b57722a5ed614c46226d22bf777b
+PODFILE CHECKSUM: 6cfa85a926fa054e8c60b29a9feb2b7f6cee3d44
 
 COCOAPODS: 1.4.0

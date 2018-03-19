@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1798BE5CF61FDC04CA194644 /* Pods_Daydream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 35BB11CB5A171934921E51F1 /* Pods_Daydream.framework */; };
+		9409090A205F4613002A65EF /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94090909205F4613002A65EF /* MapViewController.swift */; };
 		94380AC8203BAE1D00684863 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94380AC7203BAE1D00684863 /* AppDelegate.swift */; };
 		94380ACA203BAE1D00684863 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94380AC9203BAE1D00684863 /* SearchViewController.swift */; };
 		94380ACD203BAE1D00684863 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 94380ACB203BAE1D00684863 /* Main.storyboard */; };
@@ -30,6 +31,7 @@
 		275E3DD2282C7EA762CA98E6 /* Pods-Daydream.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Daydream.release.xcconfig"; path = "Pods/Target Support Files/Pods-Daydream/Pods-Daydream.release.xcconfig"; sourceTree = "<group>"; };
 		35BB11CB5A171934921E51F1 /* Pods_Daydream.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Daydream.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CF615F1B0F8AF65A624CDBF /* Pods-Daydream.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Daydream.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Daydream/Pods-Daydream.debug.xcconfig"; sourceTree = "<group>"; };
+		94090909205F4613002A65EF /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		94380AC4203BAE1D00684863 /* Daydream.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Daydream.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94380AC7203BAE1D00684863 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		94380AC9203BAE1D00684863 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
@@ -94,6 +96,7 @@
 				94380AC7203BAE1D00684863 /* AppDelegate.swift */,
 				94380AC9203BAE1D00684863 /* SearchViewController.swift */,
 				949630B9203BCBBD007139CA /* SearchDetailViewController.swift */,
+				94090909205F4613002A65EF /* MapViewController.swift */,
 				947EC655204667EB004A911D /* MapCardCell.swift */,
 				9481EC59204B358C00863A5A /* SightsCardCell.swift */,
 				94DB8FE6204B946200FA7CF7 /* EateriesCardCell.swift */,
@@ -217,13 +220,13 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Daydream/Pods-Daydream-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
-				"${BUILT_PRODUCTS_DIR}/MBProgressHUD/MBProgressHUD.framework",
+				"${BUILT_PRODUCTS_DIR}/Hero/Hero.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MBProgressHUD.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Hero.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -304,6 +307,7 @@
 				947EC6522043F28F004A911D /* Extensions.swift in Sources */,
 				94B7DB5D205EEBBB0040D61C /* NetworkService.swift in Sources */,
 				947EC658204673BF004A911D /* ShadowView.swift in Sources */,
+				9409090A205F4613002A65EF /* MapViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

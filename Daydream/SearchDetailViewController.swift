@@ -12,6 +12,7 @@ import GooglePlacePicker
 import GoogleMaps
 import Alamofire
 import SwiftyJSON
+import Hero
 
 class SearchDetailViewController: UIViewController {
 
@@ -125,6 +126,14 @@ class SearchDetailViewController: UIViewController {
         placeCardsTableView.delegate = self
         placeCardsTableView.tableFooterView = UIView()
     }
+
+    // MARK: - Segue
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let destinationVC = segue.destination as? MapViewController, let place = placeData {
+            let camera = GMSCameraPosition.camera(withLatitude: place.coordinate.latitude, longitude: place.coordinate.longitude, zoom: 14.0)
+            destinationVC.mapCamera = camera
+        }
+    }
 }
 
 // MARK: - UITableView datasource and delegate methods
@@ -147,7 +156,7 @@ extension SearchDetailViewController: UITableViewDataSource, UITableViewDelegate
             let cell = tableView.dequeueReusableCell(withIdentifier: "mapCardCell", for: indexPath)
 
             if let mapCardCell = cell as? MapCardCell {
-
+                mapCardCell.hero.id = "mapCard"
                 mapCardCell.place = placeData
 
                 return mapCardCell
@@ -177,14 +186,6 @@ extension SearchDetailViewController: UITableViewDataSource, UITableViewDelegate
             return cell
         default:
             return UITableViewCell()
-        }
-    }
-
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.row == 0 {
-            // for viewport, enter GMSCoordinateBounds object
-            guard let viewport = placeData?.viewport else { return }
-            presentPlacePicker(with: viewport)
         }
     }
 }
@@ -222,8 +223,9 @@ extension SearchDetailViewController: GMSAutocompleteResultsViewControllerDelega
 // MARK: - GooglePlacePicker methods
 extension SearchDetailViewController: GMSPlacePickerViewControllerDelegate {
     func placePicker(_ viewController: GMSPlacePickerViewController, didPick place: GMSPlace) {
-//        viewController.dismiss(animated: true, completion: nil)
+        viewController.dismiss(animated: true, completion: nil)
         // TODO: zoom into that place and show more info
+        
 
         print("Place name \(place.name)")
         print("Place address \(place.formattedAddress)")
