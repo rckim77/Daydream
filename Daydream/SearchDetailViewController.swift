@@ -184,12 +184,7 @@ extension SearchDetailViewController: UITableViewDataSource, UITableViewDelegate
         if indexPath.row == 0 {
             // for viewport, enter GMSCoordinateBounds object
             guard let viewport = placeData?.viewport else { return }
-
-            let config = GMSPlacePickerConfig(viewport: viewport)
-            let placePicker = GMSPlacePickerViewController(config: config)
-            placePicker.delegate = self
-
-            present(placePicker, animated: true, completion: nil)
+            presentPlacePicker(with: viewport)
         }
     }
 }
@@ -233,6 +228,7 @@ extension SearchDetailViewController: GMSPlacePickerViewControllerDelegate {
         print("Place name \(place.name)")
         print("Place address \(place.formattedAddress)")
         print("Place attributions \(place.attributions)")
+
     }
 
     func placePickerDidCancel(_ viewController: GMSPlacePickerViewController) {

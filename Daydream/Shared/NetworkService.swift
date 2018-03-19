@@ -43,7 +43,8 @@ class NetworkService {
         }
     }
 
-    func loadTopEateries(with place: GMSPlace, success: @escaping(_ eateries: [Eatery]) -> Void, failure: @escaping(_ error: Error) -> Void) {
+    func loadTopEateries(with place: GMSPlace, success: @escaping(_ eateries: [Eatery]) -> Void,
+                         failure: @escaping(_ error: Error) -> Void) {
         let url = createUrl(with: place, and: "eateries")
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(AppDelegate.yelpAPIKey)"
@@ -67,7 +68,8 @@ class NetworkService {
         }
     }
 
-    func loadPhoto(with placeId: String, success: @escaping(_ photo: UIImage) -> Void, failure: @escaping(_ error: Error) -> Void) {
+    func loadPhoto(with placeId: String, success: @escaping(_ photo: UIImage) -> Void,
+                   failure: @escaping(_ error: Error) -> Void) {
         GMSPlacesClient.shared().lookUpPhotos(forPlaceID: placeId) { (photos, error) in
             if let firstPhoto = photos?.results.first {
                 GMSPlacesClient.shared().loadPlacePhoto(firstPhoto) { photo, error in
