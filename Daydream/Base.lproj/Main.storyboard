@@ -514,6 +514,7 @@
                         <outlet property="placeCardsTableView" destination="Lg2-04-32b" id="rem-0K-EVa"/>
                         <outlet property="placeImageView" destination="NX7-bA-oV6" id="dS6-Yy-Ut3"/>
                         <outlet property="titleLabel" destination="pmy-BK-jFt" id="R44-PT-FbE"/>
+                        <segue destination="CGg-aC-4y8" kind="presentation" identifier="genericMapSegue" id="G8s-9F-si3"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hOa-Hv-SgJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -532,7 +533,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7yK-lk-pp6">
-                                        <rect key="frame" x="295" y="54" width="48" height="48"/>
+                                        <rect key="frame" x="299" y="54" width="48" height="48"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="48" id="5pn-ZJ-310"/>
                                             <constraint firstAttribute="width" constant="48" id="mlZ-Cg-JY2"/>
@@ -546,7 +547,7 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="7yK-lk-pp6" firstAttribute="top" secondItem="3Ar-Lq-hGN" secondAttribute="top" constant="54" id="QX9-K4-cyo"/>
-                                    <constraint firstAttribute="trailing" secondItem="7yK-lk-pp6" secondAttribute="trailing" constant="32" id="xkx-bf-VD1"/>
+                                    <constraint firstAttribute="trailing" secondItem="7yK-lk-pp6" secondAttribute="trailing" constant="28" id="xkx-bf-VD1"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -576,4 +577,7 @@
         <image name="mapCloseIconSoftShadow" width="32" height="32"/>
         <image name="sunriseJungle" width="2246" height="3644"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="G8s-9F-si3"/>
+    </inferredMetricsTieBreakers>
 </document>

@@ -9,5 +9,7 @@
 struct PointOfInterest: Codable {
     var name: String
     var viewport: Viewport
+    var centerLat: Double
+    var centerLng: Double
     var placeId: String
 }

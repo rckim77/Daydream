@@ -129,8 +129,14 @@ class SearchDetailViewController: UIViewController {
 
     // MARK: - Segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let destinationVC = segue.destination as? MapViewController, let place = placeData {
-            let camera = GMSCameraPosition.camera(withLatitude: place.coordinate.latitude, longitude: place.coordinate.longitude, zoom: 14.0)
+        if segue.identifier == "genericMapSegue", let destinationVC = segue.destination as? MapViewController,
+            let sender = sender as? PointOfInterest {
+            destinationVC.mapCamera = GMSCameraPosition.camera(withLatitude: sender.centerLat, longitude: sender.centerLng, zoom: 14.0)
+        } else if segue.identifier == "mapCardSegue", let destinationVC = segue.destination as? MapViewController,
+            let place = placeData {
+            let camera = GMSCameraPosition.camera(withLatitude: place.coordinate.latitude,
+                                                  longitude: place.coordinate.longitude,
+                                                  zoom: 16.0)
             destinationVC.mapCamera = camera
         }
     }
@@ -226,7 +232,6 @@ extension SearchDetailViewController: GMSPlacePickerViewControllerDelegate {
         viewController.dismiss(animated: true, completion: nil)
         // TODO: zoom into that place and show more info
         
-
         print("Place name \(place.name)")
         print("Place address \(place.formattedAddress)")
         print("Place attributions \(place.attributions)")
@@ -240,8 +245,8 @@ extension SearchDetailViewController: GMSPlacePickerViewControllerDelegate {
 }
 
 extension SearchDetailViewController: SightsCardCellDelegate {
-    func didSelectPointOfInterest(with viewport: GMSCoordinateBounds) {
-        presentPlacePicker(with: viewport)
+    func didSelectPointOfInterest(with place: PointOfInterest) {
+        performSegue(withIdentifier: "genericMapSegue", sender: place)
     }
 }
 

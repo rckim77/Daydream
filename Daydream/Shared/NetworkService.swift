@@ -24,6 +24,8 @@ class NetworkService {
                 let results = json["results"].arrayValue.map({ json -> PointOfInterest in
                     let name = json["name"].stringValue
                     let placeId = json["place_id"].stringValue
+                    let centerLat = json["geometry"]["location"]["lat"].doubleValue
+                    let centerLng = json["geometry"]["location"]["lng"].doubleValue
                     let viewportRaw = json["geometry"]["viewport"]
                     let northeastRaw = viewportRaw["northeast"]
                     let southwestRaw = viewportRaw["southwest"]
@@ -32,7 +34,7 @@ class NetworkService {
                                             southeastLat: southwestRaw["lat"].doubleValue,
                                             southeastLng: southwestRaw["lng"].doubleValue)
                     
-                    return PointOfInterest(name: name, viewport: viewport, placeId: placeId)
+                    return PointOfInterest(name: name, viewport: viewport, centerLat: centerLat, centerLng: centerLng, placeId: placeId)
                 })
 
                 success(results)

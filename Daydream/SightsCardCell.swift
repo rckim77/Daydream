@@ -11,7 +11,7 @@ import SwiftyJSON
 import GooglePlaces
 
 protocol SightsCardCellDelegate: class {
-    func didSelectPointOfInterest(with viewport: GMSCoordinateBounds)
+    func didSelectPointOfInterest(with place: PointOfInterest)
 }
 
 class SightsCardCell: UITableViewCell {
@@ -89,9 +89,7 @@ class SightsCardCell: UITableViewCell {
             pointOfInterest = pointsOfInterest[2]
         }
 
-        if let viewport = getViewport(for: pointOfInterest) {
-            delegate?.didSelectPointOfInterest(with: viewport)
-        }
+        delegate?.didSelectPointOfInterest(with: pointOfInterest)
     }
 
     private func getViewport(for pointOfInterest: PointOfInterest) -> GMSCoordinateBounds? {
