@@ -5,9 +5,6 @@ PODS:
   - GoogleMaps/Base (2.5.0)
   - GoogleMaps/Maps (2.5.0):
     - GoogleMaps/Base
-  - GooglePlacePicker (2.5.0):
-    - GoogleMaps (= 2.5.0)
-    - GooglePlaces (= 2.5.0)
   - GooglePlaces (2.5.0):
     - GoogleMaps/Base (= 2.5.0)
   - Hero (1.1.0)
@@ -17,7 +14,6 @@ PODS:
 DEPENDENCIES:
   - Alamofire (~> 4.7)
   - GoogleMaps
-  - GooglePlacePicker
   - GooglePlaces
   - Hero
   - SwiftLint
@@ -26,12 +22,11 @@ DEPENDENCIES:
 SPEC CHECKSUMS:
   Alamofire: 907e0a98eb68cdb7f9d1f541a563d6ac5dc77b25
   GoogleMaps: c087b8e5dfe87ca6ebf59adb9b4894a4146bec4f
-  GooglePlacePicker: 1573e644ab54564d95c2643edc0f29091609e966
   GooglePlaces: dd70d9d71ea1c7944846afe67de3712c99b30a77
   Hero: ce59e81c79390613d97b43da7179e2c5e1017e04
   SwiftLint: 2aa21b96c8d13396a051bc1cb659d2ce1e0075b0
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
 
-PODFILE CHECKSUM: 6cfa85a926fa054e8c60b29a9feb2b7f6cee3d44
+PODFILE CHECKSUM: 68b61cb2eac8303a8fcd10b1bb7d5b9dce71f14e
 
 COCOAPODS: 1.4.0

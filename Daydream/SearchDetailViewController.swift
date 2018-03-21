@@ -8,7 +8,6 @@
 
 import UIKit
 import GooglePlaces
-import GooglePlacePicker
 import GoogleMaps
 import Alamofire
 import SwiftyJSON
@@ -106,14 +105,6 @@ class SearchDetailViewController: UIViewController {
         } else {
             // TODO: show default background screen
         }
-    }
-
-    private func presentPlacePicker(with viewport: GMSCoordinateBounds) {
-        let config = GMSPlacePickerConfig(viewport: viewport)
-        let placePicker = GMSPlacePickerViewController(config: config)
-        placePicker.delegate = self
-
-        present(placePicker, animated: true, completion: nil)
     }
 
     private func configureAutocompleteVC() {
@@ -224,24 +215,6 @@ extension SearchDetailViewController: GMSAutocompleteResultsViewControllerDelega
     func didUpdateAutocompletePredictions(_ viewController: GMSAutocompleteViewController) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = false
     }
-}
-
-// MARK: - GooglePlacePicker methods
-extension SearchDetailViewController: GMSPlacePickerViewControllerDelegate {
-    func placePicker(_ viewController: GMSPlacePickerViewController, didPick place: GMSPlace) {
-        viewController.dismiss(animated: true, completion: nil)
-        // TODO: zoom into that place and show more info
-        
-        print("Place name \(place.name)")
-        print("Place address \(place.formattedAddress)")
-        print("Place attributions \(place.attributions)")
-
-    }
-
-    func placePickerDidCancel(_ viewController: GMSPlacePickerViewController) {
-        viewController.dismiss(animated: true, completion: nil)
-    }
-
 }
 
 extension SearchDetailViewController: SightsCardCellDelegate {

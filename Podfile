@@ -7,7 +7,6 @@ target 'Daydream' do
 
   # Pods for Daydream
   pod 'GooglePlaces'
-  pod 'GooglePlacePicker'
   pod 'GoogleMaps'
   pod 'SwiftLint'
   pod 'Alamofire', '~> 4.7'
