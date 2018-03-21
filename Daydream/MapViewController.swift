@@ -12,6 +12,7 @@ import GoogleMaps
 class MapViewController: UIViewController {
 
     var mapCamera: GMSCameraPosition?
+    var heroId: String?
 
     @IBOutlet weak var mapView: UIView!
 
@@ -22,7 +23,7 @@ class MapViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        mapView.hero.id = "mapCard"
+        mapView.hero.id = heroId
 
         guard let camera = mapCamera else { return }
 

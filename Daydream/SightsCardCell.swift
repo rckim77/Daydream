@@ -9,6 +9,7 @@
 import UIKit
 import SwiftyJSON
 import GooglePlaces
+import Hero
 
 protocol SightsCardCellDelegate: class {
     func didSelectPointOfInterest(with place: PointOfInterest)
@@ -73,6 +74,8 @@ class SightsCardCell: UITableViewCell {
         pointOfInterest1ImageView.image = nil
         pointOfInterest2ImageView.image = nil
         pointOfInterest3ImageView.image = nil
+
+        hero.id = "pointOfInterestCard"
     }
 
     @objc

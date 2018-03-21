@@ -123,12 +123,14 @@ class SearchDetailViewController: UIViewController {
         if segue.identifier == "genericMapSegue", let destinationVC = segue.destination as? MapViewController,
             let sender = sender as? PointOfInterest {
             destinationVC.mapCamera = GMSCameraPosition.camera(withLatitude: sender.centerLat, longitude: sender.centerLng, zoom: 14.0)
+            destinationVC.heroId = "pointOfInterestCard"
         } else if segue.identifier == "mapCardSegue", let destinationVC = segue.destination as? MapViewController,
             let place = placeData {
             let camera = GMSCameraPosition.camera(withLatitude: place.coordinate.latitude,
                                                   longitude: place.coordinate.longitude,
                                                   zoom: 16.0)
             destinationVC.mapCamera = camera
+            destinationVC.heroId = "mapCard"
         }
     }
 }

@@ -9,6 +9,7 @@
 import UIKit
 import GooglePlaces
 import GoogleMaps
+import Hero
 
 class MapCardCell: UITableViewCell {
 
@@ -31,6 +32,7 @@ class MapCardCell: UITableViewCell {
         let camera = GMSCameraPosition.camera(withLatitude: place.coordinate.latitude, longitude: place.coordinate.longitude, zoom: 14.0)
         let frame = calculateFrame()
         let mapViewNew = GMSMapView.map(withFrame: frame, camera: camera)
+        mapViewNew.hero.id = "mapCard"
 
         mapViewNew.addRoundedCorners()
 
