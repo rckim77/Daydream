@@ -19,6 +19,21 @@ class SearchViewController: UIViewController {
     var placeData: GMSPlace?
 
     @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var randomBtn: UIButton! {
+        didSet {
+//            let blurEffect = UIBlurEffect(style: .regular)
+//            let blur = UIVisualEffectView(effect: blurEffect)
+//            blur.frame = randomBtn.bounds
+//            blur.isUserInteractionEnabled = false
+//            randomBtn.insertSubview(blur, at: 0)
+            randomBtn.addRoundedCorners(radius: 16)
+            randomBtn.addBorder(color: UIColor.white.cgColor)
+        }
+    }
+
+    @IBAction func randomBtnTapped(_ sender: Any) {
+        // TODO: go to next screen with a random city
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,22 +41,27 @@ class SearchViewController: UIViewController {
         resultsViewController = GMSAutocompleteResultsViewController()
         resultsViewController?.delegate = self
         addSearchController()
-        fadeInTitle()
+        fadeInTitleAndButton()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        fadeInTitle()
+        fadeInTitleAndButton()
         let yCoordinate = view.bounds.height
         searchBarView.frame.origin.y = (yCoordinate / 2) - (searchBarViewHeight / 2)
         searchController?.searchBar.text = ""
     }
 
-    private func fadeInTitle() {
+    private func fadeInTitleAndButton() {
         titleLabel.alpha = 0
+        randomBtn.alpha = 0
         UIView.animate(withDuration: 0.8, delay: 0.3, options: .curveEaseInOut, animations: {
             self.titleLabel.alpha = 1
+        }, completion: nil)
+
+        UIView.animate(withDuration: 0.8, delay: 1.3, options: .curveEaseInOut, animations: {
+            self.randomBtn.alpha = 1
         }, completion: nil)
     }
 

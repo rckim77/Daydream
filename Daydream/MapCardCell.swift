@@ -34,7 +34,7 @@ class MapCardCell: UITableViewCell {
         let mapViewNew = GMSMapView.map(withFrame: frame, camera: camera)
         mapViewNew.hero.id = "mapCard"
 
-        mapViewNew.addRoundedCorners()
+        mapViewNew.addRoundedCorners(radius: 10)
 
         createMarkerFor(mapViewNew, with: place)
 

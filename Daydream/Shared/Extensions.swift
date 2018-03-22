@@ -126,8 +126,8 @@ extension UIView {
         }
     }
 
-    func addRoundedCorners() {
-        layer.cornerRadius = 10
+    func addRoundedCorners(radius: CGFloat) {
+        layer.cornerRadius = radius
         layer.masksToBounds = true
     }
 
@@ -151,5 +151,11 @@ extension UIView {
                                       cornerRadii: CGSize(width: 10, height: 10)).cgPath
 
         layer.mask = rectShape
+    }
+
+    func addBorder(color: CGColor) {
+        layer.borderWidth = 1.0
+        layer.borderColor = color
+        layer.cornerRadius = cornerRadius
     }
 }
