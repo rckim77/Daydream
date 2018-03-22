@@ -153,8 +153,8 @@ extension UIView {
         layer.mask = rectShape
     }
 
-    func addBorder(color: CGColor) {
-        layer.borderWidth = 1.0
+    func addBorder(color: CGColor = UIColor.white.cgColor, width: CGFloat = 1.0) {
+        layer.borderWidth = width
         layer.borderColor = color
         layer.cornerRadius = cornerRadius
     }

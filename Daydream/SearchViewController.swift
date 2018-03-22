@@ -21,13 +21,8 @@ class SearchViewController: UIViewController {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var randomBtn: UIButton! {
         didSet {
-//            let blurEffect = UIBlurEffect(style: .regular)
-//            let blur = UIVisualEffectView(effect: blurEffect)
-//            blur.frame = randomBtn.bounds
-//            blur.isUserInteractionEnabled = false
-//            randomBtn.insertSubview(blur, at: 0)
-            randomBtn.addRoundedCorners(radius: 16)
-            randomBtn.addBorder(color: UIColor.white.cgColor)
+            randomBtn.addRoundedCorners(radius: 14)
+            randomBtn.addBorder()
         }
     }
 
