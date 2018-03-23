@@ -67,7 +67,7 @@ class SearchDetailViewController: UIViewController {
         definesPresentationContext = true
     }
 
-    private func loadContent(for place: GMSPlace?) {
+    private func loadContent(for place: GMSPlace?, reloadMapCard: Bool = false) {
         if let place = place {
             titleLabel.text = place.name
 
@@ -102,6 +102,10 @@ class SearchDetailViewController: UIViewController {
                 }, failure: { error in
                     print(error)
             })
+
+            if reloadMapCard {
+                placeCardsTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .fade)
+            }
         } else {
             // TODO: show default background screen
         }
@@ -197,7 +201,7 @@ extension SearchDetailViewController: GMSAutocompleteResultsViewControllerDelega
 
         dismiss(animated: true, completion: {
             self.placeData = place
-            self.loadContent(for: place)
+            self.loadContent(for: place, reloadMapCard: true)
         })
     }
 
