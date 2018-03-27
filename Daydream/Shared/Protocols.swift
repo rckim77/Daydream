@@ -32,3 +32,17 @@ extension RandomCitySelectable {
         }
     }
 }
+
+protocol ImageViewFadeable {
+    func fadeInImage(_ image: UIImage, forImageView imageView: UIImageView)
+}
+
+extension ImageViewFadeable {
+    func fadeInImage(_ image: UIImage, forImageView imageView: UIImageView) {
+        imageView.alpha = 0
+        imageView.image = image
+        UIView.animate(withDuration: 0.6) {
+            imageView.alpha = 1
+        }
+    }
+}

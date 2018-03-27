@@ -106,15 +106,20 @@ class SightsCardCell: UITableViewCell {
     private func loadBackgroundImage(for button: Int, with pointOfInterest: PointOfInterest) {
         NetworkService().loadPhoto(with: pointOfInterest.placeId, success: { [weak self] image in
             guard let strongSelf = self else { return }
+            var imageView = UIImageView()
 
-            if button == 1 {
-                strongSelf.pointOfInterest1ImageView.image = image
-            } else if button == 2 {
-                strongSelf.pointOfInterest2ImageView.image = image
-            } else if button == 3 {
-                strongSelf.pointOfInterest3ImageView.image = image
+            switch button {
+            case 1:
+                imageView = strongSelf.pointOfInterest1ImageView
+            case 2:
+                imageView = strongSelf.pointOfInterest2ImageView
+            case 3:
+                imageView = strongSelf.pointOfInterest3ImageView
+            default:
+                break
             }
-            
+
+            strongSelf.fadeInImage(image, forImageView: imageView)
         }, failure: { error in
             print(error)
         })
@@ -128,3 +133,5 @@ class SightsCardCell: UITableViewCell {
         }
     }
 }
+
+extension SightsCardCell: ImageViewFadeable {}

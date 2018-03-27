@@ -98,14 +98,23 @@ class EateriesCardCell: UITableViewCell {
                 guard let strongSelf = self, let data = data else { return }
 
                 DispatchQueue.main.async {
-                    if button == 1 {
-                        strongSelf.eatery1ImageView.image = UIImage(data: data)
-                    } else if button == 2 {
-                        strongSelf.eatery2ImageView.image = UIImage(data: data)
-                    } else if button == 3 {
-                        strongSelf.eatery3ImageView.image = UIImage(data: data)
+                    guard let image = UIImage(data: data) else {
+                        return
                     }
 
+                    var imageView = UIImageView()
+                    switch button {
+                    case 1:
+                        imageView = strongSelf.eatery1ImageView
+                    case 2:
+                        imageView = strongSelf.eatery2ImageView
+                    case 3:
+                        imageView = strongSelf.eatery3ImageView
+                    default:
+                        break
+                    }
+
+                    strongSelf.fadeInImage(image, forImageView: imageView)
                 }
             }.resume()
         }
@@ -119,3 +128,5 @@ class EateriesCardCell: UITableViewCell {
         }
     }
 }
+
+extension EateriesCardCell: ImageViewFadeable {}
