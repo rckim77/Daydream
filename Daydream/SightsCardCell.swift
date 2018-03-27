@@ -31,10 +31,10 @@ class SightsCardCell: UITableViewCell {
     weak var delegate: SightsCardCellDelegate?
     var pointsOfInterest: [PointOfInterest]? {
         didSet {
-            if let pointsOfInterest = pointsOfInterest, pointsOfInterest.count >= 3, oldValue?.count != 0 {
+            if let pointsOfInterest = pointsOfInterest, pointsOfInterest.count >= 3 {
                 // display content only if we've made another API call, otherwise do nothing
                 // POSTLAUNCH: - Update comparison with placeId
-                if pointsOfInterest[0].placeId != oldValue?[0].placeId {
+                if oldValue?.count == 0 || pointsOfInterest[0].placeId != oldValue?[0].placeId {
                     toggleViews([pointOfInterest1View, pointOfInterest2View, pointOfInterest3View], willHide: false)
 
                     pointOfInterest1Label.text = pointsOfInterest[0].name

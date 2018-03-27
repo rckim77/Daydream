@@ -30,10 +30,10 @@ class EateriesCardCell: UITableViewCell {
     weak var delegate: EateriesCardCellDelegate?
     var eateries: [Eatery]? {
         didSet {
-            if let eateries = eateries, eateries.count >= 3, oldValue?.count != 0 {
+            if let eateries = eateries, eateries.count >= 3 {
                 // display content only if we've made another API call, otherwise do nothing
                 // POSTLAUNCH: - Update url comparison
-                if eateries[0].url != oldValue?[0].url {
+                if oldValue?.count == 0 || eateries[0].url != oldValue?[0].url {
                     toggleViews([eatery1View, eatery2View, eatery3View], willHide: false)
 
                     eatery1Label.text = eateries[0].name
