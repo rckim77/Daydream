@@ -44,7 +44,8 @@ class SearchDetailViewController: UIViewController {
     }
 
     @IBAction func randomCityBtnTapped(_ sender: UIButton) {
-        // TODO: search new city
+        searchController?.searchBar.text = getRandomCity()
+        searchController?.searchBar.becomeFirstResponder()
     }
 
     // MARK: - Search
@@ -241,3 +242,5 @@ extension SearchDetailViewController: EateriesCardCellDelegate {
         }
     }
 }
+
+extension SearchDetailViewController: RandomCitySelectable {}
