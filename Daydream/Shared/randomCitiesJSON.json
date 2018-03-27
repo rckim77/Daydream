@@ -1,0 +1,398 @@
+[
+ {
+   "city": "Hong Kong",
+   "country": "Hong Kong"
+ },
+ {
+   "city": "Singapore",
+   "country": "Singapore"
+ },
+ {
+   "city": "Bangkok",
+   "country": "Thailand"
+ },
+ {
+   "city": "London",
+   "country": "UK"
+ },
+ {
+   "city": "Macau",
+   "country": "Macau"
+ },
+ {
+   "city": "Kuala Lumpur",
+   "country": "Malaysia"
+ },
+ {
+   "city": "Shenzhen",
+   "country": "China"
+ },
+ {
+   "city": "New York City",
+   "country": "USA"
+ },
+ {
+   "city": "Antalya",
+   "country": "Turkey"
+ },
+ {
+   "city": "Paris",
+   "country": "France"
+ },
+ {
+   "city": "Istanbul",
+   "country": "Turkey"
+ },
+ {
+   "city": "Rome",
+   "country": "Italy"
+ },
+ {
+   "city": "Dubai",
+   "country": "UAE"
+ },
+ {
+   "city": "Guangzhou",
+   "country": "China"
+ },
+ {
+   "city": "Phuket",
+   "country": "Thailand"
+ },
+ {
+   "city": "Mecca",
+   "country": "Saudi Arabia"
+ },
+ {
+   "city": "Pattaya",
+   "country": "Thailand"
+ },
+ {
+   "city": "Taipei City",
+   "country": "Taiwan"
+ },
+ {
+   "city": "Prague",
+   "country": "Czech Republic"
+ },
+ {
+   "city": "Shanghai",
+   "country": "China"
+ },
+ {
+   "city": "Las Vegas",
+   "country": "USA"
+ },
+ {
+   "city": "Miami",
+   "country": "USA"
+ },
+ {
+   "city": "Barcelona",
+   "country": "Spain"
+ },
+ {
+   "city": "Moscow",
+   "country": "Russia"
+ },
+ {
+   "city": "Beijing",
+   "country": "China"
+ },
+ {
+   "city": "Los Angeles",
+   "country": "USA"
+ },
+ {
+   "city": "Budapest",
+   "country": "Hungary"
+ },
+ {
+   "city": "Vienna",
+   "country": "Austria"
+ },
+ {
+   "city": "Amsterdam",
+   "country": "Netherlands"
+ },
+ {
+   "city": "Sofia",
+   "country": "Bulgaria"
+ },
+ {
+   "city": "Madrid",
+   "country": "Spain"
+ },
+ {
+   "city": "Orlando",
+   "country": "USA"
+ },
+ {
+   "city": "Ho Chi Minh City",
+   "country": "Vietnam"
+ },
+ {
+   "city": "Lima",
+   "country": "Peru"
+ },
+ {
+   "city": "Berlin",
+   "country": "Germany"
+ },
+ {
+   "city": "Tokyo",
+   "country": "Japan"
+ },
+ {
+   "city": "Warsaw",
+   "country": "Poland"
+ },
+ {
+   "city": "Chennai",
+   "country": "India"
+ },
+ {
+   "city": "Cairo",
+   "country": "Egypt"
+ },
+ {
+   "city": "Nairobi",
+   "country": "Kenya"
+ },
+ {
+   "city": "Hangzhou",
+   "country": "China"
+ },
+ {
+   "city": "Milan",
+   "country": "Italy"
+ },
+ {
+   "city": "San Francisco",
+   "country": "USA"
+ },
+ {
+   "city": "Buenos Aires",
+   "country": "Argentina"
+ },
+ {
+   "city": "Venice",
+   "country": "Italy"
+ },
+ {
+   "city": "Mexico City",
+   "country": "Mexico"
+ },
+ {
+   "city": "Dublin",
+   "country": "Ireland"
+ },
+ {
+   "city": "Seoul",
+   "country": "South Korea"
+ },
+ {
+   "city": "Mugla",
+   "country": "Turkey"
+ },
+ {
+   "city": "Mumbai",
+   "country": "India"
+ },
+ {
+   "city": "Denpasar",
+   "country": "Indonesia"
+ },
+ {
+   "city": "Delhi",
+   "country": "India"
+ },
+ {
+   "city": "Toronto",
+   "country": "Canada"
+ },
+ {
+   "city": "Zhuhai",
+   "country": "China"
+ },
+ {
+   "city": "St Petersburg",
+   "country": "Russia"
+ },
+ {
+   "city": "Burgas",
+   "country": "Bulgaria"
+ },
+ {
+   "city": "Sydney",
+   "country": "Australia"
+ },
+ {
+   "city": "Djerba",
+   "country": "Tunisia"
+ },
+ {
+   "city": "Munich",
+   "country": "Germany"
+ },
+ {
+   "city": "Johannesburg",
+   "country": "South Africa"
+ },
+ {
+   "city": "Cancun",
+   "country": "Mexico"
+ },
+ {
+   "city": "Edirne",
+   "country": "Turkey"
+ },
+ {
+   "city": "Suzhou",
+   "country": "China"
+ },
+ {
+   "city": "Bucharest",
+   "country": "Romania"
+ },
+ {
+   "city": "Punta Cana",
+   "country": "Dominican Republic"
+ },
+ {
+   "city": "Agra",
+   "country": "India"
+ },
+ {
+   "city": "Jaipur",
+   "country": "India"
+ },
+ {
+   "city": "Brussels",
+   "country": "Belgium"
+ },
+ {
+   "city": "Nice",
+   "country": "France"
+ },
+ {
+   "city": "Chiang Mai",
+   "country": "Thailand"
+ },
+ {
+   "city": "Sharm el-Sheikh",
+   "country": "Egypt"
+ },
+ {
+   "city": "Lisbon",
+   "country": "Portugal"
+ },
+ {
+   "city": "Marrakech",
+   "country": "Morocco"
+ },
+ {
+   "city": "Jakarta",
+   "country": "Indonesia"
+ },
+ {
+   "city": "Manama",
+   "country": "Bahrain"
+ },
+ {
+   "city": "Hanoi",
+   "country": "Vietnam"
+ },
+ {
+   "city": "Honolulu",
+   "country": "USA"
+ },
+ {
+   "city": "Manila",
+   "country": "Philippines"
+ },
+ {
+   "city": "Guilin",
+   "country": "China"
+ },
+ {
+   "city": "Auckland",
+   "country": "New Zealand"
+ },
+ {
+   "city": "Siem Reap",
+   "country": "Cambodia"
+ },
+ {
+   "city": "Sousse",
+   "country": "Tunisia"
+ },
+ {
+   "city": "Amman",
+   "country": "Jordan"
+ },
+ {
+   "city": "Vancouver",
+   "country": "Canada"
+ },
+ {
+   "city": "Abu Dhabi",
+   "country": "UAE"
+ },
+ {
+   "city": "Kiev",
+   "country": "Ukraine"
+ },
+ {
+   "city": "Doha",
+   "country": "Qatar"
+ },
+ {
+   "city": "Florence",
+   "country": "Italy"
+ },
+ {
+   "city": "Rio de Janeiro",
+   "country": "Brazil"
+ },
+ {
+   "city": "Melbourne",
+   "country": "Australia"
+ },
+ {
+   "city": "Washington DC",
+   "country": "USA"
+ },
+ {
+   "city": "Riyadh",
+   "country": "Saudi Arabia"
+ },
+ {
+   "city": "Christchurch",
+   "country": "New Zealand"
+ },
+ {
+   "city": "Frankfurt",
+   "country": "Germany"
+ },
+ {
+   "city": "Baku",
+   "country": "Azerbaijan"
+ },
+ {
+   "city": "Sao Paolo",
+   "country": "Brazil"
+ },
+ {
+   "city": "Harare",
+   "country": "Zimbabwe"
+ },
+ {
+   "city": "Kolkata",
+   "country": "India"
+ },
+ {
+   "city": "Nanjing",
+   "country": "China"
+ }
+]
