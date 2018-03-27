@@ -28,22 +28,8 @@ class SearchViewController: UIViewController {
     }
 
     @IBAction func randomBtnTapped(_ sender: Any) {
-        guard let path = Bundle.main.path(forResource: "randomCitiesJSON", ofType: "json") else {
-            return
-        }
-
-        // pick a random city
-        do {
-            let url = URL(fileURLWithPath: path)
-            let data = try Data(contentsOf: url, options: .mappedIfSafe)
-            let json = JSON(data).arrayValue
-            let randomInt = Int(arc4random_uniform(UInt32(json.count)))
-            let city = json[randomInt]["city"].stringValue
-            searchController?.searchBar.text = city
-            searchController?.searchBar.becomeFirstResponder()
-        } catch {
-            // TODO: show alert modal that random btn doesn't work
-        }
+        searchController?.searchBar.text = getRandomCity()
+        searchController?.searchBar.becomeFirstResponder()
     }
 
     override func viewDidLoad() {
@@ -159,5 +145,6 @@ extension SearchViewController: UISearchControllerDelegate {
             self.titleLabel.alpha = 1
         })
     }
-    
 }
+
+extension SearchViewController: RandomCitySelectable {}
