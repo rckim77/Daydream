@@ -110,7 +110,7 @@
                                     <constraint firstAttribute="height" constant="48" id="I2R-0U-FQD"/>
                                     <constraint firstAttribute="width" constant="48" id="Zez-dM-49l"/>
                                 </constraints>
-                                <color key="tintColor" red="0.45882352939999999" green="0.42352941179999998" blue="0.51372549020000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <inset key="imageEdgeInsets" minX="8" minY="8" maxX="8" maxY="8"/>
                                 <state key="normal" image="homeWhiteShadow"/>
                                 <connections>
@@ -515,7 +515,7 @@
                                     <constraint firstAttribute="width" constant="48" id="7OV-qi-2ih"/>
                                     <constraint firstAttribute="height" constant="48" id="U6K-Og-NEf"/>
                                 </constraints>
-                                <color key="tintColor" red="0.45882352939999999" green="0.42352941179999998" blue="0.51372549020000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <inset key="imageEdgeInsets" minX="8" minY="10" maxX="8" maxY="6"/>
                                 <state key="normal" image="diceCubeHardShadow"/>
                                 <connections>
@@ -606,7 +606,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="diceCubeHardShadow" width="68" height="70"/>
+        <image name="diceCubeHardShadow" width="70" height="72"/>
         <image name="homeWhiteShadow" width="30" height="27"/>
         <image name="mapCloseIconSoftShadow" width="32" height="32"/>
         <image name="sunriseJungle" width="2246" height="3644"/>
