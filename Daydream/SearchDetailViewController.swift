@@ -22,6 +22,11 @@ class SearchDetailViewController: UIViewController {
     var placeData: GMSPlace?
     var pointsOfInterest: [PointOfInterest]?
     var eateries: [Eatery]?
+    private var visualEffectView: UIVisualEffectView {
+        let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .regular))
+        visualEffectView.frame = placeImageView.bounds
+        return visualEffectView
+    }
     private let mapCardCellHeight: CGFloat = 190
     private let sightsCardCellHeight: CGFloat = 570
     
@@ -80,13 +85,10 @@ class SearchDetailViewController: UIViewController {
 
             networkService.loadPhoto(with: place.placeID, success: { [weak self] photo in
                 guard let strongSelf = self else { return }
+                strongSelf.placeImageView.subviews.forEach { $0.removeFromSuperview() }
                 strongSelf.placeImageView.image = photo
                 strongSelf.placeImageView.contentMode = .scaleAspectFill
-
-                // add a blur for now since resolution isn't great
-                let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .regular))
-                visualEffectView.frame = strongSelf.placeImageView.bounds
-                strongSelf.placeImageView.addSubview(visualEffectView)
+                strongSelf.placeImageView.addSubview(strongSelf.visualEffectView)
                 }, failure: { error in
                     print(error)
                 }
