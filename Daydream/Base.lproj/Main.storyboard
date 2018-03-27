@@ -510,7 +510,7 @@
                                 </prototypes>
                             </tableView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rWT-1T-WUd">
-                                <rect key="frame" x="255" y="66.666666666666671" width="48" height="48"/>
+                                <rect key="frame" x="257" y="66.666666666666671" width="48" height="48"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="48" id="7OV-qi-2ih"/>
                                     <constraint firstAttribute="height" constant="48" id="U6K-Og-NEf"/>
@@ -534,7 +534,7 @@
                             <constraint firstItem="NX7-bA-oV6" firstAttribute="top" secondItem="ngt-Nd-jYB" secondAttribute="top" id="aTE-cH-bvu"/>
                             <constraint firstAttribute="bottom" secondItem="Lg2-04-32b" secondAttribute="bottom" id="biJ-nG-UC7"/>
                             <constraint firstItem="NX7-bA-oV6" firstAttribute="leading" secondItem="1tM-WJ-sOR" secondAttribute="leading" id="gBp-HF-jUV"/>
-                            <constraint firstItem="WRK-EC-lm4" firstAttribute="leading" secondItem="rWT-1T-WUd" secondAttribute="trailing" constant="8" id="hYc-bH-xpu"/>
+                            <constraint firstItem="WRK-EC-lm4" firstAttribute="leading" secondItem="rWT-1T-WUd" secondAttribute="trailing" constant="6" id="hYc-bH-xpu"/>
                             <constraint firstItem="WRK-EC-lm4" firstAttribute="centerY" secondItem="pmy-BK-jFt" secondAttribute="centerY" id="qFj-J0-rQ9"/>
                             <constraint firstItem="1tM-WJ-sOR" firstAttribute="trailing" secondItem="WRK-EC-lm4" secondAttribute="trailing" constant="16" id="qjI-og-jtI"/>
                             <constraint firstItem="1tM-WJ-sOR" firstAttribute="trailing" secondItem="NX7-bA-oV6" secondAttribute="trailing" id="rk6-js-o7d"/>
