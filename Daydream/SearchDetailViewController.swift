@@ -43,6 +43,10 @@ class SearchDetailViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
 
+    @IBAction func randomCityBtnTapped(_ sender: UIButton) {
+        // TODO: search new city
+    }
+
     // MARK: - Search
     private func addSearchController() {
 
