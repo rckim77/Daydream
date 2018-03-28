@@ -78,43 +78,41 @@ class SearchDetailViewController: UIViewController {
     }
 
     private func loadContent(for place: GMSPlace?, reloadMapCard: Bool = false) {
-        if let place = place {
-            titleLabel.text = place.name
+        guard let place = place else { return }
 
-            let networkService = NetworkService()
+        titleLabel.text = place.name
 
-            networkService.loadPhoto(with: place.placeID, success: { [weak self] photo in
-                guard let strongSelf = self else { return }
-                strongSelf.placeImageView.subviews.forEach { $0.removeFromSuperview() }
-                strongSelf.placeImageView.image = photo
-                strongSelf.placeImageView.contentMode = .scaleAspectFill
-                strongSelf.placeImageView.addSubview(strongSelf.visualEffectView)
-                }, failure: { error in
-                    print(error)
-                }
-            )
+        let networkService = NetworkService()
 
-            networkService.loadTopSights(with: place, success: { [weak self] pointsOfInterest in
-                guard let strongSelf = self else { return }
-                strongSelf.pointsOfInterest = pointsOfInterest
-                strongSelf.placeCardsTableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .fade)
-                }, failure: { error in
-                    print(error)
-            })
-
-            networkService.loadTopEateries(with: place, success: { [weak self] eateries in
-                guard let strongSelf = self else { return }
-                strongSelf.eateries = eateries
-                strongSelf.placeCardsTableView.reloadRows(at: [IndexPath(row: 2, section: 0)], with: .fade)
-                }, failure: { error in
-                    print(error)
-            })
-
-            if reloadMapCard {
-                placeCardsTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .fade)
+        networkService.loadPhoto(with: place.placeID, success: { [weak self] photo in
+            guard let strongSelf = self else { return }
+            strongSelf.placeImageView.subviews.forEach { $0.removeFromSuperview() }
+            strongSelf.placeImageView.image = photo
+            strongSelf.placeImageView.contentMode = .scaleAspectFill
+            strongSelf.placeImageView.addSubview(strongSelf.visualEffectView)
+            }, failure: { error in
+                print(error)
             }
-        } else {
-            // TODO: show default background screen
+        )
+
+        networkService.loadTopSights(with: place, success: { [weak self] pointsOfInterest in
+            guard let strongSelf = self else { return }
+            strongSelf.pointsOfInterest = pointsOfInterest
+            strongSelf.placeCardsTableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .fade)
+            }, failure: { error in
+                print(error)
+        })
+
+        networkService.loadTopEateries(with: place, success: { [weak self] eateries in
+            guard let strongSelf = self else { return }
+            strongSelf.eateries = eateries
+            strongSelf.placeCardsTableView.reloadRows(at: [IndexPath(row: 2, section: 0)], with: .fade)
+            }, failure: { error in
+                print(error)
+        })
+
+        if reloadMapCard {
+            placeCardsTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .fade)
         }
     }
 
