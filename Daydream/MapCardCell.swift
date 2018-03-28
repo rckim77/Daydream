@@ -13,17 +13,21 @@ import Hero
 
 class MapCardCell: UITableViewCell {
 
-    @IBOutlet weak var mainView: DesignableView!
+    @IBOutlet weak var mainView: DesignableView! {
+        didSet {
+            hero.id = "mapCard"
+        }
+    }
     var mapView: GMSMapView?
 
     var place: GMSPlace? {
         didSet {
-            if let place = place, place !== oldValue {
-                if let mapView = mapView {
-                    update(mapView, with: place)
-                } else {
-                    addMapView(with: place)
-                }
+            guard let place = place, place !== oldValue else { return }
+
+            if let mapView = mapView {
+                update(mapView, with: place)
+            } else {
+                addMapView(with: place)
             }
         }
     }
@@ -32,7 +36,6 @@ class MapCardCell: UITableViewCell {
         let camera = GMSCameraPosition.camera(withLatitude: place.coordinate.latitude, longitude: place.coordinate.longitude, zoom: 14.0)
         let frame = calculateFrame()
         let mapViewNew = GMSMapView.map(withFrame: frame, camera: camera)
-        mapViewNew.hero.id = "mapCard"
 
         mapViewNew.addRoundedCorners(radius: 10)
 

@@ -131,14 +131,15 @@ class SearchDetailViewController: UIViewController {
 
     // MARK: - Segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "genericMapSegue", let destinationVC = segue.destination as? MapViewController,
-            let sender = sender as? PointOfInterest {
-            destinationVC.place = sender
-            destinationVC.heroId = "pointOfInterestCard"
-        } else if segue.identifier == "mapCardSegue", let destinationVC = segue.destination as? MapViewController,
-            let place = placeData {
-            destinationVC.place = place
-            destinationVC.heroId = "mapCard"
+        if let destinationVC = segue.destination as? MapViewController {
+            // segue from Top Sights or Top Eateries cell
+            if segue.identifier == "genericMapSegue", let sender = sender as? PointOfInterest {
+                destinationVC.place = sender
+                destinationVC.heroId = "pointOfInterestCard"
+            } else if segue.identifier == "mapCardSegue", let place = placeData {
+                destinationVC.place = place
+                destinationVC.heroId = "mapCard"
+            }
         }
     }
 }
@@ -163,7 +164,6 @@ extension SearchDetailViewController: UITableViewDataSource, UITableViewDelegate
             let cell = tableView.dequeueReusableCell(withIdentifier: "mapCardCell", for: indexPath)
 
             if let mapCardCell = cell as? MapCardCell {
-                mapCardCell.hero.id = "mapCard"
                 mapCardCell.place = placeData
 
                 return mapCardCell
@@ -173,7 +173,6 @@ extension SearchDetailViewController: UITableViewDataSource, UITableViewDelegate
             let cell = tableView.dequeueReusableCell(withIdentifier: "sightsCardCell", for: indexPath)
 
             if let sightsCardCell = cell as? SightsCardCell {
-
                 sightsCardCell.delegate = self
                 sightsCardCell.pointsOfInterest = pointsOfInterest
 
@@ -184,7 +183,6 @@ extension SearchDetailViewController: UITableViewDataSource, UITableViewDelegate
             let cell = tableView.dequeueReusableCell(withIdentifier: "eateriesCardCell", for: indexPath)
 
             if let eateriesCardCell = cell as? EateriesCardCell {
-
                 eateriesCardCell.delegate = self
                 eateriesCardCell.eateries = eateries
 
