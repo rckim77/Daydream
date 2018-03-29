@@ -9,14 +9,14 @@
          <BuildActionEntry
             buildForTesting = "YES"
             buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "94380AC3203BAE1D00684863"
-               BuildableName = "Daydream.app"
-               BlueprintName = "Daydream"
+               BlueprintIdentifier = "9490BA08206C8C8000B880E7"
+               BuildableName = "DaydreamUITests.xctest"
+               BlueprintName = "DaydreamUITests"
                ReferencedContainer = "container:Daydream.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -40,15 +40,6 @@
             </BuildableReference>
          </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "94380AC3203BAE1D00684863"
-            BuildableName = "Daydream.app"
-            BlueprintName = "Daydream"
-            ReferencedContainer = "container:Daydream.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
@@ -63,16 +54,15 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "94380AC3203BAE1D00684863"
-            BuildableName = "Daydream.app"
-            BlueprintName = "Daydream"
+            BlueprintIdentifier = "9490BA08206C8C8000B880E7"
+            BuildableName = "DaydreamUITests.xctest"
+            BlueprintName = "DaydreamUITests"
             ReferencedContainer = "container:Daydream.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
@@ -82,16 +72,15 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "94380AC3203BAE1D00684863"
-            BuildableName = "Daydream.app"
-            BlueprintName = "Daydream"
+            BlueprintIdentifier = "9490BA08206C8C8000B880E7"
+            BuildableName = "DaydreamUITests.xctest"
+            BlueprintName = "DaydreamUITests"
             ReferencedContainer = "container:Daydream.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

@@ -21,6 +21,8 @@
 		9481EC5A204B358C00863A5A /* SightsCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9481EC59204B358C00863A5A /* SightsCardCell.swift */; };
 		9490BA02206AF6F700B880E7 /* randomCitiesJSON.json in Resources */ = {isa = PBXBuildFile; fileRef = 9490BA01206AF6F700B880E7 /* randomCitiesJSON.json */; };
 		9490BA04206B03B300B880E7 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9490BA03206B03B300B880E7 /* Protocols.swift */; };
+		9490BA0C206C8C8000B880E7 /* DaydreamUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9490BA0B206C8C8000B880E7 /* DaydreamUITests.swift */; };
+		9490BA14206C8CCA00B880E7 /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9490BA13206C8CCA00B880E7 /* SnapshotHelper.swift */; };
 		949630BA203BCBBD007139CA /* SearchDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949630B9203BCBBD007139CA /* SearchDetailViewController.swift */; };
 		94B7DB55205DEDFF0040D61C /* PointOfInterest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B7DB54205DEDFF0040D61C /* PointOfInterest.swift */; };
 		94B7DB57205DEE980040D61C /* Viewport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B7DB56205DEE980040D61C /* Viewport.swift */; };
@@ -28,6 +30,16 @@
 		94B7DB5D205EEBBB0040D61C /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B7DB5C205EEBBB0040D61C /* NetworkService.swift */; };
 		94DB8FE7204B946200FA7CF7 /* EateriesCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94DB8FE6204B946200FA7CF7 /* EateriesCardCell.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		9490BA0E206C8C8000B880E7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 94380ABC203BAE1D00684863 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 94380AC3203BAE1D00684863;
+			remoteInfo = Daydream;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		275E3DD2282C7EA762CA98E6 /* Pods-Daydream.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Daydream.release.xcconfig"; path = "Pods/Target Support Files/Pods-Daydream/Pods-Daydream.release.xcconfig"; sourceTree = "<group>"; };
@@ -48,6 +60,10 @@
 		9481EC59204B358C00863A5A /* SightsCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SightsCardCell.swift; sourceTree = "<group>"; };
 		9490BA01206AF6F700B880E7 /* randomCitiesJSON.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = randomCitiesJSON.json; sourceTree = "<group>"; };
 		9490BA03206B03B300B880E7 /* Protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
+		9490BA09206C8C8000B880E7 /* DaydreamUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DaydreamUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9490BA0B206C8C8000B880E7 /* DaydreamUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaydreamUITests.swift; sourceTree = "<group>"; };
+		9490BA0D206C8C8000B880E7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9490BA13206C8CCA00B880E7 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SnapshotHelper.swift; path = fastlane/SnapshotHelper.swift; sourceTree = SOURCE_ROOT; };
 		949630B9203BCBBD007139CA /* SearchDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDetailViewController.swift; sourceTree = "<group>"; };
 		94B7DB54205DEDFF0040D61C /* PointOfInterest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointOfInterest.swift; sourceTree = "<group>"; };
 		94B7DB56205DEE980040D61C /* Viewport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Viewport.swift; sourceTree = "<group>"; };
@@ -62,6 +78,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				1798BE5CF61FDC04CA194644 /* Pods_Daydream.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9490BA06206C8C8000B880E7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -80,6 +103,7 @@
 			isa = PBXGroup;
 			children = (
 				94380AC6203BAE1D00684863 /* Daydream */,
+				9490BA0A206C8C8000B880E7 /* DaydreamUITests */,
 				94380AC5203BAE1D00684863 /* Products */,
 				C82D49DAB7A4A35EC3FA2142 /* Pods */,
 				16D2AFFF8EADF7C12E01E00C /* Frameworks */,
@@ -90,6 +114,7 @@
 			isa = PBXGroup;
 			children = (
 				94380AC4203BAE1D00684863 /* Daydream.app */,
+				9490BA09206C8C8000B880E7 /* DaydreamUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -112,6 +137,16 @@
 				94380AD3203BAE1D00684863 /* Info.plist */,
 			);
 			path = Daydream;
+			sourceTree = "<group>";
+		};
+		9490BA0A206C8C8000B880E7 /* DaydreamUITests */ = {
+			isa = PBXGroup;
+			children = (
+				9490BA13206C8CCA00B880E7 /* SnapshotHelper.swift */,
+				9490BA0B206C8C8000B880E7 /* DaydreamUITests.swift */,
+				9490BA0D206C8C8000B880E7 /* Info.plist */,
+			);
+			path = DaydreamUITests;
 			sourceTree = "<group>";
 		};
 		94B7DB5A205E2C800040D61C /* Models */ = {
@@ -170,6 +205,24 @@
 			productReference = 94380AC4203BAE1D00684863 /* Daydream.app */;
 			productType = "com.apple.product-type.application";
 		};
+		9490BA08206C8C8000B880E7 /* DaydreamUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9490BA10206C8C8000B880E7 /* Build configuration list for PBXNativeTarget "DaydreamUITests" */;
+			buildPhases = (
+				9490BA05206C8C8000B880E7 /* Sources */,
+				9490BA06206C8C8000B880E7 /* Frameworks */,
+				9490BA07206C8C8000B880E7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9490BA0F206C8C8000B880E7 /* PBXTargetDependency */,
+			);
+			name = DaydreamUITests;
+			productName = DaydreamUITests;
+			productReference = 9490BA09206C8C8000B880E7 /* DaydreamUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -183,6 +236,11 @@
 					94380AC3203BAE1D00684863 = {
 						CreatedOnToolsVersion = 9.2;
 						ProvisioningStyle = Automatic;
+					};
+					9490BA08206C8C8000B880E7 = {
+						CreatedOnToolsVersion = 9.2;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 94380AC3203BAE1D00684863;
 					};
 				};
 			};
@@ -200,6 +258,7 @@
 			projectRoot = "";
 			targets = (
 				94380AC3203BAE1D00684863 /* Daydream */,
+				9490BA08206C8C8000B880E7 /* DaydreamUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -213,6 +272,13 @@
 				9490BA02206AF6F700B880E7 /* randomCitiesJSON.json in Resources */,
 				94380ACF203BAE1D00684863 /* Assets.xcassets in Resources */,
 				94380ACD203BAE1D00684863 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9490BA07206C8C8000B880E7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -317,7 +383,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		9490BA05206C8C8000B880E7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9490BA0C206C8C8000B880E7 /* DaydreamUITests.swift in Sources */,
+				9490BA14206C8CCA00B880E7 /* SnapshotHelper.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		9490BA0F206C8C8000B880E7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 94380AC3203BAE1D00684863 /* Daydream */;
+			targetProxy = 9490BA0E206C8C8000B880E7 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		94380ACB203BAE1D00684863 /* Main.storyboard */ = {
@@ -480,6 +563,36 @@
 			};
 			name = Release;
 		};
+		9490BA11206C8C8000B880E7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 49BZEB79BF;
+				INFOPLIST_FILE = DaydreamUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.rckim.DaydreamUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Daydream;
+			};
+			name = Debug;
+		};
+		9490BA12206C8C8000B880E7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 49BZEB79BF;
+				INFOPLIST_FILE = DaydreamUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.rckim.DaydreamUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Daydream;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -497,6 +610,15 @@
 			buildConfigurations = (
 				94380AD7203BAE1D00684863 /* Debug */,
 				94380AD8203BAE1D00684863 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9490BA10206C8C8000B880E7 /* Build configuration list for PBXNativeTarget "DaydreamUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9490BA11206C8C8000B880E7 /* Debug */,
+				9490BA12206C8C8000B880E7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
