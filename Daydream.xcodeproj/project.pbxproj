@@ -23,6 +23,7 @@
 		9490BA04206B03B300B880E7 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9490BA03206B03B300B880E7 /* Protocols.swift */; };
 		9490BA0C206C8C8000B880E7 /* DaydreamUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9490BA0B206C8C8000B880E7 /* DaydreamUITests.swift */; };
 		9490BA14206C8CCA00B880E7 /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9490BA13206C8CCA00B880E7 /* SnapshotHelper.swift */; };
+		9490BA18206CAA8300B880E7 /* Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9490BA17206CAA8300B880E7 /* Place.swift */; };
 		949630BA203BCBBD007139CA /* SearchDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949630B9203BCBBD007139CA /* SearchDetailViewController.swift */; };
 		94B7DB55205DEDFF0040D61C /* PointOfInterest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B7DB54205DEDFF0040D61C /* PointOfInterest.swift */; };
 		94B7DB57205DEE980040D61C /* Viewport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B7DB56205DEE980040D61C /* Viewport.swift */; };
@@ -64,6 +65,7 @@
 		9490BA0B206C8C8000B880E7 /* DaydreamUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaydreamUITests.swift; sourceTree = "<group>"; };
 		9490BA0D206C8C8000B880E7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9490BA13206C8CCA00B880E7 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SnapshotHelper.swift; path = fastlane/SnapshotHelper.swift; sourceTree = SOURCE_ROOT; };
+		9490BA17206CAA8300B880E7 /* Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Place.swift; sourceTree = "<group>"; };
 		949630B9203BCBBD007139CA /* SearchDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDetailViewController.swift; sourceTree = "<group>"; };
 		94B7DB54205DEDFF0040D61C /* PointOfInterest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointOfInterest.swift; sourceTree = "<group>"; };
 		94B7DB56205DEE980040D61C /* Viewport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Viewport.swift; sourceTree = "<group>"; };
@@ -154,6 +156,7 @@
 			children = (
 				94B7DB56205DEE980040D61C /* Viewport.swift */,
 				94B7DB54205DEDFF0040D61C /* PointOfInterest.swift */,
+				9490BA17206CAA8300B880E7 /* Place.swift */,
 				94B7DB58205E06080040D61C /* Eatery.swift */,
 			);
 			path = Models;
@@ -376,6 +379,7 @@
 				94B7DB55205DEDFF0040D61C /* PointOfInterest.swift in Sources */,
 				94B7DB57205DEE980040D61C /* Viewport.swift in Sources */,
 				94B7DB59205E06080040D61C /* Eatery.swift in Sources */,
+				9490BA18206CAA8300B880E7 /* Place.swift in Sources */,
 				947EC6522043F28F004A911D /* Extensions.swift in Sources */,
 				94B7DB5D205EEBBB0040D61C /* NetworkService.swift in Sources */,
 				947EC658204673BF004A911D /* ShadowView.swift in Sources */,
@@ -470,7 +474,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -521,7 +525,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";

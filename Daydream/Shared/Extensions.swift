@@ -9,6 +9,26 @@
 import UIKit
 import GooglePlaces
 
+extension GMSPlace: Placeable {
+
+    var placeableId: String {
+        return self.placeID
+    }
+
+    var placeableName: String {
+        return self.name
+    }
+
+    var placeableFormattedAddress: String? {
+        return self.formattedAddress
+    }
+
+    var placeableCoordinate: CLLocationCoordinate2D {
+        return self.coordinate
+    }
+
+}
+
 extension UIColor {
     convenience init(hexString: String) {
         let hexString = hexString.trimmingCharacters(in: .whitespacesAndNewlines)

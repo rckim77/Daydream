@@ -17,7 +17,7 @@ class SearchViewController: UIViewController {
     var resultView: UITextView?
     var searchBarView: UIView!
     private let searchBarViewHeight: CGFloat = 45.0
-    var placeData: GMSPlace?
+    var placeData: Placeable?
 
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var randomBtn: UIButton! {
@@ -28,8 +28,18 @@ class SearchViewController: UIViewController {
     }
 
     @IBAction func randomBtnTapped(_ sender: Any) {
-        searchController?.searchBar.text = getRandomCity()
-        searchController?.searchBar.becomeFirstResponder()
+        guard let randomPlaceName = getRandomCity() else { return }
+
+        NetworkService().getPlaceId(with: randomPlaceName, success: { [weak self] place in
+            guard let strongSelf = self else { return }
+
+            strongSelf.placeData = place
+            strongSelf.performSegue(withIdentifier: "toSearchDetailVCSegue", sender: nil)
+        }, failure: { error in
+            if let error = error {
+                print(error)
+            }
+        })
     }
 
     override func viewDidLoad() {

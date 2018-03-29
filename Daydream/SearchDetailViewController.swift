@@ -19,7 +19,7 @@ class SearchDetailViewController: UIViewController {
     var searchController: UISearchController?
     var resultView: UITextView?
     var mapView: GMSMapView?
-    var placeData: GMSPlace?
+    var placeData: Placeable?
     var pointsOfInterest: [PointOfInterest]?
     var eateries: [Eatery]?
     private var visualEffectView: UIVisualEffectView {
@@ -77,14 +77,14 @@ class SearchDetailViewController: UIViewController {
         definesPresentationContext = true
     }
 
-    private func loadContent(for place: GMSPlace?, reloadMapCard: Bool = false) {
+    private func loadContent(for place: Placeable?, reloadMapCard: Bool = false) {
         guard let place = place else { return }
 
-        titleLabel.text = place.name
+        titleLabel.text = place.placeableName
 
         let networkService = NetworkService()
 
-        networkService.loadPhoto(with: place.placeID, success: { [weak self] photo in
+        networkService.loadPhoto(with: place.placeableId, success: { [weak self] photo in
             guard let strongSelf = self else { return }
             strongSelf.placeImageView.subviews.forEach { $0.removeFromSuperview() }
             strongSelf.placeImageView.image = photo

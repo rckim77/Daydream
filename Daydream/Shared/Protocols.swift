@@ -8,6 +8,14 @@
 
 import Foundation
 import SwiftyJSON
+import CoreLocation
+
+protocol Placeable: class {
+    var placeableId: String { get }
+    var placeableName: String { get }
+    var placeableFormattedAddress: String? { get }
+    var placeableCoordinate: CLLocationCoordinate2D { get }
+}
 
 protocol RandomCitySelectable {
     func getRandomCity() -> String?
