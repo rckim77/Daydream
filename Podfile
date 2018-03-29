@@ -12,4 +12,5 @@ target 'Daydream' do
   pod 'Alamofire', '~> 4.7'
   pod 'SwiftyJSON'
   pod 'Hero'
+  pod 'SVProgressHUD'
 end

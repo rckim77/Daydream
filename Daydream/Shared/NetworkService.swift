@@ -90,11 +90,7 @@ class NetworkService {
     func getPlaceId(with placeName: String, success: @escaping(_ place: Place) -> Void, failure: @escaping(_ error: Error?) -> Void) {
         let url = createUrlWithPlaceName(placeName)
 
-        Alamofire.request(url).validate().responseJSON { [weak self] response in
-            guard let strongSelf = self else {
-                failure(nil)
-                return
-            }
+        Alamofire.request(url).validate().responseJSON { response in
             switch response.result {
             case .success(let value):
                 let json = JSON(value)
@@ -103,9 +99,9 @@ class NetworkService {
                     return
                 }
 
-                let placeId = result["placeId"].stringValue
+                let placeId = result["place_id"].stringValue
 
-                strongSelf.getPlace(with: placeId, success: { place in
+                NetworkService().getPlace(with: placeId, success: { place in
                     success(place)
                 }, failure: { error in
                     failure(error)
@@ -116,29 +112,28 @@ class NetworkService {
         }
     }
 
-    private func getPlace(with placeId: String, success: @escaping(_ place: Place) -> Void, failure: @escaping(_ error: Error?) -> Void) {
+    func getPlace(with placeId: String, success: @escaping(_ place: Place) -> Void, failure: @escaping(_ error: Error?) -> Void) {
         let url = createUrlWithPlaceId(placeId)
 
         Alamofire.request(url).validate().responseJSON { response in
             switch response.result {
             case .success(let value):
                 let json = JSON(value)
-                guard let result = json["results"].arrayValue.first else {
+                guard let result = json["result"].dictionary,
+                    let placeID = result["place_id"]?.string,
+                    let name = result["name"]?.string,
+                    let formattedAddress = result["formatted_address"]?.string,
+                    let latitude = result["geometry"]?["location"]["lat"].double,
+                    let longitude = result["geometry"]?["location"]["lng"].double else {
                     failure(nil)
                     return
                 }
 
-                let placeID = result["place_id"].stringValue
-                let name = result["name"].stringValue
-                let formattedAddress = result["formatted_address"].stringValue
-                let latitude = result["geometry"]["location"]["lat"].doubleValue
-                let longitude = result["geometry"]["location"]["lng"].doubleValue
                 let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
 
                 let place = Place(placeID: placeID, name: name, formattedAddress: formattedAddress, coordinate: coordinate)
 
                 success(place)
-
             case .failure(let error):
                 failure(error)
             }
@@ -150,9 +145,9 @@ class NetworkService {
             let keyParam = AppDelegate.googleAPIKey
             let placeName = place.placeableName.split(separator: " ")
             var queryParam = "tourist+spots+in"
-            placeName.forEach({ word in
+            placeName.forEach { word in
                 queryParam += "+" + word
-            })
+            }
 
             let url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=\(queryParam)&key=\(keyParam)"
 
@@ -170,7 +165,12 @@ class NetworkService {
 
     private func createUrlWithPlaceName(_ placeName: String) -> String {
         let keyParam = AppDelegate.googleAPIKey
-        let placeNameParam = placeName
+        let placeWords = placeName.split(separator: " ")
+        var placeNameParam = placeWords[0]
+        for i in 1..<placeWords.count {
+            placeNameParam += "+" + placeWords[i]
+        }
+        
         let url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=\(placeNameParam)&key=\(keyParam)"
 
         return url
