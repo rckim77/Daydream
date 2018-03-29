@@ -19,7 +19,6 @@ platform :ios do
   before_all do
     # ENV["SLACK_URL"] = "https://hooks.slack.com/services/..."
     cocoapods
-    # carthage
   end
 
   desc "Runs all the tests"
@@ -42,6 +41,10 @@ platform :ios do
   lane :release do
     # sync_code_signing(type: "appstore")
     capture_screenshots
+    increment_build_number(
+      build_number: app_store_build_number + 1,
+      xcodeproj: "Daydream.xcodeproj"
+    )
     build_app # Build your app - more options available
     upload_to_app_store(force: true)
     # frame_screenshots
