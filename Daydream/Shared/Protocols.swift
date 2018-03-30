@@ -15,6 +15,7 @@ protocol Placeable: class {
     var placeableName: String { get }
     var placeableFormattedAddress: String? { get }
     var placeableCoordinate: CLLocationCoordinate2D { get }
+    var placeableViewport: Viewport? { get }
 }
 
 protocol RandomCitySelectable {

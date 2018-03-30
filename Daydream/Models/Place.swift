@@ -13,11 +13,13 @@ class Place: Placeable {
     var placeableName: String
     var placeableFormattedAddress: String?
     var placeableCoordinate: CLLocationCoordinate2D
+    var placeableViewport: Viewport?
 
-    init(placeID: String, name: String, formattedAddress: String?, coordinate: CLLocationCoordinate2D) {
+    init(placeID: String, name: String, formattedAddress: String?, coordinate: CLLocationCoordinate2D, viewport: Viewport? = nil) {
         self.placeableId = placeID
         self.placeableName = name
         self.placeableFormattedAddress = formattedAddress
         self.placeableCoordinate = coordinate
+        self.placeableViewport = viewport
     }
 }

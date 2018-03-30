@@ -27,6 +27,14 @@ extension GMSPlace: Placeable {
         return self.coordinate
     }
 
+    var placeableViewport: Viewport? {
+        guard let viewport = self.viewport else { return nil }
+        return Viewport(northeastLat: viewport.northEast.latitude,
+                        northeastLng: viewport.northEast.longitude,
+                        southwestLat: viewport.southWest.latitude,
+                        southwestLng: viewport.southWest.longitude)
+    }
+
 }
 
 extension UIColor {

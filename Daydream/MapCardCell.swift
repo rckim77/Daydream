@@ -71,7 +71,8 @@ class MapCardCell: UITableViewCell {
     private func createMarkerFor(_ mapView: GMSMapView, with place: Placeable) {
         let marker = GMSMarker()
         
-        marker.position = CLLocationCoordinate2D(latitude: place.placeableCoordinate.latitude, longitude: place.placeableCoordinate.longitude)
+        marker.position = CLLocationCoordinate2D(latitude: place.placeableCoordinate.latitude,
+                                                 longitude: place.placeableCoordinate.longitude)
         marker.title = place.placeableName
         marker.snippet = place.placeableFormattedAddress
         marker.map = mapView

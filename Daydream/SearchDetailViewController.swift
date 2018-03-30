@@ -21,7 +21,7 @@ class SearchDetailViewController: UIViewController {
     var resultView: UITextView?
     var mapView: GMSMapView?
     var placeData: Placeable?
-    var pointsOfInterest: [PointOfInterest]?
+    var pointsOfInterest: [Placeable]?
     var eateries: [Eatery]?
     private var visualEffectView: UIVisualEffectView {
         let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .regular))
@@ -61,7 +61,7 @@ class SearchDetailViewController: UIViewController {
             strongSelf.loadContent(for: place, reloadMapCard: true)
         }, failure: { error in
             SVProgressHUD.dismiss()
-            print("Error: \(error)")
+            print(String(describing: error))
         })
     }
 
@@ -112,7 +112,7 @@ class SearchDetailViewController: UIViewController {
             strongSelf.pointsOfInterest = pointsOfInterest
             strongSelf.placeCardsTableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .fade)
             }, failure: { error in
-                print(error)
+                print(error ?? "error loading top sights")
         })
 
         networkService.loadTopEateries(with: place, success: { [weak self] eateries in
@@ -120,7 +120,7 @@ class SearchDetailViewController: UIViewController {
             strongSelf.eateries = eateries
             strongSelf.placeCardsTableView.reloadRows(at: [IndexPath(row: 2, section: 0)], with: .fade)
             }, failure: { error in
-                print(error)
+                print(error ?? "error loading top eateries")
         })
 
         if reloadMapCard {
@@ -143,8 +143,8 @@ class SearchDetailViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destinationVC = segue.destination as? MapViewController {
             // segue from Top Sights or Top Eateries cell
-            if segue.identifier == "genericMapSegue", let sender = sender as? PointOfInterest {
-                destinationVC.place = sender
+            if segue.identifier == "genericMapSegue" {
+                destinationVC.place = sender as? Placeable
                 destinationVC.heroId = "pointOfInterestCard"
             } else if segue.identifier == "mapCardSegue", let place = placeData {
                 destinationVC.place = place
@@ -236,7 +236,7 @@ extension SearchDetailViewController: GMSAutocompleteResultsViewControllerDelega
 }
 
 extension SearchDetailViewController: SightsCardCellDelegate {
-    func didSelectPointOfInterest(with place: PointOfInterest) {
+    func didSelectPointOfInterest(with place: Placeable) {
         performSegue(withIdentifier: "genericMapSegue", sender: place)
     }
 }

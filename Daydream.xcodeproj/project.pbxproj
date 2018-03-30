@@ -25,7 +25,6 @@
 		9490BA14206C8CCA00B880E7 /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9490BA13206C8CCA00B880E7 /* SnapshotHelper.swift */; };
 		9490BA18206CAA8300B880E7 /* Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9490BA17206CAA8300B880E7 /* Place.swift */; };
 		949630BA203BCBBD007139CA /* SearchDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949630B9203BCBBD007139CA /* SearchDetailViewController.swift */; };
-		94B7DB55205DEDFF0040D61C /* PointOfInterest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B7DB54205DEDFF0040D61C /* PointOfInterest.swift */; };
 		94B7DB57205DEE980040D61C /* Viewport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B7DB56205DEE980040D61C /* Viewport.swift */; };
 		94B7DB59205E06080040D61C /* Eatery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B7DB58205E06080040D61C /* Eatery.swift */; };
 		94B7DB5D205EEBBB0040D61C /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B7DB5C205EEBBB0040D61C /* NetworkService.swift */; };
@@ -67,7 +66,6 @@
 		9490BA13206C8CCA00B880E7 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SnapshotHelper.swift; path = fastlane/SnapshotHelper.swift; sourceTree = SOURCE_ROOT; };
 		9490BA17206CAA8300B880E7 /* Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Place.swift; sourceTree = "<group>"; };
 		949630B9203BCBBD007139CA /* SearchDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDetailViewController.swift; sourceTree = "<group>"; };
-		94B7DB54205DEDFF0040D61C /* PointOfInterest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointOfInterest.swift; sourceTree = "<group>"; };
 		94B7DB56205DEE980040D61C /* Viewport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Viewport.swift; sourceTree = "<group>"; };
 		94B7DB58205E06080040D61C /* Eatery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Eatery.swift; sourceTree = "<group>"; };
 		94B7DB5C205EEBBB0040D61C /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
@@ -155,7 +153,6 @@
 			isa = PBXGroup;
 			children = (
 				94B7DB56205DEE980040D61C /* Viewport.swift */,
-				94B7DB54205DEDFF0040D61C /* PointOfInterest.swift */,
 				9490BA17206CAA8300B880E7 /* Place.swift */,
 				94B7DB58205E06080040D61C /* Eatery.swift */,
 			);
@@ -378,7 +375,6 @@
 				9481EC5A204B358C00863A5A /* SightsCardCell.swift in Sources */,
 				94380AC8203BAE1D00684863 /* AppDelegate.swift in Sources */,
 				947EC656204667EB004A911D /* MapCardCell.swift in Sources */,
-				94B7DB55205DEDFF0040D61C /* PointOfInterest.swift in Sources */,
 				94B7DB57205DEE980040D61C /* Viewport.swift in Sources */,
 				94B7DB59205E06080040D61C /* Eatery.swift in Sources */,
 				9490BA18206CAA8300B880E7 /* Place.swift in Sources */,
@@ -548,7 +544,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.rckim.Daydream;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -565,7 +561,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.rckim.Daydream;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

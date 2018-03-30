@@ -12,7 +12,7 @@ import GooglePlaces
 import Hero
 
 protocol SightsCardCellDelegate: class {
-    func didSelectPointOfInterest(with place: PointOfInterest)
+    func didSelectPointOfInterest(with place: Placeable)
 }
 
 class SightsCardCell: UITableViewCell {
@@ -29,17 +29,17 @@ class SightsCardCell: UITableViewCell {
     @IBOutlet weak var noContentLabel: UILabel!
     
     weak var delegate: SightsCardCellDelegate?
-    var pointsOfInterest: [PointOfInterest]? {
+    var pointsOfInterest: [Placeable]? {
         didSet {
             if let pointsOfInterest = pointsOfInterest, pointsOfInterest.count >= 3 {
                 // display content only if we've made another API call, otherwise do nothing
                 // POSTLAUNCH: - Update comparison with placeId
-                if oldValue?.count == 0 || pointsOfInterest[0].placeId != oldValue?[0].placeId {
+                if oldValue?.count == 0 || pointsOfInterest[0].placeableId != oldValue?[0].placeableId {
                     toggleViews([pointOfInterest1View, pointOfInterest2View, pointOfInterest3View], willHide: false)
 
-                    pointOfInterest1Label.text = pointsOfInterest[0].name
-                    pointOfInterest2Label.text = pointsOfInterest[1].name
-                    pointOfInterest3Label.text = pointsOfInterest[2].name
+                    pointOfInterest1Label.text = pointsOfInterest[0].placeableName
+                    pointOfInterest2Label.text = pointsOfInterest[1].placeableName
+                    pointOfInterest3Label.text = pointsOfInterest[2].placeableName
 
                     // reset image (to prevent background images being reused due to dequeueing reusable cells)
                     pointOfInterest1ImageView.image = nil
@@ -101,16 +101,16 @@ class SightsCardCell: UITableViewCell {
         delegate?.didSelectPointOfInterest(with: pointOfInterest)
     }
 
-    private func getViewport(for pointOfInterest: PointOfInterest) -> GMSCoordinateBounds? {
-        let viewport = pointOfInterest.viewport
+    private func getViewport(for pointOfInterest: Placeable) -> GMSCoordinateBounds? {
+        guard let viewport = pointOfInterest.placeableViewport else { return nil }
         let northeast = CLLocationCoordinate2D(latitude: viewport.northeastLat, longitude: viewport.northeastLng)
-        let southwest = CLLocationCoordinate2D(latitude: viewport.southeastLat, longitude: viewport.southeastLng)
+        let southwest = CLLocationCoordinate2D(latitude: viewport.southwestLat, longitude: viewport.southwestLng)
 
         return GMSCoordinateBounds(coordinate: northeast, coordinate: southwest)
     }
 
-    private func loadBackgroundImage(for button: Int, with pointOfInterest: PointOfInterest) {
-        NetworkService().loadPhoto(with: pointOfInterest.placeId, success: { [weak self] image in
+    private func loadBackgroundImage(for button: Int, with pointOfInterest: Placeable) {
+        NetworkService().loadPhoto(with: pointOfInterest.placeableId, success: { [weak self] image in
             guard let strongSelf = self else { return }
             var imageView = UIImageView()
 

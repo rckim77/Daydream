@@ -6,9 +6,11 @@
 //  Copyright © 2018 Raymond Kim. All rights reserved.
 //
 
+import CoreLocation
+
 struct Viewport: Codable {
-    var northeastLat: Double
-    var northeastLng: Double
-    var southeastLat: Double
-    var southeastLng: Double
+    var northeastLat: CLLocationDegrees
+    var northeastLng: CLLocationDegrees
+    var southwestLat: CLLocationDegrees
+    var southwestLng: CLLocationDegrees
 }

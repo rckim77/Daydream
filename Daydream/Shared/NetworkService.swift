@@ -12,7 +12,7 @@ import SwiftyJSON
 
 class NetworkService {
 
-    func loadTopSights(with place: Placeable, success: @escaping(_ pointsOfInterest: [PointOfInterest]) -> Void,
+    func loadTopSights(with place: Placeable, success: @escaping(_ pointsOfInterest: [Placeable]) -> Void,
                        failure: @escaping(_ error: Error?) -> Void) {
         let url = createUrl(with: place, and: "point_of_interest")
 
@@ -26,24 +26,26 @@ class NetworkService {
                     return
                 }
 
-                let pointsOfInterest = results.flatMap { json -> PointOfInterest? in
-                    guard let name = json["name"].string,
-                        let placeId = json["place_id"].string,
-                        let centerLat = json["geometry"]["location"]["lat"].double,
-                        let centerLng = json["geometry"]["location"]["lng"].double,
-                        let northeastLat = json["geometry"]["viewport"]["northeast"]["lat"].double,
-                        let northeastLng = json["geometry"]["viewport"]["northeast"]["lng"].double,
-                        let southwestLat = json["geometry"]["viewport"]["southwest"]["lat"].double,
-                        let southwestLng = json["geometry"]["viewport"]["southwest"]["lng"].double else {
+                let pointsOfInterest = results.flatMap { result -> Place? in
+                    guard let name = result["name"].string,
+                        let placeId = result["place_id"].string,
+                        let centerLat = result["geometry"]["location"]["lat"].double,
+                        let centerLng = result["geometry"]["location"]["lng"].double,
+                        let northeastLat = result["geometry"]["viewport"]["northeast"]["lat"].double,
+                        let northeastLng = result["geometry"]["viewport"]["northeast"]["lng"].double,
+                        let southwestLat = result["geometry"]["viewport"]["southwest"]["lat"].double,
+                        let southwestLng = result["geometry"]["viewport"]["southwest"]["lng"].double else {
                         return nil
                     }
 
+                    let formattedAddress = result["formatted_address"].string
+                    let coordinate = CLLocationCoordinate2D(latitude: centerLat, longitude: centerLng)
                     let viewport = Viewport(northeastLat: northeastLat,
                                             northeastLng: northeastLng,
-                                            southeastLat: southwestLat,
-                                            southeastLng: southwestLng)
+                                            southwestLat: southwestLat,
+                                            southwestLng: southwestLng)
                     
-                    return PointOfInterest(name: name, viewport: viewport, centerLat: centerLat, centerLng: centerLng, placeId: placeId)
+                    return Place(placeID: placeId, name: name, formattedAddress: formattedAddress, coordinate: coordinate, viewport: viewport)
                 }
 
                 success(pointsOfInterest)
@@ -70,10 +72,10 @@ class NetworkService {
                     return
                 }
 
-                let eateries = results.flatMap { json -> Eatery? in
-                    guard let name = json["name"].string,
-                        let imageUrl = json["image_url"].string,
-                        let url = json["url"].string else { return nil }
+                let eateries = results.flatMap { result -> Eatery? in
+                    guard let name = result["name"].string,
+                        let imageUrl = result["image_url"].string,
+                        let url = result["url"].string else { return nil }
 
                     return Eatery(name: name, imageUrl: imageUrl, url: url)
                 }

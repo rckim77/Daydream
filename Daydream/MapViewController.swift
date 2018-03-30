@@ -12,11 +12,9 @@ import GooglePlaces
 
 class MapViewController: UIViewController {
 
-    var place: Any?
+    var place: Placeable?
     var heroId: String?
     var dynamicMapView: GMSMapView?
-
-    @IBOutlet weak var mapView: UIView!
 
     @IBAction func closeBtnTapped(_ sender: Any) {
         dismiss(animated: true, completion: nil)
@@ -25,46 +23,39 @@ class MapViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        mapView.hero.id = heroId
-        createMapView(with: place)
+        view.hero.id = heroId
+        addOrUpdateMapView(with: place)
     }
 
-    private func createMapView(with place: Any?) {
-        var camera: GMSCameraPosition?
+    private func addOrUpdateMapView(with place: Placeable?) {
+        guard let place = place else { return }
+        let camera = GMSCameraPosition.camera(withLatitude: place.placeableCoordinate.latitude,
+                                              longitude: place.placeableCoordinate.longitude,
+                                              zoom: 16.0)
 
-        if let place = place as? PointOfInterest {
-            camera = GMSCameraPosition.camera(withLatitude: place.centerLat, longitude: place.centerLng, zoom: 15.0)
+        if let dynamicMapView = dynamicMapView {
+            dynamicMapView.animate(to: camera)
+        } else {
+            let frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+            let mapViewNew = GMSMapView.map(withFrame: frame, camera: camera)
 
-        } else if let place = place as? GMSPlace {
-            camera = GMSCameraPosition.camera(withLatitude: place.coordinate.latitude,
-                                                  longitude: place.coordinate.longitude,
-                                                  zoom: 16.0)
+            dynamicMapView = mapViewNew
+
+            guard let dynamicMapView = dynamicMapView else { return }
+            view.addSubview(dynamicMapView)
+            view.sendSubview(toBack: dynamicMapView)
         }
-
-        guard let cameraPosition = camera else { return }
-
-        let frame = CGRect(x: 0, y: 0, width: mapView.bounds.width, height: mapView.bounds.height)
-        let mapViewNew = GMSMapView.map(withFrame: frame, camera: cameraPosition)
-
-        dynamicMapView = mapViewNew
-        mapView.addSubview(mapViewNew)
-        mapView.sendSubview(toBack: mapViewNew)
 
         createMarker(with: place)
     }
 
-    private func createMarker(with place: Any?) {
+    private func createMarker(with place: Placeable) {
         let marker = GMSMarker()
         marker.appearAnimation = .pop
 
-        if let place = place as? PointOfInterest {
-            marker.position = CLLocationCoordinate2D(latitude: place.centerLat, longitude: place.centerLng)
-            marker.title = place.name
-            marker.map = dynamicMapView
-        } else if let place = place as? GMSPlace {
-            marker.position = CLLocationCoordinate2D(latitude: place.coordinate.latitude, longitude: place.coordinate.longitude)
-            marker.title = place.name
-            marker.map = dynamicMapView
-        }
+        marker.position = CLLocationCoordinate2D(latitude: place.placeableCoordinate.latitude,
+                                                 longitude: place.placeableCoordinate.longitude)
+        marker.title = place.placeableName
+        marker.map = dynamicMapView
     }
 }
