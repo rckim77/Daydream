@@ -29,7 +29,7 @@ class SearchDetailViewController: UIViewController {
         return visualEffectView
     }
     private let mapCardCellHeight: CGFloat = 190
-    private let sightsCardCellHeight: CGFloat = 570
+    private let sightsCardCellHeight: CGFloat = 600
     
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var placeImageView: UIImageView!
