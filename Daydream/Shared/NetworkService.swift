@@ -13,7 +13,7 @@ import SwiftyJSON
 class NetworkService {
 
     func loadTopSights(with place: Placeable, success: @escaping(_ pointsOfInterest: [PointOfInterest]) -> Void,
-                       failure: @escaping(_ error: Error) -> Void) {
+                       failure: @escaping(_ error: Error?) -> Void) {
         let url = createUrl(with: place, and: "point_of_interest")
 
         Alamofire.request(url).validate().responseJSON { response in
@@ -21,23 +21,32 @@ class NetworkService {
             case .success(let value):
                 let json = JSON(value)
                 // POSTLAUNCH: - refactor into a JSON init method
-                let results = json["results"].arrayValue.map({ json -> PointOfInterest in
-                    let name = json["name"].stringValue
-                    let placeId = json["place_id"].stringValue
-                    let centerLat = json["geometry"]["location"]["lat"].doubleValue
-                    let centerLng = json["geometry"]["location"]["lng"].doubleValue
-                    let viewportRaw = json["geometry"]["viewport"]
-                    let northeastRaw = viewportRaw["northeast"]
-                    let southwestRaw = viewportRaw["southwest"]
-                    let viewport = Viewport(northeastLat: northeastRaw["lat"].doubleValue,
-                                            northeastLng: northeastRaw["lng"].doubleValue,
-                                            southeastLat: southwestRaw["lat"].doubleValue,
-                                            southeastLng: southwestRaw["lng"].doubleValue)
+                guard let results = json["results"].array else {
+                    failure(nil)
+                    return
+                }
+
+                let pointsOfInterest = results.flatMap { json -> PointOfInterest? in
+                    guard let name = json["name"].string,
+                        let placeId = json["place_id"].string,
+                        let centerLat = json["geometry"]["location"]["lat"].double,
+                        let centerLng = json["geometry"]["location"]["lng"].double,
+                        let northeastLat = json["geometry"]["viewport"]["northeast"]["lat"].double,
+                        let northeastLng = json["geometry"]["viewport"]["northeast"]["lng"].double,
+                        let southwestLat = json["geometry"]["viewport"]["southwest"]["lat"].double,
+                        let southwestLng = json["geometry"]["viewport"]["southwest"]["lng"].double else {
+                        return nil
+                    }
+
+                    let viewport = Viewport(northeastLat: northeastLat,
+                                            northeastLng: northeastLng,
+                                            southeastLat: southwestLat,
+                                            southeastLng: southwestLng)
                     
                     return PointOfInterest(name: name, viewport: viewport, centerLat: centerLat, centerLng: centerLng, placeId: placeId)
-                })
+                }
 
-                success(results)
+                success(pointsOfInterest)
             case .failure(let error):
                 failure(error)
             }
@@ -46,7 +55,7 @@ class NetworkService {
     }
 
     func loadTopEateries(with place: Placeable, success: @escaping(_ eateries: [Eatery]) -> Void,
-                         failure: @escaping(_ error: Error) -> Void) {
+                         failure: @escaping(_ error: Error?) -> Void) {
         let url = createUrl(with: place, and: "eateries")
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(AppDelegate.yelpAPIKey)"
@@ -56,14 +65,20 @@ class NetworkService {
             switch response.result {
             case .success(let value):
                 let json = JSON(value)
-                let results = json["businesses"].arrayValue.map({ json -> Eatery in
-                    let name = json["name"].stringValue
-                    let imageUrl = json["image_url"].stringValue
-                    let url = json["url"].stringValue
-                    return Eatery(name: name, imageUrl: imageUrl, url: url)
-                })
+                guard let results = json["businesses"].array else {
+                    failure(nil)
+                    return
+                }
 
-                success(results)
+                let eateries = results.flatMap { json -> Eatery? in
+                    guard let name = json["name"].string,
+                        let imageUrl = json["image_url"].string,
+                        let url = json["url"].string else { return nil }
+
+                    return Eatery(name: name, imageUrl: imageUrl, url: url)
+                }
+
+                success(eateries)
             case .failure(let error):
                 failure(error)
             }
@@ -94,12 +109,11 @@ class NetworkService {
             switch response.result {
             case .success(let value):
                 let json = JSON(value)
-                guard let result = json["results"].arrayValue.first else {
+                guard let result = json["results"].array?.first,
+                    let placeId = result["place_id"].string else {
                     failure(nil)
                     return
                 }
-
-                let placeId = result["place_id"].stringValue
 
                 NetworkService().getPlace(with: placeId, success: { place in
                     success(place)

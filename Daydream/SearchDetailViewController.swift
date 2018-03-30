@@ -60,6 +60,7 @@ class SearchDetailViewController: UIViewController {
             strongSelf.placeData = place
             strongSelf.loadContent(for: place, reloadMapCard: true)
         }, failure: { error in
+            SVProgressHUD.dismiss()
             print("Error: \(error)")
         })
     }
