@@ -58,10 +58,6 @@ class EateriesCardCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
 
-        eatery1View.addTopRoundedCorners()
-        eatery2View.layer.masksToBounds = true
-        eatery3View.addBottomRoundedCorners()
-
         let tapGesture1 = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(withSender:)))
         eatery1View.addGestureRecognizer(tapGesture1)
         let tapGesture2 = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(withSender:)))
@@ -73,6 +69,16 @@ class EateriesCardCell: UITableViewCell {
         eatery1ImageView.image = nil
         eatery2ImageView.image = nil
         eatery3ImageView.image = nil
+    }
+
+    override func setNeedsLayout() {
+        super.setNeedsLayout()
+
+        eatery1View.addTopRoundedCorners()
+        eatery2View.layer.masksToBounds = true
+        eatery3View.addBottomRoundedCorners()
+
+        layoutIfNeeded()
     }
 
     @objc

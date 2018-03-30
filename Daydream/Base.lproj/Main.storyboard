@@ -4,6 +4,7 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -260,7 +261,6 @@
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
                                                         <constraint firstItem="cCe-zg-RYa" firstAttribute="height" secondItem="Ciz-Vh-WN7" secondAttribute="height" id="0Zi-ht-ecv"/>
-                                                        <constraint firstItem="cWo-q2-xtE" firstAttribute="leading" secondItem="0af-yr-VQQ" secondAttribute="leading" id="7Dg-BM-Aiy"/>
                                                         <constraint firstItem="cCe-zg-RYa" firstAttribute="leading" secondItem="0af-yr-VQQ" secondAttribute="leading" id="8iD-hY-lHt"/>
                                                         <constraint firstAttribute="trailing" secondItem="Ciz-Vh-WN7" secondAttribute="trailing" id="FxH-zc-aqP"/>
                                                         <constraint firstItem="cCe-zg-RYa" firstAttribute="top" secondItem="Ciz-Vh-WN7" secondAttribute="bottom" id="KBQ-67-5U0"/>
@@ -268,8 +268,9 @@
                                                         <constraint firstItem="cWo-q2-xtE" firstAttribute="top" secondItem="cCe-zg-RYa" secondAttribute="bottom" id="Y2c-G0-8PZ"/>
                                                         <constraint firstAttribute="height" constant="485" id="asR-hn-Nmk"/>
                                                         <constraint firstItem="cCe-zg-RYa" firstAttribute="height" secondItem="cWo-q2-xtE" secondAttribute="height" id="bjC-RB-6zj"/>
+                                                        <constraint firstAttribute="trailing" secondItem="cWo-q2-xtE" secondAttribute="trailing" id="dTH-C4-Z4Q"/>
                                                         <constraint firstAttribute="trailing" secondItem="cCe-zg-RYa" secondAttribute="trailing" id="kQ2-dW-h6C"/>
-                                                        <constraint firstAttribute="trailing" secondItem="cWo-q2-xtE" secondAttribute="trailing" id="pn8-Pz-NsV"/>
+                                                        <constraint firstItem="cWo-q2-xtE" firstAttribute="leading" secondItem="0af-yr-VQQ" secondAttribute="leading" id="ydT-Ag-TBg"/>
                                                         <constraint firstItem="Ciz-Vh-WN7" firstAttribute="leading" secondItem="0af-yr-VQQ" secondAttribute="leading" id="z2O-gw-uKr"/>
                                                         <constraint firstAttribute="bottom" secondItem="cWo-q2-xtE" secondAttribute="bottom" id="zDK-Wx-u7y"/>
                                                     </constraints>

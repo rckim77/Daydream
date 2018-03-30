@@ -59,10 +59,6 @@ class SightsCardCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
 
-        pointOfInterest1View.addTopRoundedCorners()
-        pointOfInterest2View.layer.masksToBounds = true
-        pointOfInterest3View.addBottomRoundedCorners()
-
         let tapGesture1 = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(withSender:)))
         pointOfInterest1View.addGestureRecognizer(tapGesture1)
         let tapGesture2 = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(withSender:)))
@@ -76,6 +72,16 @@ class SightsCardCell: UITableViewCell {
         pointOfInterest3ImageView.image = nil
 
         hero.id = "pointOfInterestCard"
+    }
+
+    override func setNeedsLayout() {
+        super.setNeedsLayout()
+
+        pointOfInterest1View.addTopRoundedCorners()
+        pointOfInterest2View.layer.masksToBounds = true
+        pointOfInterest3View.addBottomRoundedCorners()
+
+        layoutIfNeeded()
     }
 
     @objc
