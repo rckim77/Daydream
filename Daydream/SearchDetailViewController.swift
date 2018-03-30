@@ -12,6 +12,7 @@ import GoogleMaps
 import Alamofire
 import SwiftyJSON
 import Hero
+import SVProgressHUD
 
 class SearchDetailViewController: UIViewController {
 
@@ -49,8 +50,18 @@ class SearchDetailViewController: UIViewController {
     }
 
     @IBAction func randomCityBtnTapped(_ sender: UIButton) {
-        searchController?.searchBar.text = getRandomCity()
-        searchController?.searchBar.becomeFirstResponder()
+        guard let randomCity = getRandomCity() else { return }
+
+        SVProgressHUD.show()
+        NetworkService().getPlaceId(with: randomCity, success: { [weak self] place in
+            SVProgressHUD.dismiss()
+            guard let strongSelf = self else { return }
+
+            strongSelf.placeData = place
+            strongSelf.loadContent(for: place, reloadMapCard: true)
+        }, failure: { error in
+            print("Error: \(error)")
+        })
     }
 
     // MARK: - Search
@@ -88,7 +99,7 @@ class SearchDetailViewController: UIViewController {
             guard let strongSelf = self else { return }
             strongSelf.placeImageView.subviews.forEach { $0.removeFromSuperview() }
             strongSelf.placeImageView.image = photo
-            strongSelf.placeImageView.contentMode = .scaleAspectFill
+            strongSelf.placeImageView.contentMode = .scaleAspectFill    
             strongSelf.placeImageView.addSubview(strongSelf.visualEffectView)
             }, failure: { error in
                 print(error)

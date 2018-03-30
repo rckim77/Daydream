@@ -29,10 +29,10 @@ class SearchViewController: UIViewController {
     }
 
     @IBAction func randomBtnTapped(_ sender: Any) {
-        guard let randomPlaceName = getRandomCity() else { return }
+        guard let randomCity = getRandomCity() else { return }
 
         SVProgressHUD.show()
-        NetworkService().getPlaceId(with: randomPlaceName, success: { [weak self] place in
+        NetworkService().getPlaceId(with: randomCity, success: { [weak self] place in
             SVProgressHUD.dismiss()
             guard let strongSelf = self else { return }
 
