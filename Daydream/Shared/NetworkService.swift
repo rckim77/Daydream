@@ -156,6 +156,20 @@ class NetworkService {
         }
     }
 
+    func getSummaryFor(_ city: String, success: @escaping(_ summary: String) -> Void, failure: @escaping(_ error: Error?) -> Void) {
+        let url = createUrlFor(city)
+
+        Alamofire.request(url).validate().responseJSON { response in
+            switch response.result {
+            case .success(let value):
+                let json = JSON(value)
+                guard let query = json["query"].dictionary else { return }
+            case .failure(let error):
+                failure(error)
+            }
+        }
+    }
+
     private func createUrl(with place: Placeable, and type: String) -> String {
         if type == "point_of_interest" {
             let keyParam = AppDelegate.googleAPIKey
@@ -196,6 +210,18 @@ class NetworkService {
         let keyParam = AppDelegate.googleAPIKey
         let placeIdParam = placeId
         let url = "https://maps.googleapis.com/maps/api/place/details/json?placeid=\(placeIdParam)&key=\(keyParam)"
+
+        return url
+    }
+
+    private func createUrlFor(_ city: String) -> String {
+        let cityWords = city.split(separator: " ")
+        var cityParam = cityWords[0]
+        for i in 1..<cityWords.count {
+            cityParam += "+" + cityWords[i]
+        }
+
+        let url = "https://en.wikivoyage.org/w/api.php?action=query&titles=\(cityParam)&prop=extracts&explaintext&format=jsonfm"
 
         return url
     }
