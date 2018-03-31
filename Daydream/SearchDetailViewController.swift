@@ -132,6 +132,13 @@ class SearchDetailViewController: UIViewController {
         if reloadMapCard {
             placeCardsTableView.reloadRows(at: [mapCardCellIndexPath], with: .fade)
         }
+
+        networkService.getSummaryFor(place.placeableName, success: { [weak self] summary in
+            let sentences = summary.split(separator: ".")
+            print(sentences[0..<4])
+        }, failure: { error in
+            print(error)
+        })
     }
 
     private func configureAutocompleteVC() {
