@@ -21,7 +21,6 @@ class SummaryCardCell: UITableViewCell {
         super.setNeedsLayout()
 
 
-
         layoutIfNeeded()
     }
 }

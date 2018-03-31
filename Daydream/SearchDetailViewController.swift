@@ -111,7 +111,7 @@ class SearchDetailViewController: UIViewController {
         networkService.loadTopSights(with: place, success: { [weak self] pointsOfInterest in
             guard let strongSelf = self else { return }
             strongSelf.pointsOfInterest = pointsOfInterest
-            strongSelf.placeCardsTableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .fade)
+            strongSelf.placeCardsTableView.reloadRows(at: [IndexPath(row: 2, section: 0)], with: .fade)
             }, failure: { error in
                 print(error ?? "error loading top sights")
         })
@@ -119,13 +119,13 @@ class SearchDetailViewController: UIViewController {
         networkService.loadTopEateries(with: place, success: { [weak self] eateries in
             guard let strongSelf = self else { return }
             strongSelf.eateries = eateries
-            strongSelf.placeCardsTableView.reloadRows(at: [IndexPath(row: 2, section: 0)], with: .fade)
+            strongSelf.placeCardsTableView.reloadRows(at: [IndexPath(row: 3, section: 0)], with: .fade)
             }, failure: { error in
                 print(error ?? "error loading top eateries")
         })
 
         if reloadMapCard {
-            placeCardsTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .fade)
+            placeCardsTableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .fade)
         }
     }
 
@@ -182,7 +182,7 @@ extension SearchDetailViewController: UITableViewDataSource, UITableViewDelegate
             let cell = tableView.dequeueReusableCell(withIdentifier: "summaryCardCell", for: indexPath)
 
             if let summaryCardCell = cell as? SummaryCardCell {
-                summaryCardCell.summaryLabel.text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                summaryCardCell.summaryLabel.text = "Lorem."
 
                 return summaryCardCell
             }
