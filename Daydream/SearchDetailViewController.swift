@@ -30,7 +30,10 @@ class SearchDetailViewController: UIViewController {
     }
     private let summaryCardCellHeight: CGFloat = 190
     private let mapCardCellHeight: CGFloat = 190
+    private let mapCardCellIndexPath = IndexPath(row: 0, section: 0)
     private let sightsCardCellHeight: CGFloat = 600
+    private let sightsCardCellIndexPath = IndexPath(row: 1, section: 0)
+    private let eateriesCardCellIndexPath = IndexPath(row: 2, section: 0)
     
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var placeImageView: UIImageView!
@@ -100,9 +103,11 @@ class SearchDetailViewController: UIViewController {
         networkService.loadPhoto(with: place.placeableId, success: { [weak self] photo in
             guard let strongSelf = self else { return }
             strongSelf.placeImageView.subviews.forEach { $0.removeFromSuperview() }
+
             strongSelf.placeImageView.image = photo
             strongSelf.placeImageView.contentMode = .scaleAspectFill    
             strongSelf.placeImageView.addSubview(strongSelf.visualEffectView)
+
             }, failure: { error in
                 print(error)
             }
@@ -111,7 +116,7 @@ class SearchDetailViewController: UIViewController {
         networkService.loadTopSights(with: place, success: { [weak self] pointsOfInterest in
             guard let strongSelf = self else { return }
             strongSelf.pointsOfInterest = pointsOfInterest
-            strongSelf.placeCardsTableView.reloadRows(at: [IndexPath(row: 2, section: 0)], with: .fade)
+            strongSelf.placeCardsTableView.reloadRows(at: [strongSelf.sightsCardCellIndexPath], with: .fade)
             }, failure: { error in
                 print(error ?? "error loading top sights")
         })
@@ -119,13 +124,13 @@ class SearchDetailViewController: UIViewController {
         networkService.loadTopEateries(with: place, success: { [weak self] eateries in
             guard let strongSelf = self else { return }
             strongSelf.eateries = eateries
-            strongSelf.placeCardsTableView.reloadRows(at: [IndexPath(row: 3, section: 0)], with: .fade)
+            strongSelf.placeCardsTableView.reloadRows(at: [strongSelf.eateriesCardCellIndexPath], with: .fade)
             }, failure: { error in
                 print(error ?? "error loading top eateries")
         })
 
         if reloadMapCard {
-            placeCardsTableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .fade)
+            placeCardsTableView.reloadRows(at: [mapCardCellIndexPath], with: .fade)
         }
     }
 
@@ -162,14 +167,12 @@ extension SearchDetailViewController: UITableViewDataSource, UITableViewDelegate
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
+        return 3
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.row {
         case 0:
-            return summaryCardCellHeight
-        case 1:
             return mapCardCellHeight
         default:
             return sightsCardCellHeight
@@ -177,17 +180,17 @@ extension SearchDetailViewController: UITableViewDataSource, UITableViewDelegate
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch indexPath.row {
-        case 0:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "summaryCardCell", for: indexPath)
-
-            if let summaryCardCell = cell as? SummaryCardCell {
-                summaryCardCell.summaryLabel.text = "Lorem."
-
-                return summaryCardCell
-            }
-            return cell
-        case 1:
+        switch indexPath {
+//        case 0:
+//            let cell = tableView.dequeueReusableCell(withIdentifier: "summaryCardCell", for: indexPath)
+//
+//            if let summaryCardCell = cell as? SummaryCardCell {
+//                summaryCardCell.summaryLabel.text = "Lorem."
+//
+//                return summaryCardCell
+//            }
+//            return cell
+        case mapCardCellIndexPath:
             let cell = tableView.dequeueReusableCell(withIdentifier: "mapCardCell", for: indexPath)
 
             if let mapCardCell = cell as? MapCardCell {
@@ -196,7 +199,7 @@ extension SearchDetailViewController: UITableViewDataSource, UITableViewDelegate
                 return mapCardCell
             }
             return cell
-        case 2:
+        case sightsCardCellIndexPath:
             let cell = tableView.dequeueReusableCell(withIdentifier: "sightsCardCell", for: indexPath)
 
             if let sightsCardCell = cell as? SightsCardCell {
@@ -206,7 +209,7 @@ extension SearchDetailViewController: UITableViewDataSource, UITableViewDelegate
                 return sightsCardCell
             }
             return cell
-        case 3:
+        case eateriesCardCellIndexPath:
             let cell = tableView.dequeueReusableCell(withIdentifier: "eateriesCardCell", for: indexPath)
 
             if let eateriesCardCell = cell as? EateriesCardCell {

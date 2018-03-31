@@ -125,68 +125,8 @@
                                 <rect key="frame" x="0.0" y="180" width="320" height="388"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="summaryCardCell" rowHeight="190" id="jE0-I9-OFZ" customClass="SummaryCardCell" customModule="Daydream" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="320" height="190"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="jE0-I9-OFZ" id="zNC-eK-26l" customClass="MapCardCell" customModule="Daydream" customModuleProvider="target">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="190"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <view contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="1Sz-nY-8ND" customClass="DesignableView" customModule="Daydream" customModuleProvider="target">
-                                                    <rect key="frame" x="16" y="8" width="288" height="174"/>
-                                                    <subviews>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lorem" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ieo-kw-DuN">
-                                                            <rect key="frame" x="16" y="8" width="256" height="158"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="256" id="Ev4-Px-oHW"/>
-                                                                <constraint firstAttribute="height" constant="158" id="fZW-7J-Iv4"/>
-                                                            </constraints>
-                                                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
-                                                    </subviews>
-                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    <constraints>
-                                                        <constraint firstItem="ieo-kw-DuN" firstAttribute="leading" secondItem="1Sz-nY-8ND" secondAttribute="leading" constant="16" id="4zf-P3-MHg"/>
-                                                        <constraint firstAttribute="height" constant="174" id="a8u-Er-IZW"/>
-                                                        <constraint firstAttribute="trailing" secondItem="ieo-kw-DuN" secondAttribute="trailing" constant="16" id="eIt-P9-k4q"/>
-                                                        <constraint firstAttribute="bottom" secondItem="ieo-kw-DuN" secondAttribute="bottom" constant="8" id="f3U-vs-Gth"/>
-                                                        <constraint firstItem="ieo-kw-DuN" firstAttribute="top" secondItem="1Sz-nY-8ND" secondAttribute="top" constant="8" id="obr-vr-B9e"/>
-                                                    </constraints>
-                                                    <userDefinedRuntimeAttributes>
-                                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                            <real key="value" value="10"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                        <userDefinedRuntimeAttribute type="number" keyPath="shadowRadius">
-                                                            <real key="value" value="3"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                        <userDefinedRuntimeAttribute type="number" keyPath="shadowOpacity">
-                                                            <real key="value" value="0.29999999999999999"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                        <userDefinedRuntimeAttribute type="color" keyPath="shadowColor">
-                                                            <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                        <userDefinedRuntimeAttribute type="size" keyPath="shadowOffset">
-                                                            <size key="value" width="0.0" height="3"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                    </userDefinedRuntimeAttributes>
-                                                </view>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstAttribute="bottom" secondItem="1Sz-nY-8ND" secondAttribute="bottom" constant="8" id="0dU-0r-aoL"/>
-                                                <constraint firstAttribute="trailing" secondItem="1Sz-nY-8ND" secondAttribute="trailing" constant="16" id="19L-hA-BEe"/>
-                                                <constraint firstItem="1Sz-nY-8ND" firstAttribute="top" secondItem="zNC-eK-26l" secondAttribute="top" constant="8" id="bAT-sI-wFY"/>
-                                                <constraint firstItem="1Sz-nY-8ND" firstAttribute="leading" secondItem="zNC-eK-26l" secondAttribute="leading" constant="16" id="wHB-Id-82e"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <connections>
-                                            <outlet property="cardView" destination="1Sz-nY-8ND" id="DZy-lR-cs6"/>
-                                            <outlet property="summaryLabel" destination="ieo-kw-DuN" id="jOq-6V-y6M"/>
-                                        </connections>
-                                    </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="mapCardCell" rowHeight="190" id="MYb-IR-Ts9" customClass="MapCardCell" customModule="Daydream" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="218" width="320" height="190"/>
+                                        <rect key="frame" x="0.0" y="28" width="320" height="190"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="MYb-IR-Ts9" id="Cew-so-fED" customClass="MapCardCell" customModule="Daydream" customModuleProvider="target">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="190"/>
@@ -231,7 +171,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="sightsCardCell" rowHeight="600" id="u45-7M-3W5" customClass="SightsCardCell" customModule="Daydream" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="408" width="320" height="600"/>
+                                        <rect key="frame" x="0.0" y="218" width="320" height="600"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="u45-7M-3W5" id="uZ4-RN-RBL">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="600"/>
@@ -403,7 +343,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="eateriesCardCell" rowHeight="600" id="rPE-Bq-m44" customClass="EateriesCardCell" customModule="Daydream" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="1008" width="320" height="600"/>
+                                        <rect key="frame" x="0.0" y="818" width="320" height="600"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="rPE-Bq-m44" id="nkI-M7-1OO">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="600"/>
@@ -569,6 +509,66 @@
                                             <outlet property="eatery3Label" destination="Lqu-VO-YGn" id="YJx-Qj-xZs"/>
                                             <outlet property="eatery3View" destination="1UT-Ql-mCF" id="DWi-TM-2d8"/>
                                             <outlet property="noContentLabel" destination="AOG-LH-mgj" id="hOX-NF-xK1"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="summaryCardCell" rowHeight="190" id="jE0-I9-OFZ" customClass="SummaryCardCell" customModule="Daydream" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="1418" width="320" height="190"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="jE0-I9-OFZ" id="zNC-eK-26l" customClass="MapCardCell" customModule="Daydream" customModuleProvider="target">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="190"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <view contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="1Sz-nY-8ND" customClass="DesignableView" customModule="Daydream" customModuleProvider="target">
+                                                    <rect key="frame" x="16" y="8" width="288" height="174"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lorem" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ieo-kw-DuN">
+                                                            <rect key="frame" x="16" y="8" width="256" height="158"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="256" id="Ev4-Px-oHW"/>
+                                                                <constraint firstAttribute="height" constant="158" id="fZW-7J-Iv4"/>
+                                                            </constraints>
+                                                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <constraints>
+                                                        <constraint firstItem="ieo-kw-DuN" firstAttribute="leading" secondItem="1Sz-nY-8ND" secondAttribute="leading" constant="16" id="4zf-P3-MHg"/>
+                                                        <constraint firstAttribute="height" constant="174" id="a8u-Er-IZW"/>
+                                                        <constraint firstAttribute="trailing" secondItem="ieo-kw-DuN" secondAttribute="trailing" constant="16" id="eIt-P9-k4q"/>
+                                                        <constraint firstAttribute="bottom" secondItem="ieo-kw-DuN" secondAttribute="bottom" constant="8" id="f3U-vs-Gth"/>
+                                                        <constraint firstItem="ieo-kw-DuN" firstAttribute="top" secondItem="1Sz-nY-8ND" secondAttribute="top" constant="8" id="obr-vr-B9e"/>
+                                                    </constraints>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                            <real key="value" value="10"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="shadowRadius">
+                                                            <real key="value" value="3"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="shadowOpacity">
+                                                            <real key="value" value="0.29999999999999999"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                        <userDefinedRuntimeAttribute type="color" keyPath="shadowColor">
+                                                            <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                        <userDefinedRuntimeAttribute type="size" keyPath="shadowOffset">
+                                                            <size key="value" width="0.0" height="3"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
+                                                </view>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="bottom" secondItem="1Sz-nY-8ND" secondAttribute="bottom" constant="8" id="0dU-0r-aoL"/>
+                                                <constraint firstAttribute="trailing" secondItem="1Sz-nY-8ND" secondAttribute="trailing" constant="16" id="19L-hA-BEe"/>
+                                                <constraint firstItem="1Sz-nY-8ND" firstAttribute="top" secondItem="zNC-eK-26l" secondAttribute="top" constant="8" id="bAT-sI-wFY"/>
+                                                <constraint firstItem="1Sz-nY-8ND" firstAttribute="leading" secondItem="zNC-eK-26l" secondAttribute="leading" constant="16" id="wHB-Id-82e"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <connections>
+                                            <outlet property="cardView" destination="1Sz-nY-8ND" id="DZy-lR-cs6"/>
+                                            <outlet property="summaryLabel" destination="ieo-kw-DuN" id="jOq-6V-y6M"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
