@@ -28,6 +28,7 @@ class SearchDetailViewController: UIViewController {
         visualEffectView.frame = placeImageView.bounds
         return visualEffectView
     }
+    private let summaryCardCellHeight: CGFloat = 190
     private let mapCardCellHeight: CGFloat = 190
     private let sightsCardCellHeight: CGFloat = 600
     
@@ -161,16 +162,32 @@ extension SearchDetailViewController: UITableViewDataSource, UITableViewDelegate
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return 4
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return indexPath.row == 0 ? mapCardCellHeight : sightsCardCellHeight
+        switch indexPath.row {
+        case 0:
+            return summaryCardCellHeight
+        case 1:
+            return mapCardCellHeight
+        default:
+            return sightsCardCellHeight
+        }
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.row {
         case 0:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "summaryCardCell", for: indexPath)
+
+            if let summaryCardCell = cell as? SummaryCardCell {
+                summaryCardCell.summaryLabel.text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+
+                return summaryCardCell
+            }
+            return cell
+        case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "mapCardCell", for: indexPath)
 
             if let mapCardCell = cell as? MapCardCell {
@@ -179,7 +196,7 @@ extension SearchDetailViewController: UITableViewDataSource, UITableViewDelegate
                 return mapCardCell
             }
             return cell
-        case 1:
+        case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: "sightsCardCell", for: indexPath)
 
             if let sightsCardCell = cell as? SightsCardCell {
@@ -189,7 +206,7 @@ extension SearchDetailViewController: UITableViewDataSource, UITableViewDelegate
                 return sightsCardCell
             }
             return cell
-        case 2:
+        case 3:
             let cell = tableView.dequeueReusableCell(withIdentifier: "eateriesCardCell", for: indexPath)
 
             if let eateriesCardCell = cell as? EateriesCardCell {
