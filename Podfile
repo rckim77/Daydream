@@ -13,4 +13,5 @@ target 'Daydream' do
   pod 'SwiftyJSON'
   pod 'Hero'
   pod 'SVProgressHUD'
+  pod 'Firebase/Core'
 end
