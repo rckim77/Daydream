@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AD_UNIT_ID_FOR_BANNER_TEST</key>
+	<string>ca-app-pub-3940256099942544/2934735716</string>
+	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
+	<string>ca-app-pub-3940256099942544/4411468910</string>
+	<key>CLIENT_ID</key>
+	<string>576108651646-7lsbp53snh8ecne6aka4llgsk96rk0lq.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.576108651646-7lsbp53snh8ecne6aka4llgsk96rk0lq</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBC1VXy93uiIMZvSnh7P1-36fHw6triutE</string>
+	<key>GCM_SENDER_ID</key>
+	<string>576108651646</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.rckim.Daydream</string>
+	<key>PROJECT_ID</key>
+	<string>daydream-ios-app-1519089175589</string>
+	<key>STORAGE_BUCKET</key>
+	<string>daydream-ios-app-1519089175589.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<true></true>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<false></false>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:576108651646:ios:520df3d8c1a6e5e0</string>
+	<key>DATABASE_URL</key>
+	<string>https://daydream-ios-app-1519089175589.firebaseio.com</string>
+</dict>
+</plist>

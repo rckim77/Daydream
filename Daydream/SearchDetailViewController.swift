@@ -13,6 +13,7 @@ import Alamofire
 import SwiftyJSON
 import Hero
 import SVProgressHUD
+import Firebase
 
 class SearchDetailViewController: UIViewController {
 
@@ -54,6 +55,10 @@ class SearchDetailViewController: UIViewController {
     }
 
     @IBAction func randomCityBtnTapped(_ sender: UIButton) {
+        Analytics.logEvent(AnalyticsEventSelectContent, parameters: [
+            AnalyticsParameterItemID: "id-\(String(describing: title))",
+            AnalyticsParameterContentType: "random button"
+        ])
         guard let randomCity = getRandomCity() else { return }
 
         SVProgressHUD.show()
@@ -187,15 +192,6 @@ extension SearchDetailViewController: UITableViewDataSource, UITableViewDelegate
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath {
-//        case 0:
-//            let cell = tableView.dequeueReusableCell(withIdentifier: "summaryCardCell", for: indexPath)
-//
-//            if let summaryCardCell = cell as? SummaryCardCell {
-//                summaryCardCell.summaryLabel.text = "Lorem."
-//
-//                return summaryCardCell
-//            }
-//            return cell
         case mapCardCellIndexPath:
             let cell = tableView.dequeueReusableCell(withIdentifier: "mapCardCell", for: indexPath)
 
@@ -237,7 +233,10 @@ extension SearchDetailViewController: GMSAutocompleteResultsViewControllerDelega
     // Handle user's selection
     func resultsController(_ resultsController: GMSAutocompleteResultsViewController,
                            didAutocompleteWith place: GMSPlace) {
-
+        Analytics.logEvent(AnalyticsEventSearch, parameters: [
+            AnalyticsParameterSearchTerm: (searchController?.searchBar.text ?? "Couldn't get search bar text"),
+            AnalyticsParameterLocation: place.placeID
+        ])
         searchController?.searchBar.text = nil // reset to search bar text
 
         dismiss(animated: true, completion: {
@@ -263,12 +262,20 @@ extension SearchDetailViewController: GMSAutocompleteResultsViewControllerDelega
 
 extension SearchDetailViewController: SightsCardCellDelegate {
     func didSelectPointOfInterest(with place: Placeable) {
+        Analytics.logEvent(AnalyticsEventSelectContent, parameters: [
+            AnalyticsParameterItemID: "id-\(String(describing: title))",
+            AnalyticsParameterContentType: "select point of interest"
+        ])
         performSegue(withIdentifier: "genericMapSegue", sender: place)
     }
 }
 
 extension SearchDetailViewController: EateriesCardCellDelegate {
     func didSelectEatery(_ eatery: Eatery) {
+        Analytics.logEvent(AnalyticsEventSelectContent, parameters: [
+            AnalyticsParameterItemID: "id-\(String(describing: title))",
+            AnalyticsParameterContentType: "select eatery"
+        ])
         if let url = URL(string: eatery.url) {
             if #available(iOS 10.0, *) {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)

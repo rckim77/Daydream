@@ -10,6 +10,7 @@ import UIKit
 import GooglePlaces
 import SwiftyJSON
 import SVProgressHUD
+import Firebase
 
 class SearchViewController: UIViewController {
 
@@ -29,6 +30,11 @@ class SearchViewController: UIViewController {
     }
 
     @IBAction func randomBtnTapped(_ sender: Any) {
+        Analytics.logEvent(AnalyticsEventSelectContent, parameters: [
+            AnalyticsParameterItemID: "id-\(String(describing: title))",
+            AnalyticsParameterContentType: "random button"
+        ])
+
         guard let randomCity = getRandomCity() else { return }
 
         SVProgressHUD.show()
@@ -117,6 +123,10 @@ class SearchViewController: UIViewController {
 extension SearchViewController: GMSAutocompleteResultsViewControllerDelegate {
     // Handle the user's selection
     func resultsController(_ resultsController: GMSAutocompleteResultsViewController, didAutocompleteWith place: GMSPlace) {
+        Analytics.logEvent(AnalyticsEventSearch, parameters: [
+            AnalyticsParameterSearchTerm: (searchController?.searchBar.text ?? "Couldn't get search bar text"),
+            AnalyticsParameterLocation: place.placeID
+        ])
         placeData = place
         dismiss(animated: true, completion: {
             self.performSegue(withIdentifier: "toSearchDetailVCSegue", sender: nil)

@@ -29,6 +29,8 @@
 		94B7DB59205E06080040D61C /* Eatery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B7DB58205E06080040D61C /* Eatery.swift */; };
 		94B7DB5D205EEBBB0040D61C /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B7DB5C205EEBBB0040D61C /* NetworkService.swift */; };
 		94DB8FE7204B946200FA7CF7 /* EateriesCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94DB8FE6204B946200FA7CF7 /* EateriesCardCell.swift */; };
+		94E392AD2070B4300073E8C9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 94E392AC2070B4300073E8C9 /* GoogleService-Info.plist */; };
+		94E392AE2070B4300073E8C9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 94E392AC2070B4300073E8C9 /* GoogleService-Info.plist */; };
 		94F837042070022700ADB690 /* SummaryCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F837032070022600ADB690 /* SummaryCardCell.swift */; };
 /* End PBXBuildFile section */
 
@@ -71,6 +73,7 @@
 		94B7DB58205E06080040D61C /* Eatery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Eatery.swift; sourceTree = "<group>"; };
 		94B7DB5C205EEBBB0040D61C /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		94DB8FE6204B946200FA7CF7 /* EateriesCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EateriesCardCell.swift; sourceTree = "<group>"; };
+		94E392AC2070B4300073E8C9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		94F837032070022600ADB690 /* SummaryCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryCardCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -135,6 +138,7 @@
 				94380ACE203BAE1D00684863 /* Assets.xcassets */,
 				94380AD0203BAE1D00684863 /* LaunchScreen.storyboard */,
 				94380AD3203BAE1D00684863 /* Info.plist */,
+				94E392AC2070B4300073E8C9 /* GoogleService-Info.plist */,
 			);
 			path = Daydream;
 			sourceTree = "<group>";
@@ -281,6 +285,7 @@
 			files = (
 				94380AD2203BAE1D00684863 /* LaunchScreen.storyboard in Resources */,
 				9490BA02206AF6F700B880E7 /* randomCitiesJSON.json in Resources */,
+				94E392AD2070B4300073E8C9 /* GoogleService-Info.plist in Resources */,
 				94380ACF203BAE1D00684863 /* Assets.xcassets in Resources */,
 				94380ACD203BAE1D00684863 /* Main.storyboard in Resources */,
 			);
@@ -290,6 +295,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				94E392AE2070B4300073E8C9 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
