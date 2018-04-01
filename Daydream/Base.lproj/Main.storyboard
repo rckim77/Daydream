@@ -66,7 +66,7 @@
                         <outlet property="randomBtn" destination="wyW-dr-4PC" id="Na6-ko-ZcB"/>
                         <outlet property="searchDisplayController" destination="3QI-pJ-GPe" id="vse-jb-lwP"/>
                         <outlet property="titleLabel" destination="JHi-Ty-WLR" id="ex4-nX-Bqc"/>
-                        <segue destination="mAC-Ym-g6i" kind="presentation" identifier="toSearchDetailVCSegue" id="0Kk-Mo-0ud"/>
+                        <segue destination="mAC-Ym-g6i" kind="presentation" identifier="toSearchDetailVCSegue" modalTransitionStyle="crossDissolve" id="0Kk-Mo-0ud"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
