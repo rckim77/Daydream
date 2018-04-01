@@ -20,7 +20,6 @@ class SummaryCardCell: UITableViewCell {
     override func setNeedsLayout() {
         super.setNeedsLayout()
 
-
         layoutIfNeeded()
     }
 }
