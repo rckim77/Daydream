@@ -8,6 +8,7 @@
 
 import UIKit
 import GooglePlaces
+import Firebase
 
 extension GMSPlace: Placeable {
 
@@ -91,6 +92,22 @@ extension GMSAutocompleteResultsViewController {
         primaryTextColor = .lightGray
         secondaryTextColor = .lightGray
 
+    }
+}
+
+extension UIViewController {
+    func logEvent(contentType: String) {
+        Analytics.logEvent(AnalyticsEventSelectContent, parameters: [
+            AnalyticsParameterItemID: "id-\(String(describing: title))",
+            AnalyticsParameterContentType: contentType
+        ])
+    }
+
+    func logSearchEvent(searchTerm: String, placeId: String) {
+        Analytics.logEvent(AnalyticsEventSearch, parameters: [
+            AnalyticsParameterSearchTerm: searchTerm,
+            AnalyticsParameterLocation: placeId
+        ])
     }
 }
 
