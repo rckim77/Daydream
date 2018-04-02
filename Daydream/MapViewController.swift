@@ -15,6 +15,7 @@ class MapViewController: UIViewController {
     var place: Placeable?
     var heroId: String?
     var dynamicMapView: GMSMapView?
+    var addMarkerInfoView: Bool = false
 
     @IBAction func closeBtnTapped(_ sender: Any) {
         dismiss(animated: true, completion: nil)
@@ -46,10 +47,10 @@ class MapViewController: UIViewController {
             view.sendSubview(toBack: dynamicMapView)
         }
 
-        createMarker(with: place)
+        createMarker(with: place, addMarkerInfoView: addMarkerInfoView)
     }
 
-    private func createMarker(with place: Placeable) {
+    private func createMarker(with place: Placeable, addMarkerInfoView: Bool) {
         let marker = GMSMarker()
         marker.appearAnimation = .pop
 
@@ -57,5 +58,11 @@ class MapViewController: UIViewController {
                                                  longitude: place.placeableCoordinate.longitude)
         marker.title = place.placeableName
         marker.map = dynamicMapView
+
+        if addMarkerInfoView {
+            marker.snippet = "Details"
+        }
+
+        dynamicMapView?.selectedMarker = marker
     }
 }

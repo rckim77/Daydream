@@ -160,6 +160,7 @@ class SearchDetailViewController: UIViewController {
             if segue.identifier == "genericMapSegue" {
                 destinationVC.place = sender as? Placeable
                 destinationVC.heroId = "pointOfInterestCard"
+                destinationVC.addMarkerInfoView = true
             } else if segue.identifier == "mapCardSegue", let place = placeData {
                 destinationVC.place = place
                 destinationVC.heroId = "mapCard"
