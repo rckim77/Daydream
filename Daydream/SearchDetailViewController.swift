@@ -58,8 +58,8 @@ class SearchDetailViewController: UIViewController {
     @IBAction func randomCityBtnTapped(_ sender: UIButton) {
         logEvent(contentType: "random button")
         guard let randomCity = getRandomCity() else { return }
-
         SVProgressHUD.show()
+        
         NetworkService().getPlaceId(with: randomCity, success: { [weak self] place in
             SVProgressHUD.dismiss()
             guard let strongSelf = self else { return }
@@ -134,12 +134,6 @@ class SearchDetailViewController: UIViewController {
         if reloadMapCard {
             placeCardsTableView.reloadRows(at: [mapCardCellIndexPath], with: .fade)
         }
-
-//        networkService.getSummaryFor(place.placeableName, success: { [weak self] summary in
-//            print(summary)
-//        }, failure: { error in
-//            print(error)
-//        })
     }
 
     private func configureAutocompleteVC() {

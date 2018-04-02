@@ -60,9 +60,29 @@ class MapViewController: UIViewController {
         marker.map = dynamicMapView
 
         if addMarkerInfoView {
-            marker.snippet = "Details"
+            marker.snippet = "Loading..."
         }
 
         dynamicMapView?.selectedMarker = marker
+
+        NetworkService().getPlace(with: place.placeableId, success: { place in
+            var snippet = ""
+
+            if let formattedAddress = place.placeableFormattedAddress {
+                snippet += formattedAddress
+            }
+
+            if let phoneNumber = place.placeableFormattedPhoneNumber {
+                snippet += "\n\(phoneNumber)"
+            }
+
+            if let rating = place.placeableRating {
+                snippet += "\nRating: \(rating)"
+            }
+
+            marker.snippet = snippet
+        }, failure: { error in
+            print(String(describing: error))
+        })
     }
 }

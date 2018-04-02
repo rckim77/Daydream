@@ -38,14 +38,17 @@ class NetworkService {
                         return nil
                     }
 
-                    let formattedAddress = result["formatted_address"].string
+                    // NOTE: A text search request doesn't return data on address, phone number, nor rating.
                     let coordinate = CLLocationCoordinate2D(latitude: centerLat, longitude: centerLng)
                     let viewport = Viewport(northeastLat: northeastLat,
                                             northeastLng: northeastLng,
                                             southwestLat: southwestLat,
                                             southwestLng: southwestLng)
                     
-                    return Place(placeID: placeId, name: name, formattedAddress: formattedAddress, coordinate: coordinate, viewport: viewport)
+                    return Place(placeID: placeId,
+                                 name: name,
+                                 coordinate: coordinate,
+                                 viewport: viewport)
                 }
 
                 success(pointsOfInterest)
@@ -145,9 +148,17 @@ class NetworkService {
                     return
                 }
 
+                // NOTE: Place Detail request optionally returns phone number and/or rating.
+                let formattedPhoneNumber = result["international_phone_number"]?.string
+                let rating = result["rating"]?.float
                 let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
 
-                let place = Place(placeID: placeID, name: name, formattedAddress: formattedAddress, coordinate: coordinate)
+                let place = Place(placeID: placeID,
+                                  name: name,
+                                  formattedAddress: formattedAddress,
+                                  formattedPhoneNumber: formattedPhoneNumber,
+                                  rating: rating,
+                                  coordinate: coordinate)
 
                 success(place)
             case .failure(let error):

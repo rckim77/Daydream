@@ -14,6 +14,8 @@ protocol Placeable: class {
     var placeableId: String { get }
     var placeableName: String { get }
     var placeableFormattedAddress: String? { get }
+    var placeableFormattedPhoneNumber: String? { get }
+    var placeableRating: Float? { get }
     var placeableCoordinate: CLLocationCoordinate2D { get }
     var placeableViewport: Viewport? { get }
 }

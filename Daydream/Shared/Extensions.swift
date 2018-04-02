@@ -11,7 +11,6 @@ import GooglePlaces
 import Firebase
 
 extension GMSPlace: Placeable {
-
     var placeableId: String {
         return self.placeID
     }
@@ -22,6 +21,14 @@ extension GMSPlace: Placeable {
 
     var placeableFormattedAddress: String? {
         return self.formattedAddress
+    }
+
+    var placeableFormattedPhoneNumber: String? {
+        return self.phoneNumber
+    }
+
+    var placeableRating: Float? {
+        return self.rating
     }
 
     var placeableCoordinate: CLLocationCoordinate2D {
