@@ -15,6 +15,8 @@ class MapViewController: UIViewController {
     var place: Placeable?
     var heroId: String?
     var dynamicMapView: GMSMapView?
+    var dynamicMarker: GMSMarker?
+    private let networkService = NetworkService()
     var addMarkerInfoView: Bool = false
 
     @IBAction func closeBtnTapped(_ sender: Any) {
@@ -25,10 +27,10 @@ class MapViewController: UIViewController {
         super.viewDidLoad()
 
         view.hero.id = heroId
-        addOrUpdateMapView(with: place)
+        addOrUpdateMapView(with: place, getSnippetData: true)
     }
 
-    private func addOrUpdateMapView(with place: Placeable?) {
+    private func addOrUpdateMapView(with place: Placeable?, getSnippetData: Bool) {
         guard let place = place else { return }
         let camera = GMSCameraPosition.camera(withLatitude: place.placeableCoordinate.latitude,
                                               longitude: place.placeableCoordinate.longitude,
@@ -43,44 +45,78 @@ class MapViewController: UIViewController {
             dynamicMapView = mapViewNew
 
             guard let dynamicMapView = dynamicMapView else { return }
+            dynamicMapView.delegate = self
             view.addSubview(dynamicMapView)
             view.sendSubview(toBack: dynamicMapView)
         }
 
-        createMarker(with: place, addMarkerInfoView: addMarkerInfoView)
+        addOrUpdateMarker(with: place, addMarkerInfoView: addMarkerInfoView, getSnippetData: getSnippetData)
     }
 
-    private func createMarker(with place: Placeable, addMarkerInfoView: Bool) {
-        let marker = GMSMarker()
-        marker.appearAnimation = .pop
+    private func addOrUpdateMarker(with place: Placeable, addMarkerInfoView: Bool = false, getSnippetData: Bool = false) {
+        guard let mapView = dynamicMapView else { return }
 
-        marker.position = CLLocationCoordinate2D(latitude: place.placeableCoordinate.latitude,
-                                                 longitude: place.placeableCoordinate.longitude)
-        marker.title = place.placeableName
-        marker.map = dynamicMapView
+        let position = CLLocationCoordinate2D(latitude: place.placeableCoordinate.latitude, longitude: place.placeableCoordinate.longitude)
 
-        if addMarkerInfoView {
-            marker.snippet = "Loading..."
+        if let marker = dynamicMarker {
+            marker.map = nil // clears prev marker
+            marker.title = place.placeableName
+            marker.map = mapView
+            marker.position = position
+        } else {
+            let marker = GMSMarker()
+            marker.appearAnimation = .pop
+            marker.title = place.placeableName
+            marker.map = mapView
+            marker.position = position
+
+            dynamicMarker = marker
         }
 
-        dynamicMapView?.selectedMarker = marker
+        guard let dynamicMarker = dynamicMarker else { return }
 
-        NetworkService().getPlace(with: place.placeableId, success: { place in
-            var snippet = ""
+        if addMarkerInfoView {
+            mapView.selectedMarker = dynamicMarker
+            if getSnippetData {
+                dynamicMarker.tracksInfoWindowChanges = true
+                dynamicMarker.snippet = "Loading..."
 
-            if let formattedAddress = place.placeableFormattedAddress {
-                snippet += formattedAddress
+                networkService.getPlace(with: place.placeableId, success: { [weak self] place in
+                    dynamicMarker.snippet = self?.createSnippet(for: place)
+                    dynamicMarker.tracksInfoWindowChanges = false
+                    }, failure: { error in
+                        print(String(describing: error))
+                })
+            } else {
+                dynamicMarker.snippet = createSnippet(for: place)
             }
+        }
 
-            if let phoneNumber = place.placeableFormattedPhoneNumber {
-                snippet += "\n\(phoneNumber)"
-            }
+    }
 
-            if let rating = place.placeableRating {
-                snippet += "\nRating: \(rating)"
-            }
+    private func createSnippet(for place: Placeable) -> String {
+        var snippet = ""
 
-            marker.snippet = snippet
+        if let formattedAddress = place.placeableFormattedAddress {
+            snippet += formattedAddress
+        }
+
+        if let phoneNumber = place.placeableFormattedPhoneNumber {
+            snippet += "\n\(phoneNumber)"
+        }
+
+        if let rating = place.placeableRating {
+            snippet += "\nRating: \(rating)"
+        }
+
+        return snippet
+    }
+}
+
+extension MapViewController: GMSMapViewDelegate {
+    func mapView(_ mapView: GMSMapView, didTapPOIWithPlaceID placeID: String, name: String, location: CLLocationCoordinate2D) {
+        networkService.getPlace(with: placeID, success: { [weak self] place in
+            self?.addOrUpdateMapView(with: place, getSnippetData: false)
         }, failure: { error in
             print(String(describing: error))
         })
