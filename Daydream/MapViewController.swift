@@ -16,11 +16,31 @@ class MapViewController: UIViewController {
     var heroId: String?
     var dynamicMapView: GMSMapView?
     var dynamicMarker: GMSMarker?
+    var isInNightMode: Bool = false
     private let networkService = NetworkService()
     var addMarkerInfoView: Bool = false
 
     @IBAction func closeBtnTapped(_ sender: Any) {
         dismiss(animated: true, completion: nil)
+    }
+    @IBAction func nightModeBtnTapped(_ sender: UIButton) {
+        if isInNightMode {
+            dynamicMapView?.mapStyle = nil
+            isInNightMode = false
+            sender.setTitle("Night", for: .normal)
+        } else {
+            do {
+                // Set the map style by passing the URL of the local file.
+                if let styleURL = Bundle.main.url(forResource: "style", withExtension: "json"), let mapView = dynamicMapView {
+                    mapView.mapStyle = try GMSMapStyle(contentsOfFileURL: styleURL)
+                    isInNightMode = true
+                    sender.setTitle("Day", for: .normal)
+                }
+            } catch {
+                logErrorEvent(error)
+            }
+        }
+
     }
 
     override func viewDidLoad() {

@@ -637,11 +637,24 @@
                                     <action selector="closeBtnTapped:" destination="CGg-aC-4y8" eventType="touchUpInside" id="TQp-Y3-dqo"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="omz-Nd-4J3">
+                                <rect key="frame" x="198" y="37" width="38" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="38" id="GGp-s3-6Rn"/>
+                                    <constraint firstAttribute="height" constant="30" id="Yvg-GS-mux"/>
+                                </constraints>
+                                <state key="normal" title="Night"/>
+                                <connections>
+                                    <action selector="nightModeBtnTapped:" destination="CGg-aC-4y8" eventType="touchUpInside" id="B4Y-Ri-zLn"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="7yK-lk-pp6" firstAttribute="leading" secondItem="omz-Nd-4J3" secondAttribute="trailing" constant="24" id="MKE-Ye-abT"/>
                             <constraint firstItem="7yK-lk-pp6" firstAttribute="top" secondItem="Yii-Ue-V4b" secondAttribute="top" constant="8" id="VbW-c3-mDJ"/>
                             <constraint firstItem="Yii-Ue-V4b" firstAttribute="trailing" secondItem="7yK-lk-pp6" secondAttribute="trailing" constant="12" id="kYX-1O-uCy"/>
+                            <constraint firstItem="omz-Nd-4J3" firstAttribute="centerY" secondItem="7yK-lk-pp6" secondAttribute="centerY" id="xuM-Oq-Ku3"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Yii-Ue-V4b"/>
                     </view>
