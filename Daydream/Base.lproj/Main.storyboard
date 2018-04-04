@@ -167,7 +167,6 @@
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
                                             <outlet property="mainView" destination="0Pv-YR-4mM" id="7ez-CA-yHk"/>
-                                            <segue destination="CGg-aC-4y8" kind="presentation" identifier="mapCardSegue" id="yu5-G9-f8N"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="sightsCardCell" rowHeight="600" id="u45-7M-3W5" customClass="SightsCardCell" customModule="Daydream" customModuleProvider="target">
@@ -673,7 +672,4 @@
         <image name="mapCloseIconSoftShadow" width="32" height="32"/>
         <image name="sunriseJungle" width="2246" height="3644"/>
     </resources>
-    <inferredMetricsTieBreakers>
-        <segue reference="yu5-G9-f8N"/>
-    </inferredMetricsTieBreakers>
 </document>

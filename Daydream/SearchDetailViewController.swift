@@ -154,9 +154,6 @@ class SearchDetailViewController: UIViewController {
                 destinationVC.place = sender as? Placeable
                 destinationVC.heroId = "pointOfInterestCard"
                 destinationVC.addMarkerInfoView = true
-            } else if segue.identifier == "mapCardSegue", let place = placeData {
-                destinationVC.place = place
-                destinationVC.heroId = "mapCard"
             }
         }
     }
