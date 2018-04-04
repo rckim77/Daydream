@@ -43,6 +43,10 @@ extension GMSPlace: Placeable {
                         southwestLng: viewport.southWest.longitude)
     }
 
+    var placeableMapUrl: String? {
+        return nil
+    }
+
 }
 
 extension UIColor {
@@ -114,6 +118,12 @@ extension UIViewController {
         Analytics.logEvent(AnalyticsEventSearch, parameters: [
             AnalyticsParameterSearchTerm: searchTerm,
             AnalyticsParameterLocation: placeId
+        ])
+    }
+
+    func logErrorEvent(_ error: Error?) {
+        Analytics.logEvent("DaydreamAppError", parameters: [
+            "Error": String(describing: error)
         ])
     }
 }

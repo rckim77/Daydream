@@ -143,7 +143,8 @@ class NetworkService {
                     let name = result["name"]?.string,
                     let formattedAddress = result["formatted_address"]?.string,
                     let latitude = result["geometry"]?["location"]["lat"].double,
-                    let longitude = result["geometry"]?["location"]["lng"].double else {
+                    let longitude = result["geometry"]?["location"]["lng"].double,
+                    let mapUrl = result["url"]?.string else {
                     failure(nil)
                     return
                 }
@@ -158,7 +159,8 @@ class NetworkService {
                                   formattedAddress: formattedAddress,
                                   formattedPhoneNumber: formattedPhoneNumber,
                                   rating: rating,
-                                  coordinate: coordinate)
+                                  coordinate: coordinate,
+                                  mapUrl: mapUrl)
 
                 success(place)
             case .failure(let error):

@@ -18,6 +18,7 @@ protocol Placeable: class {
     var placeableRating: Float? { get }
     var placeableCoordinate: CLLocationCoordinate2D { get }
     var placeableViewport: Viewport? { get }
+    var placeableMapUrl: String? { get }
 }
 
 protocol RandomCitySelectable {

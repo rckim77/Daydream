@@ -16,8 +16,9 @@ class Place: Placeable {
     var placeableRating: Float?
     var placeableCoordinate: CLLocationCoordinate2D
     var placeableViewport: Viewport?
+    var placeableMapUrl: String?
 
-    init(placeID: String, name: String, formattedAddress: String? = nil, formattedPhoneNumber: String? = nil, rating: Float? = nil, coordinate: CLLocationCoordinate2D, viewport: Viewport? = nil) {
+    init(placeID: String, name: String, formattedAddress: String? = nil, formattedPhoneNumber: String? = nil, rating: Float? = nil, coordinate: CLLocationCoordinate2D, viewport: Viewport? = nil, mapUrl: String? = nil) {
         self.placeableId = placeID
         self.placeableName = name
         self.placeableFormattedAddress = formattedAddress
@@ -25,5 +26,6 @@ class Place: Placeable {
         self.placeableRating = rating
         self.placeableCoordinate = coordinate
         self.placeableViewport = viewport
+        self.placeableMapUrl = mapUrl
     }
 }

@@ -84,8 +84,9 @@ class MapViewController: UIViewController {
                 networkService.getPlace(with: place.placeableId, success: { [weak self] place in
                     dynamicMarker.snippet = self?.createSnippet(for: place)
                     dynamicMarker.tracksInfoWindowChanges = false
-                    }, failure: { error in
-                        print(String(describing: error))
+                    self?.place = place
+                }, failure: { [weak self] error in
+                    self?.logErrorEvent(error)
                 })
             } else {
                 dynamicMarker.snippet = createSnippet(for: place)
@@ -117,8 +118,16 @@ extension MapViewController: GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, didTapPOIWithPlaceID placeID: String, name: String, location: CLLocationCoordinate2D) {
         networkService.getPlace(with: placeID, success: { [weak self] place in
             self?.addOrUpdateMapView(with: place, getSnippetData: false)
-        }, failure: { error in
-            print(String(describing: error))
+            self?.place = place
+        }, failure: { [weak self] error in
+            self?.logErrorEvent(error)
         })
+    }
+
+    func mapView(_ mapView: GMSMapView, didTapInfoWindowOf marker: GMSMarker) {
+        logEvent(contentType: "tapped info window on map")
+        if let mapUrl = place?.placeableMapUrl, let url = URL(string: mapUrl) {
+            UIApplication.shared.open(url, options: [:])
+        }
     }
 }
