@@ -40,11 +40,9 @@ class SearchViewController: UIViewController {
 
             strongSelf.placeData = place
             strongSelf.performSegue(withIdentifier: "toSearchDetailVCSegue", sender: nil)
-        }, failure: { error in
+        }, failure: { [weak self] error in
             SVProgressHUD.dismiss()
-            if let error = error {
-                print(error)
-            }
+            self?.logErrorEvent(error)
         })
     }
 
@@ -128,7 +126,7 @@ extension SearchViewController: GMSAutocompleteResultsViewControllerDelegate {
 
     // Handle the error
     func resultsController(_ resultsController: GMSAutocompleteResultsViewController, didFailAutocompleteWithError error: Error) {
-        print("Error: ", error.localizedDescription)
+        logErrorEvent(error)
     }
 
     // User canceled the operation

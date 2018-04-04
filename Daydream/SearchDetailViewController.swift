@@ -66,9 +66,9 @@ class SearchDetailViewController: UIViewController {
 
             strongSelf.placeData = place
             strongSelf.loadContent(for: place, reloadMapCard: true)
-        }, failure: { error in
+        }, failure: { [weak self] error in
             SVProgressHUD.dismiss()
-            print(String(describing: error))
+            self?.logErrorEvent(error)
         })
     }
 
@@ -110,25 +110,24 @@ class SearchDetailViewController: UIViewController {
             strongSelf.placeImageView.contentMode = .scaleAspectFill    
             strongSelf.placeImageView.addSubview(strongSelf.visualEffectView)
 
-            }, failure: { error in
-                print(error)
-            }
-        )
+        }, failure: { [weak self] error in
+            self?.logErrorEvent(error)
+        })
 
         networkService.loadTopSights(with: place, success: { [weak self] pointsOfInterest in
             guard let strongSelf = self else { return }
             strongSelf.pointsOfInterest = pointsOfInterest
             strongSelf.placeCardsTableView.reloadRows(at: [strongSelf.sightsCardCellIndexPath], with: .fade)
-            }, failure: { error in
-                print(error ?? "error loading top sights")
+        }, failure: { [weak self] error in
+            self?.logErrorEvent(error)
         })
 
         networkService.loadTopEateries(with: place, success: { [weak self] eateries in
             guard let strongSelf = self else { return }
             strongSelf.eateries = eateries
             strongSelf.placeCardsTableView.reloadRows(at: [strongSelf.eateriesCardCellIndexPath], with: .fade)
-            }, failure: { error in
-                print(error ?? "error loading top eateries")
+        }, failure: { [weak self] error in
+            self?.logErrorEvent(error)
         })
 
         if reloadMapCard {
@@ -236,7 +235,7 @@ extension SearchDetailViewController: GMSAutocompleteResultsViewControllerDelega
 
     func resultsController(_ resultsController: GMSAutocompleteResultsViewController,
                            didFailAutocompleteWithError error: Error) {
-        print("Autocomplete Error: ", error.localizedDescription)
+        logErrorEvent(error)
     }
 
     // Turn the network activity indicator on and off again
@@ -261,11 +260,7 @@ extension SearchDetailViewController: EateriesCardCellDelegate {
         logEvent(contentType: "select eatery")
 
         if let url = URL(string: eatery.url) {
-            if #available(iOS 10.0, *) {
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
-            } else {
-                UIApplication.shared.openURL(url)
-            }
+            UIApplication.shared.open(url, options: [:])
         }
     }
 }

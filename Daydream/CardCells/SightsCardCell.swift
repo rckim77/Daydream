@@ -126,8 +126,8 @@ class SightsCardCell: UITableViewCell {
             }
 
             strongSelf.fadeInImage(image, forImageView: imageView)
-        }, failure: { error in
-            print(error)
+        }, failure: { [weak self] error in
+            self?.logErrorEvent(error)
         })
     }
 

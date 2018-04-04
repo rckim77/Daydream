@@ -220,4 +220,10 @@ extension UIView {
         layer.borderColor = color
         layer.cornerRadius = cornerRadius
     }
+
+    func logErrorEvent(_ error: Error?) {
+        Analytics.logEvent("DaydreamAppError", parameters: [
+            "Error": String(describing: error)
+            ])
+    }
 }
