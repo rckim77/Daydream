@@ -27,14 +27,14 @@ class MapViewController: UIViewController {
         if isInNightMode {
             dynamicMapView?.mapStyle = nil
             isInNightMode = false
-            sender.setTitle("Night", for: .normal)
+            sender.setImage(#imageLiteral(resourceName: "nightIcon"), for: .normal)
         } else {
             do {
                 // Set the map style by passing the URL of the local file.
                 if let styleURL = Bundle.main.url(forResource: "style", withExtension: "json"), let mapView = dynamicMapView {
                     mapView.mapStyle = try GMSMapStyle(contentsOfFileURL: styleURL)
                     isInNightMode = true
-                    sender.setTitle("Day", for: .normal)
+                    sender.setImage(#imageLiteral(resourceName: "sunIcon"), for: .normal)
                 }
             } catch {
                 logErrorEvent(error)
