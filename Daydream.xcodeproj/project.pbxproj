@@ -25,6 +25,7 @@
 		9490BA14206C8CCA00B880E7 /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9490BA13206C8CCA00B880E7 /* SnapshotHelper.swift */; };
 		9490BA18206CAA8300B880E7 /* Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9490BA17206CAA8300B880E7 /* Place.swift */; };
 		949630BA203BCBBD007139CA /* SearchDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949630B9203BCBBD007139CA /* SearchDetailViewController.swift */; };
+		94A7B7DB20780D39003E28A8 /* Review.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A7B7DA20780D39003E28A8 /* Review.swift */; };
 		94B7DB57205DEE980040D61C /* Viewport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B7DB56205DEE980040D61C /* Viewport.swift */; };
 		94B7DB59205E06080040D61C /* Eatery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B7DB58205E06080040D61C /* Eatery.swift */; };
 		94B7DB5D205EEBBB0040D61C /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B7DB5C205EEBBB0040D61C /* NetworkService.swift */; };
@@ -70,6 +71,7 @@
 		9490BA13206C8CCA00B880E7 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SnapshotHelper.swift; path = fastlane/SnapshotHelper.swift; sourceTree = SOURCE_ROOT; };
 		9490BA17206CAA8300B880E7 /* Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Place.swift; sourceTree = "<group>"; };
 		949630B9203BCBBD007139CA /* SearchDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDetailViewController.swift; sourceTree = "<group>"; };
+		94A7B7DA20780D39003E28A8 /* Review.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Review.swift; sourceTree = "<group>"; };
 		94B7DB56205DEE980040D61C /* Viewport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Viewport.swift; sourceTree = "<group>"; };
 		94B7DB58205E06080040D61C /* Eatery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Eatery.swift; sourceTree = "<group>"; };
 		94B7DB5C205EEBBB0040D61C /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
@@ -160,6 +162,7 @@
 			children = (
 				94B7DB56205DEE980040D61C /* Viewport.swift */,
 				9490BA17206CAA8300B880E7 /* Place.swift */,
+				94A7B7DA20780D39003E28A8 /* Review.swift */,
 				94B7DB58205E06080040D61C /* Eatery.swift */,
 			);
 			path = Models;
@@ -394,6 +397,7 @@
 			files = (
 				9490BA04206B03B300B880E7 /* Protocols.swift in Sources */,
 				94380ACA203BAE1D00684863 /* SearchViewController.swift in Sources */,
+				94A7B7DB20780D39003E28A8 /* Review.swift in Sources */,
 				94DB8FE7204B946200FA7CF7 /* EateriesCardCell.swift in Sources */,
 				947EC6542043F5B2004A911D /* Color.swift in Sources */,
 				949630BA203BCBBD007139CA /* SearchDetailViewController.swift in Sources */,

@@ -21,6 +21,12 @@ protocol Placeable: class {
     var placeableMapUrl: String? { get }
 }
 
+protocol Reviewable: class {
+    var author: String { get }
+    var rating: Int { get }
+    var review: String? { get }
+}
+
 protocol RandomCitySelectable {
     func getRandomCity() -> String?
 }
