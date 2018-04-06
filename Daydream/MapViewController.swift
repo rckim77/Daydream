@@ -22,8 +22,13 @@ class MapViewController: UIViewController {
     
     @IBOutlet weak var reviewView: DesignableView!
     @IBOutlet weak var authorLabel: UILabel!
-    @IBOutlet weak var ratingLabel: UILabel!
     @IBOutlet weak var reviewLabel: UILabel!
+    @IBOutlet weak var star1: UIImageView!
+    @IBOutlet weak var star2: UIImageView!
+    @IBOutlet weak var star3: UIImageView!
+    @IBOutlet weak var star4: UIImageView!
+    @IBOutlet weak var star5: UIImageView!
+    
     @IBAction func closeBtnTapped(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
@@ -114,7 +119,7 @@ class MapViewController: UIViewController {
                     self?.place = place
                     if let reviews = place.placeableReviews, !reviews.isEmpty {
                         self?.authorLabel.text = reviews[0].author
-                        self?.ratingLabel.text = String(reviews[0].rating)
+                        self?.displayStars(reviews[0].rating)
                         self?.reviewLabel.text = reviews[0].review ?? ""
 
                         UIView.animate(withDuration: 0.8, animations: {
@@ -147,6 +152,14 @@ class MapViewController: UIViewController {
         }
 
         return snippet
+    }
+
+    private func displayStars(_ rating: Int) {
+        let stars: [UIImageView] = [star5, star4, star3, star2, star1]
+
+        for i in 0..<rating {
+            stars[i].image = #imageLiteral(resourceName: "filledStarIcon")
+        }
     }
 }
 
