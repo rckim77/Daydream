@@ -647,12 +647,73 @@
                                     <action selector="nightModeBtnTapped:" destination="CGg-aC-4y8" eventType="touchUpInside" id="B4Y-Ri-zLn"/>
                                 </connections>
                             </button>
+                            <view contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="U6Y-KM-3Xa" customClass="DesignableView" customModule="Daydream" customModuleProvider="target">
+                                <rect key="frame" x="16" y="388" width="288" height="150"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Author" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VPC-mb-fDk">
+                                        <rect key="frame" x="20" y="20" width="53.5" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="21" id="h8C-mG-HM7"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Rating" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W0d-YA-T0K">
+                                        <rect key="frame" x="219" y="20" width="49" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="21" id="RDj-zI-2xE"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Review text text text text text text text text text text text text text text text text text text" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="49l-d5-jC6">
+                                        <rect key="frame" x="20" y="53" width="248" height="77"/>
+                                        <fontDescription key="fontDescription" name=".SFNSText" family=".SF NS Text" pointSize="16"/>
+                                        <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="W0d-YA-T0K" secondAttribute="trailing" constant="20" id="1cg-oE-Rbe"/>
+                                    <constraint firstItem="49l-d5-jC6" firstAttribute="leading" secondItem="U6Y-KM-3Xa" secondAttribute="leading" constant="20" id="8xp-Tx-tRu"/>
+                                    <constraint firstItem="W0d-YA-T0K" firstAttribute="top" secondItem="U6Y-KM-3Xa" secondAttribute="top" constant="20" id="AwF-eZ-rsm"/>
+                                    <constraint firstItem="49l-d5-jC6" firstAttribute="top" secondItem="VPC-mb-fDk" secondAttribute="bottom" constant="12" id="C6Z-Xm-Zot"/>
+                                    <constraint firstItem="VPC-mb-fDk" firstAttribute="leading" secondItem="U6Y-KM-3Xa" secondAttribute="leading" constant="20" id="CYP-Gi-w0Z"/>
+                                    <constraint firstAttribute="trailing" secondItem="49l-d5-jC6" secondAttribute="trailing" constant="20" id="Ruz-bj-bFG"/>
+                                    <constraint firstAttribute="height" constant="150" id="SQn-eh-naR"/>
+                                    <constraint firstItem="VPC-mb-fDk" firstAttribute="top" secondItem="U6Y-KM-3Xa" secondAttribute="top" constant="20" id="hnN-CY-ii1"/>
+                                    <constraint firstAttribute="bottom" secondItem="49l-d5-jC6" secondAttribute="bottom" constant="20" id="phO-OC-eXB"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="shadowRadius">
+                                        <real key="value" value="3"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="shadowOpacity">
+                                        <real key="value" value="0.29999999999999999"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="shadowColor">
+                                        <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="size" keyPath="shadowOffset">
+                                        <size key="value" width="0.0" height="3"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="Yii-Ue-V4b" firstAttribute="trailing" secondItem="U6Y-KM-3Xa" secondAttribute="trailing" constant="16" id="7yR-i8-Y3T"/>
                             <constraint firstItem="omz-Nd-4J3" firstAttribute="leading" secondItem="Yii-Ue-V4b" secondAttribute="leading" constant="14" id="FlH-13-R5K"/>
+                            <constraint firstItem="U6Y-KM-3Xa" firstAttribute="leading" secondItem="Yii-Ue-V4b" secondAttribute="leading" constant="16" id="Khg-Aw-tis"/>
                             <constraint firstItem="7yK-lk-pp6" firstAttribute="top" secondItem="Yii-Ue-V4b" secondAttribute="top" constant="8" id="VbW-c3-mDJ"/>
                             <constraint firstItem="Yii-Ue-V4b" firstAttribute="trailing" secondItem="7yK-lk-pp6" secondAttribute="trailing" constant="14" id="kYX-1O-uCy"/>
+                            <constraint firstItem="Yii-Ue-V4b" firstAttribute="bottom" secondItem="U6Y-KM-3Xa" secondAttribute="bottom" constant="30" id="pjB-7l-j9C"/>
                             <constraint firstItem="omz-Nd-4J3" firstAttribute="centerY" secondItem="7yK-lk-pp6" secondAttribute="centerY" id="xuM-Oq-Ku3"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Yii-Ue-V4b"/>
@@ -660,6 +721,12 @@
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="boolean" keyPath="isHeroEnabled" value="YES"/>
                     </userDefinedRuntimeAttributes>
+                    <connections>
+                        <outlet property="authorLabel" destination="VPC-mb-fDk" id="Iqb-qh-O1k"/>
+                        <outlet property="ratingLabel" destination="W0d-YA-T0K" id="mun-rX-3MC"/>
+                        <outlet property="reviewLabel" destination="49l-d5-jC6" id="gOn-ee-JeW"/>
+                        <outlet property="reviewView" destination="U6Y-KM-3Xa" id="1KJ-bo-etb"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1lm-RG-AHt" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

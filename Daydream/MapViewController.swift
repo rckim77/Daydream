@@ -20,6 +20,10 @@ class MapViewController: UIViewController {
     var addMarkerInfoView: Bool = false
     private let networkService = NetworkService()
     
+    @IBOutlet weak var reviewView: DesignableView!
+    @IBOutlet weak var authorLabel: UILabel!
+    @IBOutlet weak var ratingLabel: UILabel!
+    @IBOutlet weak var reviewLabel: UILabel!
     @IBAction func closeBtnTapped(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
@@ -47,6 +51,7 @@ class MapViewController: UIViewController {
         super.viewDidLoad()
 
         view.hero.id = heroId
+        reviewView.alpha = 0
 
         guard let place = place else { return }
 
@@ -108,7 +113,13 @@ class MapViewController: UIViewController {
                     dynamicMarker.tracksInfoWindowChanges = false
                     self?.place = place
                     if let reviews = place.placeableReviews, !reviews.isEmpty {
-                        // TODO: show review view
+                        self?.authorLabel.text = reviews[0].author
+                        self?.ratingLabel.text = String(reviews[0].rating)
+                        self?.reviewLabel.text = reviews[0].review ?? ""
+
+                        UIView.animate(withDuration: 0.8, animations: {
+                            self?.reviewView.alpha = 1
+                        })
                     }
                 }, failure: { [weak self] error in
                     self?.logErrorEvent(error)
