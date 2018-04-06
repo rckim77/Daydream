@@ -150,11 +150,23 @@ class NetworkService {
                     return
                 }
 
-                // NOTE: Place Detail request optionally returns phone number and/or rating.
+                // NOTE: Place Detail request optionally returns phone number, rating, reviews.
                 // Documentation: https://developers.google.com/places/web-service/details
                 let formattedPhoneNumber = result["international_phone_number"]?.string
                 let rating = result["rating"]?.float
                 let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+                var reviews: [Review]?
+                if let reviewsJSON = result["reviews"]?.array {
+                    reviews = reviewsJSON.flatMap { review -> Review? in
+                        guard let dict = review.dictionary,
+                            let author = dict["author_name"]?.string,
+                            let rating = dict["rating"]?.int else { return nil }
+
+                        let review = dict["text"]?.string
+
+                        return Review(author: author, rating: rating, review: review)
+                    }
+                }
 
                 let place = Place(placeID: placeID,
                                   name: name,
@@ -162,7 +174,8 @@ class NetworkService {
                                   formattedPhoneNumber: formattedPhoneNumber,
                                   rating: rating,
                                   coordinate: coordinate,
-                                  mapUrl: mapUrl)
+                                  mapUrl: mapUrl,
+                                  reviews: reviews)
 
                 success(place)
             case .failure(let error):
