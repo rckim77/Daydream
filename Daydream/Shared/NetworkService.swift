@@ -39,6 +39,7 @@ class NetworkService {
                     }
 
                     // NOTE: A text search request doesn't return data on address, phone number, nor rating.
+                    // Documentation: https://developers.google.com/places/web-service/search
                     let coordinate = CLLocationCoordinate2D(latitude: centerLat, longitude: centerLng)
                     let viewport = Viewport(northeastLat: northeastLat,
                                             northeastLng: northeastLng,
@@ -150,6 +151,7 @@ class NetworkService {
                 }
 
                 // NOTE: Place Detail request optionally returns phone number and/or rating.
+                // Documentation: https://developers.google.com/places/web-service/details
                 let formattedPhoneNumber = result["international_phone_number"]?.string
                 let rating = result["rating"]?.float
                 let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
