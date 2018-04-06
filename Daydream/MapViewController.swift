@@ -17,12 +17,13 @@ class MapViewController: UIViewController {
     var dynamicMapView: GMSMapView?
     var dynamicMarker: GMSMarker?
     var isInNightMode: Bool = false
-    private let networkService = NetworkService()
     var addMarkerInfoView: Bool = false
-
+    private let networkService = NetworkService()
+    
     @IBAction func closeBtnTapped(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
+
     @IBAction func nightModeBtnTapped(_ sender: UIButton) {
         if isInNightMode {
             dynamicMapView?.mapStyle = nil
@@ -40,18 +41,19 @@ class MapViewController: UIViewController {
                 logErrorEvent(error)
             }
         }
-
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         view.hero.id = heroId
+
+        guard let place = place else { return }
+
         addOrUpdateMapView(with: place, getSnippetData: true)
     }
 
-    private func addOrUpdateMapView(with place: Placeable?, getSnippetData: Bool) {
-        guard let place = place else { return }
+    private func addOrUpdateMapView(with place: Placeable, getSnippetData: Bool) {
         let camera = GMSCameraPosition.camera(withLatitude: place.placeableCoordinate.latitude,
                                               longitude: place.placeableCoordinate.longitude,
                                               zoom: 16.0)
@@ -105,6 +107,9 @@ class MapViewController: UIViewController {
                     dynamicMarker.snippet = self?.createSnippet(for: place)
                     dynamicMarker.tracksInfoWindowChanges = false
                     self?.place = place
+                    if let reviews = place.placeableReviews, !reviews.isEmpty {
+                        // TODO: show review view
+                    }
                 }, failure: { [weak self] error in
                     self?.logErrorEvent(error)
                 })

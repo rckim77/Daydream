@@ -87,7 +87,7 @@
                     </connections>
                 </searchDisplayController>
             </objects>
-            <point key="canvasLocation" x="140" y="133.00492610837438"/>
+            <point key="canvasLocation" x="238" y="31"/>
         </scene>
         <!--Search Detail View Controller-->
         <scene sceneID="Zbz-uR-xUS">
@@ -615,7 +615,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hOa-Hv-SgJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="903.20000000000005" y="131.52709359605913"/>
+            <point key="canvasLocation" x="1086" y="31"/>
         </scene>
         <!--Map View Controller-->
         <scene sceneID="Wgs-uz-Bis">
@@ -663,7 +663,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1lm-RG-AHt" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1674.375" y="130.98591549295776"/>
+            <point key="canvasLocation" x="1910.625" y="30.633802816901408"/>
         </scene>
     </scenes>
     <resources>

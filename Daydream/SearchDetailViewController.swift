@@ -151,10 +151,10 @@ class SearchDetailViewController: UIViewController {
 
     // MARK: - Segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let destinationVC = segue.destination as? MapViewController {
-            // segue from Top Sights or Top Eateries cell
+        if let destinationVC = segue.destination as? MapViewController, let sender = sender as? Placeable {
+            // segue from Top Sights cell
             if segue.identifier == "genericMapSegue" {
-                destinationVC.place = sender as? Placeable
+                destinationVC.place = sender
                 destinationVC.heroId = "pointOfInterestCard"
                 destinationVC.addMarkerInfoView = true
             }
