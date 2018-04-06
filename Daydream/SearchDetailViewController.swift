@@ -68,7 +68,8 @@ class SearchDetailViewController: UIViewController {
             strongSelf.loadContent(for: place, reloadMapCard: true)
         }, failure: { [weak self] error in
             SVProgressHUD.dismiss()
-            self?.logErrorEvent(error)
+            guard let strongSelf = self else { return }
+            strongSelf.logErrorEvent(error)
         })
     }
 
@@ -105,13 +106,13 @@ class SearchDetailViewController: UIViewController {
         networkService.loadPhoto(with: place.placeableId, success: { [weak self] photo in
             guard let strongSelf = self else { return }
             strongSelf.placeImageView.subviews.forEach { $0.removeFromSuperview() }
-
             strongSelf.placeImageView.image = photo
             strongSelf.placeImageView.contentMode = .scaleAspectFill    
             strongSelf.placeImageView.addSubview(strongSelf.visualEffectView)
 
         }, failure: { [weak self] error in
-            self?.logErrorEvent(error)
+            guard let strongSelf = self else { return }
+            strongSelf.logErrorEvent(error)
         })
 
         networkService.loadTopSights(with: place, success: { [weak self] pointsOfInterest in
@@ -119,7 +120,8 @@ class SearchDetailViewController: UIViewController {
             strongSelf.pointsOfInterest = pointsOfInterest
             strongSelf.placeCardsTableView.reloadRows(at: [strongSelf.sightsCardCellIndexPath], with: .fade)
         }, failure: { [weak self] error in
-            self?.logErrorEvent(error)
+            guard let strongSelf = self else { return }
+            strongSelf.logErrorEvent(error)
         })
 
         networkService.loadTopEateries(with: place, success: { [weak self] eateries in
@@ -127,7 +129,8 @@ class SearchDetailViewController: UIViewController {
             strongSelf.eateries = eateries
             strongSelf.placeCardsTableView.reloadRows(at: [strongSelf.eateriesCardCellIndexPath], with: .fade)
         }, failure: { [weak self] error in
-            self?.logErrorEvent(error)
+            guard let strongSelf = self else { return }
+            strongSelf.logErrorEvent(error)
         })
 
         if reloadMapCard {
@@ -213,6 +216,25 @@ extension SearchDetailViewController: UITableViewDataSource, UITableViewDelegate
             return UITableViewCell()
         }
     }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.row == 0 {
+            logEvent(contentType: "select map card cell")
+            guard let place = placeData else { return }
+
+            if let mapUrl = place.placeableMapUrl {
+                openUrl(mapUrl)
+            } else {
+                NetworkService().getPlace(with: place.placeableId, success: { [weak self] place in
+                    guard let strongSelf = self, let mapUrl = place.placeableMapUrl else { return }
+                    strongSelf.openUrl(mapUrl)
+                }, failure: { [weak self] error in
+                    guard let strongSelf = self else { return }
+                    strongSelf.logErrorEvent(error)
+                })
+            }
+        }
+    }
 }
 
 // MARK: - GooglePlaces Autocomplete methods
@@ -255,10 +277,7 @@ extension SearchDetailViewController: SightsCardCellDelegate {
 extension SearchDetailViewController: EateriesCardCellDelegate {
     func didSelectEatery(_ eatery: Eatery) {
         logEvent(contentType: "select eatery")
-
-        if let url = URL(string: eatery.url) {
-            UIApplication.shared.open(url, options: [:])
-        }
+        openUrl(eatery.url)
     }
 }
 

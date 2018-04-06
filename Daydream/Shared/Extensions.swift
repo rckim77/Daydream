@@ -126,6 +126,11 @@ extension UIViewController {
             "Error": String(describing: error)
         ])
     }
+
+    func openUrl(_ url: String) {
+        guard let url = URL(string: url) else { return }
+        UIApplication.shared.open(url, options: [:])
+    }
 }
 
 @IBDesignable
