@@ -156,7 +156,6 @@ class SearchDetailViewController: UIViewController {
             if segue.identifier == "genericMapSegue" {
                 destinationVC.place = sender
                 destinationVC.heroId = "pointOfInterestCard"
-                destinationVC.addMarkerInfoView = true
             }
         }
     }

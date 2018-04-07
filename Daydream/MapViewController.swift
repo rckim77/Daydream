@@ -17,7 +17,6 @@ class MapViewController: UIViewController {
     var dynamicMapView: GMSMapView?
     var dynamicMarker: GMSMarker?
     var isInNightMode: Bool = false
-    var addMarkerInfoView: Bool = false
     private let networkService = NetworkService()
     
     @IBOutlet weak var reviewView: DesignableView!
@@ -30,7 +29,6 @@ class MapViewController: UIViewController {
     @IBOutlet weak var star5: UIImageView!
     
     @IBAction func closeBtnTapped(_ sender: Any) {
-        stopDisplayingReviews()
         dismiss(animated: true, completion: nil)
     }
 
@@ -62,7 +60,7 @@ class MapViewController: UIViewController {
 
         guard let place = place else { return }
 
-        addOrUpdateMapView(with: place)
+        addOrUpdateMapView(for: place.placeableId, name: place.placeableName, location: place.placeableCoordinate)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -70,16 +68,16 @@ class MapViewController: UIViewController {
         stopDisplayingReviews()
     }
 
-    private func addOrUpdateMapView(with place: Placeable) {
-        let camera = GMSCameraPosition.camera(withLatitude: place.placeableCoordinate.latitude,
-                                              longitude: place.placeableCoordinate.longitude,
+    private func addOrUpdateMapView(for placeId: String, name: String, location: CLLocationCoordinate2D) {
+        let camera = GMSCameraPosition.camera(withLatitude: location.latitude,
+                                              longitude: location.longitude,
                                               zoom: 16.0)
 
         if let dynamicMapView = dynamicMapView {
             dynamicMapView.animate(to: camera)
-            addOrUpdateMarkerAndReviews(for: place.placeableId,
-                                        name: place.placeableName,
-                                        location: place.placeableCoordinate,
+            addOrUpdateMarkerAndReviews(for: placeId,
+                                        name: name,
+                                        location: location,
                                         in: dynamicMapView)
         } else {
             let frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
@@ -91,9 +89,9 @@ class MapViewController: UIViewController {
             dynamicMapView.delegate = self
             view.addSubview(dynamicMapView)
             view.sendSubview(toBack: dynamicMapView)
-            addOrUpdateMarkerAndReviews(for: place.placeableId,
-                                        name: place.placeableName,
-                                        location: place.placeableCoordinate,
+            addOrUpdateMarkerAndReviews(for: placeId,
+                                        name: name,
+                                        location: location,
                                         in: dynamicMapView)
         }
     }
@@ -197,7 +195,7 @@ class MapViewController: UIViewController {
 
 extension MapViewController: GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, didTapPOIWithPlaceID placeID: String, name: String, location: CLLocationCoordinate2D) {
-        addOrUpdateMarkerAndReviews(for: placeID, name: name, location: location, in: mapView)
+        addOrUpdateMapView(for: placeID, name: name, location: location)
     }
 
     func mapView(_ mapView: GMSMapView, didTapInfoWindowOf marker: GMSMarker) {
