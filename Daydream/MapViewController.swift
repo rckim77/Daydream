@@ -144,15 +144,14 @@ class MapViewController: UIViewController {
 
     private func displayReviews(_ reviews: [Reviewable]?) {
         guard let reviews = reviews, !reviews.isEmpty else { return }
-
-        stopDisplayingReviews()
+        loadReviewContent(reviews[0])
         reviewView.isHidden = false
         reviewView.alpha = 1
-        startDisplayingReviews(reviews, index: 0)
+        startDisplayingReviews(reviews, index: 1)
     }
 
     private func startDisplayingReviews(_ reviews: [Reviewable], index: Int) {
-        if index != reviews.count - 1 {
+        if index < reviews.count - 1 {
             UIView.animate(withDuration: 0.8, animations: {
                 self.reviewView.subviews.forEach { $0.alpha = 1 }
             }, completion: { _ in
@@ -173,6 +172,7 @@ class MapViewController: UIViewController {
     }
 
     private func stopDisplayingReviews() {
+        reviewView.subviews.forEach { $0.layer.removeAllAnimations() }
         reviewView.layer.removeAllAnimations()
         reviewView.alpha = 0
         reviewView.isHidden = true
@@ -180,21 +180,20 @@ class MapViewController: UIViewController {
 
     private func loadReviewContent(_ review: Reviewable) {
         authorLabel.text = review.author
-        displayStars(review.rating)
-        reviewLabel.text = review.review ?? ""
-    }
 
-    private func displayStars(_ rating: Int) {
         let stars: [UIImageView] = [star5, star4, star3, star2, star1]
-
-        for i in 0..<rating {
+        for i in 0..<review.rating {
             stars[i].image = #imageLiteral(resourceName: "filledStarIcon")
         }
+
+        reviewLabel.text = review.review ?? ""
     }
 }
 
 extension MapViewController: GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, didTapPOIWithPlaceID placeID: String, name: String, location: CLLocationCoordinate2D) {
+        logEvent(contentType: "tapped POI on map")
+        stopDisplayingReviews()
         addOrUpdateMapView(for: placeID, name: name, location: location)
     }
 
