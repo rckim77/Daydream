@@ -108,7 +108,6 @@ class SearchViewController: UIViewController {
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destinationVC = segue.destination as? SearchDetailViewController {
-            // pass data
             destinationVC.placeData = placeData
         }
     }

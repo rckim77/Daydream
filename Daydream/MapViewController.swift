@@ -75,10 +75,7 @@ class MapViewController: UIViewController {
 
         if let dynamicMapView = dynamicMapView {
             dynamicMapView.animate(to: camera)
-            addOrUpdateMarkerAndReviews(for: placeId,
-                                        name: name,
-                                        location: location,
-                                        in: dynamicMapView)
+            addOrUpdateMarkerAndReviews(for: placeId, name: name, location: location, in: dynamicMapView)
         } else {
             let frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
             let mapViewNew = GMSMapView.map(withFrame: frame, camera: camera)
@@ -89,10 +86,7 @@ class MapViewController: UIViewController {
             dynamicMapView.delegate = self
             view.addSubview(dynamicMapView)
             view.sendSubview(toBack: dynamicMapView)
-            addOrUpdateMarkerAndReviews(for: placeId,
-                                        name: name,
-                                        location: location,
-                                        in: dynamicMapView)
+            addOrUpdateMarkerAndReviews(for: placeId, name: name, location: location, in: dynamicMapView)
         }
     }
 
@@ -196,13 +190,13 @@ class MapViewController: UIViewController {
 
 extension MapViewController: GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, didTapPOIWithPlaceID placeID: String, name: String, location: CLLocationCoordinate2D) {
-        logEvent(contentType: "tapped POI on map")
+        logEvent(contentType: "POI on map tapped")
         stopDisplayingReviews()
         addOrUpdateMapView(for: placeID, name: name, location: location)
     }
 
     func mapView(_ mapView: GMSMapView, didTapInfoWindowOf marker: GMSMarker) {
-        logEvent(contentType: "tapped info window on map")
+        logEvent(contentType: "info window on marker tapped")
         if let mapUrl = place?.placeableMapUrl, let url = URL(string: mapUrl) {
             UIApplication.shared.open(url, options: [:])
         }

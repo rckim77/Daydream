@@ -29,6 +29,7 @@ class SearchDetailViewController: UIViewController {
         visualEffectView.frame = placeImageView.bounds
         return visualEffectView
     }
+    private let networkService = NetworkService()
     private let summaryCardCellHeight: CGFloat = 190
     private let mapCardCellHeight: CGFloat = 190
     private let mapCardCellIndexPath = IndexPath(row: 0, section: 0)
@@ -51,12 +52,12 @@ class SearchDetailViewController: UIViewController {
 
     // MARK: - IBActions
     @IBAction func homeBtnTapped(_ sender: UIButton) {
-        logEvent(contentType: "home button")
+        logEvent(contentType: "home button tapped")
         dismiss(animated: true, completion: nil)
     }
 
     @IBAction func randomCityBtnTapped(_ sender: UIButton) {
-        logEvent(contentType: "random button")
+        logEvent(contentType: "random button tapped")
         guard let randomCity = getRandomCity() else { return }
         SVProgressHUD.show()
         
@@ -100,8 +101,6 @@ class SearchDetailViewController: UIViewController {
         guard let place = place else { return }
 
         titleLabel.text = place.placeableName
-
-        let networkService = NetworkService()
 
         networkService.loadPhoto(with: place.placeableId, success: { [weak self] photo in
             guard let strongSelf = self else { return }
@@ -224,7 +223,7 @@ extension SearchDetailViewController: UITableViewDataSource, UITableViewDelegate
             if let mapUrl = place.placeableMapUrl {
                 openUrl(mapUrl)
             } else {
-                NetworkService().getPlace(with: place.placeableId, success: { [weak self] place in
+                networkService.getPlace(with: place.placeableId, success: { [weak self] place in
                     guard let strongSelf = self, let mapUrl = place.placeableMapUrl else { return }
                     strongSelf.openUrl(mapUrl)
                 }, failure: { [weak self] error in
