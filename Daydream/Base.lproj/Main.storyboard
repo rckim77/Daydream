@@ -702,6 +702,7 @@
                                     </imageView>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <gestureRecognizers/>
                                 <constraints>
                                     <constraint firstItem="RLy-iB-pdI" firstAttribute="centerY" secondItem="dXN-uh-XdC" secondAttribute="centerY" id="0ms-1F-4xE"/>
                                     <constraint firstAttribute="trailing" secondItem="W7M-DE-JsB" secondAttribute="trailing" constant="16" id="3mf-cB-VTz"/>
@@ -739,6 +740,9 @@
                                         <size key="value" width="0.0" height="3"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="FCW-7U-jyB" appends="YES" id="zDt-6K-7Hd"/>
+                                </connections>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -768,6 +772,11 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1lm-RG-AHt" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="FCW-7U-jyB">
+                    <connections>
+                        <action selector="reviewViewTapped:" destination="CGg-aC-4y8" id="fr9-tt-zQv"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1910.625" y="30.633802816901408"/>
         </scene>

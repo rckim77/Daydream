@@ -16,6 +16,8 @@ class MapViewController: UIViewController {
     var heroId: String?
     var dynamicMapView: GMSMapView?
     var dynamicMarker: GMSMarker?
+    var currentReviews: [Reviewable]?
+    var currentReviewIndex: Int = 0
     var isInNightMode: Bool = false
     private let networkService = NetworkService()
     
@@ -51,6 +53,11 @@ class MapViewController: UIViewController {
         }
     }
 
+    @IBAction func reviewViewTapped(_ sender: UITapGestureRecognizer) {
+        guard let reviews = currentReviews, let authorUrl = reviews[currentReviewIndex].authorUrl else { return }
+        openUrl(authorUrl)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -59,6 +66,15 @@ class MapViewController: UIViewController {
         reviewView.isHidden = true
 
         guard let place = place else { return }
+
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(stopDisplayingReviews),
+                                               name: .UIApplicationDidEnterBackground,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(restartDisplayingCurrentReviews),
+                                               name: .UIApplicationWillEnterForeground,
+                                               object: nil)
 
         addOrUpdateMapView(for: place.placeableId, name: place.placeableName, location: place.placeableCoordinate)
     }
@@ -116,11 +132,13 @@ class MapViewController: UIViewController {
             dynamicMarker.snippet = self?.createSnippet(for: place)
             dynamicMarker.tracksInfoWindowChanges = false
             self?.place = place
-            self?.displayReviews(place.placeableReviews)
+            self?.displayReviews(place.placeableReviews, index: 0)
         }, failure: { [weak self] error in
             self?.logErrorEvent(error)
         })
     }
+
+    // MARK: - Marker-specific methods
 
     private func createSnippet(for place: Placeable) -> String {
         var snippet = ""
@@ -136,12 +154,16 @@ class MapViewController: UIViewController {
         return snippet
     }
 
-    private func displayReviews(_ reviews: [Reviewable]?) {
+    // MARK: - Review-specific methods
+
+    private func displayReviews(_ reviews: [Reviewable]?, index: Int) {
         guard let reviews = reviews, !reviews.isEmpty else { return }
-        loadReviewContent(reviews[0])
+        currentReviews = reviews
+        currentReviewIndex = index
+        loadReviewContent(reviews[index])
         reviewView.isHidden = false
         reviewView.alpha = 1
-        startDisplayingReviews(reviews, index: 1)
+        startDisplayingReviews(reviews, index: index + 1)
     }
 
     private func startDisplayingReviews(_ reviews: [Reviewable], index: Int) {
@@ -154,6 +176,7 @@ class MapViewController: UIViewController {
                         self.reviewView.subviews.forEach { $0.alpha = 0 }
                     }, completion: { finished in
                         if finished {
+                            self.currentReviewIndex = index
                             self.loadReviewContent(reviews[index])
                             self.startDisplayingReviews(reviews, index: index + 1)
                         }
@@ -169,6 +192,13 @@ class MapViewController: UIViewController {
         }
     }
 
+    @objc
+    private func restartDisplayingCurrentReviews() {
+        guard let reviews = currentReviews else { return }
+        displayReviews(reviews, index: currentReviewIndex)
+    }
+
+    @objc
     private func stopDisplayingReviews() {
         reviewView.subviews.forEach { $0.layer.removeAllAnimations() }
         reviewView.layer.removeAllAnimations()

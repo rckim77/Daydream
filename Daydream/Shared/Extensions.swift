@@ -50,7 +50,6 @@ extension GMSPlace: Placeable {
     var placeableReviews: [Reviewable]? {
         return nil
     }
-
 }
 
 extension UIColor {

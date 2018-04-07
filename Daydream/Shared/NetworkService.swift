@@ -163,8 +163,9 @@ class NetworkService {
                             let rating = dict["rating"]?.int else { return nil }
 
                         let review = dict["text"]?.string
+                        let authorUrl = dict["author_url"]?.string
 
-                        return Review(author: author, rating: rating, review: review)
+                        return Review(author: author, rating: rating, review: review, authorUrl: authorUrl)
                     }
                 }
 
