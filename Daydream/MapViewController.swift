@@ -154,13 +154,17 @@ class MapViewController: UIViewController {
         if index < reviews.count - 1 {
             UIView.animate(withDuration: 0.8, animations: {
                 self.reviewView.subviews.forEach { $0.alpha = 1 }
-            }, completion: { _ in
-                UIView.animate(withDuration: 0.8, delay: 4, animations: {
-                    self.reviewView.subviews.forEach { $0.alpha = 0 }
-                }, completion: { _ in
-                    self.loadReviewContent(reviews[index])
-                    self.startDisplayingReviews(reviews, index: index + 1)
-                })
+            }, completion: { finished in
+                if finished {
+                    UIView.animate(withDuration: 0.8, delay: 4, animations: {
+                        self.reviewView.subviews.forEach { $0.alpha = 0 }
+                    }, completion: { finished in
+                        if finished {
+                            self.loadReviewContent(reviews[index])
+                            self.startDisplayingReviews(reviews, index: index + 1)
+                        }
+                    })
+                }
             })
         } else {
             UIView.animate(withDuration: 0.8, animations: {
