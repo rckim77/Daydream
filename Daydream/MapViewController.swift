@@ -56,7 +56,8 @@ class MapViewController: UIViewController {
         super.viewDidLoad()
 
         view.hero.id = heroId
-        reviewView.alpha = 0
+
+        reviewView.isHidden = true
 
         guard let place = place else { return }
 
@@ -118,13 +119,9 @@ class MapViewController: UIViewController {
                     dynamicMarker.tracksInfoWindowChanges = false
                     self?.place = place
                     if let reviews = place.placeableReviews, !reviews.isEmpty {
-                        self?.authorLabel.text = reviews[0].author
-                        self?.displayStars(reviews[0].rating)
-                        self?.reviewLabel.text = reviews[0].review ?? ""
-
-                        UIView.animate(withDuration: 0.8, animations: {
-                            self?.reviewView.alpha = 1
-                        })
+                        self?.reviewView.isHidden = false
+                        self?.reviewView.alpha = 1
+                        self?.startDisplayingReviews(reviews, index: 0)
                     }
                 }, failure: { [weak self] error in
                     self?.logErrorEvent(error)
@@ -152,6 +149,33 @@ class MapViewController: UIViewController {
         }
 
         return snippet
+    }
+
+    private func startDisplayingReviews(_ reviews: [Reviewable], index: Int) {
+        if index != reviews.count - 1 {
+            UIView.animate(withDuration: 0.8, animations: {
+                self.reviewView.subviews.forEach { $0.alpha = 1 }
+            }, completion: { _ in
+                UIView.animate(withDuration: 0.8, delay: 4, animations: {
+                    self.reviewView.subviews.forEach { $0.alpha = 0 }
+                }, completion: { _ in
+                    self.loadReviewContent(reviews[index])
+                    self.startDisplayingReviews(reviews, index: index + 1)
+                })
+            })
+        } else {
+            UIView.animate(withDuration: 0.8, animations: {
+                self.reviewView.alpha = 0
+            }, completion: { _ in
+                self.reviewView.isHidden = true
+            })
+        }
+    }
+
+    private func loadReviewContent(_ review: Reviewable) {
+        authorLabel.text = review.author
+        displayStars(review.rating)
+        reviewLabel.text = review.review ?? ""
     }
 
     private func displayStars(_ rating: Int) {
