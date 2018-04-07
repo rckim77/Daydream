@@ -648,7 +648,7 @@
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="U6Y-KM-3Xa" customClass="DesignableView" customModule="Daydream" customModuleProvider="target">
-                                <rect key="frame" x="16" y="388" width="288" height="150"/>
+                                <rect key="frame" x="16" y="378" width="288" height="160"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="John Carpenter" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.75" translatesAutoresizingMaskIntoConstraints="NO" id="VPC-mb-fDk">
                                         <rect key="frame" x="16" y="16" width="122.5" height="21"/>
@@ -660,7 +660,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Review text text text text text text text text text text text text text text text text text text" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.84999999999999998" translatesAutoresizingMaskIntoConstraints="NO" id="49l-d5-jC6">
-                                        <rect key="frame" x="16" y="49" width="256" height="85"/>
+                                        <rect key="frame" x="16" y="49" width="256" height="95"/>
                                         <fontDescription key="fontDescription" name=".SFNSText" family=".SF NS Text" pointSize="16"/>
                                         <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -713,7 +713,7 @@
                                     <constraint firstItem="RLy-iB-pdI" firstAttribute="leading" secondItem="sc6-mr-3yo" secondAttribute="trailing" constant="2" id="M1b-o7-iLj"/>
                                     <constraint firstItem="dXN-uh-XdC" firstAttribute="centerY" secondItem="W7M-DE-JsB" secondAttribute="centerY" id="MzM-NW-4AM"/>
                                     <constraint firstAttribute="trailing" secondItem="49l-d5-jC6" secondAttribute="trailing" constant="16" id="Ruz-bj-bFG"/>
-                                    <constraint firstAttribute="height" constant="150" id="SQn-eh-naR"/>
+                                    <constraint firstAttribute="height" constant="160" id="SQn-eh-naR"/>
                                     <constraint firstItem="sc6-mr-3yo" firstAttribute="centerY" secondItem="RLy-iB-pdI" secondAttribute="centerY" id="bXt-JO-zVv"/>
                                     <constraint firstItem="W7M-DE-JsB" firstAttribute="leading" secondItem="dXN-uh-XdC" secondAttribute="trailing" constant="2" id="fhL-Kh-XlZ"/>
                                     <constraint firstItem="W7M-DE-JsB" firstAttribute="centerY" secondItem="VPC-mb-fDk" secondAttribute="centerY" id="ha6-jU-GNf"/>
