@@ -30,6 +30,7 @@ class MapViewController: UIViewController {
     @IBOutlet weak var star5: UIImageView!
     
     @IBAction func closeBtnTapped(_ sender: Any) {
+        stopDisplayingReviews()
         dismiss(animated: true, completion: nil)
     }
 
@@ -61,16 +62,25 @@ class MapViewController: UIViewController {
 
         guard let place = place else { return }
 
-        addOrUpdateMapView(with: place, getSnippetData: true)
+        addOrUpdateMapView(with: place)
     }
 
-    private func addOrUpdateMapView(with place: Placeable, getSnippetData: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        stopDisplayingReviews()
+    }
+
+    private func addOrUpdateMapView(with place: Placeable) {
         let camera = GMSCameraPosition.camera(withLatitude: place.placeableCoordinate.latitude,
                                               longitude: place.placeableCoordinate.longitude,
                                               zoom: 16.0)
 
         if let dynamicMapView = dynamicMapView {
             dynamicMapView.animate(to: camera)
+            addOrUpdateMarkerAndReviews(for: place.placeableId,
+                                        name: place.placeableName,
+                                        location: place.placeableCoordinate,
+                                        in: dynamicMapView)
         } else {
             let frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
             let mapViewNew = GMSMapView.map(withFrame: frame, camera: camera)
@@ -81,56 +91,43 @@ class MapViewController: UIViewController {
             dynamicMapView.delegate = self
             view.addSubview(dynamicMapView)
             view.sendSubview(toBack: dynamicMapView)
+            addOrUpdateMarkerAndReviews(for: place.placeableId,
+                                        name: place.placeableName,
+                                        location: place.placeableCoordinate,
+                                        in: dynamicMapView)
         }
-
-        addOrUpdateMarker(with: place, addMarkerInfoView: addMarkerInfoView, getSnippetData: getSnippetData)
     }
 
-    private func addOrUpdateMarker(with place: Placeable, addMarkerInfoView: Bool = false, getSnippetData: Bool = false) {
-        guard let mapView = dynamicMapView else { return }
-
-        let position = CLLocationCoordinate2D(latitude: place.placeableCoordinate.latitude, longitude: place.placeableCoordinate.longitude)
-
+    private func addOrUpdateMarkerAndReviews(for placeId: String, name: String, location: CLLocationCoordinate2D, in mapView: GMSMapView) {
         if let marker = dynamicMarker {
             marker.map = nil // clears prev marker
-            marker.title = place.placeableName
+            marker.title = name
             marker.map = mapView
-            marker.position = position
+            marker.position = location
         } else {
             let marker = GMSMarker()
             marker.appearAnimation = .pop
-            marker.title = place.placeableName
+            marker.title = name
             marker.map = mapView
-            marker.position = position
+            marker.position = location
 
             dynamicMarker = marker
         }
 
         guard let dynamicMarker = dynamicMarker else { return }
 
-        if addMarkerInfoView {
-            mapView.selectedMarker = dynamicMarker
-            if getSnippetData {
-                dynamicMarker.tracksInfoWindowChanges = true
-                dynamicMarker.snippet = "Loading..."
+        mapView.selectedMarker = dynamicMarker
 
-                networkService.getPlace(with: place.placeableId, success: { [weak self] place in
-                    dynamicMarker.snippet = self?.createSnippet(for: place)
-                    dynamicMarker.tracksInfoWindowChanges = false
-                    self?.place = place
-                    if let reviews = place.placeableReviews, !reviews.isEmpty {
-                        self?.reviewView.isHidden = false
-                        self?.reviewView.alpha = 1
-                        self?.startDisplayingReviews(reviews, index: 0)
-                    }
-                }, failure: { [weak self] error in
-                    self?.logErrorEvent(error)
-                })
-            } else {
-                dynamicMarker.snippet = createSnippet(for: place)
-            }
-        }
+        dynamicMarker.tracksInfoWindowChanges = true
 
+        networkService.getPlace(with: placeId, success: { [weak self] place in
+            dynamicMarker.snippet = self?.createSnippet(for: place)
+            dynamicMarker.tracksInfoWindowChanges = false
+            self?.place = place
+            self?.displayReviews(place.placeableReviews)
+        }, failure: { [weak self] error in
+            self?.logErrorEvent(error)
+        })
     }
 
     private func createSnippet(for place: Placeable) -> String {
@@ -144,11 +141,16 @@ class MapViewController: UIViewController {
             snippet += "\n\(phoneNumber)"
         }
 
-        if let rating = place.placeableRating {
-            snippet += "\nRating: \(rating)"
-        }
-
         return snippet
+    }
+
+    private func displayReviews(_ reviews: [Reviewable]?) {
+        guard let reviews = reviews, !reviews.isEmpty else { return }
+
+        stopDisplayingReviews()
+        reviewView.isHidden = false
+        reviewView.alpha = 1
+        startDisplayingReviews(reviews, index: 0)
     }
 
     private func startDisplayingReviews(_ reviews: [Reviewable], index: Int) {
@@ -172,6 +174,12 @@ class MapViewController: UIViewController {
         }
     }
 
+    private func stopDisplayingReviews() {
+        reviewView.layer.removeAllAnimations()
+        reviewView.alpha = 0
+        reviewView.isHidden = true
+    }
+
     private func loadReviewContent(_ review: Reviewable) {
         authorLabel.text = review.author
         displayStars(review.rating)
@@ -189,12 +197,7 @@ class MapViewController: UIViewController {
 
 extension MapViewController: GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, didTapPOIWithPlaceID placeID: String, name: String, location: CLLocationCoordinate2D) {
-        networkService.getPlace(with: placeID, success: { [weak self] place in
-            self?.addOrUpdateMapView(with: place, getSnippetData: false)
-            self?.place = place
-        }, failure: { [weak self] error in
-            self?.logErrorEvent(error)
-        })
+        addOrUpdateMarkerAndReviews(for: placeID, name: name, location: location, in: mapView)
     }
 
     func mapView(_ mapView: GMSMapView, didTapInfoWindowOf marker: GMSMarker) {

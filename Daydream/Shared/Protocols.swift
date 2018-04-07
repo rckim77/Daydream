@@ -19,6 +19,7 @@ protocol Placeable: class {
     var placeableCoordinate: CLLocationCoordinate2D { get }
     var placeableViewport: Viewport? { get }
     var placeableMapUrl: String? { get }
+    var placeableReviews: [Reviewable]? { get }
 }
 
 protocol Reviewable: class {
