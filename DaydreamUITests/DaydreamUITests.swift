@@ -12,10 +12,7 @@ class DaydreamUITests: XCTestCase {
         
     override func setUp() {
         super.setUp()
-        
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-        
-        // In UI tests it is usually best to stop immediately when a failure occurs.
+
         continueAfterFailure = false
 
         let app = XCUIApplication()
@@ -24,7 +21,6 @@ class DaydreamUITests: XCTestCase {
     }
     
     override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
     
@@ -35,17 +31,32 @@ class DaydreamUITests: XCTestCase {
         snapshot("01SearchVC")
 
         let searchField = app.searchFields["e.g., Tokyo"]
+
         searchField.tap()
 
-        snapshot("02AutocorrectVC")
+        sleep(2)
 
         searchField.typeText("tokyo")
+
+        snapshot("02AutocorrectVC")
 
         app/*@START_MENU_TOKEN@*/.tables["Search results"].staticTexts["Tokyo"]/*[[".otherElements[\"Double-tap to dismiss\"].tables[\"Search results\"]",".cells.staticTexts[\"Tokyo\"]",".staticTexts[\"Tokyo\"]",".tables[\"Search results\"]"],[[[-1,3,1],[-1,0,1]],[[-1,2],[-1,1]]],[0,0]]@END_MENU_TOKEN@*/.tap()
 
         sleep(4)
 
         snapshot("03SearchDetailVC")
+
+        app.tables/*@START_MENU_TOKEN@*/.otherElements["poi1Card"]/*[[".cells.otherElements[\"poi1Card\"]",".otherElements[\"poi1Card\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+
+        sleep(4)
+
+        snapshot("04MapVC")
+
+        app.buttons["nightIcon"].tap()
+
+        sleep(2)
+
+        snapshot("05MapVCDark")
     }
     
 }

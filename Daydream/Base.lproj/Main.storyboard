@@ -196,6 +196,9 @@
                                                                 </label>
                                                             </subviews>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <accessibility key="accessibilityConfiguration" identifier="poi1Card">
+                                                                <bool key="isElement" value="YES"/>
+                                                            </accessibility>
                                                             <gestureRecognizers/>
                                                             <constraints>
                                                                 <constraint firstAttribute="bottom" secondItem="yHN-6d-7DC" secondAttribute="bottom" constant="16" id="bnj-gm-jrb"/>
@@ -223,6 +226,9 @@
                                                                 </label>
                                                             </subviews>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <accessibility key="accessibilityConfiguration" identifier="poi2Card">
+                                                                <bool key="isElement" value="YES"/>
+                                                            </accessibility>
                                                             <constraints>
                                                                 <constraint firstItem="1VR-CS-te4" firstAttribute="leading" secondItem="cCe-zg-RYa" secondAttribute="leading" id="4KI-cS-N9R"/>
                                                                 <constraint firstAttribute="bottom" secondItem="ezb-Nw-YUk" secondAttribute="bottom" constant="16" id="A4B-gw-enK"/>
@@ -249,6 +255,9 @@
                                                                 </label>
                                                             </subviews>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <accessibility key="accessibilityConfiguration" identifier="poi3Card">
+                                                                <bool key="isElement" value="YES"/>
+                                                            </accessibility>
                                                             <constraints>
                                                                 <constraint firstAttribute="trailing" secondItem="P01-u6-tgK" secondAttribute="trailing" id="4qG-yc-fKF"/>
                                                                 <constraint firstAttribute="bottom" secondItem="4Ot-hh-287" secondAttribute="bottom" constant="16" id="BQy-V7-Lpj"/>
@@ -367,6 +376,9 @@
                                                                 </label>
                                                             </subviews>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <accessibility key="accessibilityConfiguration" identifier="eatery1Card">
+                                                                <bool key="isElement" value="YES"/>
+                                                            </accessibility>
                                                             <constraints>
                                                                 <constraint firstAttribute="bottom" secondItem="fWx-Dg-Obi" secondAttribute="bottom" id="9r8-pQ-ctT"/>
                                                                 <constraint firstAttribute="trailing" secondItem="hMl-U2-MRA" secondAttribute="trailing" constant="16" id="GkG-j3-RMF"/>
@@ -393,6 +405,9 @@
                                                                 </label>
                                                             </subviews>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <accessibility key="accessibilityConfiguration" identifier="eatery2Card">
+                                                                <bool key="isElement" value="YES"/>
+                                                            </accessibility>
                                                             <constraints>
                                                                 <constraint firstItem="T2T-CZ-Lqm" firstAttribute="top" secondItem="qCj-Lu-ZCV" secondAttribute="top" id="0c9-Fg-su6"/>
                                                                 <constraint firstItem="T2T-CZ-Lqm" firstAttribute="leading" secondItem="qCj-Lu-ZCV" secondAttribute="leading" id="IOp-B3-FTj"/>
@@ -419,6 +434,9 @@
                                                                 </label>
                                                             </subviews>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <accessibility key="accessibilityConfiguration" identifier="eatery3Card">
+                                                                <bool key="isElement" value="YES"/>
+                                                            </accessibility>
                                                             <constraints>
                                                                 <constraint firstAttribute="bottom" secondItem="Lqu-VO-YGn" secondAttribute="bottom" constant="16" id="113-HV-HD3"/>
                                                                 <constraint firstAttribute="trailing" secondItem="vYf-LJ-afM" secondAttribute="trailing" id="81c-bJ-ere"/>
