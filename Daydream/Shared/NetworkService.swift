@@ -201,7 +201,6 @@ class NetworkService {
                 guard let query = json["query"]["pages"].dictionary, let pageIdKey = query.keys.first,
                     let extract = query[pageIdKey]?["extract"].string else { return }
 
-                // TODO: parse extract to capture the first few sentences
                 success(extract)
             case .failure(let error):
                 failure(error)

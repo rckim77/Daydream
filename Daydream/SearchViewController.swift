@@ -30,7 +30,7 @@ class SearchViewController: UIViewController {
     }
 
     @IBAction func randomBtnTapped(_ sender: Any) {
-        logEvent(contentType: "random button")
+        logEvent(contentType: "random button tapped")
         guard let randomCity = getRandomCity() else { return }
 
         SVProgressHUD.show()
