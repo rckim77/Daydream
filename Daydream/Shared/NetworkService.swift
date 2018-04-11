@@ -12,6 +12,29 @@ import SwiftyJSON
 
 class NetworkService {
 
+    func loadSightsAndEateries(with place: Placeable,
+                               success: @escaping(_ pointsOfInterest: [Placeable], _ eateries: [Eatery]?) -> Void,
+                               failure: @escaping(_ error: Error?) -> Void) {
+        var sights: [Placeable] = []
+
+        loadTopSights(with: place, success: { [weak self] pointsOfInterest in
+            guard let strongSelf = self else {
+                failure(nil)
+                return
+            }
+
+            sights = pointsOfInterest
+
+            strongSelf.loadTopEateries(with: place, success: { eateries in
+                success(sights, eateries)
+            }, failure: { error in
+                failure(error)
+            })
+        }, failure: { error in
+            failure(error)
+        })
+    }
+
     func loadTopSights(with place: Placeable, success: @escaping(_ pointsOfInterest: [Placeable]) -> Void,
                        failure: @escaping(_ error: Error?) -> Void) {
         let url = createUrl(with: place, and: "point_of_interest")

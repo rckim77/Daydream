@@ -315,21 +315,11 @@
                                                     <color key="shadowColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <size key="shadowOffset" width="0.0" height="1"/>
                                                 </label>
-                                                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No content" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j4v-fc-CkW">
-                                                    <rect key="frame" x="98.5" y="284.5" width="123" height="31"/>
-                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="25"/>
-                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    <nil key="highlightedColor"/>
-                                                    <color key="shadowColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    <size key="shadowOffset" width="0.0" height="1"/>
-                                                </label>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="0af-yr-VQQ" firstAttribute="top" secondItem="KKi-EJ-6t6" secondAttribute="bottom" constant="24" id="5lb-Mg-AVi"/>
                                                 <constraint firstAttribute="trailing" secondItem="0af-yr-VQQ" secondAttribute="trailing" constant="16" id="7MV-Ul-USx"/>
                                                 <constraint firstItem="KKi-EJ-6t6" firstAttribute="top" secondItem="uZ4-RN-RBL" secondAttribute="top" constant="16" id="Mcx-Hb-I9a"/>
-                                                <constraint firstItem="j4v-fc-CkW" firstAttribute="centerY" secondItem="uZ4-RN-RBL" secondAttribute="centerY" id="VhN-WO-RRd"/>
-                                                <constraint firstItem="j4v-fc-CkW" firstAttribute="centerX" secondItem="uZ4-RN-RBL" secondAttribute="centerX" id="Z03-4d-gpr"/>
                                                 <constraint firstItem="KKi-EJ-6t6" firstAttribute="leading" secondItem="uZ4-RN-RBL" secondAttribute="leading" constant="16" id="k2z-IV-bma"/>
                                                 <constraint firstItem="0af-yr-VQQ" firstAttribute="leading" secondItem="uZ4-RN-RBL" secondAttribute="leading" constant="16" id="o4t-jy-SSc"/>
                                                 <constraint firstAttribute="bottom" secondItem="0af-yr-VQQ" secondAttribute="bottom" constant="16" id="tlF-ZZ-U4y"/>
@@ -338,7 +328,6 @@
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
-                                            <outlet property="noContentLabel" destination="j4v-fc-CkW" id="zl6-8Y-zyi"/>
                                             <outlet property="pointOfInterest1ImageView" destination="UIt-au-apq" id="xzq-Sq-gbl"/>
                                             <outlet property="pointOfInterest1Label" destination="yHN-6d-7DC" id="vjk-V4-vEU"/>
                                             <outlet property="pointOfInterest1View" destination="Ciz-Vh-WN7" id="RyB-se-OHb"/>

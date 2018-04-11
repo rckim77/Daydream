@@ -26,7 +26,6 @@ class SightsCardCell: UITableViewCell {
     @IBOutlet weak var pointOfInterest3View: UIView!
     @IBOutlet weak var pointOfInterest3Label: UILabel!
     @IBOutlet weak var pointOfInterest3ImageView: UIImageView!
-    @IBOutlet weak var noContentLabel: UILabel!
     
     weak var delegate: SightsCardCellDelegate?
     var pointsOfInterest: [Placeable]? {
@@ -35,7 +34,7 @@ class SightsCardCell: UITableViewCell {
                 // display content only if we've made another API call, otherwise do nothing
                 // POSTLAUNCH: - Update comparison with placeId
                 if oldValue?.count == 0 || pointsOfInterest[0].placeableId != oldValue?[0].placeableId {
-                    toggleViews([pointOfInterest1View, pointOfInterest2View, pointOfInterest3View], willHide: false)
+                    isHidden = false
 
                     pointOfInterest1Label.text = pointsOfInterest[0].placeableName
                     pointOfInterest2Label.text = pointsOfInterest[1].placeableName
@@ -51,7 +50,7 @@ class SightsCardCell: UITableViewCell {
                     loadBackgroundImage(for: 3, with: pointsOfInterest[2])
                 }
             } else { // before response from API or error
-                toggleViews([pointOfInterest1View, pointOfInterest2View, pointOfInterest3View], willHide: true)
+                isHidden = true
             }
         }
     }
@@ -129,14 +128,6 @@ class SightsCardCell: UITableViewCell {
         }, failure: { [weak self] error in
             self?.logErrorEvent(error)
         })
-    }
-
-    private func toggleViews(_ views: [UIView], willHide: Bool) {
-        noContentLabel.isHidden = !willHide
-
-        for view in views {
-            view.isHidden = willHide
-        }
     }
 }
 

@@ -1,5 +1,5 @@
 //
-//  SearchDetailViewModel.swift
+//  SearchDetailDataSource.swift
 //  Daydream
 //
 //  Created by Raymond Kim on 4/10/18.
@@ -11,21 +11,9 @@ import UIKit
 class SearchDetailDataSource: NSObject, UITableViewDataSource {
 
     var place: Placeable
-    var pointsOfInterest: [Placeable]
+    var pointsOfInterest: [Placeable]?
     var eateries: [Eatery]?
     weak var viewController: SearchDetailViewController?
-    lazy var arrayModels: [Any]? = {
-        var array = [Any]()
-
-        array.append(place)
-        array.append(pointsOfInterest)
-
-        if let eateries = eateries {
-            array.append(eateries)
-        }
-
-        return array
-    }()
 
     let networkService = NetworkService()
     let summaryCardCellHeight: CGFloat = 190
@@ -35,9 +23,8 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
     let sightsCardCellIndexPath = IndexPath(row: 1, section: 0)
     let eateriesCardCellIndexPath = IndexPath(row: 2, section: 0)
 
-    init(place: Placeable, pointsOfInterest: [Placeable]) {
+    init(place: Placeable) {
         self.place = place
-        self.pointsOfInterest = pointsOfInterest
     }
 
     func loadPhoto(success: @escaping(_ image: UIImage) -> Void, failure: @escaping(_ error: Error?) -> Void) {
@@ -48,28 +35,16 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
         })
     }
 
-    func loadPointsOfInterest(failure: @escaping(_ error: Error?) -> Void) {
-        networkService.loadTopSights(with: place, success: { [weak self] topSights in
+    func loadSightsAndEateries(success: @escaping(_ indexPaths: [IndexPath]) -> Void, failure: @escaping(_ error: Error?) -> Void) {
+        networkService.loadSightsAndEateries(with: place, success: { [weak self] sights, eateries in
             guard let strongSelf = self else {
                 failure(nil)
                 return
             }
 
-            strongSelf.pointsOfInterest = topSights
-        }, failure: { error in
-            failure(error)
-        })
-    }
-
-    func loadTopEateries(success: @escaping() -> Void, failure: @escaping(_ error: Error?) -> Void) {
-        networkService.loadTopEateries(with: place, success: { [weak self] eateries in
-            guard let strongSelf = self else {
-                failure(nil)
-                return
-            }
-
+            strongSelf.pointsOfInterest = sights
             strongSelf.eateries = eateries
-            success()
+            success([strongSelf.sightsCardCellIndexPath, strongSelf.eateriesCardCellIndexPath])
         }, failure: { error in
             failure(error)
         })
@@ -81,7 +56,7 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return arrayModels?.count ?? 0
+        return 3
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

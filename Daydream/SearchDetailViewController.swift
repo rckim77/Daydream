@@ -55,17 +55,8 @@ class SearchDetailViewController: UIViewController {
         
         networkService.getPlaceId(with: randomCity, success: { [weak self] place in
             guard let strongSelf = self else { return }
-
-            strongSelf.networkService.loadTopSights(with: place, success: { [weak self] pointsOfInterest in
-                SVProgressHUD.dismiss()
-                guard let strongSelf = self else { return }
-                strongSelf.dataSource = SearchDetailDataSource(place: place, pointsOfInterest: pointsOfInterest)
-                strongSelf.loadDataSource(reloadMapCard: true)
-            }, failure: { [weak self] error in
-                SVProgressHUD.showError(withStatus: "Please try again.")
-                guard let strongSelf = self else { return }
-                strongSelf.logErrorEvent(error)
-            })
+            strongSelf.dataSource = SearchDetailDataSource(place: place)
+            strongSelf.loadDataSource(reloadMapCard: true)
         }, failure: { [weak self] error in
             SVProgressHUD.showError(withStatus: "Please try again.")
             guard let strongSelf = self else { return }
@@ -112,9 +103,9 @@ class SearchDetailViewController: UIViewController {
             strongSelf.logErrorEvent(error)
         })
 
-        dataSource.loadTopEateries(success: { [weak self] in
+        dataSource.loadSightsAndEateries(success: { [weak self] indexPaths in
             guard let strongSelf = self else { return }
-            strongSelf.placeCardsTableView.reloadRows(at: [dataSource.eateriesCardCellIndexPath], with: .fade)
+            strongSelf.placeCardsTableView.reloadRows(at: indexPaths, with: .fade)
         }, failure: { [weak self] error in
             guard let strongSelf = self else { return }
             strongSelf.logErrorEvent(error)
@@ -193,6 +184,7 @@ extension SearchDetailViewController: GMSAutocompleteResultsViewControllerDelega
         searchController?.searchBar.text = nil // reset to search bar text
 
         dismiss(animated: true, completion: {
+            self.dataSource = SearchDetailDataSource(place: place)
             self.loadDataSource(reloadMapCard: true)
         })
     }
