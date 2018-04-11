@@ -21,22 +21,14 @@ class SearchDetailViewController: UIViewController {
     var searchController: UISearchController?
     var resultView: UITextView?
     var mapView: GMSMapView?
-    var placeData: Placeable?
-    var pointsOfInterest: [Placeable]?
-    var eateries: [Eatery]?
+    var dataSource: SearchDetailDataSource?
     private var visualEffectView: UIVisualEffectView {
         let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .regular))
         visualEffectView.frame = placeImageView.bounds
         return visualEffectView
     }
     private let networkService = NetworkService()
-    private let summaryCardCellHeight: CGFloat = 190
-    private let mapCardCellHeight: CGFloat = 190
-    private let mapCardCellIndexPath = IndexPath(row: 0, section: 0)
-    private let sightsCardCellHeight: CGFloat = 600
-    private let sightsCardCellIndexPath = IndexPath(row: 1, section: 0)
-    private let eateriesCardCellIndexPath = IndexPath(row: 2, section: 0)
-    
+
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var placeImageView: UIImageView!
     @IBOutlet weak var placeCardsTableView: UITableView!
@@ -47,7 +39,7 @@ class SearchDetailViewController: UIViewController {
         configureAutocompleteVC()
         configureTableView()
         addSearchController()
-        loadContent(for: placeData)
+        loadDataSource()
     }
 
     // MARK: - IBActions
@@ -61,14 +53,21 @@ class SearchDetailViewController: UIViewController {
         guard let randomCity = getRandomCity() else { return }
         SVProgressHUD.show()
         
-        NetworkService().getPlaceId(with: randomCity, success: { [weak self] place in
-            SVProgressHUD.dismiss()
+        networkService.getPlaceId(with: randomCity, success: { [weak self] place in
             guard let strongSelf = self else { return }
 
-            strongSelf.placeData = place
-            strongSelf.loadContent(for: place, reloadMapCard: true)
+            strongSelf.networkService.loadTopSights(with: place, success: { [weak self] pointsOfInterest in
+                SVProgressHUD.dismiss()
+                guard let strongSelf = self else { return }
+                strongSelf.dataSource = SearchDetailDataSource(place: place, pointsOfInterest: pointsOfInterest)
+                strongSelf.loadDataSource(reloadMapCard: true)
+            }, failure: { [weak self] error in
+                SVProgressHUD.showError(withStatus: "Please try again.")
+                guard let strongSelf = self else { return }
+                strongSelf.logErrorEvent(error)
+            })
         }, failure: { [weak self] error in
-            SVProgressHUD.dismiss()
+            SVProgressHUD.showError(withStatus: "Please try again.")
             guard let strongSelf = self else { return }
             strongSelf.logErrorEvent(error)
         })
@@ -97,43 +96,32 @@ class SearchDetailViewController: UIViewController {
         definesPresentationContext = true
     }
 
-    private func loadContent(for place: Placeable?, reloadMapCard: Bool = false) {
-        guard let place = place else { return }
+    private func loadDataSource(reloadMapCard: Bool = false) {
+        guard let dataSource = dataSource else { return }
 
-        titleLabel.text = place.placeableName
+        titleLabel.text = dataSource.place.placeableName
 
-        networkService.loadPhoto(with: place.placeableId, success: { [weak self] photo in
+        dataSource.loadPhoto(success: { [weak self] image in
             guard let strongSelf = self else { return }
             strongSelf.placeImageView.subviews.forEach { $0.removeFromSuperview() }
-            strongSelf.placeImageView.image = photo
-            strongSelf.placeImageView.contentMode = .scaleAspectFill    
+            strongSelf.placeImageView.image = image
+            strongSelf.placeImageView.contentMode = .scaleAspectFill
             strongSelf.placeImageView.addSubview(strongSelf.visualEffectView)
-
         }, failure: { [weak self] error in
             guard let strongSelf = self else { return }
             strongSelf.logErrorEvent(error)
         })
 
-        networkService.loadTopSights(with: place, success: { [weak self] pointsOfInterest in
+        dataSource.loadTopEateries(success: { [weak self] in
             guard let strongSelf = self else { return }
-            strongSelf.pointsOfInterest = pointsOfInterest
-            strongSelf.placeCardsTableView.reloadRows(at: [strongSelf.sightsCardCellIndexPath], with: .fade)
-        }, failure: { [weak self] error in
-            guard let strongSelf = self else { return }
-            strongSelf.logErrorEvent(error)
-        })
-
-        networkService.loadTopEateries(with: place, success: { [weak self] eateries in
-            guard let strongSelf = self else { return }
-            strongSelf.eateries = eateries
-            strongSelf.placeCardsTableView.reloadRows(at: [strongSelf.eateriesCardCellIndexPath], with: .fade)
+            strongSelf.placeCardsTableView.reloadRows(at: [dataSource.eateriesCardCellIndexPath], with: .fade)
         }, failure: { [weak self] error in
             guard let strongSelf = self else { return }
             strongSelf.logErrorEvent(error)
         })
 
         if reloadMapCard {
-            placeCardsTableView.reloadRows(at: [mapCardCellIndexPath], with: .fade)
+            placeCardsTableView.reloadRows(at: [dataSource.mapCardCellIndexPath], with: .fade)
         }
     }
 
@@ -143,9 +131,10 @@ class SearchDetailViewController: UIViewController {
     }
 
     private func configureTableView() {
-        placeCardsTableView.dataSource = self
+        placeCardsTableView.dataSource = dataSource
         placeCardsTableView.delegate = self
         placeCardsTableView.tableFooterView = UIView()
+        dataSource?.viewController = self
     }
 
     // MARK: - Segue
@@ -161,69 +150,28 @@ class SearchDetailViewController: UIViewController {
 }
 
 // MARK: - UITableView datasource and delegate methods
-extension SearchDetailViewController: UITableViewDataSource, UITableViewDelegate {
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
-    }
-
+extension SearchDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        guard let dataSource = dataSource else { return 0 }
+
         switch indexPath.row {
         case 0:
-            return mapCardCellHeight
+            return dataSource.mapCardCellHeight
         default:
-            return sightsCardCellHeight
-        }
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch indexPath {
-        case mapCardCellIndexPath:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "mapCardCell", for: indexPath)
-
-            if let mapCardCell = cell as? MapCardCell {
-                mapCardCell.place = placeData
-
-                return mapCardCell
-            }
-            return cell
-        case sightsCardCellIndexPath:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "sightsCardCell", for: indexPath)
-
-            if let sightsCardCell = cell as? SightsCardCell {
-                sightsCardCell.delegate = self
-                sightsCardCell.pointsOfInterest = pointsOfInterest
-
-                return sightsCardCell
-            }
-            return cell
-        case eateriesCardCellIndexPath:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "eateriesCardCell", for: indexPath)
-
-            if let eateriesCardCell = cell as? EateriesCardCell {
-                eateriesCardCell.delegate = self
-                eateriesCardCell.eateries = eateries
-
-                return eateriesCardCell
-            }
-            return cell
-        default:
-            return UITableViewCell()
+            return dataSource.sightsCardCellHeight
         }
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let dataSource = dataSource else { return }
+
         if indexPath.row == 0 {
             logEvent(contentType: "select map card cell")
-            guard let place = placeData else { return }
 
-            if let mapUrl = place.placeableMapUrl {
+            if let mapUrl = dataSource.place.placeableMapUrl {
                 openUrl(mapUrl)
             } else {
-                networkService.getPlace(with: place.placeableId, success: { [weak self] place in
+                networkService.getPlace(with: dataSource.place.placeableId, success: { [weak self] place in
                     guard let strongSelf = self, let mapUrl = place.placeableMapUrl else { return }
                     strongSelf.openUrl(mapUrl)
                 }, failure: { [weak self] error in
@@ -245,8 +193,7 @@ extension SearchDetailViewController: GMSAutocompleteResultsViewControllerDelega
         searchController?.searchBar.text = nil // reset to search bar text
 
         dismiss(animated: true, completion: {
-            self.placeData = place
-            self.loadContent(for: place, reloadMapCard: true)
+            self.loadDataSource(reloadMapCard: true)
         })
     }
 

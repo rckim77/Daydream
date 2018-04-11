@@ -41,8 +41,9 @@ class SearchViewController: UIViewController {
             strongSelf.placeData = place
             strongSelf.performSegue(withIdentifier: "toSearchDetailVCSegue", sender: nil)
         }, failure: { [weak self] error in
-            SVProgressHUD.dismiss()
-            self?.logErrorEvent(error)
+            SVProgressHUD.showError(withStatus: "Please try again.")
+            guard let strongSelf = self else { return }
+            strongSelf.logErrorEvent(error)
         })
     }
 
@@ -107,8 +108,11 @@ class SearchViewController: UIViewController {
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let destinationVC = segue.destination as? SearchDetailViewController {
-            destinationVC.placeData = placeData
+        if let destinationVC = segue.destination as? SearchDetailViewController,
+            let pointsOfInterest = sender as? [Placeable],
+            let place = placeData {
+            let dataSource = SearchDetailDataSource(place: place, pointsOfInterest: pointsOfInterest)
+            destinationVC.dataSource = dataSource
         }
     }
 }
@@ -119,7 +123,17 @@ extension SearchViewController: GMSAutocompleteResultsViewControllerDelegate {
         logSearchEvent(searchTerm: searchController?.searchBar.text ?? "Couldn't get search bar text", placeId: place.placeID)
         placeData = place
         dismiss(animated: true, completion: {
-            self.performSegue(withIdentifier: "toSearchDetailVCSegue", sender: nil)
+            SVProgressHUD.show()
+            NetworkService().loadTopSights(with: place, success: { [weak self] topSights in
+                SVProgressHUD.dismiss()
+                guard let strongSelf = self else { return }
+                strongSelf.performSegue(withIdentifier: "toSearchDetailVCSegue", sender: topSights)
+            }, failure: { [weak self] error in
+                SVProgressHUD.showError(withStatus: "Please try again.")
+                guard let strongSelf = self else { return }
+                strongSelf.logErrorEvent(error)
+            })
+
         })
     }
 

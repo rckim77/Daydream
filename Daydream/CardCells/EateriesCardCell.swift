@@ -25,7 +25,6 @@ class EateriesCardCell: UITableViewCell {
     @IBOutlet weak var eatery3View: UIView!
     @IBOutlet weak var eatery3ImageView: UIImageView!
     @IBOutlet weak var eatery3Label: UILabel!
-    @IBOutlet weak var noContentLabel: UILabel!
 
     weak var delegate: EateriesCardCellDelegate?
     var eateries: [Eatery]? {
@@ -33,8 +32,8 @@ class EateriesCardCell: UITableViewCell {
             if let eateries = eateries, eateries.count >= 3 {
                 // display content only if we've made another API call, otherwise do nothing
                 // POSTLAUNCH: - Update url comparison
-                if oldValue?.count == 0 || eateries[0].url != oldValue?[0].url {
-                    toggleViews([eatery1View, eatery2View, eatery3View], willHide: false)
+                if oldValue == nil || eateries[0].url != oldValue?[0].url {
+                    isHidden = false
 
                     eatery1Label.text = eateries[0].name
                     eatery2Label.text = eateries[1].name
@@ -50,7 +49,7 @@ class EateriesCardCell: UITableViewCell {
                     loadBackgroundImage(for: 3, with: eateries[2])
                 }
             } else { // before response from API or error
-                toggleViews([eatery1View, eatery2View, eatery3View], willHide: true)
+                isHidden = true
             }
         }
     }
@@ -123,14 +122,6 @@ class EateriesCardCell: UITableViewCell {
                     strongSelf.fadeInImage(image, forImageView: imageView)
                 }
             }.resume()
-        }
-    }
-    
-    private func toggleViews(_ views: [UIView], willHide: Bool) {
-        noContentLabel.isHidden = !willHide
-
-        for view in views {
-            view.isHidden = willHide
         }
     }
 }

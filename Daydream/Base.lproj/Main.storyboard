@@ -482,14 +482,6 @@
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                 </view>
-                                                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No content" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AOG-LH-mgj">
-                                                    <rect key="frame" x="98.5" y="284.5" width="123" height="31"/>
-                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="25"/>
-                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    <nil key="highlightedColor"/>
-                                                    <color key="shadowColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    <size key="shadowOffset" width="0.0" height="1"/>
-                                                </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Top Eateries" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Qn-ZQ-k3h">
                                                     <rect key="frame" x="16" y="16" width="130.5" height="29"/>
                                                     <constraints>
@@ -505,8 +497,6 @@
                                             <constraints>
                                                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="7Qn-ZQ-k3h" secondAttribute="trailing" id="1Zq-g9-Sbr"/>
                                                 <constraint firstItem="S4O-10-Qll" firstAttribute="top" secondItem="7Qn-ZQ-k3h" secondAttribute="bottom" constant="24" id="6cd-hm-G4V"/>
-                                                <constraint firstItem="AOG-LH-mgj" firstAttribute="centerY" secondItem="nkI-M7-1OO" secondAttribute="centerY" id="B0w-ou-KRF"/>
-                                                <constraint firstItem="AOG-LH-mgj" firstAttribute="centerX" secondItem="nkI-M7-1OO" secondAttribute="centerX" id="HDh-YM-ZKL"/>
                                                 <constraint firstAttribute="bottom" secondItem="S4O-10-Qll" secondAttribute="bottom" constant="16" id="Tub-jJ-Fje"/>
                                                 <constraint firstItem="7Qn-ZQ-k3h" firstAttribute="leading" secondItem="nkI-M7-1OO" secondAttribute="leading" constant="16" id="hGJ-qh-trW"/>
                                                 <constraint firstItem="7Qn-ZQ-k3h" firstAttribute="top" secondItem="nkI-M7-1OO" secondAttribute="top" constant="16" id="qnT-dt-8xJ"/>
@@ -525,7 +515,6 @@
                                             <outlet property="eatery3ImageView" destination="vYf-LJ-afM" id="tJn-jL-1S4"/>
                                             <outlet property="eatery3Label" destination="Lqu-VO-YGn" id="YJx-Qj-xZs"/>
                                             <outlet property="eatery3View" destination="1UT-Ql-mCF" id="DWi-TM-2d8"/>
-                                            <outlet property="noContentLabel" destination="AOG-LH-mgj" id="hOX-NF-xK1"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="summaryCardCell" rowHeight="190" id="jE0-I9-OFZ" customClass="SummaryCardCell" customModule="Daydream" customModuleProvider="target">

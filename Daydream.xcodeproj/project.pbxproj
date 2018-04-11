@@ -29,6 +29,7 @@
 		94B7DB57205DEE980040D61C /* Viewport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B7DB56205DEE980040D61C /* Viewport.swift */; };
 		94B7DB59205E06080040D61C /* Eatery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B7DB58205E06080040D61C /* Eatery.swift */; };
 		94B7DB5D205EEBBB0040D61C /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B7DB5C205EEBBB0040D61C /* NetworkService.swift */; };
+		94B8CEB3207DC31D00CA8101 /* SearchDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B8CEB2207DC31D00CA8101 /* SearchDetailViewModel.swift */; };
 		94DB8FE7204B946200FA7CF7 /* EateriesCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94DB8FE6204B946200FA7CF7 /* EateriesCardCell.swift */; };
 		94E392AD2070B4300073E8C9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 94E392AC2070B4300073E8C9 /* GoogleService-Info.plist */; };
 		94E392AE2070B4300073E8C9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 94E392AC2070B4300073E8C9 /* GoogleService-Info.plist */; };
@@ -75,6 +76,7 @@
 		94B7DB56205DEE980040D61C /* Viewport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Viewport.swift; sourceTree = "<group>"; };
 		94B7DB58205E06080040D61C /* Eatery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Eatery.swift; sourceTree = "<group>"; };
 		94B7DB5C205EEBBB0040D61C /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
+		94B8CEB2207DC31D00CA8101 /* SearchDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDetailViewModel.swift; sourceTree = "<group>"; };
 		94DB8FE6204B946200FA7CF7 /* EateriesCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EateriesCardCell.swift; sourceTree = "<group>"; };
 		94E392AC2070B4300073E8C9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		94E392AF2074B29E0073E8C9 /* style.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = style.json; sourceTree = "<group>"; };
@@ -134,6 +136,7 @@
 				94380AC7203BAE1D00684863 /* AppDelegate.swift */,
 				94380AC9203BAE1D00684863 /* SearchViewController.swift */,
 				949630B9203BCBBD007139CA /* SearchDetailViewController.swift */,
+				94B8CEB2207DC31D00CA8101 /* SearchDetailViewModel.swift */,
 				94090909205F4613002A65EF /* MapViewController.swift */,
 				94E392AB20700B4B0073E8C9 /* CardCells */,
 				94B7DB5A205E2C800040D61C /* Models */,
@@ -398,6 +401,7 @@
 				9490BA04206B03B300B880E7 /* Protocols.swift in Sources */,
 				94380ACA203BAE1D00684863 /* SearchViewController.swift in Sources */,
 				94A7B7DB20780D39003E28A8 /* Review.swift in Sources */,
+				94B8CEB3207DC31D00CA8101 /* SearchDetailViewModel.swift in Sources */,
 				94DB8FE7204B946200FA7CF7 /* EateriesCardCell.swift in Sources */,
 				947EC6542043F5B2004A911D /* Color.swift in Sources */,
 				949630BA203BCBBD007139CA /* SearchDetailViewController.swift in Sources */,
