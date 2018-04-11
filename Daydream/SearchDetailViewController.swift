@@ -54,8 +54,9 @@ class SearchDetailViewController: UIViewController {
         SVProgressHUD.show()
         
         networkService.getPlaceId(with: randomCity, success: { [weak self] place in
-            guard let strongSelf = self else { return }
-            strongSelf.dataSource = SearchDetailDataSource(place: place)
+            SVProgressHUD.dismiss()
+            guard let strongSelf = self, let dataSource = strongSelf.dataSource else { return }
+            dataSource.place = place
             strongSelf.loadDataSource(reloadMapCard: true)
         }, failure: { [weak self] error in
             SVProgressHUD.showError(withStatus: "Please try again.")
@@ -184,7 +185,9 @@ extension SearchDetailViewController: GMSAutocompleteResultsViewControllerDelega
         searchController?.searchBar.text = nil // reset to search bar text
 
         dismiss(animated: true, completion: {
-            self.dataSource = SearchDetailDataSource(place: place)
+            guard let dataSource = self.dataSource else { return }
+
+            dataSource.place = place
             self.loadDataSource(reloadMapCard: true)
         })
     }

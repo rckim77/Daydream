@@ -87,7 +87,12 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
 
             if let eateriesCardCell = cell as? EateriesCardCell {
                 eateriesCardCell.delegate = viewController
-                eateriesCardCell.eateries = eateries
+
+                if let eateries = eateries, eateries.count >= 3 {
+                    eateriesCardCell.eateries = eateries
+                } else {
+                    eateriesCardCell.eateries = nil
+                }
 
                 return eateriesCardCell
             }

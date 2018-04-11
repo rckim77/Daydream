@@ -29,7 +29,7 @@ class EateriesCardCell: UITableViewCell {
     weak var delegate: EateriesCardCellDelegate?
     var eateries: [Eatery]? {
         didSet {
-            if let eateries = eateries, eateries.count >= 3 {
+            if let eateries = eateries {
                 // display content only if we've made another API call, otherwise do nothing
                 // POSTLAUNCH: - Update url comparison
                 if oldValue == nil || eateries[0].url != oldValue?[0].url {
