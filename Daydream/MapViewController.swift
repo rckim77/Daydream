@@ -168,11 +168,11 @@ class MapViewController: UIViewController {
 
     private func startDisplayingReviews(_ reviews: [Reviewable], index: Int) {
         if index < reviews.count - 1 {
-            UIView.animate(withDuration: 0.8, animations: {
+            UIView.animate(withDuration: 0.7, animations: {
                 self.reviewView.subviews.forEach { $0.alpha = 1 }
             }, completion: { finished in
                 if finished {
-                    UIView.animate(withDuration: 0.8, delay: 5, animations: {
+                    UIView.animate(withDuration: 0.7, delay: 5, animations: {
                         self.reviewView.subviews.forEach { $0.alpha = 0 }
                     }, completion: { finished in
                         if finished {
