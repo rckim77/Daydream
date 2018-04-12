@@ -52,6 +52,12 @@ class DaydreamUITests: XCTestCase {
 
         snapshot("04MapVC")
 
+        app.buttons["mapCloseIconSoftShadow"].tap()
+
+        app.tables.otherElements["poi2Card"].tap()
+
+        sleep(2)
+
         app.buttons["nightIcon"].tap()
 
         sleep(1)
