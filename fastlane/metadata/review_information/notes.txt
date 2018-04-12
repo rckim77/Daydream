@@ -1,1 +1,10 @@
+The app is easy to test since there is no login required. 
 
+-Search View Controller-
+You can search via the search bar on the screen right after the loading screen fades away. You can also tap on the "Random" button to also load content for a city. 
+
+-Search Detail View Controller-
+At the top it displays the name of the city. There's a die icon and a home icon. The die icon selects a random city and will reload content for that city. The home icon takes the user back to the Search View Controller. You can tap on the map cell, the "Top Sights" cells, and the "Top Eateries" cells. When you tap on the map cell, it redirects you to Google Maps to show a larger map for that city. If you tap on one of the top sights, it segues to a map experience (see Map View Controller below for details). If you tap on an eateries cell, it will redirect to the corresponding Yelp page for that place.
+
+-Map View Controller-
+A user can get to this view controller by tapping on one of the Top Sights cells. At the top there are two icons: a moon icon and a close icon. The moon icon toggles a day/night mode for map styling. The close icon takes the user back to the Search Detail View Controller. Here users can view reviews for that specific place and interact with the map to read up on other points of interest. For example, the user can tap on the info view that pops up above the marker to redirect to Google Maps for additional information about that location and tap on a review (at the bottom of the screen) to redirect to Google Maps to read more about that reviewer. 
