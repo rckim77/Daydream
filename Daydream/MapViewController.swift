@@ -172,7 +172,7 @@ class MapViewController: UIViewController {
                 self.reviewView.subviews.forEach { $0.alpha = 1 }
             }, completion: { finished in
                 if finished {
-                    UIView.animate(withDuration: 0.8, delay: 4, animations: {
+                    UIView.animate(withDuration: 0.8, delay: 5, animations: {
                         self.reviewView.subviews.forEach { $0.alpha = 0 }
                     }, completion: { finished in
                         if finished {
