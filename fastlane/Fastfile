@@ -51,7 +51,49 @@ platform :ios do
     # frame_screenshots
   end
 
-  # You can define as many lanes as you want
+  desc "Deploy a new minor version to the App Store (minor functionality with backwards compatibility)"
+  lane :releaseNewMinorVersion do
+    # sync_code_signing(type: "appstore")
+    capture_screenshots
+    increment_build_number(
+      build_number: app_store_build_number + 1,
+      xcodeproj: "Daydream.xcodeproj"
+    )
+    increment_version_number(
+    	bump_type: "minor"
+    )
+    build_app(scheme: "Daydream") # Build your app - more options available
+    upload_to_app_store(force: true)
+    # frame_screenshots
+  end
+
+    desc "Deploy a new patch version to the App Store (bug fixes with backwards compatibility)"
+  lane :releaseNewPatchVersion do
+    # sync_code_signing(type: "appstore")
+    capture_screenshots
+    increment_build_number(
+      build_number: app_store_build_number + 1,
+      xcodeproj: "Daydream.xcodeproj"
+    )
+    increment_version_number(
+    	bump_type: "patch"
+    )
+    build_app(scheme: "Daydream") # Build your app - more options available
+    upload_to_app_store(force: true)
+    # frame_screenshots
+  end
+
+  desc "Deploy a new build to the App Store (major functionality added with potential breaking changes)"
+  lane :releaseNewBuild do
+    # sync_code_signing(type: "appstore")
+    capture_screenshots
+    increment_build_number(
+      build_number: app_store_build_number + 1,
+      xcodeproj: "Daydream.xcodeproj"
+    )
+    build_app(scheme: "Daydream") # Build your app - more options available
+    upload_to_app_store(force: true)
+  end
 
   after_all do |lane|
     # This block is called, only if the executed lane was successful
