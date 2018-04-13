@@ -28,11 +28,26 @@ fastlane ios beta
 Submit a new Beta Build to Apple TestFlight
 
 This will also make sure the profile is up to date
-### ios release
+### ios release_new_major_version
 ```
-fastlane ios release
+fastlane ios release_new_major_version
 ```
-Deploy a new version to the App Store
+Deploy a new major version to the App Store (major functionality with potential breaking changes)
+### ios release_new_minor_version
+```
+fastlane ios release_new_minor_version
+```
+Deploy a new minor version to the App Store (minor functionality with backwards compatibility)
+### ios release_new_patch_version
+```
+fastlane ios release_new_patch_version
+```
+Deploy a new patch version to the App Store (bug fixes with backwards compatibility)
+### ios release_new_build_only
+```
+fastlane ios release_new_build_only
+```
+Deploy a new build only to the App Store; no version chnages
 
 ----
 
