@@ -37,22 +37,38 @@ platform :ios do
     # You can also use other beta testing services here (run `fastlane actions`)
   end
 
-  desc "Deploy a new version to the App Store"
-  lane :release do
+  # desc "Deploy a new version to the App Store"
+  # lane :release do
+  #   # sync_code_signing(type: "appstore")
+  #   capture_screenshots
+  #   increment_build_number(
+  #     build_number: app_store_build_number + 1,
+  #     xcodeproj: "Daydream.xcodeproj"
+  #   )
+  #   increment_version_number
+  #   build_app(scheme: "Daydream") # Build your app - more options available
+  #   upload_to_app_store(force: true)
+  #   # frame_screenshots
+  # end
+
+   desc "Deploy a new major version to the App Store (major functionality with potential breaking changes)"
+  lane :release_new_major_version do
     # sync_code_signing(type: "appstore")
     capture_screenshots
     increment_build_number(
       build_number: app_store_build_number + 1,
       xcodeproj: "Daydream.xcodeproj"
     )
-    increment_version_number
+    increment_version_number(
+    	bump_type: "minor"
+    )
     build_app(scheme: "Daydream") # Build your app - more options available
     upload_to_app_store(force: true)
     # frame_screenshots
   end
 
   desc "Deploy a new minor version to the App Store (minor functionality with backwards compatibility)"
-  lane :releaseNewMinorVersion do
+  lane :release_new_minor_version do
     # sync_code_signing(type: "appstore")
     capture_screenshots
     increment_build_number(
@@ -68,7 +84,7 @@ platform :ios do
   end
 
     desc "Deploy a new patch version to the App Store (bug fixes with backwards compatibility)"
-  lane :releaseNewPatchVersion do
+  lane :release_new_patch_version do
     # sync_code_signing(type: "appstore")
     capture_screenshots
     increment_build_number(
@@ -83,8 +99,8 @@ platform :ios do
     # frame_screenshots
   end
 
-  desc "Deploy a new build to the App Store (major functionality added with potential breaking changes)"
-  lane :releaseNewBuild do
+  desc "Deploy a new build only to the App Store; no version chnages"
+  lane :release_new_build_only do
     # sync_code_signing(type: "appstore")
     capture_screenshots
     increment_build_number(
