@@ -8,7 +8,6 @@
 
 import UIKit
 import GooglePlaces
-import Crashlytics
 
 class SearchViewController: UIViewController {
 
