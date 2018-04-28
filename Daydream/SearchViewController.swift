@@ -11,6 +11,7 @@ import GooglePlaces
 import SwiftyJSON
 import SVProgressHUD
 import Firebase
+import Crashlytics
 
 class SearchViewController: UIViewController {
 
@@ -30,6 +31,7 @@ class SearchViewController: UIViewController {
     }
 
     @IBAction func randomBtnTapped(_ sender: Any) {
+        Crashlytics.sharedInstance().crash()
         logEvent(contentType: "random button tapped")
         guard let randomCity = getRandomCity() else { return }
 

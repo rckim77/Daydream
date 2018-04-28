@@ -1,15 +1,18 @@
 PODS:
   - Alamofire (4.7.0)
+  - Crashlytics (3.10.1):
+    - Fabric (~> 1.7.5)
+  - Fabric (1.7.5)
   - Firebase/Core (4.10.0):
     - FirebaseAnalytics (= 4.1.0)
     - FirebaseCore (= 4.0.16)
   - FirebaseAnalytics (4.1.0):
     - FirebaseCore (~> 4.0)
     - FirebaseInstanceID (~> 2.0)
-    - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
+    - GoogleToolboxForMac/NSData+zlib (~> 2.1)
     - nanopb (~> 0.3)
   - FirebaseCore (4.0.16):
-    - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
+    - GoogleToolboxForMac/NSData+zlib (~> 2.1)
   - FirebaseInstanceID (2.0.9):
     - FirebaseCore (~> 4.0)
   - GoogleMaps (2.5.0):
@@ -20,7 +23,7 @@ PODS:
   - GooglePlaces (2.5.0):
     - GoogleMaps/Base (= 2.5.0)
   - GoogleToolboxForMac/Defines (2.1.3)
-  - "GoogleToolboxForMac/NSData+zlib (2.1.3)":
+  - GoogleToolboxForMac/NSData+zlib (2.1.3):
     - GoogleToolboxForMac/Defines (= 2.1.3)
   - Hero (1.1.0)
   - nanopb (0.3.8):
@@ -34,6 +37,8 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire (~> 4.7)
+  - Crashlytics
+  - Fabric
   - Firebase/Core
   - GoogleMaps
   - GooglePlaces
@@ -42,24 +47,10 @@ DEPENDENCIES:
   - SwiftLint
   - SwiftyJSON
 
-SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
-    - Alamofire
-    - Firebase
-    - FirebaseAnalytics
-    - FirebaseCore
-    - FirebaseInstanceID
-    - GoogleMaps
-    - GooglePlaces
-    - GoogleToolboxForMac
-    - Hero
-    - nanopb
-    - SVProgressHUD
-    - SwiftLint
-    - SwiftyJSON
-
 SPEC CHECKSUMS:
   Alamofire: 907e0a98eb68cdb7f9d1f541a563d6ac5dc77b25
+  Crashlytics: aee1a064cbbf99b32efa3f056a5f458d846bc8ff
+  Fabric: ae7146a5f505ea370a1e44820b4b1dc8890e2890
   Firebase: c98c8b1fbcbdccd82539a36c2b17a9b1bb0ee798
   FirebaseAnalytics: 3dfae28d4a5e06f86c4fae830efc2ad3fadb19bc
   FirebaseCore: eb9e1a56733ff1094ecf3e28af9069c344b25239
@@ -73,6 +64,6 @@ SPEC CHECKSUMS:
   SwiftLint: 2aa21b96c8d13396a051bc1cb659d2ce1e0075b0
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
 
-PODFILE CHECKSUM: 1399cd891782f58cb72b4e6343ec2e8e90de811e
+PODFILE CHECKSUM: 23f1dcd6eb4f59ec9d9f851720b7f030bf632e29
 
-COCOAPODS: 1.5.0
+COCOAPODS: 1.4.0

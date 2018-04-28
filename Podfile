@@ -14,4 +14,6 @@ target 'Daydream' do
   pod 'Hero'
   pod 'SVProgressHUD'
   pod 'Firebase/Core'
+  pod 'Fabric'
+  pod 'Crashlytics'
 end
