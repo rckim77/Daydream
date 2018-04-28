@@ -9,10 +9,7 @@
 import UIKit
 import GooglePlaces
 import GoogleMaps
-import Alamofire
-import SwiftyJSON
 import Hero
-import Firebase
 
 class SearchDetailViewController: UIViewController {
 

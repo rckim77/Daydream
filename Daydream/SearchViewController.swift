@@ -8,8 +8,6 @@
 
 import UIKit
 import GooglePlaces
-import SwiftyJSON
-import Firebase
 import Crashlytics
 
 class SearchViewController: UIViewController {
