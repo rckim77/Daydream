@@ -235,3 +235,18 @@ extension UIView {
             ])
     }
 }
+
+extension UIViewController {
+    func add(_ childVC: UIViewController) {
+        addChildViewController(childVC)
+        view.addSubview(childVC.view)
+        childVC.didMove(toParentViewController: self)
+    }
+
+    func remove() {
+        guard parent != nil else { return }
+        willMove(toParentViewController: nil)
+        removeFromParentViewController()
+        view.removeFromSuperview()
+    }
+}
