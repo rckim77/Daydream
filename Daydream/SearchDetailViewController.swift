@@ -12,7 +12,6 @@ import GoogleMaps
 import Alamofire
 import SwiftyJSON
 import Hero
-import SVProgressHUD
 import Firebase
 
 class SearchDetailViewController: UIViewController {
@@ -51,15 +50,16 @@ class SearchDetailViewController: UIViewController {
     @IBAction func randomCityBtnTapped(_ sender: UIButton) {
         logEvent(contentType: "random button tapped")
         guard let randomCity = getRandomCity() else { return }
-        SVProgressHUD.show()
+        let loadingVC = LoadingViewController()
+        add(loadingVC)
         
         networkService.getPlaceId(with: randomCity, success: { [weak self] place in
-            SVProgressHUD.dismiss()
+            loadingVC.remove()
             guard let strongSelf = self, let dataSource = strongSelf.dataSource else { return }
             dataSource.place = place
             strongSelf.loadDataSource(reloadMapCard: true)
         }, failure: { [weak self] error in
-            SVProgressHUD.showError(withStatus: "Please try again.")
+            loadingVC.remove()
             guard let strongSelf = self else { return }
             strongSelf.logErrorEvent(error)
         })
