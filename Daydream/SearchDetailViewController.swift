@@ -22,11 +22,11 @@ class SearchDetailViewController: UIViewController {
     var resultView: UITextView?
     var mapView: GMSMapView?
     var dataSource: SearchDetailDataSource?
-    private var visualEffectView: UIVisualEffectView {
+    private lazy var visualEffectView: UIVisualEffectView = {
         let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .regular))
         visualEffectView.frame = placeImageView.bounds
         return visualEffectView
-    }
+    }()
     private let networkService = NetworkService()
 
     @IBOutlet weak var titleLabel: UILabel!
