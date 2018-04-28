@@ -32,7 +32,7 @@ PODS:
   - nanopb/decode (0.3.8)
   - nanopb/encode (0.3.8)
   - SVProgressHUD (2.2.5)
-  - SwiftLint (0.24.2)
+  - SwiftLint (0.25.1)
   - SwiftyJSON (4.0.0)
 
 DEPENDENCIES:
@@ -44,7 +44,7 @@ DEPENDENCIES:
   - GooglePlaces
   - Hero
   - SVProgressHUD
-  - SwiftLint
+  - SwiftLint (~> 0.25)
   - SwiftyJSON
 
 SPEC CHECKSUMS:
@@ -61,9 +61,9 @@ SPEC CHECKSUMS:
   Hero: ce59e81c79390613d97b43da7179e2c5e1017e04
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
-  SwiftLint: 2aa21b96c8d13396a051bc1cb659d2ce1e0075b0
+  SwiftLint: ce933681be10c3266e82576dad676fa815a602e9
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
 
-PODFILE CHECKSUM: 23f1dcd6eb4f59ec9d9f851720b7f030bf632e29
+PODFILE CHECKSUM: 07b17de082cc9aa98c4d38b0aefc566bea6d627e
 
 COCOAPODS: 1.4.0
