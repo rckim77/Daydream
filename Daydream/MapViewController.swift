@@ -5,7 +5,6 @@
 //  Created by Raymond Kim on 3/18/18.
 //  Copyright © 2018 Raymond Kim. All rights reserved.
 //
-// swiftlint:disable identifier_name
 
 import UIKit
 import GoogleMaps
