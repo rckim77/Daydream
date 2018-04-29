@@ -10,8 +10,8 @@ import UIKit
 import SwiftyJSON
 import GooglePlaces
 
-protocol EateriesCardCellDelegate: class {
-    func didSelectEatery(_ eatery: Eatery)
+protocol EateriesCardCellDelegate: AnyObject {
+    func eateriesCardCell(_ cell: EateriesCardCell, didSelectEatery eatery: Eatery)
 }
 
 class EateriesCardCell: UITableViewCell {
@@ -94,7 +94,7 @@ class EateriesCardCell: UITableViewCell {
             eatery = eateries[2]
         }
 
-       delegate?.didSelectEatery(eatery)
+       delegate?.eateriesCardCell(self, didSelectEatery: eatery)
     }
 
     private func loadBackgroundImage(for button: Int, with eatery: Eatery) {
