@@ -8,9 +8,6 @@
 
 import UIKit
 import GooglePlaces
-import SwiftyJSON
-import SVProgressHUD
-import Firebase
 
 class SearchViewController: UIViewController {
 
@@ -30,18 +27,19 @@ class SearchViewController: UIViewController {
     }
 
     @IBAction func randomBtnTapped(_ sender: Any) {
-        logEvent(contentType: "random button tapped")
+        logEvent(contentType: "random button tapped", title)
         guard let randomCity = getRandomCity() else { return }
+        let loadingVC = LoadingViewController()
+        add(loadingVC)
 
-        SVProgressHUD.show()
         NetworkService().getPlaceId(with: randomCity, success: { [weak self] place in
-            SVProgressHUD.dismiss()
+            loadingVC.remove()
             guard let strongSelf = self else { return }
 
             strongSelf.placeData = place
             strongSelf.performSegue(withIdentifier: "toSearchDetailVCSegue", sender: nil)
         }, failure: { [weak self] error in
-            SVProgressHUD.showError(withStatus: "Please try again.")
+            loadingVC.remove()
             guard let strongSelf = self else { return }
             strongSelf.logErrorEvent(error)
         })
@@ -162,4 +160,4 @@ extension SearchViewController: UISearchControllerDelegate {
     }
 }
 
-extension SearchViewController: RandomCitySelectable {}
+extension SearchViewController: RandomCitySelectable, Loggable {}

@@ -26,6 +26,7 @@
 		9490BA18206CAA8300B880E7 /* Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9490BA17206CAA8300B880E7 /* Place.swift */; };
 		949630BA203BCBBD007139CA /* SearchDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949630B9203BCBBD007139CA /* SearchDetailViewController.swift */; };
 		94A7B7DB20780D39003E28A8 /* Review.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A7B7DA20780D39003E28A8 /* Review.swift */; };
+		94AE9B852094DAF500450399 /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94AE9B842094DAF500450399 /* LoadingViewController.swift */; };
 		94B7DB57205DEE980040D61C /* Viewport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B7DB56205DEE980040D61C /* Viewport.swift */; };
 		94B7DB59205E06080040D61C /* Eatery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B7DB58205E06080040D61C /* Eatery.swift */; };
 		94B7DB5D205EEBBB0040D61C /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B7DB5C205EEBBB0040D61C /* NetworkService.swift */; };
@@ -73,6 +74,7 @@
 		9490BA17206CAA8300B880E7 /* Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Place.swift; sourceTree = "<group>"; };
 		949630B9203BCBBD007139CA /* SearchDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDetailViewController.swift; sourceTree = "<group>"; };
 		94A7B7DA20780D39003E28A8 /* Review.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Review.swift; sourceTree = "<group>"; };
+		94AE9B842094DAF500450399 /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
 		94B7DB56205DEE980040D61C /* Viewport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Viewport.swift; sourceTree = "<group>"; };
 		94B7DB58205E06080040D61C /* Eatery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Eatery.swift; sourceTree = "<group>"; };
 		94B7DB5C205EEBBB0040D61C /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
@@ -175,6 +177,7 @@
 			isa = PBXGroup;
 			children = (
 				947EC6512043F28F004A911D /* Extensions.swift */,
+				94AE9B842094DAF500450399 /* LoadingViewController.swift */,
 				9490BA03206B03B300B880E7 /* Protocols.swift */,
 				94B7DB5C205EEBBB0040D61C /* NetworkService.swift */,
 				9490BA01206AF6F700B880E7 /* randomCitiesJSON.json */,
@@ -219,6 +222,7 @@
 				2C1A16EE59777786F623EDDF /* [CP] Embed Pods Frameworks */,
 				8007B826663EE312D427A181 /* [CP] Copy Pods Resources */,
 				947EC659204B27CC004A911D /* ShellScript */,
+				941CD8C32090FC1000A1D9B8 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -254,7 +258,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0920;
-				LastUpgradeCheck = 0920;
+				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = "Raymond Kim";
 				TargetAttributes = {
 					94380AC3203BAE1D00684863 = {
@@ -360,6 +364,19 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Daydream/Pods-Daydream-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		941CD8C32090FC1000A1D9B8 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "${PODS_ROOT}/Fabric/run";
+		};
 		947EC659204B27CC004A911D /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -409,6 +426,7 @@
 				94380AC8203BAE1D00684863 /* AppDelegate.swift in Sources */,
 				947EC656204667EB004A911D /* MapCardCell.swift in Sources */,
 				94F837042070022700ADB690 /* SummaryCardCell.swift in Sources */,
+				94AE9B852094DAF500450399 /* LoadingViewController.swift in Sources */,
 				94B7DB57205DEE980040D61C /* Viewport.swift in Sources */,
 				94B7DB59205E06080040D61C /* Eatery.swift in Sources */,
 				9490BA18206CAA8300B880E7 /* Place.swift in Sources */,
@@ -472,6 +490,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -479,6 +498,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -489,7 +509,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -531,6 +551,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -538,6 +559,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -548,7 +570,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -575,6 +597,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 49BZEB79BF;
 				INFOPLIST_FILE = Daydream/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;

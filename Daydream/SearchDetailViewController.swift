@@ -9,11 +9,7 @@
 import UIKit
 import GooglePlaces
 import GoogleMaps
-import Alamofire
-import SwiftyJSON
 import Hero
-import SVProgressHUD
-import Firebase
 
 class SearchDetailViewController: UIViewController {
 
@@ -22,11 +18,11 @@ class SearchDetailViewController: UIViewController {
     var resultView: UITextView?
     var mapView: GMSMapView?
     var dataSource: SearchDetailDataSource?
-    private var visualEffectView: UIVisualEffectView {
+    private lazy var visualEffectView: UIVisualEffectView = {
         let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .regular))
         visualEffectView.frame = placeImageView.bounds
         return visualEffectView
-    }
+    }()
     private let networkService = NetworkService()
 
     @IBOutlet weak var titleLabel: UILabel!
@@ -44,22 +40,23 @@ class SearchDetailViewController: UIViewController {
 
     // MARK: - IBActions
     @IBAction func homeBtnTapped(_ sender: UIButton) {
-        logEvent(contentType: "home button tapped")
+        logEvent(contentType: "home button tapped", title)
         dismiss(animated: true, completion: nil)
     }
 
     @IBAction func randomCityBtnTapped(_ sender: UIButton) {
-        logEvent(contentType: "random button tapped")
+        logEvent(contentType: "random button tapped", title)
         guard let randomCity = getRandomCity() else { return }
-        SVProgressHUD.show()
+        let loadingVC = LoadingViewController()
+        add(loadingVC)
         
         networkService.getPlaceId(with: randomCity, success: { [weak self] place in
-            SVProgressHUD.dismiss()
+            loadingVC.remove()
             guard let strongSelf = self, let dataSource = strongSelf.dataSource else { return }
             dataSource.place = place
             strongSelf.loadDataSource(reloadMapCard: true)
         }, failure: { [weak self] error in
-            SVProgressHUD.showError(withStatus: "Please try again.")
+            loadingVC.remove()
             guard let strongSelf = self else { return }
             strongSelf.logErrorEvent(error)
         })
@@ -95,10 +92,13 @@ class SearchDetailViewController: UIViewController {
 
         dataSource.loadPhoto(success: { [weak self] image in
             guard let strongSelf = self else { return }
-            strongSelf.placeImageView.subviews.forEach { $0.removeFromSuperview() }
-            strongSelf.placeImageView.image = image
-            strongSelf.placeImageView.contentMode = .scaleAspectFill
-            strongSelf.placeImageView.addSubview(strongSelf.visualEffectView)
+
+            DispatchQueue.main.async {
+                strongSelf.placeImageView.subviews.forEach { $0.removeFromSuperview() }
+                strongSelf.placeImageView.image = image
+                strongSelf.placeImageView.contentMode = .scaleAspectFill
+                strongSelf.placeImageView.addSubview(strongSelf.visualEffectView)
+            }
         }, failure: { [weak self] error in
             guard let strongSelf = self else { return }
             strongSelf.logErrorEvent(error)
@@ -106,7 +106,9 @@ class SearchDetailViewController: UIViewController {
 
         dataSource.loadSightsAndEateries(success: { [weak self] indexPaths in
             guard let strongSelf = self else { return }
-            strongSelf.placeCardsTableView.reloadRows(at: indexPaths, with: .fade)
+            DispatchQueue.main.async {
+                strongSelf.placeCardsTableView.reloadRows(at: indexPaths, with: .fade)
+            }
         }, failure: { [weak self] error in
             guard let strongSelf = self else { return }
             strongSelf.logErrorEvent(error)
@@ -158,7 +160,7 @@ extension SearchDetailViewController: UITableViewDelegate {
         guard let dataSource = dataSource else { return }
 
         if indexPath.row == 0 {
-            logEvent(contentType: "select map card cell")
+            logEvent(contentType: "select map card cell", title)
 
             if let mapUrl = dataSource.place.placeableMapUrl {
                 openUrl(mapUrl)
@@ -208,17 +210,17 @@ extension SearchDetailViewController: GMSAutocompleteResultsViewControllerDelega
 }
 
 extension SearchDetailViewController: SightsCardCellDelegate {
-    func didSelectPointOfInterest(with place: Placeable) {
-        logEvent(contentType: "select point of interest")
+    func sightsCardCell(_ cell: SightsCardCell, didSelectPlace place: Placeable) {
+        logEvent(contentType: "select point of interest", title)
         performSegue(withIdentifier: "genericMapSegue", sender: place)
     }
 }
 
 extension SearchDetailViewController: EateriesCardCellDelegate {
-    func didSelectEatery(_ eatery: Eatery) {
-        logEvent(contentType: "select eatery")
+    func eateriesCardCell(_ cell: EateriesCardCell, didSelectEatery eatery: Eatery) {
+        logEvent(contentType: "select eatery", title)
         openUrl(eatery.url)
     }
 }
 
-extension SearchDetailViewController: RandomCitySelectable {}
+extension SearchDetailViewController: RandomCitySelectable, Loggable {}

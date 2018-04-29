@@ -1,26 +1,29 @@
 PODS:
   - Alamofire (4.7.0)
+  - Crashlytics (3.10.1):
+    - Fabric (~> 1.7.5)
+  - Fabric (1.7.5)
   - Firebase/Core (4.10.0):
     - FirebaseAnalytics (= 4.1.0)
     - FirebaseCore (= 4.0.16)
   - FirebaseAnalytics (4.1.0):
     - FirebaseCore (~> 4.0)
     - FirebaseInstanceID (~> 2.0)
-    - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
+    - GoogleToolboxForMac/NSData+zlib (~> 2.1)
     - nanopb (~> 0.3)
   - FirebaseCore (4.0.16):
-    - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
+    - GoogleToolboxForMac/NSData+zlib (~> 2.1)
   - FirebaseInstanceID (2.0.9):
     - FirebaseCore (~> 4.0)
-  - GoogleMaps (2.5.0):
-    - GoogleMaps/Maps (= 2.5.0)
-  - GoogleMaps/Base (2.5.0)
-  - GoogleMaps/Maps (2.5.0):
+  - GoogleMaps (2.7.0):
+    - GoogleMaps/Maps (= 2.7.0)
+  - GoogleMaps/Base (2.7.0)
+  - GoogleMaps/Maps (2.7.0):
     - GoogleMaps/Base
-  - GooglePlaces (2.5.0):
-    - GoogleMaps/Base (= 2.5.0)
+  - GooglePlaces (2.7.0):
+    - GoogleMaps/Base (= 2.7.0)
   - GoogleToolboxForMac/Defines (2.1.3)
-  - "GoogleToolboxForMac/NSData+zlib (2.1.3)":
+  - GoogleToolboxForMac/NSData+zlib (2.1.3):
     - GoogleToolboxForMac/Defines (= 2.1.3)
   - Hero (1.1.0)
   - nanopb (0.3.8):
@@ -29,50 +32,38 @@ PODS:
   - nanopb/decode (0.3.8)
   - nanopb/encode (0.3.8)
   - SVProgressHUD (2.2.5)
-  - SwiftLint (0.24.2)
+  - SwiftLint (0.25.1)
   - SwiftyJSON (4.0.0)
 
 DEPENDENCIES:
   - Alamofire (~> 4.7)
+  - Crashlytics
+  - Fabric
   - Firebase/Core
-  - GoogleMaps
-  - GooglePlaces
+  - GoogleMaps (~> 2.7)
+  - GooglePlaces (~> 2.7)
   - Hero
   - SVProgressHUD
-  - SwiftLint
+  - SwiftLint (~> 0.25)
   - SwiftyJSON
-
-SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
-    - Alamofire
-    - Firebase
-    - FirebaseAnalytics
-    - FirebaseCore
-    - FirebaseInstanceID
-    - GoogleMaps
-    - GooglePlaces
-    - GoogleToolboxForMac
-    - Hero
-    - nanopb
-    - SVProgressHUD
-    - SwiftLint
-    - SwiftyJSON
 
 SPEC CHECKSUMS:
   Alamofire: 907e0a98eb68cdb7f9d1f541a563d6ac5dc77b25
+  Crashlytics: aee1a064cbbf99b32efa3f056a5f458d846bc8ff
+  Fabric: ae7146a5f505ea370a1e44820b4b1dc8890e2890
   Firebase: c98c8b1fbcbdccd82539a36c2b17a9b1bb0ee798
   FirebaseAnalytics: 3dfae28d4a5e06f86c4fae830efc2ad3fadb19bc
   FirebaseCore: eb9e1a56733ff1094ecf3e28af9069c344b25239
   FirebaseInstanceID: d2058a35e9bebda1b6dd42486b84917bde552a9d
-  GoogleMaps: c087b8e5dfe87ca6ebf59adb9b4894a4146bec4f
-  GooglePlaces: dd70d9d71ea1c7944846afe67de3712c99b30a77
+  GoogleMaps: f79af95cb24d869457b1f961c93d3ce8b2f3b848
+  GooglePlaces: 3d06e6c99654545b4738ce49648745779c25f2ef
   GoogleToolboxForMac: 2501e2ad72a52eb3dfe7bd9aee7dad11b858bd20
   Hero: ce59e81c79390613d97b43da7179e2c5e1017e04
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
-  SwiftLint: 2aa21b96c8d13396a051bc1cb659d2ce1e0075b0
+  SwiftLint: ce933681be10c3266e82576dad676fa815a602e9
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
 
-PODFILE CHECKSUM: 1399cd891782f58cb72b4e6343ec2e8e90de811e
+PODFILE CHECKSUM: 30e6b40ac4268a54a06ff43861788001d64290c0
 
-COCOAPODS: 1.5.0
+COCOAPODS: 1.4.0

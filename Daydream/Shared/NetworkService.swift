@@ -49,7 +49,7 @@ class NetworkService {
                     return
                 }
 
-                let pointsOfInterest = results.flatMap { result -> Place? in
+                let pointsOfInterest = results.compactMap { result -> Place? in
                     guard let name = result["name"].string,
                         let placeId = result["place_id"].string,
                         let centerLat = result["geometry"]["location"]["lat"].double,
@@ -99,7 +99,7 @@ class NetworkService {
                     return
                 }
 
-                let eateries = results.flatMap { result -> Eatery? in
+                let eateries = results.compactMap { result -> Eatery? in
                     guard let name = result["name"].string,
                         let imageUrl = result["image_url"].string,
                         let url = result["url"].string else { return nil }
@@ -180,7 +180,7 @@ class NetworkService {
                 let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
                 var reviews: [Review]?
                 if let reviewsJSON = result["reviews"]?.array {
-                    reviews = reviewsJSON.flatMap { review -> Review? in
+                    reviews = reviewsJSON.compactMap { review -> Review? in
                         guard let dict = review.dictionary,
                             let author = dict["author_name"]?.string,
                             let rating = dict["rating"]?.int else { return nil }

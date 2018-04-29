@@ -8,7 +8,6 @@
 
 import UIKit
 import GooglePlaces
-import Firebase
 
 extension GMSPlace: Placeable {
     var placeableId: String {
@@ -109,33 +108,6 @@ extension GMSAutocompleteResultsViewController {
     }
 }
 
-extension UIViewController {
-    func logEvent(contentType: String) {
-        Analytics.logEvent(AnalyticsEventSelectContent, parameters: [
-            AnalyticsParameterItemID: "id-\(String(describing: title))",
-            AnalyticsParameterContentType: contentType
-        ])
-    }
-
-    func logSearchEvent(searchTerm: String, placeId: String) {
-        Analytics.logEvent(AnalyticsEventSearch, parameters: [
-            AnalyticsParameterSearchTerm: searchTerm,
-            AnalyticsParameterLocation: placeId
-        ])
-    }
-
-    func logErrorEvent(_ error: Error?) {
-        Analytics.logEvent("DaydreamAppError", parameters: [
-            "Error": String(describing: error)
-        ])
-    }
-
-    func openUrl(_ url: String) {
-        guard let url = URL(string: url) else { return }
-        UIApplication.shared.open(url, options: [:])
-    }
-}
-
 @IBDesignable
 class DesignableView: UIView {
 }
@@ -228,10 +200,24 @@ extension UIView {
         layer.borderColor = color
         layer.cornerRadius = cornerRadius
     }
+}
 
-    func logErrorEvent(_ error: Error?) {
-        Analytics.logEvent("DaydreamAppError", parameters: [
-            "Error": String(describing: error)
-            ])
+extension UIViewController {
+    func add(_ childVC: UIViewController) {
+        addChildViewController(childVC)
+        view.addSubview(childVC.view)
+        childVC.didMove(toParentViewController: self)
+    }
+
+    func remove() {
+        guard parent != nil else { return }
+        willMove(toParentViewController: nil)
+        removeFromParentViewController()
+        view.removeFromSuperview()
+    }
+
+    func openUrl(_ url: String) {
+        guard let url = URL(string: url) else { return }
+        UIApplication.shared.open(url, options: [:])
     }
 }

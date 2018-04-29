@@ -1,3 +1,13 @@
+Version 2.7.0 - April 2018
+==========================
+Note:
+  - Support for Xcode 8.0 has been dropped. The new minimum is Xcode 9.0.
+
+Version 2.6.0 - February 2018
+=============================
+Note:
+  - Updated for compatibility with GoogleMaps/GooglePlacePicker 2.6.0
+
 Version 2.5.0 - October 2017
 ============================
 Features:

@@ -129,12 +129,16 @@ class MapViewController: UIViewController {
         dynamicMarker.tracksInfoWindowChanges = true
 
         networkService.getPlace(with: placeId, success: { [weak self] place in
-            dynamicMarker.snippet = self?.createSnippet(for: place)
+            guard let strongSelf = self else { return }
+            dynamicMarker.snippet = strongSelf.createSnippet(for: place)
             dynamicMarker.tracksInfoWindowChanges = false
-            self?.place = place
-            self?.displayReviews(place.placeableReviews, index: 0)
+            strongSelf.place = place
+            DispatchQueue.main.async {
+                strongSelf.displayReviews(place.placeableReviews, index: 0)
+            }
         }, failure: { [weak self] error in
-            self?.logErrorEvent(error)
+            guard let strongSelf = self else { return }
+            strongSelf.logErrorEvent(error)
         })
     }
 
@@ -220,15 +224,17 @@ class MapViewController: UIViewController {
 
 extension MapViewController: GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, didTapPOIWithPlaceID placeID: String, name: String, location: CLLocationCoordinate2D) {
-        logEvent(contentType: "POI on map tapped")
+        logEvent(contentType: "POI on map tapped", title)
         stopDisplayingReviews()
         addOrUpdateMapView(for: placeID, name: name, location: location)
     }
 
     func mapView(_ mapView: GMSMapView, didTapInfoWindowOf marker: GMSMarker) {
-        logEvent(contentType: "info window on marker tapped")
+        logEvent(contentType: "info window on marker tapped", title)
         if let mapUrl = place?.placeableMapUrl, let url = URL(string: mapUrl) {
             UIApplication.shared.open(url, options: [:])
         }
     }
 }
+
+extension MapViewController: Loggable {}
