@@ -210,7 +210,7 @@ extension SearchDetailViewController: GMSAutocompleteResultsViewControllerDelega
 }
 
 extension SearchDetailViewController: SightsCardCellDelegate {
-    func didSelectPointOfInterest(with place: Placeable) {
+    func sightsCardCell(_ cell: SightsCardCell, didSelectPlace place: Placeable) {
         logEvent(contentType: "select point of interest", title)
         performSegue(withIdentifier: "genericMapSegue", sender: place)
     }

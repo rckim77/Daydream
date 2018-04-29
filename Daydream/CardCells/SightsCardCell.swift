@@ -11,8 +11,8 @@ import SwiftyJSON
 import GooglePlaces
 import Hero
 
-protocol SightsCardCellDelegate: class {
-    func didSelectPointOfInterest(with place: Placeable)
+protocol SightsCardCellDelegate: AnyObject {
+    func sightsCardCell(_ cell: SightsCardCell, didSelectPlace place: Placeable)
 }
 
 class SightsCardCell: UITableViewCell {
@@ -97,7 +97,7 @@ class SightsCardCell: UITableViewCell {
             pointOfInterest = pointsOfInterest[2]
         }
 
-        delegate?.didSelectPointOfInterest(with: pointOfInterest)
+        delegate?.sightsCardCell(self, didSelectPlace: pointOfInterest)
     }
 
     private func getViewport(for pointOfInterest: Placeable) -> GMSCoordinateBounds? {
