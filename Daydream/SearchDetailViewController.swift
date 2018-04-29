@@ -40,12 +40,12 @@ class SearchDetailViewController: UIViewController {
 
     // MARK: - IBActions
     @IBAction func homeBtnTapped(_ sender: UIButton) {
-        logEvent(contentType: "home button tapped")
+        logEvent(contentType: "home button tapped", title)
         dismiss(animated: true, completion: nil)
     }
 
     @IBAction func randomCityBtnTapped(_ sender: UIButton) {
-        logEvent(contentType: "random button tapped")
+        logEvent(contentType: "random button tapped", title)
         guard let randomCity = getRandomCity() else { return }
         let loadingVC = LoadingViewController()
         add(loadingVC)
@@ -155,7 +155,7 @@ extension SearchDetailViewController: UITableViewDelegate {
         guard let dataSource = dataSource else { return }
 
         if indexPath.row == 0 {
-            logEvent(contentType: "select map card cell")
+            logEvent(contentType: "select map card cell", title)
 
             if let mapUrl = dataSource.place.placeableMapUrl {
                 openUrl(mapUrl)
@@ -206,16 +206,16 @@ extension SearchDetailViewController: GMSAutocompleteResultsViewControllerDelega
 
 extension SearchDetailViewController: SightsCardCellDelegate {
     func didSelectPointOfInterest(with place: Placeable) {
-        logEvent(contentType: "select point of interest")
+        logEvent(contentType: "select point of interest", title)
         performSegue(withIdentifier: "genericMapSegue", sender: place)
     }
 }
 
 extension SearchDetailViewController: EateriesCardCellDelegate {
     func didSelectEatery(_ eatery: Eatery) {
-        logEvent(contentType: "select eatery")
+        logEvent(contentType: "select eatery", title)
         openUrl(eatery.url)
     }
 }
 
-extension SearchDetailViewController: RandomCitySelectable {}
+extension SearchDetailViewController: RandomCitySelectable, Loggable {}

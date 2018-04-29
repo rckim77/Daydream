@@ -131,4 +131,4 @@ class SightsCardCell: UITableViewCell {
     }
 }
 
-extension SightsCardCell: ImageViewFadeable {}
+extension SightsCardCell: ImageViewFadeable, Loggable {}

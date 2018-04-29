@@ -220,15 +220,17 @@ class MapViewController: UIViewController {
 
 extension MapViewController: GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, didTapPOIWithPlaceID placeID: String, name: String, location: CLLocationCoordinate2D) {
-        logEvent(contentType: "POI on map tapped")
+        logEvent(contentType: "POI on map tapped", title)
         stopDisplayingReviews()
         addOrUpdateMapView(for: placeID, name: name, location: location)
     }
 
     func mapView(_ mapView: GMSMapView, didTapInfoWindowOf marker: GMSMarker) {
-        logEvent(contentType: "info window on marker tapped")
+        logEvent(contentType: "info window on marker tapped", title)
         if let mapUrl = place?.placeableMapUrl, let url = URL(string: mapUrl) {
             UIApplication.shared.open(url, options: [:])
         }
     }
 }
+
+extension MapViewController: Loggable {}
