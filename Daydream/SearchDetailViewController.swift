@@ -92,10 +92,13 @@ class SearchDetailViewController: UIViewController {
 
         dataSource.loadPhoto(success: { [weak self] image in
             guard let strongSelf = self else { return }
-            strongSelf.placeImageView.subviews.forEach { $0.removeFromSuperview() }
-            strongSelf.placeImageView.image = image
-            strongSelf.placeImageView.contentMode = .scaleAspectFill
-            strongSelf.placeImageView.addSubview(strongSelf.visualEffectView)
+
+            DispatchQueue.main.async {
+                strongSelf.placeImageView.subviews.forEach { $0.removeFromSuperview() }
+                strongSelf.placeImageView.image = image
+                strongSelf.placeImageView.contentMode = .scaleAspectFill
+                strongSelf.placeImageView.addSubview(strongSelf.visualEffectView)
+            }
         }, failure: { [weak self] error in
             guard let strongSelf = self else { return }
             strongSelf.logErrorEvent(error)
@@ -103,7 +106,9 @@ class SearchDetailViewController: UIViewController {
 
         dataSource.loadSightsAndEateries(success: { [weak self] indexPaths in
             guard let strongSelf = self else { return }
-            strongSelf.placeCardsTableView.reloadRows(at: indexPaths, with: .fade)
+            DispatchQueue.main.async {
+                strongSelf.placeCardsTableView.reloadRows(at: indexPaths, with: .fade)
+            }
         }, failure: { [weak self] error in
             guard let strongSelf = self else { return }
             strongSelf.logErrorEvent(error)

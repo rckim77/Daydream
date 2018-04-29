@@ -129,12 +129,16 @@ class MapViewController: UIViewController {
         dynamicMarker.tracksInfoWindowChanges = true
 
         networkService.getPlace(with: placeId, success: { [weak self] place in
-            dynamicMarker.snippet = self?.createSnippet(for: place)
+            guard let strongSelf = self else { return }
+            dynamicMarker.snippet = strongSelf.createSnippet(for: place)
             dynamicMarker.tracksInfoWindowChanges = false
-            self?.place = place
-            self?.displayReviews(place.placeableReviews, index: 0)
+            strongSelf.place = place
+            DispatchQueue.main.async {
+                strongSelf.displayReviews(place.placeableReviews, index: 0)
+            }
         }, failure: { [weak self] error in
-            self?.logErrorEvent(error)
+            guard let strongSelf = self else { return }
+            strongSelf.logErrorEvent(error)
         })
     }
 
