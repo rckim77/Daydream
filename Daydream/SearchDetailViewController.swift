@@ -13,11 +13,11 @@ import Hero
 
 class SearchDetailViewController: UIViewController {
 
-    var resultsViewController: GMSAutocompleteResultsViewController?
-    var searchController: UISearchController?
-    var resultView: UITextView?
-    var mapView: GMSMapView?
     var dataSource: SearchDetailDataSource?
+    private var resultsViewController: GMSAutocompleteResultsViewController?
+    private var searchController: UISearchController?
+    private var resultView: UITextView?
+    private var mapView: GMSMapView?
     private lazy var visualEffectView: UIVisualEffectView = {
         let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .regular))
         visualEffectView.frame = placeImageView.bounds

@@ -35,6 +35,7 @@
 		94E392AD2070B4300073E8C9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 94E392AC2070B4300073E8C9 /* GoogleService-Info.plist */; };
 		94E392AE2070B4300073E8C9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 94E392AC2070B4300073E8C9 /* GoogleService-Info.plist */; };
 		94E392B02074B29E0073E8C9 /* style.json in Resources */ = {isa = PBXBuildFile; fileRef = 94E392AF2074B29E0073E8C9 /* style.json */; };
+		94E3D9582097EEC800384680 /* ExpiringCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E3D9572097EEC800384680 /* ExpiringCache.swift */; };
 		94F837042070022700ADB690 /* SummaryCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F837032070022600ADB690 /* SummaryCardCell.swift */; };
 /* End PBXBuildFile section */
 
@@ -82,6 +83,7 @@
 		94DB8FE6204B946200FA7CF7 /* EateriesCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EateriesCardCell.swift; sourceTree = "<group>"; };
 		94E392AC2070B4300073E8C9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		94E392AF2074B29E0073E8C9 /* style.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = style.json; sourceTree = "<group>"; };
+		94E3D9572097EEC800384680 /* ExpiringCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpiringCache.swift; sourceTree = "<group>"; };
 		94F837032070022600ADB690 /* SummaryCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryCardCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -184,6 +186,7 @@
 				94E392AF2074B29E0073E8C9 /* style.json */,
 				947EC657204673BF004A911D /* ShadowView.swift */,
 				947EC6532043F5B2004A911D /* Color.swift */,
+				94E3D9572097EEC800384680 /* ExpiringCache.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -421,6 +424,7 @@
 				94B8CEB3207DC31D00CA8101 /* SearchDetailDataSource.swift in Sources */,
 				94DB8FE7204B946200FA7CF7 /* EateriesCardCell.swift in Sources */,
 				947EC6542043F5B2004A911D /* Color.swift in Sources */,
+				94E3D9582097EEC800384680 /* ExpiringCache.swift in Sources */,
 				949630BA203BCBBD007139CA /* SearchDetailViewController.swift in Sources */,
 				9481EC5A204B358C00863A5A /* SightsCardCell.swift in Sources */,
 				94380AC8203BAE1D00684863 /* AppDelegate.swift in Sources */,

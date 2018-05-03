@@ -18,9 +18,9 @@ class MapCardCell: UITableViewCell {
             hero.id = "mapCard"
         }
     }
-    var mapView: GMSMapView?
+    weak var mapView: GMSMapView?
 
-    var place: Placeable? {
+    weak var place: Placeable? {
         didSet {
             guard let place = place, place !== oldValue else { return }
 
