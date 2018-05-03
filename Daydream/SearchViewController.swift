@@ -11,12 +11,12 @@ import GooglePlaces
 
 class SearchViewController: UIViewController {
 
-    var resultsViewController: GMSAutocompleteResultsViewController?
-    var searchController: UISearchController?
-    var resultView: UITextView?
-    var searchBarView: UIView!
+    private var resultsViewController: GMSAutocompleteResultsViewController?
+    private var searchController: UISearchController?
+    private var resultView: UITextView?
+    private var searchBarView: UIView!
     private let searchBarViewHeight: CGFloat = 45.0
-    var placeData: Placeable?
+    private var placeData: Placeable?
 
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var randomBtn: UIButton! {
