@@ -10,11 +10,11 @@ import UIKit
 import GooglePlaces
 
 extension GMSPlace: Placeable {
-    var placeableId: String {
+    var placeableId: String? {
         return self.placeID
     }
 
-    var placeableName: String {
+    var placeableName: String? {
         return self.name
     }
 

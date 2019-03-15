@@ -115,7 +115,9 @@ class SearchViewController: UIViewController {
 extension SearchViewController: GMSAutocompleteResultsViewControllerDelegate {
     // Handle the user's selection
     func resultsController(_ resultsController: GMSAutocompleteResultsViewController, didAutocompleteWith place: GMSPlace) {
-        logSearchEvent(searchTerm: searchController?.searchBar.text ?? "Couldn't get search bar text", placeId: place.placeID)
+        let searchBarText = searchController?.searchBar.text ?? "Couldn't get search bar text"
+        let placeId = place.placeID ?? "Couldn't get place ID"
+        logSearchEvent(searchTerm: searchBarText, placeId: placeId)
         placeData = place
         dismiss(animated: true, completion: {
             self.performSegue(withIdentifier: "toSearchDetailVCSegue", sender: nil)

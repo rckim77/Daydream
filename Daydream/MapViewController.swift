@@ -61,12 +61,6 @@ class MapViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.hero.id = heroId
-
-        reviewView.isHidden = true
-
-        guard let place = place else { return }
-
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(stopDisplayingReviews),
                                                name: .UIApplicationDidEnterBackground,
@@ -76,7 +70,11 @@ class MapViewController: UIViewController {
                                                name: .UIApplicationWillEnterForeground,
                                                object: nil)
 
-        addOrUpdateMapView(for: place.placeableId, name: place.placeableName, location: place.placeableCoordinate)
+        view.hero.id = heroId
+
+        reviewView.isHidden = true
+
+        addOrUpdateMapView(for: place?.placeableId, name: place?.placeableName, location: place?.placeableCoordinate)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -84,7 +82,9 @@ class MapViewController: UIViewController {
         stopDisplayingReviews()
     }
 
-    private func addOrUpdateMapView(for placeId: String, name: String, location: CLLocationCoordinate2D) {
+    private func addOrUpdateMapView(for placeId: String?, name: String?, location: CLLocationCoordinate2D?) {
+        guard let placeId = placeId, let name = name, let location = location else { return }
+
         let camera = GMSCameraPosition.camera(withLatitude: location.latitude,
                                               longitude: location.longitude,
                                               zoom: 16.0)

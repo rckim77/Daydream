@@ -9,8 +9,8 @@
 import CoreLocation
 
 class Place: Placeable {
-    var placeableId: String
-    var placeableName: String
+    var placeableId: String?
+    var placeableName: String?
     var placeableFormattedAddress: String?
     var placeableFormattedPhoneNumber: String?
     var placeableRating: Float?
@@ -19,7 +19,15 @@ class Place: Placeable {
     var placeableMapUrl: String?
     var placeableReviews: [Reviewable]?
 
-    init(placeID: String, name: String, formattedAddress: String? = nil, formattedPhoneNumber: String? = nil, rating: Float? = nil, coordinate: CLLocationCoordinate2D, viewport: Viewport? = nil, mapUrl: String? = nil, reviews: [Reviewable]? = nil) {
+    init(placeID: String,
+         name: String,
+         formattedAddress: String? = nil,
+         formattedPhoneNumber: String? = nil,
+         rating: Float? = nil,
+         coordinate: CLLocationCoordinate2D,
+         viewport: Viewport? = nil,
+         mapUrl: String? = nil,
+         reviews: [Reviewable]? = nil) {
         self.placeableId = placeID
         self.placeableName = name
         self.placeableFormattedAddress = formattedAddress

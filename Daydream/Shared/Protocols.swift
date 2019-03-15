@@ -12,8 +12,8 @@ import CoreLocation
 import Firebase
 
 protocol Placeable: class {
-    var placeableId: String { get }
-    var placeableName: String { get }
+    var placeableId: String? { get }
+    var placeableName: String? { get }
     var placeableFormattedAddress: String? { get }
     var placeableFormattedPhoneNumber: String? { get }
     var placeableRating: Float? { get }

@@ -7,26 +7,24 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		043836CFDAFCE1EFAA0755EB /* PagingPhotoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 21153EB819432638638C2C26 /* PagingPhotoView.m */; };
+		09FF1CE95591E27B4D3D288F /* AutocompleteModalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E1502E6F1A86B1773138153B /* AutocompleteModalViewController.m */; };
 		15D96A2CC730B0DEF8195766 /* MainSplitViewControllerBehaviorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 818B68D04D9AD33F4EBC54D2 /* MainSplitViewControllerBehaviorManager.m */; };
-		1A484FC943BEEFA43D99A1B1 /* PagingPhotoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 21153EB819432638638C2C26 /* PagingPhotoView.m */; };
-		214143B4B35541589A702634 /* AutocompleteWithCustomColors.m in Sources */ = {isa = PBXBuildFile; fileRef = FC03FEE150596E9432F612DF /* AutocompleteWithCustomColors.m */; };
-		26BA8435B438A4BEB9C893A5 /* PhotosViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6078563FD3AF8109B2586941 /* PhotosViewController.m */; };
 		2A5A993302F4E6E15EA9BCD2 /* PlacesDemoAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 85EDEFE42680FF093454D1AB /* PlacesDemoAssets.xcassets */; };
 		2EC566C0AE2182DE0FEBA86B /* DemoAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B81B9326DD5B37C08B8CCAA /* DemoAppDelegate.m */; };
-		3439DA691B81CBDA5BE552BD /* AutocompleteBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0E6E2A1285D9A0BEBDCD503 /* AutocompleteBaseViewController.m */; };
+		456F556165F526C27D77C29F /* AutocompleteWithCustomColors.m in Sources */ = {isa = PBXBuildFile; fileRef = FC03FEE150596E9432F612DF /* AutocompleteWithCustomColors.m */; };
+		50FF58B9289C98C6B86556A1 /* AutocompleteBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0E6E2A1285D9A0BEBDCD503 /* AutocompleteBaseViewController.m */; };
 		5B89B9BA327B31EC08E64538 /* BaseDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A3D4BD9841268F97FD23E770 /* BaseDemoViewController.m */; };
-		60B690F521E7F65388320B08 /* AutocompletePushViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BAEA89ED8C397E73E2E9730 /* AutocompletePushViewController.m */; };
 		66310EE76B375B01262F52A1 /* DemoData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F2203BCCE0CFC3DC4F38B30 /* DemoData.m */; };
-		6E4B65E8726D60B6659FC6EE /* AutocompleteWithSearchDisplayController.m in Sources */ = {isa = PBXBuildFile; fileRef = 243C9279E0BF845B23337398 /* AutocompleteWithSearchDisplayController.m */; };
+		7F5C374E191BE1976291EF76 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97ADBE3D50D731A88C24F3F0 /* UIKit.framework */; };
+		814DB985D93EA8DFA1153023 /* AutocompleteWithTextFieldController.m in Sources */ = {isa = PBXBuildFile; fileRef = ADB9E4A950DB2EA454486E47 /* AutocompleteWithTextFieldController.m */; };
 		91123AFDEB15F27812A8FCFF /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1D344C64A66F10D55590797E /* Localizable.strings */; };
-		A5154B6A9CB2C3A126703D9E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97ADBE3D50D731A88C24F3F0 /* UIKit.framework */; };
-		AA96A2641C8281A831381AA2 /* AutocompleteWithSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F7419DDC82CA074FF0A508C /* AutocompleteWithSearchViewController.m */; };
+		BA6B6F9C15CF6B13D9CD2103 /* AutocompletePushViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BAEA89ED8C397E73E2E9730 /* AutocompletePushViewController.m */; };
 		C54FD416450638D80BD9A3C0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F65D01DD8887E3B1B9731DAE /* LaunchScreen.storyboard */; };
+		C566A4B7DA8E167CB8D1876B /* PlacePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A69D3327086631C22DBBAD94 /* PlacePickerViewController.m */; };
 		D064B1789A04566EA32E30E1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D0589812EE1F702A7BBA34D /* main.m */; };
 		E56159A1819452F650C1D995 /* DemoListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36C753B6637575A8CD81C699 /* DemoListViewController.m */; };
-		EBEE5C2C69F0939E6BD8864A /* AutocompleteModalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E1502E6F1A86B1773138153B /* AutocompleteModalViewController.m */; };
-		F05B665E94D7DE65E01A76D3 /* PlacePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A69D3327086631C22DBBAD94 /* PlacePickerViewController.m */; };
-		F2051AE18567239DCEE29679 /* AutocompleteWithTextFieldController.m in Sources */ = {isa = PBXBuildFile; fileRef = ADB9E4A950DB2EA454486E47 /* AutocompleteWithTextFieldController.m */; };
+		F554DF2AC3FF71DBFD097862 /* AutocompleteWithSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F7419DDC82CA074FF0A508C /* AutocompleteWithSearchViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,12 +39,10 @@
 		1FE971FB44A73F445279DA7F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		21153EB819432638638C2C26 /* PagingPhotoView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PagingPhotoView.m; sourceTree = "<group>"; };
 		216CA36352B45FBC79C98B8F /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
-		243C9279E0BF845B23337398 /* AutocompleteWithSearchDisplayController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AutocompleteWithSearchDisplayController.m; sourceTree = "<group>"; };
 		273B1A3F7AA7EED9084B5033 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/Localizable.strings; sourceTree = "<group>"; };
 		2D52E39A30BD9D0AFC323F7F /* es_419 */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es_419; path = es_419.lproj/Localizable.strings; sourceTree = "<group>"; };
 		2E4275BAD2E59FA193904FFC /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/Localizable.strings; sourceTree = "<group>"; };
 		31A6A624F6D9631C9BFECF9A /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/Localizable.strings; sourceTree = "<group>"; };
-		36AEC349198E6BC061546705 /* AutocompleteWithSearchDisplayController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AutocompleteWithSearchDisplayController.h; sourceTree = "<group>"; };
 		36C753B6637575A8CD81C699 /* DemoListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DemoListViewController.m; sourceTree = "<group>"; };
 		37CA5C28547C65246AC4EAE6 /* zh_HK */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = zh_HK; path = zh_HK.lproj/Localizable.strings; sourceTree = "<group>"; };
 		3A822A5CF223FF6ADFCA9458 /* th */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = th; path = th.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -56,12 +52,10 @@
 		4F2203BCCE0CFC3DC4F38B30 /* DemoData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DemoData.m; sourceTree = "<group>"; };
 		50E198C48B1A11E3B03DBE30 /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/Localizable.strings; sourceTree = "<group>"; };
 		55F92A67B1F0F18431DD759C /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/Localizable.strings; sourceTree = "<group>"; };
-		6078563FD3AF8109B2586941 /* PhotosViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotosViewController.m; sourceTree = "<group>"; };
 		611B5E7788AB0459C2AA1A54 /* DemoData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DemoData.h; sourceTree = "<group>"; };
 		651835542B635C74A3D0F711 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		67BD5ABA8E74D336AE54C0B0 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/Localizable.strings; sourceTree = "<group>"; };
 		69D781288A761B789E0F63B6 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
-		6EBC31158FA04B806E2549AF /* PhotosViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotosViewController.h; sourceTree = "<group>"; };
 		77688EB771E8262C6C224CE8 /* en_IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en_IN; path = en_IN.lproj/Localizable.strings; sourceTree = "<group>"; };
 		818B68D04D9AD33F4EBC54D2 /* MainSplitViewControllerBehaviorManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainSplitViewControllerBehaviorManager.m; sourceTree = "<group>"; };
 		84E89BC0ADE5F983320B9730 /* AutocompletePushViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AutocompletePushViewController.h; sourceTree = "<group>"; };
@@ -115,33 +109,27 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A5154B6A9CB2C3A126703D9E /* UIKit.framework in Frameworks */,
+				7F5C374E191BE1976291EF76 /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0D3B41906E0C3777FFB056DE /* Samples */ = {
-			isa = PBXGroup;
-			children = (
-				581A54906DCDED616577E5AE /* Autocomplete */,
-				3CB3E42FBF23DD0411D5EFB5 /* PagingPhotoView.h */,
-				21153EB819432638638C2C26 /* PagingPhotoView.m */,
-				6EBC31158FA04B806E2549AF /* PhotosViewController.h */,
-				6078563FD3AF8109B2586941 /* PhotosViewController.m */,
-				D386A1C846DB8FAC6C3916E6 /* PlacePickerViewController.h */,
-				A69D3327086631C22DBBAD94 /* PlacePickerViewController.m */,
-			);
-			path = Samples;
-			sourceTree = "<group>";
-		};
 		272C787B5065093A74F813D3 /* Source */ = {
 			isa = PBXGroup;
 			children = (
 				E437630B6C8A8B3D1C7679DE /* GooglePlacesDemos */,
 			);
 			name = Source;
+			sourceTree = "<group>";
+		};
+		3746C4AF365DFCF50C878915 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				97ADBE3D50D731A88C24F3F0 /* UIKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		5451EE1805656445BDA54845 /* Resources */ = {
@@ -154,7 +142,7 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
-		581A54906DCDED616577E5AE /* Autocomplete */ = {
+		5EDD6C0FADBB29C5650216AA /* Autocomplete */ = {
 			isa = PBXGroup;
 			children = (
 				88DC6C46CAE8787FB54161AF /* AutocompleteBaseViewController.h */,
@@ -165,8 +153,6 @@
 				1BAEA89ED8C397E73E2E9730 /* AutocompletePushViewController.m */,
 				13C513E93D85CC7B765F9CDB /* AutocompleteWithCustomColors.h */,
 				FC03FEE150596E9432F612DF /* AutocompleteWithCustomColors.m */,
-				36AEC349198E6BC061546705 /* AutocompleteWithSearchDisplayController.h */,
-				243C9279E0BF845B23337398 /* AutocompleteWithSearchDisplayController.m */,
 				CF1B1E3D7B5C131B7DF1C10C /* AutocompleteWithSearchViewController.h */,
 				8F7419DDC82CA074FF0A508C /* AutocompleteWithSearchViewController.m */,
 				F2689EA2B2A4F7DC9912D5DE /* AutocompleteWithTextFieldController.h */,
@@ -179,7 +165,7 @@
 			isa = PBXGroup;
 			children = (
 				272C787B5065093A74F813D3 /* Source */,
-				B8B0BC3E953F50BF23A2F9F8 /* Frameworks */,
+				3746C4AF365DFCF50C878915 /* Frameworks */,
 				87ED31F365F5BCA83FBDE8E8 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -203,19 +189,23 @@
 			path = Support;
 			sourceTree = "<group>";
 		};
-		B8B0BC3E953F50BF23A2F9F8 /* Frameworks */ = {
+		9651A1E7EAF97D08B9A3400B /* Samples */ = {
 			isa = PBXGroup;
 			children = (
-				97ADBE3D50D731A88C24F3F0 /* UIKit.framework */,
+				5EDD6C0FADBB29C5650216AA /* Autocomplete */,
+				3CB3E42FBF23DD0411D5EFB5 /* PagingPhotoView.h */,
+				21153EB819432638638C2C26 /* PagingPhotoView.m */,
+				D386A1C846DB8FAC6C3916E6 /* PlacePickerViewController.h */,
+				A69D3327086631C22DBBAD94 /* PlacePickerViewController.m */,
 			);
-			name = Frameworks;
+			path = Samples;
 			sourceTree = "<group>";
 		};
 		E437630B6C8A8B3D1C7679DE /* GooglePlacesDemos */ = {
 			isa = PBXGroup;
 			children = (
 				5451EE1805656445BDA54845 /* Resources */,
-				0D3B41906E0C3777FFB056DE /* Samples */,
+				9651A1E7EAF97D08B9A3400B /* Samples */,
 				903D8B003C69F9D605250637 /* Support */,
 				F8ABF15D04AF351D0A21A5CD /* DemoAppDelegate.h */,
 				9B81B9326DD5B37C08B8CCAA /* DemoAppDelegate.m */,
@@ -256,7 +246,6 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 0900;
 			};
 			buildConfigurationList = 63964CA36C9733EFF27C66CD /* Build configuration list for PBXProject "GooglePlacesDemos" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -296,16 +285,14 @@
 				66310EE76B375B01262F52A1 /* DemoData.m in Sources */,
 				E56159A1819452F650C1D995 /* DemoListViewController.m in Sources */,
 				D064B1789A04566EA32E30E1 /* main.m in Sources */,
-				3439DA691B81CBDA5BE552BD /* AutocompleteBaseViewController.m in Sources */,
-				EBEE5C2C69F0939E6BD8864A /* AutocompleteModalViewController.m in Sources */,
-				60B690F521E7F65388320B08 /* AutocompletePushViewController.m in Sources */,
-				214143B4B35541589A702634 /* AutocompleteWithCustomColors.m in Sources */,
-				6E4B65E8726D60B6659FC6EE /* AutocompleteWithSearchDisplayController.m in Sources */,
-				AA96A2641C8281A831381AA2 /* AutocompleteWithSearchViewController.m in Sources */,
-				F2051AE18567239DCEE29679 /* AutocompleteWithTextFieldController.m in Sources */,
-				1A484FC943BEEFA43D99A1B1 /* PagingPhotoView.m in Sources */,
-				26BA8435B438A4BEB9C893A5 /* PhotosViewController.m in Sources */,
-				F05B665E94D7DE65E01A76D3 /* PlacePickerViewController.m in Sources */,
+				50FF58B9289C98C6B86556A1 /* AutocompleteBaseViewController.m in Sources */,
+				09FF1CE95591E27B4D3D288F /* AutocompleteModalViewController.m in Sources */,
+				BA6B6F9C15CF6B13D9CD2103 /* AutocompletePushViewController.m in Sources */,
+				456F556165F526C27D77C29F /* AutocompleteWithCustomColors.m in Sources */,
+				F554DF2AC3FF71DBFD097862 /* AutocompleteWithSearchViewController.m in Sources */,
+				814DB985D93EA8DFA1153023 /* AutocompleteWithTextFieldController.m in Sources */,
+				043836CFDAFCE1EFAA0755EB /* PagingPhotoView.m in Sources */,
+				C566A4B7DA8E167CB8D1876B /* PlacePickerViewController.m in Sources */,
 				5B89B9BA327B31EC08E64538 /* BaseDemoViewController.m in Sources */,
 				15D96A2CC730B0DEF8195766 /* MainSplitViewControllerBehaviorManager.m in Sources */,
 			);
@@ -390,7 +377,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = ./GooglePlacesDemos/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LIBRARY_SEARCH_PATHS = (
 					.,
 					"$(SDKROOT)/System/Library/Frameworks",

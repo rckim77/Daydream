@@ -27,7 +27,8 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
     }
 
     func loadPhoto(success: @escaping(_ image: UIImage) -> Void, failure: @escaping(_ error: Error?) -> Void) {
-        networkService.loadPhoto(with: place.placeableId, success: { photo in
+        guard let placeId = place.placeableId else { return }
+        networkService.loadPhoto(with: placeId, success: { photo in
             success(photo)
         }, failure: { error in
             failure(error)
