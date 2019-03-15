@@ -63,11 +63,11 @@ class MapViewController: UIViewController {
 
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(stopDisplayingReviews),
-                                               name: .UIApplicationDidEnterBackground,
+                                               name: UIApplication.didEnterBackgroundNotification,
                                                object: nil)
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(restartDisplayingCurrentReviews),
-                                               name: .UIApplicationWillEnterForeground,
+                                               name: UIApplication.willEnterForegroundNotification,
                                                object: nil)
 
         view.hero.id = heroId
@@ -101,7 +101,7 @@ class MapViewController: UIViewController {
             guard let dynamicMapView = dynamicMapView else { return }
             dynamicMapView.delegate = self
             view.addSubview(dynamicMapView)
-            view.sendSubview(toBack: dynamicMapView)
+            view.sendSubviewToBack(dynamicMapView)
             addOrUpdateMarkerAndReviews(for: placeId, name: name, location: location, in: dynamicMapView)
         }
     }

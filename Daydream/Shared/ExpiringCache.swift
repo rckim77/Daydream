@@ -25,7 +25,7 @@ class ExpiringCache<K: Hashable, V: Any> {
     init(duration: TimeInterval = kDefaultTimeInterval) {
         self.duration = duration
 
-        observer = NotificationCenter.default.addObserver(forName: .UIApplicationDidReceiveMemoryWarning,
+        observer = NotificationCenter.default.addObserver(forName: UIApplication.didReceiveMemoryWarningNotification,
                                                           object: nil,
                                                           queue: nil) { [weak self] _ in
             print("added observer")
@@ -40,7 +40,7 @@ class ExpiringCache<K: Hashable, V: Any> {
 
         DispatchQueue.main.async {
             print("added timer to run loop on main thread")
-            RunLoop.current.add(self.timer, forMode: .defaultRunLoopMode)
+            RunLoop.current.add(self.timer, forMode: RunLoop.Mode.default)
         }
     }
 
@@ -94,7 +94,7 @@ class ExpiringCache<K: Hashable, V: Any> {
     deinit {
         print("removing observer")
         NotificationCenter.default.removeObserver(observer,
-                                                  name: .UIApplicationDidReceiveMemoryWarning,
+                                                  name: UIApplication.didReceiveMemoryWarningNotification,
                                                   object: nil)
     }
 }
