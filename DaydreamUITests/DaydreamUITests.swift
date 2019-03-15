@@ -40,13 +40,13 @@ class DaydreamUITests: XCTestCase {
 
         snapshot("02AutocorrectVC")
 
-        app/*@START_MENU_TOKEN@*/.tables["Search results"].staticTexts["Tokyo"]/*[[".otherElements[\"Double-tap to dismiss\"].tables[\"Search results\"]",".cells.staticTexts[\"Tokyo\"]",".staticTexts[\"Tokyo\"]",".tables[\"Search results\"]"],[[[-1,3,1],[-1,0,1]],[[-1,2],[-1,1]]],[0,0]]@END_MENU_TOKEN@*/.tap()
+        app.tables["Search results"].staticTexts["Tokyo"].tap()
 
         sleep(4)
 
         snapshot("03SearchDetailVC")
 
-        app.tables/*@START_MENU_TOKEN@*/.otherElements["poi1Card"]/*[[".cells.otherElements[\"poi1Card\"]",".otherElements[\"poi1Card\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        app.tables.otherElements["poi1Card"].tap()
 
         sleep(4)
 
