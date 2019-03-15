@@ -232,9 +232,9 @@ class NetworkService {
     }
 
     private func createUrl(with place: Placeable, and type: String) -> String {
-        if type == "point_of_interest" {
+        if let placeableName = place.placeableName, type == "point_of_interest" {
             let keyParam = AppDelegate.googleAPIKey
-            let placeName = place.placeableName.split(separator: " ")
+            let placeName = placeableName.split(separator: " ")
             var queryParam = "tourist+spots+in"
             placeName.forEach { word in
                 queryParam += "+" + word

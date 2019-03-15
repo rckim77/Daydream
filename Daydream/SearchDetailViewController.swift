@@ -13,11 +13,11 @@ import Hero
 
 class SearchDetailViewController: UIViewController {
 
-    var resultsViewController: GMSAutocompleteResultsViewController?
-    var searchController: UISearchController?
-    var resultView: UITextView?
-    var mapView: GMSMapView?
     var dataSource: SearchDetailDataSource?
+    private var resultsViewController: GMSAutocompleteResultsViewController?
+    private var searchController: UISearchController?
+    private var resultView: UITextView?
+    private var mapView: GMSMapView?
     private lazy var visualEffectView: UIVisualEffectView = {
         let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .regular))
         visualEffectView.frame = placeImageView.bounds
@@ -164,8 +164,8 @@ extension SearchDetailViewController: UITableViewDelegate {
 
             if let mapUrl = dataSource.place.placeableMapUrl {
                 openUrl(mapUrl)
-            } else {
-                networkService.getPlace(with: dataSource.place.placeableId, success: { [weak self] place in
+            } else if let placeId = dataSource.place.placeableId {
+                networkService.getPlace(with: placeId, success: { [weak self] place in
                     guard let strongSelf = self, let mapUrl = place.placeableMapUrl else { return }
                     strongSelf.openUrl(mapUrl)
                 }, failure: { [weak self] error in
@@ -183,7 +183,9 @@ extension SearchDetailViewController: GMSAutocompleteResultsViewControllerDelega
     // Handle user's selection
     func resultsController(_ resultsController: GMSAutocompleteResultsViewController,
                            didAutocompleteWith place: GMSPlace) {
-        logSearchEvent(searchTerm: searchController?.searchBar.text ?? "Couldn't get search bar text", placeId: place.placeID)
+        let searchBarText = searchController?.searchBar.text ?? "Couldn't get search bar text"
+        let placeId = place.placeID ?? "Couldn't get place ID"
+        logSearchEvent(searchTerm: searchBarText, placeId: placeId)
         searchController?.searchBar.text = nil // reset to search bar text
 
         dismiss(animated: true, completion: {

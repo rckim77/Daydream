@@ -11,12 +11,12 @@ import GooglePlaces
 
 class SearchViewController: UIViewController {
 
-    var resultsViewController: GMSAutocompleteResultsViewController?
-    var searchController: UISearchController?
-    var resultView: UITextView?
-    var searchBarView: UIView!
+    private var resultsViewController: GMSAutocompleteResultsViewController?
+    private var searchController: UISearchController?
+    private var resultView: UITextView?
+    private var searchBarView: UIView!
     private let searchBarViewHeight: CGFloat = 45.0
-    var placeData: Placeable?
+    private var placeData: Placeable?
 
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var randomBtn: UIButton! {
@@ -115,7 +115,9 @@ class SearchViewController: UIViewController {
 extension SearchViewController: GMSAutocompleteResultsViewControllerDelegate {
     // Handle the user's selection
     func resultsController(_ resultsController: GMSAutocompleteResultsViewController, didAutocompleteWith place: GMSPlace) {
-        logSearchEvent(searchTerm: searchController?.searchBar.text ?? "Couldn't get search bar text", placeId: place.placeID)
+        let searchBarText = searchController?.searchBar.text ?? "Couldn't get search bar text"
+        let placeId = place.placeID ?? "Couldn't get place ID"
+        logSearchEvent(searchTerm: searchBarText, placeId: placeId)
         placeData = place
         dismiss(animated: true, completion: {
             self.performSegue(withIdentifier: "toSearchDetailVCSegue", sender: nil)

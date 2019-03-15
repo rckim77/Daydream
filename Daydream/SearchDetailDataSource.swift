@@ -15,8 +15,7 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
     var eateries: [Eatery]?
     weak var viewController: SearchDetailViewController?
 
-    let networkService = NetworkService()
-    let summaryCardCellHeight: CGFloat = 190
+    private let networkService = NetworkService()
     let mapCardCellHeight: CGFloat = 190
     let mapCardCellIndexPath = IndexPath(row: 0, section: 0)
     let sightsCardCellHeight: CGFloat = 600
@@ -28,7 +27,8 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
     }
 
     func loadPhoto(success: @escaping(_ image: UIImage) -> Void, failure: @escaping(_ error: Error?) -> Void) {
-        networkService.loadPhoto(with: place.placeableId, success: { photo in
+        guard let placeId = place.placeableId else { return }
+        networkService.loadPhoto(with: placeId, success: { photo in
             success(photo)
         }, failure: { error in
             failure(error)

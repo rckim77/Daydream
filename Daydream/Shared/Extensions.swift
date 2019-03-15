@@ -10,11 +10,11 @@ import UIKit
 import GooglePlaces
 
 extension GMSPlace: Placeable {
-    var placeableId: String {
+    var placeableId: String? {
         return self.placeID
     }
 
-    var placeableName: String {
+    var placeableName: String? {
         return self.name
     }
 
@@ -79,7 +79,7 @@ extension UIColor {
 extension UISearchController {
     func setStyle() {
         // style cancel button
-        let cancelBtnAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
+        let cancelBtnAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes(cancelBtnAttributes, for: .normal)
 
         // style search bar text color
@@ -87,7 +87,7 @@ extension UISearchController {
         searchBarTextField?.textColor = .white
 
         // style placeholder text color
-        let placeholderTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
+        let placeholderTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         searchBarTextField?.attributedPlaceholder = NSAttributedString(string: "e.g., Tokyo", attributes: placeholderTextAttributes)
 
         // style search icon
@@ -204,15 +204,15 @@ extension UIView {
 
 extension UIViewController {
     func add(_ childVC: UIViewController) {
-        addChildViewController(childVC)
+        addChild(childVC)
         view.addSubview(childVC.view)
-        childVC.didMove(toParentViewController: self)
+        childVC.didMove(toParent: self)
     }
 
     func remove() {
         guard parent != nil else { return }
-        willMove(toParentViewController: nil)
-        removeFromParentViewController()
+        willMove(toParent: nil)
+        removeFromParent()
         view.removeFromSuperview()
     }
 

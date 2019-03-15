@@ -61,22 +61,20 @@ class MapViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(stopDisplayingReviews),
+                                               name: UIApplication.didEnterBackgroundNotification,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(restartDisplayingCurrentReviews),
+                                               name: UIApplication.willEnterForegroundNotification,
+                                               object: nil)
+
         view.hero.id = heroId
 
         reviewView.isHidden = true
 
-        guard let place = place else { return }
-
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(stopDisplayingReviews),
-                                               name: .UIApplicationDidEnterBackground,
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(restartDisplayingCurrentReviews),
-                                               name: .UIApplicationWillEnterForeground,
-                                               object: nil)
-
-        addOrUpdateMapView(for: place.placeableId, name: place.placeableName, location: place.placeableCoordinate)
+        addOrUpdateMapView(for: place?.placeableId, name: place?.placeableName, location: place?.placeableCoordinate)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -84,7 +82,9 @@ class MapViewController: UIViewController {
         stopDisplayingReviews()
     }
 
-    private func addOrUpdateMapView(for placeId: String, name: String, location: CLLocationCoordinate2D) {
+    private func addOrUpdateMapView(for placeId: String?, name: String?, location: CLLocationCoordinate2D?) {
+        guard let placeId = placeId, let name = name, let location = location else { return }
+
         let camera = GMSCameraPosition.camera(withLatitude: location.latitude,
                                               longitude: location.longitude,
                                               zoom: 16.0)
@@ -101,7 +101,7 @@ class MapViewController: UIViewController {
             guard let dynamicMapView = dynamicMapView else { return }
             dynamicMapView.delegate = self
             view.addSubview(dynamicMapView)
-            view.sendSubview(toBack: dynamicMapView)
+            view.sendSubviewToBack(dynamicMapView)
             addOrUpdateMarkerAndReviews(for: placeId, name: name, location: location, in: dynamicMapView)
         }
     }

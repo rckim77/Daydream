@@ -109,7 +109,8 @@ class SightsCardCell: UITableViewCell {
     }
 
     private func loadBackgroundImage(for button: Int, with pointOfInterest: Placeable) {
-        NetworkService().loadPhoto(with: pointOfInterest.placeableId, success: { [weak self] image in
+        guard let placeId = pointOfInterest.placeableId else { return }
+        NetworkService().loadPhoto(with: placeId, success: { [weak self] image in
             guard let strongSelf = self else { return }
             var imageView = UIImageView()
 
