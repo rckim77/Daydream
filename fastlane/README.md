@@ -47,7 +47,7 @@ Deploy a new patch version to the App Store (bug fixes with backwards compatibil
 ```
 fastlane ios release_new_build_only
 ```
-Deploy a new build only to the App Store; no version chnages
+Deploy a new build only to the App Store; no version changes
 
 ----
 
