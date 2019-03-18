@@ -221,3 +221,11 @@ extension UIViewController {
         UIApplication.shared.open(url, options: [:])
     }
 }
+
+extension String {
+    var abbreviated: String {
+        let nameParts = self.components(separatedBy: " ")
+        guard let first = nameParts.first, let lastInitial = nameParts.last?.first else { return self }
+        return first + " " + String(lastInitial) + "."
+    }
+}

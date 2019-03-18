@@ -212,11 +212,7 @@ class MapViewController: UIViewController {
     }
 
     private func loadReviewContent(_ review: Reviewable) {
-        if let review = review as? Review {
-            authorLabel.text = review.authorAbbreviated
-        } else {
-            authorLabel.text = review.author
-        }
+        authorLabel.text = review.author
 
         let stars: [UIImageView] = [star5, star4, star3, star2, star1]
         for i in 0..<review.rating {

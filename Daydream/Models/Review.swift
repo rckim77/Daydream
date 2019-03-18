@@ -13,17 +13,13 @@ class Review: Reviewable {
     var authorUrl: String?
     var authorProfileUrl: String?
 
-    var authorAbbreviated: String? {
-        let nameParts = author.components(separatedBy: " ")
-        guard let first = nameParts.first, let lastInitial = nameParts.last?.first else { return nil }
-        return first + " " + String(lastInitial) + "."
-    }
-
     init(_ author: String, _ rating: Int, _ review: String? = nil, _ authorUrl: String? = nil, _ authorProfileUrl: String? = nil) {
-        self.author = author
+        self.author = author.abbreviated
         self.rating = rating
         self.review = review
         self.authorUrl = authorUrl
         self.authorProfileUrl = authorProfileUrl
     }
+
+    
 }
