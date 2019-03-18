@@ -103,9 +103,7 @@ class EateriesCardCell: UITableViewCell {
                 guard let strongSelf = self, let data = data else { return }
 
                 DispatchQueue.main.async {
-                    guard let image = UIImage(data: data) else {
-                        return
-                    }
+                    guard let image = UIImage(data: data) else { return }
 
                     var imageView = UIImageView()
                     switch button {

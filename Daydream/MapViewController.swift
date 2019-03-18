@@ -23,6 +23,7 @@ class MapViewController: UIViewController {
     
     @IBOutlet weak var reviewView: DesignableView!
     @IBOutlet weak var authorLabel: UILabel!
+    @IBOutlet weak var authorImageView: UIImageView!
     @IBOutlet weak var reviewLabel: UILabel!
     @IBOutlet weak var star1: UIImageView!
     @IBOutlet weak var star2: UIImageView!
@@ -167,7 +168,12 @@ class MapViewController: UIViewController {
         loadReviewContent(reviews[index])
         reviewView.isHidden = false
         reviewView.alpha = 1
-        startDisplayingReviews(reviews, index: index + 1)
+
+        if ProcessInfo.processInfo.environment["isUITest"] == "true" {
+            displayReviewForUITest(reviews)
+        } else {
+            startDisplayingReviews(reviews, index: index + 1)   
+        }
     }
 
     private func startDisplayingReviews(_ reviews: [Reviewable], index: Int) {
@@ -176,7 +182,7 @@ class MapViewController: UIViewController {
                 self.reviewView.subviews.forEach { $0.alpha = 1 }
             }, completion: { finished in
                 if finished {
-                    UIView.animate(withDuration: 0.7, delay: 5, animations: {
+                    UIView.animate(withDuration: 0.7, delay: 6, animations: {
                         self.reviewView.subviews.forEach { $0.alpha = 0 }
                     }, completion: { finished in
                         if finished {
@@ -194,6 +200,13 @@ class MapViewController: UIViewController {
                 self.reviewView.isHidden = true
             })
         }
+    }
+
+    private func displayReviewForUITest(_ reviews: [Reviewable]) {
+        guard let firstReview = reviews.first else { return }
+        reviewView.isHidden = false
+        currentReviewIndex = 1
+        loadReviewContent(firstReview)
     }
 
     @objc
@@ -219,6 +232,19 @@ class MapViewController: UIViewController {
         }
 
         reviewLabel.text = review.review ?? ""
+        loadImage(from: review.authorProfileUrl)
+    }
+
+    private func loadImage(from urlString: String?) {
+        guard let urlString = urlString, let url = URL(string: urlString) else { return }
+
+        URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
+            guard let strongSelf = self, let data = data else { return }
+            DispatchQueue.main.async {
+                guard let image = UIImage(data: data) else { return }
+                strongSelf.fadeInImage(image, forImageView: strongSelf.authorImageView)
+            }
+        }.resume()
     }
 }
 
@@ -237,4 +263,4 @@ extension MapViewController: GMSMapViewDelegate {
     }
 }
 
-extension MapViewController: Loggable {}
+extension MapViewController: Loggable, ImageViewFadeable {}

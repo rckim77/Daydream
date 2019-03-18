@@ -28,6 +28,7 @@ protocol Reviewable: class {
     var rating: Int { get }
     var review: String? { get }
     var authorUrl: String? { get }
+    var authorProfileUrl: String? { get }
 }
 
 protocol RandomCitySelectable {

@@ -11,11 +11,15 @@ class Review: Reviewable {
     var rating: Int
     var review: String?
     var authorUrl: String?
+    var authorProfileUrl: String?
 
-    init(author: String, rating: Int, review: String? = nil, authorUrl: String? = nil) {
-        self.author = author
+    init(_ author: String, _ rating: Int, _ review: String? = nil, _ authorUrl: String? = nil, _ authorProfileUrl: String? = nil) {
+        self.author = author.abbreviated
         self.rating = rating
         self.review = review
         self.authorUrl = authorUrl
+        self.authorProfileUrl = authorProfileUrl
     }
+
+    
 }

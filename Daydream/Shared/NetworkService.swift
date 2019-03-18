@@ -187,8 +187,9 @@ class NetworkService {
 
                         let review = dict["text"]?.string
                         let authorUrl = dict["author_url"]?.string
+                        let authorProfileUrl = dict["profile_photo_url"]?.string
 
-                        return Review(author: author, rating: rating, review: review, authorUrl: authorUrl)
+                        return Review(author, rating, review, authorUrl, authorProfileUrl)
                     }
                 }
 
