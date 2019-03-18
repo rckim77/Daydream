@@ -11,11 +11,19 @@ class Review: Reviewable {
     var rating: Int
     var review: String?
     var authorUrl: String?
+    var authorProfileUrl: String?
 
-    init(author: String, rating: Int, review: String? = nil, authorUrl: String? = nil) {
+    var authorAbbreviated: String? {
+        let nameParts = author.components(separatedBy: " ")
+        guard let first = nameParts.first, let lastInitial = nameParts.last?.first else { return nil }
+        return first + " " + String(lastInitial) + "."
+    }
+
+    init(_ author: String, _ rating: Int, _ review: String? = nil, _ authorUrl: String? = nil, _ authorProfileUrl: String? = nil) {
         self.author = author
         self.rating = rating
         self.review = review
         self.authorUrl = authorUrl
+        self.authorProfileUrl = authorProfileUrl
     }
 }

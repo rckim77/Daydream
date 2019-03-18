@@ -23,6 +23,7 @@ class MapViewController: UIViewController {
     
     @IBOutlet weak var reviewView: DesignableView!
     @IBOutlet weak var authorLabel: UILabel!
+    @IBOutlet weak var authorImageView: UIImageView!
     @IBOutlet weak var reviewLabel: UILabel!
     @IBOutlet weak var star1: UIImageView!
     @IBOutlet weak var star2: UIImageView!
@@ -211,7 +212,11 @@ class MapViewController: UIViewController {
     }
 
     private func loadReviewContent(_ review: Reviewable) {
-        authorLabel.text = review.author
+        if let review = review as? Review {
+            authorLabel.text = review.authorAbbreviated
+        } else {
+            authorLabel.text = review.author
+        }
 
         let stars: [UIImageView] = [star5, star4, star3, star2, star1]
         for i in 0..<review.rating {
@@ -219,6 +224,19 @@ class MapViewController: UIViewController {
         }
 
         reviewLabel.text = review.review ?? ""
+        loadImage(from: review.authorProfileUrl)
+    }
+
+    private func loadImage(from urlString: String?) {
+        guard let urlString = urlString, let url = URL(string: urlString) else { return }
+
+        URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
+            guard let strongSelf = self, let data = data else { return }
+            DispatchQueue.main.async {
+                guard let image = UIImage(data: data) else { return }
+                strongSelf.fadeInImage(image, forImageView: strongSelf.authorImageView)
+            }
+        }.resume()
     }
 }
 
@@ -237,4 +255,4 @@ extension MapViewController: GMSMapViewDelegate {
     }
 }
 
-extension MapViewController: Loggable {}
+extension MapViewController: Loggable, ImageViewFadeable {}
