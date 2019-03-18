@@ -168,16 +168,21 @@ class MapViewController: UIViewController {
         loadReviewContent(reviews[index])
         reviewView.isHidden = false
         reviewView.alpha = 1
-        startDisplayingReviews(reviews, index: index + 1)
+
+        if ProcessInfo.processInfo.environment["isUITest"] == "true" {
+            startDisplayingReviews(reviews, index: index + 1, animate: false)
+        } else {
+            startDisplayingReviews(reviews, index: index + 1)
+        }
     }
 
-    private func startDisplayingReviews(_ reviews: [Reviewable], index: Int) {
+    private func startDisplayingReviews(_ reviews: [Reviewable], index: Int, animate: Bool = true) {
         if index < reviews.count - 1 {
-            UIView.animate(withDuration: 0.7, animations: {
+            UIView.animate(withDuration: animate ? 0.7 : 0, animations: {
                 self.reviewView.subviews.forEach { $0.alpha = 1 }
             }, completion: { finished in
                 if finished {
-                    UIView.animate(withDuration: 0.7, delay: 5, animations: {
+                    UIView.animate(withDuration: animate ? 0.7 : 0, delay: 6, animations: {
                         self.reviewView.subviews.forEach { $0.alpha = 0 }
                     }, completion: { finished in
                         if finished {

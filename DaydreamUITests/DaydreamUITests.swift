@@ -14,19 +14,13 @@ class DaydreamUITests: XCTestCase {
         super.setUp()
 
         continueAfterFailure = false
-
-        let app = XCUIApplication()
-        setupSnapshot(app)
-        app.launch()
-    }
-    
-    override func tearDown() {
-        super.tearDown()
     }
     
     func testUserInputCityAndSelectFirstAutocorrectTableViewCell() {
-
         let app = XCUIApplication()
+        app.launchEnvironment = ["isUITest": "true"]
+        setupSnapshot(app)
+        app.launch()
 
         snapshot("01SearchVC")
 
