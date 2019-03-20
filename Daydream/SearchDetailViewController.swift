@@ -10,6 +10,7 @@ import UIKit
 import GooglePlaces
 import GoogleMaps
 import Hero
+import SnapKit
 
 class SearchDetailViewController: UIViewController {
 
@@ -18,15 +19,39 @@ class SearchDetailViewController: UIViewController {
     private var searchController: UISearchController?
     private var resultView: UITextView?
     private var mapView: GMSMapView?
+
+    private lazy var headerView: UIView = {
+        let view = UIView()
+        return view
+    }()
+
+    private lazy var titleLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.font = UIFont.systemFont(ofSize: 36, weight: .medium)
+        return label
+    }()
+
+    private lazy var randomButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(named: "diceCubeHardShadow"), for: .normal)
+        return button
+    }()
+
+    private lazy var homeButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(named: "homeWhiteShadow"), for: .normal)
+        return button
+    }()
+
     private lazy var visualEffectView: UIVisualEffectView = {
         let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .regular))
         visualEffectView.frame = placeImageView.bounds
         return visualEffectView
     }()
+
     private let networkService = NetworkService()
     private let headerSectionHeight: CGFloat = 100
-
-    @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var placeImageView: UIImageView!
     @IBOutlet weak var placeCardsTableView: UITableView!
 
@@ -34,8 +59,7 @@ class SearchDetailViewController: UIViewController {
         super.viewDidLoad()
 
         configureTableView()
-        configureSearchController()
-        configureResultsVC()
+        configureHeaderSection()
         loadDataSource()
     }
 
@@ -65,16 +89,47 @@ class SearchDetailViewController: UIViewController {
 
     // MARK: - UI Configuration methods
 
+    private func configureHeaderSection() {
+        view.addSubview(headerView)
+        headerView.addSubview(titleLabel)
+        headerView.addSubview(randomButton)
+        headerView.addSubview(homeButton)
+
+        headerView.snp.makeConstraints { make in
+            make.top.leading.trailing.equalToSuperview()
+        }
+
+        titleLabel.snp.makeConstraints { make in
+            make.leading.top.bottom.equalToSuperview().inset(16)
+        }
+
+        randomButton.snp.makeConstraints { make in
+            make.leading.greaterThanOrEqualTo(titleLabel.snp.trailing).offset(8)
+            make.height.width.equalTo(24)
+            make.top.equalToSuperview().inset(16)
+        }
+
+        homeButton.snp.makeConstraints { make in
+            make.leading.equalTo(randomButton.snp.trailing).offset(4)
+            make.height.width.equalTo(24)
+            make.top.equalTo(16)
+            make.trailing.equalToSuperview().inset(16)
+        }
+
+        configureSearchController()
+        configureResultsVC()
+    }
+
     private func configureSearchController() {
         searchController = UISearchController(searchResultsController: resultsViewController)
         searchController?.searchResultsUpdater = resultsViewController
         searchController?.searchBar.searchBarStyle = .minimal
         searchController?.setStyle()
 
-//        let subView = UIView(frame: CGRect(x: 0, y: 128.0, width: view.bounds.width, height: 45.0))
-//        subView.addSubview((searchController?.searchBar)!)
-//        view.addSubview(subView)
-//        searchController?.searchBar.sizeToFit()
+        //        let subView = UIView(frame: CGRect(x: 0, y: 128.0, width: view.bounds.width, height: 45.0))
+        //        subView.addSubview((searchController?.searchBar)!)
+        //        view.addSubview(subView)
+        //        searchController?.searchBar.sizeToFit()
 
         // When UISearchController presents the results view, present it in
         // this view controller, not one further up the chain.
