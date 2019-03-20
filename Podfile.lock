@@ -31,6 +31,7 @@ PODS:
     - nanopb/encode (= 0.3.8)
   - nanopb/decode (0.3.8)
   - nanopb/encode (0.3.8)
+  - SnapKit (4.0.1)
   - SVProgressHUD (2.2.5)
   - SwiftLint (0.25.1)
   - SwiftyJSON (4.0.0)
@@ -43,6 +44,7 @@ DEPENDENCIES:
   - GoogleMaps (~> 3.0)
   - GooglePlaces (~> 3.0)
   - Hero
+  - SnapKit (~> 4.0.0)
   - SVProgressHUD
   - SwiftLint (~> 0.25)
   - SwiftyJSON
@@ -60,10 +62,11 @@ SPEC CHECKSUMS:
   GoogleToolboxForMac: 2501e2ad72a52eb3dfe7bd9aee7dad11b858bd20
   Hero: ce59e81c79390613d97b43da7179e2c5e1017e04
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
+  SnapKit: 0de968a9fec17499afa29683b05d0c775b6d1c29
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   SwiftLint: ce933681be10c3266e82576dad676fa815a602e9
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
 
-PODFILE CHECKSUM: 7ced3fc4bd3ec80d3a1f9ff2790d7f28d4ce10fd
+PODFILE CHECKSUM: 78ef03ee371f4bad5295afed6fd61b226ca0f469
 
 COCOAPODS: 1.4.0
