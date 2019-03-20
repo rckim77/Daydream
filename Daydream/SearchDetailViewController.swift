@@ -29,19 +29,34 @@ class SearchDetailViewController: UIViewController {
         let label = UILabel()
         label.textColor = .white
         label.font = UIFont.systemFont(ofSize: 36, weight: .medium)
+        label.addDropShadow()
         return label
     }()
 
     private lazy var randomButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(named: "diceCubeHardShadow"), for: .normal)
+        button.addTarget(self, action: #selector(didTapRandomButton), for: .touchUpInside)
         return button
     }()
 
     private lazy var homeButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(named: "homeWhiteShadow"), for: .normal)
+        button.addTarget(self, action: #selector(didTapHomeButton), for: .touchUpInside)
         return button
+    }()
+
+    private lazy var searchField: UIButton = {
+        let searchField = UIButton(type: .system)
+        searchField.backgroundColor = UIColor.black.withAlphaComponent(0.05)
+        searchField.addTarget(self, action: #selector(didTapSearchField), for: .touchUpInside)
+        searchField.setTitle("e.g., Tokyo", for: .normal)
+        searchField.contentHorizontalAlignment = .leading
+        searchField.contentEdgeInsets = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 0)
+        searchField.tintColor = .white
+        searchField.addRoundedCorners(radius: 10.0)
+        return searchField
     }()
 
     private lazy var visualEffectView: UIVisualEffectView = {
@@ -51,7 +66,7 @@ class SearchDetailViewController: UIViewController {
     }()
 
     private let networkService = NetworkService()
-    private let headerSectionHeight: CGFloat = 100
+    private let headerSectionHeight: CGFloat = 115
     @IBOutlet weak var placeImageView: UIImageView!
     @IBOutlet weak var placeCardsTableView: UITableView!
 
@@ -63,88 +78,7 @@ class SearchDetailViewController: UIViewController {
         loadDataSource()
     }
 
-    // MARK: - IBActions
-    @IBAction func homeBtnTapped(_ sender: UIButton) {
-        logEvent(contentType: "home button tapped", title)
-        dismiss(animated: true, completion: nil)
-    }
-
-    @IBAction func randomCityBtnTapped(_ sender: UIButton) {
-        logEvent(contentType: "random button tapped", title)
-        guard let randomCity = getRandomCity() else { return }
-        let loadingVC = LoadingViewController()
-        add(loadingVC)
-        
-        networkService.getPlaceId(with: randomCity, success: { [weak self] place in
-            loadingVC.remove()
-            guard let strongSelf = self, let dataSource = strongSelf.dataSource else { return }
-            dataSource.place = place
-            strongSelf.loadDataSource(reloadMapCard: true)
-        }, failure: { [weak self] error in
-            loadingVC.remove()
-            guard let strongSelf = self else { return }
-            strongSelf.logErrorEvent(error)
-        })
-    }
-
     // MARK: - UI Configuration methods
-
-    private func configureHeaderSection() {
-        view.addSubview(headerView)
-        headerView.addSubview(titleLabel)
-        headerView.addSubview(randomButton)
-        headerView.addSubview(homeButton)
-
-        headerView.snp.makeConstraints { make in
-            make.top.leading.trailing.equalToSuperview()
-        }
-
-        titleLabel.snp.makeConstraints { make in
-            make.leading.top.bottom.equalToSuperview().inset(16)
-        }
-
-        randomButton.snp.makeConstraints { make in
-            make.leading.greaterThanOrEqualTo(titleLabel.snp.trailing).offset(8)
-            make.height.width.equalTo(24)
-            make.top.equalToSuperview().inset(16)
-        }
-
-        homeButton.snp.makeConstraints { make in
-            make.leading.equalTo(randomButton.snp.trailing).offset(4)
-            make.height.width.equalTo(24)
-            make.top.equalTo(16)
-            make.trailing.equalToSuperview().inset(16)
-        }
-
-        configureSearchController()
-        configureResultsVC()
-    }
-
-    private func configureSearchController() {
-        searchController = UISearchController(searchResultsController: resultsViewController)
-        searchController?.searchResultsUpdater = resultsViewController
-        searchController?.searchBar.searchBarStyle = .minimal
-        searchController?.setStyle()
-
-        //        let subView = UIView(frame: CGRect(x: 0, y: 128.0, width: view.bounds.width, height: 45.0))
-        //        subView.addSubview((searchController?.searchBar)!)
-        //        view.addSubview(subView)
-        //        searchController?.searchBar.sizeToFit()
-
-        // When UISearchController presents the results view, present it in
-        // this view controller, not one further up the chain.
-        definesPresentationContext = true
-    }
-
-    private func configureResultsVC() {
-        // filter autocomplete results by only showing cities and set styling
-        let autocompleteFilter = GMSAutocompleteFilter()
-        autocompleteFilter.type = .city
-        resultsViewController?.autocompleteFilter = autocompleteFilter
-        resultsViewController?.setStyle()
-        resultsViewController = GMSAutocompleteResultsViewController()
-        resultsViewController?.delegate = self
-    }
 
     private func configureTableView() {
         placeCardsTableView.contentInset = UIEdgeInsets(top: headerSectionHeight, left: 0, bottom: 0, right: 0)
@@ -152,6 +86,43 @@ class SearchDetailViewController: UIViewController {
         placeCardsTableView.delegate = self
         placeCardsTableView.tableFooterView = UIView()
         dataSource?.viewController = self
+    }
+
+    private func configureHeaderSection() {
+        view.addSubview(headerView)
+        headerView.addSubview(titleLabel)
+        headerView.addSubview(randomButton)
+        headerView.addSubview(homeButton)
+        headerView.addSubview(searchField)
+
+        headerView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            make.leading.trailing.equalToSuperview()
+        }
+
+        titleLabel.snp.makeConstraints { make in
+            make.leading.top.equalToSuperview().inset(16)
+        }
+
+        randomButton.snp.makeConstraints { make in
+            make.leading.greaterThanOrEqualTo(titleLabel.snp.trailing).offset(8)
+            make.height.width.equalTo(28)
+            make.centerY.equalTo(titleLabel.snp.centerY).offset(2)
+        }
+
+        homeButton.snp.makeConstraints { make in
+            make.leading.equalTo(randomButton.snp.trailing).offset(16)
+            make.height.width.equalTo(36)
+            make.trailing.equalToSuperview().inset(16)
+            make.centerY.equalTo(titleLabel.snp.centerY)
+        }
+
+        searchField.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.bottom).offset(12)
+            make.leading.trailing.equalToSuperview().inset(16)
+            make.height.equalTo(34)
+            make.bottom.equalToSuperview().inset(8)
+        }
     }
 
     private func loadDataSource(reloadMapCard: Bool = false) {
@@ -198,6 +169,44 @@ class SearchDetailViewController: UIViewController {
             }
         }
     }
+
+    // MARK: - Button selectors
+
+    @objc
+    private func didTapRandomButton() {
+        logEvent(contentType: "random button tapped", title)
+        guard let randomCity = getRandomCity() else { return }
+        let loadingVC = LoadingViewController()
+        add(loadingVC)
+
+        networkService.getPlaceId(with: randomCity, success: { [weak self] place in
+            loadingVC.remove()
+            guard let strongSelf = self, let dataSource = strongSelf.dataSource else { return }
+            dataSource.place = place
+            strongSelf.loadDataSource(reloadMapCard: true)
+            }, failure: { [weak self] error in
+                loadingVC.remove()
+                guard let strongSelf = self else { return }
+                strongSelf.logErrorEvent(error)
+        })
+    }
+
+    @objc
+    private func didTapHomeButton() {
+        logEvent(contentType: "home button tapped", title)
+        dismiss(animated: true, completion: nil)
+    }
+
+    @objc
+    private func didTapSearchField() {
+        let autocompleteVC = GMSAutocompleteViewController()
+        autocompleteVC.delegate = self
+        let autocompleteFilter = GMSAutocompleteFilter()
+        autocompleteFilter.type = .city
+        autocompleteVC.autocompleteFilter = autocompleteFilter
+        autocompleteVC.setStyle()
+        present(autocompleteVC, animated: true, completion: nil)
+    }
 }
 
 // MARK: - UITableView datasource and delegate methods
@@ -235,15 +244,11 @@ extension SearchDetailViewController: UITableViewDelegate {
 }
 
 // MARK: - GooglePlaces Autocomplete methods
-extension SearchDetailViewController: GMSAutocompleteResultsViewControllerDelegate {
-
-    // Handle user's selection
-    func resultsController(_ resultsController: GMSAutocompleteResultsViewController,
-                           didAutocompleteWith place: GMSPlace) {
-        let searchBarText = searchController?.searchBar.text ?? "Couldn't get search bar text"
+extension SearchDetailViewController: GMSAutocompleteViewControllerDelegate {
+    func viewController(_ viewController: GMSAutocompleteViewController, didAutocompleteWith place: GMSPlace) {
+        let placeName = place.name ?? "Couldn't get place name"
         let placeId = place.placeID ?? "Couldn't get place ID"
-        logSearchEvent(searchTerm: searchBarText, placeId: placeId)
-        searchController?.searchBar.text = nil // reset to search bar text
+        logSearchEvent(searchTerm: placeName, placeId: placeId)
 
         dismiss(animated: true, completion: {
             guard let dataSource = self.dataSource else { return }
@@ -253,12 +258,14 @@ extension SearchDetailViewController: GMSAutocompleteResultsViewControllerDelega
         })
     }
 
-    func resultsController(_ resultsController: GMSAutocompleteResultsViewController,
-                           didFailAutocompleteWithError error: Error) {
+    func viewController(_ viewController: GMSAutocompleteViewController, didFailAutocompleteWithError error: Error) {
         logErrorEvent(error)
     }
 
-    // Turn the network activity indicator on and off again
+    func wasCancelled(_ viewController: GMSAutocompleteViewController) {
+        dismiss(animated: true, completion: nil)
+    }
+
     func didRequestAutocompletePredictions(_ viewController: GMSAutocompleteViewController) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
     }

@@ -98,13 +98,20 @@ extension UISearchController {
     }
 }
 
-extension GMSAutocompleteResultsViewController {
+extension GMSAutocompleteViewController {
     func setStyle() {
-        tableCellBackgroundColor = UIColor.black.withAlphaComponent(0.3)
         primaryTextHighlightColor = .white
         primaryTextColor = .lightGray
         secondaryTextColor = .lightGray
+    }
+}
 
+extension GMSAutocompleteResultsViewController {
+    func setStyle() {
+        tableCellBackgroundColor = UIColor.black.withAlphaComponent(0.3)
+        primaryTextHighlightColor = .black
+        primaryTextColor = .lightGray
+        secondaryTextColor = .lightGray
     }
 }
 
@@ -227,5 +234,15 @@ extension String {
         let nameParts = self.components(separatedBy: " ")
         guard let first = nameParts.first, let lastInitial = nameParts.last?.first else { return self }
         return first + " " + String(lastInitial) + "."
+    }
+}
+
+extension UILabel {
+    func addDropShadow() {
+        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowRadius = 0
+        layer.shadowOpacity = 1.0
+        layer.shadowOffset = CGSize(width: 0, height: 1)
+        layer.masksToBounds = false
     }
 }
