@@ -24,6 +24,7 @@ class SearchDetailViewController: UIViewController {
         return visualEffectView
     }()
     private let networkService = NetworkService()
+    private let headerSectionHeight: CGFloat = 100
 
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var placeImageView: UIImageView!
@@ -31,10 +32,10 @@ class SearchDetailViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        configureAutocompleteVC()
+
         configureTableView()
-        addSearchController()
+        configureSearchController()
+        configureResultsVC()
         loadDataSource()
     }
 
@@ -62,27 +63,40 @@ class SearchDetailViewController: UIViewController {
         })
     }
 
-    // MARK: - Search
-    private func addSearchController() {
+    // MARK: - UI Configuration methods
+
+    private func configureSearchController() {
         searchController = UISearchController(searchResultsController: resultsViewController)
         searchController?.searchResultsUpdater = resultsViewController
         searchController?.searchBar.searchBarStyle = .minimal
         searchController?.setStyle()
 
+//        let subView = UIView(frame: CGRect(x: 0, y: 128.0, width: view.bounds.width, height: 45.0))
+//        subView.addSubview((searchController?.searchBar)!)
+//        view.addSubview(subView)
+//        searchController?.searchBar.sizeToFit()
+
+        // When UISearchController presents the results view, present it in
+        // this view controller, not one further up the chain.
+        definesPresentationContext = true
+    }
+
+    private func configureResultsVC() {
         // filter autocomplete results by only showing cities and set styling
         let autocompleteFilter = GMSAutocompleteFilter()
         autocompleteFilter.type = .city
         resultsViewController?.autocompleteFilter = autocompleteFilter
         resultsViewController?.setStyle()
+        resultsViewController = GMSAutocompleteResultsViewController()
+        resultsViewController?.delegate = self
+    }
 
-        let subView = UIView(frame: CGRect(x: 0, y: 128.0, width: view.bounds.width, height: 45.0))
-        subView.addSubview((searchController?.searchBar)!)
-        view.addSubview(subView)
-        searchController?.searchBar.sizeToFit()
-
-        // When UISearchController presents the results view, present it in
-        // this view controller, not one further up the chain.
-        definesPresentationContext = true
+    private func configureTableView() {
+        placeCardsTableView.contentInset = UIEdgeInsets(top: headerSectionHeight, left: 0, bottom: 0, right: 0)
+        placeCardsTableView.dataSource = dataSource
+        placeCardsTableView.delegate = self
+        placeCardsTableView.tableFooterView = UIView()
+        dataSource?.viewController = self
     }
 
     private func loadDataSource(reloadMapCard: Bool = false) {
@@ -117,18 +131,6 @@ class SearchDetailViewController: UIViewController {
         if reloadMapCard {
             placeCardsTableView.reloadRows(at: [dataSource.mapCardCellIndexPath], with: .fade)
         }
-    }
-
-    private func configureAutocompleteVC() {
-        resultsViewController = GMSAutocompleteResultsViewController()
-        resultsViewController?.delegate = self
-    }
-
-    private func configureTableView() {
-        placeCardsTableView.dataSource = dataSource
-        placeCardsTableView.delegate = self
-        placeCardsTableView.tableFooterView = UIView()
-        dataSource?.viewController = self
     }
 
     // MARK: - Segue
