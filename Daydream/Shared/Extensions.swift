@@ -100,9 +100,9 @@ extension UISearchController {
 
 extension GMSAutocompleteViewController {
     func setStyle() {
-        primaryTextHighlightColor = .white
-        primaryTextColor = .lightGray
-        secondaryTextColor = .lightGray
+        primaryTextHighlightColor = .black
+        primaryTextColor = .darkGray
+        secondaryTextColor = .darkGray
     }
 }
 
