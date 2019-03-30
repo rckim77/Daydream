@@ -16,5 +16,4 @@ target 'Daydream' do
   pod 'Firebase/Core'
   pod 'Fabric'
   pod 'Crashlytics'
-  pod 'SnapKit', '~> 4.0.0'
 end
