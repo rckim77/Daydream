@@ -21,7 +21,7 @@ class SearchViewController: UIViewController {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var randomBtn: UIButton! {
         didSet {
-            randomBtn.addRoundedCorners(radius: 14)
+            randomBtn.addRoundedCorners(radius: 10)
             randomBtn.addBorder()
         }
     }

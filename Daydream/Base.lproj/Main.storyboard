@@ -21,25 +21,22 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sunriseJungle" translatesAutoresizingMaskIntoConstraints="NO" id="dpb-Nn-lH0">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Where do you want to go?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JHi-Ty-WLR">
-                                <rect key="frame" x="16" y="202.66666666666666" width="343" height="86.999999999999972"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="36"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Where do you want to go?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JHi-Ty-WLR">
+                                <rect key="frame" x="18" y="227.66666666666666" width="339" height="36.999999999999972"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                                 <color key="shadowColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <size key="shadowOffset" width="0.0" height="1"/>
-                                <variation key="heightClass=regular-widthClass=regular">
-                                    <fontDescription key="fontDescription" type="system" pointSize="44"/>
-                                </variation>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wyW-dr-4PC">
-                                <rect key="frame" x="137.66666666666666" y="548" width="100" height="36"/>
+                                <rect key="frame" x="132.66666666666666" y="546" width="110" height="40"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="JPB-fF-3Ru"/>
-                                    <constraint firstAttribute="height" constant="36" id="t2R-i0-qY6"/>
+                                    <constraint firstAttribute="width" constant="110" id="JPB-fF-3Ru"/>
+                                    <constraint firstAttribute="height" constant="40" id="t2R-i0-qY6"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle2"/>
                                 <state key="normal" title="Random">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
@@ -54,8 +51,8 @@
                             <constraint firstItem="wyW-dr-4PC" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="6W1-q5-IYt"/>
                             <constraint firstItem="dpb-Nn-lH0" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="7WP-jS-fcN"/>
                             <constraint firstAttribute="bottom" secondItem="dpb-Nn-lH0" secondAttribute="bottom" id="P8W-jG-2t8"/>
-                            <constraint firstItem="JHi-Ty-WLR" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="TBw-zr-FEF"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="JHi-Ty-WLR" secondAttribute="trailing" constant="16" id="Uja-pT-Azc"/>
+                            <constraint firstItem="JHi-Ty-WLR" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="18" id="TBw-zr-FEF"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="JHi-Ty-WLR" secondAttribute="trailing" constant="18" id="Uja-pT-Azc"/>
                             <constraint firstItem="JHi-Ty-WLR" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="-160" id="g8E-WR-dEo"/>
                             <constraint firstItem="dpb-Nn-lH0" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="r9u-vR-P5E"/>
                             <constraint firstItem="dpb-Nn-lH0" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="tZf-8I-pK3"/>
