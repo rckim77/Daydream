@@ -108,8 +108,7 @@ extension GMSAutocompleteResultsViewController {
 }
 
 @IBDesignable
-class DesignableView: UIView {
-}
+class DesignableView: UIView {}
 
 extension UIView {
     @IBInspectable

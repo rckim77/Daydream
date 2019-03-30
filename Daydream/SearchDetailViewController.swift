@@ -24,20 +24,30 @@ class SearchDetailViewController: UIViewController {
         return visualEffectView
     }()
     private let networkService = NetworkService()
+
+    // Constants
+    private let searchBarOffset: CGFloat = 12 + 45 // bottom offset + height
     private let headerContentInset: CGFloat = 142
-    private let fadePoint: CGFloat = 118
+    private let headerFadeInStartPoint: CGFloat = 142 + 44 // header content inset + ignored safe area offset
+    private let headerFadeInEndPoint: CGFloat = 129
+    private let headerFadeOutStartPoint: CGFloat = 100
+    private let headerFadeOutEndPoint: CGFloat = 80
+    private let floatingTitleLabelFadeInStartPoint: CGFloat = 85
+    private let floatingTitleLabelFadeInEndPoint: CGFloat = 65
 
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var placeImageView: UIImageView!
     @IBOutlet weak var placeCardsTableView: UITableView!
     @IBOutlet weak var randomCityButton: UIButton!
     @IBOutlet weak var homeButton: UIButton!
-    
+    @IBOutlet weak var floatingTitleLabel: UILabel!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
         configureAutocompleteVC()
         configureTableView()
+        configureFloatingTitleLabel()
         addSearchController()
         loadDataSource()
     }
@@ -79,7 +89,8 @@ class SearchDetailViewController: UIViewController {
         resultsViewController?.autocompleteFilter = autocompleteFilter
         resultsViewController?.setStyle()
 
-        let subView = UIView(frame: CGRect(x: 0, y: 120.0, width: view.bounds.width, height: 45.0))
+        let searchBarWidth = view.bounds.width
+        let subView = UIView(frame: CGRect(x: 0, y: 120.0, width: searchBarWidth, height: 45.0))
         subView.addSubview((searchController?.searchBar)!)
         view.addSubview(subView)
         searchController?.searchBar.sizeToFit()
@@ -93,6 +104,7 @@ class SearchDetailViewController: UIViewController {
         guard let dataSource = dataSource else { return }
 
         titleLabel.text = dataSource.place.placeableName
+        floatingTitleLabel.text = dataSource.place.placeableName
 
         dataSource.loadPhoto(success: { [weak self] image in
             guard let strongSelf = self else { return }
@@ -134,6 +146,11 @@ class SearchDetailViewController: UIViewController {
         placeCardsTableView.tableFooterView = UIView()
         placeCardsTableView.contentInset = UIEdgeInsets(top: headerContentInset, left: 0, bottom: 0, right: 0)
         dataSource?.viewController = self
+    }
+
+    private func configureFloatingTitleLabel() {
+        floatingTitleLabel.alpha = 0
+        floatingTitleLabel.addRoundedCorners(radius: 8)
     }
 
     // MARK: - Segue
@@ -181,21 +198,48 @@ extension SearchDetailViewController: UITableViewDelegate {
         }
     }
 
+    // MARK: - Scrolling Transition Methods
+
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let contentYOffset = scrollView.contentOffset.y
-        if contentYOffset > -headerContentInset {
-            print("contentYOffset: \(contentYOffset)")
-            let delta = (-contentYOffset - fadePoint) / (headerContentInset - fadePoint)
-            print("delta: \(delta)")
-            searchController?.searchBar.alpha = max(delta, 0)
-            titleLabel.alpha = max(delta, 0)
-            randomCityButton.alpha = max(delta, 0)
-            homeButton.alpha = max(delta, 0)
+        let yOffset = scrollView.contentOffset.y
+        transitionSearchBar(yOffset)
+        transitionHeader(yOffset)
+        transitionFloatingTitleLabel(yOffset)
+    }
+
+    private func transitionSearchBar(_ yOffset: CGFloat) {
+        if yOffset >= -headerFadeInStartPoint {
+            let calculatedAlpha = (-yOffset - headerFadeInEndPoint) / searchBarOffset
+            searchController?.searchBar.alpha = max(calculatedAlpha, 0)
+            view.insertSubview(placeCardsTableView, aboveSubview: randomCityButton)
+            view.insertSubview(floatingTitleLabel, aboveSubview: placeCardsTableView)
         } else {
+            view.insertSubview(placeCardsTableView, aboveSubview: placeImageView)
             searchController?.searchBar.alpha = 1
+        }
+    }
+
+    private func transitionHeader(_ yOffset: CGFloat) {
+        if yOffset >= -headerFadeOutStartPoint {
+            let calculatedHeaderAlpha = (-yOffset - headerFadeOutEndPoint) / (headerFadeOutStartPoint - headerFadeOutEndPoint)
+
+            titleLabel.alpha = min(calculatedHeaderAlpha, 1)
+            randomCityButton.alpha = min(calculatedHeaderAlpha, 1)
+            homeButton.alpha = min(calculatedHeaderAlpha, 1)
+        } else {
             titleLabel.alpha = 1
             randomCityButton.alpha = 1
             homeButton.alpha = 1
+        }
+    }
+
+    private func transitionFloatingTitleLabel(_ yOffset: CGFloat) {
+        if yOffset >= -floatingTitleLabelFadeInStartPoint {
+            let range = floatingTitleLabelFadeInStartPoint - floatingTitleLabelFadeInEndPoint
+            let calculatedAlpha = 1 - ((-yOffset - floatingTitleLabelFadeInEndPoint) / range)
+            floatingTitleLabel.alpha = min(calculatedAlpha, 1)
+        } else {
+            floatingTitleLabel.alpha = 0
         }
     }
 }
