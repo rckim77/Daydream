@@ -28,7 +28,9 @@ class SearchDetailViewController: UIViewController {
     // Constants
     private let searchBarOffset: CGFloat = 12 + 45 // bottom offset + height
     private let headerContentInset: CGFloat = 142
-    private let headerFadeInStartPoint: CGFloat = 142 + 44 // header content inset + ignored safe area offset
+    private var headerFadeInStartPoint: CGFloat {
+        return 142 + notchHeight
+    }
     private let headerFadeInEndPoint: CGFloat = 129
     private let headerFadeOutStartPoint: CGFloat = 100
     private let headerFadeOutEndPoint: CGFloat = 80
@@ -90,7 +92,8 @@ class SearchDetailViewController: UIViewController {
         resultsViewController?.setStyle()
 
         let searchBarWidth = view.bounds.width
-        let subView = UIView(frame: CGRect(x: 0, y: 120.0, width: searchBarWidth, height: 45.0))
+        let yOffset: CGFloat = deviceSize == .iPhoneSE ? 84 : 120
+        let subView = UIView(frame: CGRect(x: 0, y: yOffset, width: searchBarWidth, height: 45.0))
         subView.addSubview((searchController?.searchBar)!)
         view.addSubview(subView)
         searchController?.searchBar.sizeToFit()
@@ -208,13 +211,11 @@ extension SearchDetailViewController: UITableViewDelegate {
     }
 
     private func transitionSearchBar(_ yOffset: CGFloat) {
-        if yOffset >= -headerFadeInStartPoint {
+        if yOffset > -headerFadeInStartPoint {
             let calculatedAlpha = (-yOffset - headerFadeInEndPoint) / searchBarOffset
             searchController?.searchBar.alpha = max(calculatedAlpha, 0)
-            view.insertSubview(placeCardsTableView, aboveSubview: randomCityButton)
             view.insertSubview(floatingTitleLabel, aboveSubview: placeCardsTableView)
         } else {
-            view.insertSubview(placeCardsTableView, aboveSubview: placeImageView)
             searchController?.searchBar.alpha = 1
         }
     }
@@ -222,11 +223,12 @@ extension SearchDetailViewController: UITableViewDelegate {
     private func transitionHeader(_ yOffset: CGFloat) {
         if yOffset >= -headerFadeOutStartPoint {
             let calculatedHeaderAlpha = (-yOffset - headerFadeOutEndPoint) / (headerFadeOutStartPoint - headerFadeOutEndPoint)
-
+            view.insertSubview(placeCardsTableView, aboveSubview: randomCityButton)
             titleLabel.alpha = min(calculatedHeaderAlpha, 1)
             randomCityButton.alpha = min(calculatedHeaderAlpha, 1)
             homeButton.alpha = min(calculatedHeaderAlpha, 1)
         } else {
+            view.insertSubview(placeCardsTableView, aboveSubview: placeImageView)
             titleLabel.alpha = 1
             randomCityButton.alpha = 1
             homeButton.alpha = 1

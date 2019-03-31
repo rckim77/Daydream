@@ -201,6 +201,17 @@ extension UIView {
 }
 
 extension UIViewController {
+
+    var deviceSize: UIDevice.DeviceSize {
+        // swiftlint:disable discouraged_direct_init
+        return UIDevice().deviceSize
+    }
+
+    var notchHeight: CGFloat {
+        // swiftlint:disable discouraged_direct_init
+        return UIDevice().notchHeight
+    }
+
     func add(_ childVC: UIViewController) {
         addChild(childVC)
         view.addSubview(childVC.view)
