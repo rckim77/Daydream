@@ -39,14 +39,15 @@ class SearchDetailViewController: UIViewController {
     }
     private let headerFadeOutStartPoint: CGFloat = 100
     private let headerFadeOutEndPoint: CGFloat = 80
-    private let floatingTitleLabelFadeInStartPoint: CGFloat = 85
-    private let floatingTitleLabelFadeInEndPoint: CGFloat = 65
+    private let floatingTitleViewFadeInStartPoint: CGFloat = 85
+    private let floatingTitleViewFadeInEndPoint: CGFloat = 65
 
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var placeImageView: UIImageView!
     @IBOutlet weak var placeCardsTableView: UITableView!
     @IBOutlet weak var randomCityButton: UIButton!
     @IBOutlet weak var homeButton: UIButton!
+    @IBOutlet weak var floatingTitleView: DesignableView!
     @IBOutlet weak var floatingTitleLabel: UILabel!
 
     override func viewDidLoad() {
@@ -156,8 +157,7 @@ class SearchDetailViewController: UIViewController {
     }
 
     private func configureFloatingTitleLabel() {
-        floatingTitleLabel.alpha = 0
-        floatingTitleLabel.addRoundedCorners(radius: 8)
+        floatingTitleView.alpha = 0
     }
 
     // MARK: - Segue
@@ -218,7 +218,7 @@ extension SearchDetailViewController: UITableViewDelegate {
         if yOffset > -headerFadeInStartPoint {
             let calculatedAlpha = (-yOffset - headerFadeInEndPoint) / searchBarOffset
             searchController?.searchBar.alpha = max(calculatedAlpha, 0)
-            view.insertSubview(floatingTitleLabel, aboveSubview: placeCardsTableView)
+            view.insertSubview(floatingTitleView, aboveSubview: placeCardsTableView)
         } else {
             searchController?.searchBar.alpha = 1
         }
@@ -240,12 +240,12 @@ extension SearchDetailViewController: UITableViewDelegate {
     }
 
     private func transitionFloatingTitleLabel(_ yOffset: CGFloat) {
-        if yOffset >= -floatingTitleLabelFadeInStartPoint {
-            let range = floatingTitleLabelFadeInStartPoint - floatingTitleLabelFadeInEndPoint
-            let calculatedAlpha = 1 - ((-yOffset - floatingTitleLabelFadeInEndPoint) / range)
-            floatingTitleLabel.alpha = min(calculatedAlpha, 1)
+        if yOffset >= -floatingTitleViewFadeInStartPoint {
+            let range = floatingTitleViewFadeInStartPoint - floatingTitleViewFadeInEndPoint
+            let calculatedAlpha = 1 - ((-yOffset - floatingTitleViewFadeInEndPoint) / range)
+            floatingTitleView.alpha = min(calculatedAlpha, 1)
         } else {
-            floatingTitleLabel.alpha = 0
+            floatingTitleView.alpha = 0
         }
     }
 }

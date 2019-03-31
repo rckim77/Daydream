@@ -107,6 +107,40 @@ extension GMSAutocompleteResultsViewController {
     }
 }
 
+extension UIView {
+    func addRoundedCorners(radius: CGFloat) {
+        layer.cornerRadius = radius
+        layer.masksToBounds = true
+    }
+
+    func addBottomRoundedCorners() {
+        let rectShape = CAShapeLayer()
+        rectShape.bounds = frame
+        rectShape.position = center
+        rectShape.path = UIBezierPath(roundedRect: bounds,
+                                      byRoundingCorners: [.bottomLeft, .bottomRight],
+                                      cornerRadii: CGSize(width: 10, height: 10)).cgPath
+
+        layer.mask = rectShape
+    }
+
+    func addTopRoundedCorners() {
+        let rectShape = CAShapeLayer()
+        rectShape.bounds = frame
+        rectShape.position = center
+        rectShape.path = UIBezierPath(roundedRect: bounds,
+                                      byRoundingCorners: [.topLeft, .topRight],
+                                      cornerRadii: CGSize(width: 10, height: 10)).cgPath
+
+        layer.mask = rectShape
+    }
+
+    func addBorder(color: UIColor = .white, width: CGFloat = 1.0) {
+        layer.borderWidth = width
+        layer.borderColor = color.cgColor
+    }
+}
+
 extension UIViewController {
 
     var deviceSize: UIDevice.DeviceSize {

@@ -544,30 +544,6 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P1h-OL-Jg5">
-                                <rect key="frame" x="166.66666666666666" y="52" width="41.666666666666657" height="30"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="71b-5r-Age"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <real key="value" value="8"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="shadowRadius">
-                                        <real key="value" value="0.0"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="shadowOpacity">
-                                        <real key="value" value="0.0"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="size" keyPath="shadowOffset">
-                                        <size key="value" width="0.0" height="0.0"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tokyo" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.69999999999999996" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pmy-BK-jFt">
                                 <rect key="frame" x="16" y="68" width="76" height="37"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
@@ -602,21 +578,56 @@
                                     <action selector="randomCityBtnTapped:" destination="mAC-Ym-g6i" eventType="touchUpInside" id="iH1-Sr-Qdo"/>
                                 </connections>
                             </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6KP-bC-1sz" customClass="DesignableView" customModule="Daydream" customModuleProvider="target">
+                                <rect key="frame" x="158.66666666666666" y="43" width="58" height="37"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5da-ff-ebA">
+                                        <rect key="frame" x="8" y="8" width="42" height="21"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                        <color key="textColor" white="0.3575734874" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="5da-ff-ebA" secondAttribute="trailing" constant="8" id="2CW-94-xFh"/>
+                                    <constraint firstItem="5da-ff-ebA" firstAttribute="top" secondItem="6KP-bC-1sz" secondAttribute="top" constant="8" id="AZY-Lr-cRK"/>
+                                    <constraint firstItem="5da-ff-ebA" firstAttribute="leading" secondItem="6KP-bC-1sz" secondAttribute="leading" constant="8" id="Dtm-zB-lyk"/>
+                                    <constraint firstAttribute="bottom" secondItem="5da-ff-ebA" secondAttribute="bottom" constant="8" id="GEc-ph-WSY"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="16"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="shadowRadius">
+                                        <real key="value" value="3"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="shadowOpacity">
+                                        <real key="value" value="0.29999999999999999"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="size" keyPath="shadowOffset">
+                                        <size key="value" width="0.0" height="3"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="shadowColor">
+                                        <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="0.72549019609999998" green="0.88235294119999996" blue="0.86274509799999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="rWT-1T-WUd" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="pmy-BK-jFt" secondAttribute="trailing" constant="8" id="CMg-XM-RxJ"/>
                             <constraint firstAttribute="bottom" secondItem="NX7-bA-oV6" secondAttribute="bottom" id="D6x-Xs-oES"/>
                             <constraint firstItem="1tM-WJ-sOR" firstAttribute="trailing" secondItem="Lg2-04-32b" secondAttribute="trailing" id="KOp-bY-Tge"/>
-                            <constraint firstItem="P1h-OL-Jg5" firstAttribute="top" secondItem="1tM-WJ-sOR" secondAttribute="top" constant="8" id="MLm-ja-Oje"/>
                             <constraint firstItem="Lg2-04-32b" firstAttribute="top" secondItem="ngt-Nd-jYB" secondAttribute="top" id="NWD-le-PEq"/>
                             <constraint firstItem="rWT-1T-WUd" firstAttribute="centerY" secondItem="WRK-EC-lm4" secondAttribute="centerY" id="VO4-Fb-TiI"/>
                             <constraint firstItem="Lg2-04-32b" firstAttribute="leading" secondItem="1tM-WJ-sOR" secondAttribute="leading" id="ZYX-sD-0s6"/>
-                            <constraint firstItem="P1h-OL-Jg5" firstAttribute="centerX" secondItem="ngt-Nd-jYB" secondAttribute="centerX" id="Zjg-HQ-jHn"/>
                             <constraint firstItem="NX7-bA-oV6" firstAttribute="top" secondItem="ngt-Nd-jYB" secondAttribute="top" id="aTE-cH-bvu"/>
                             <constraint firstAttribute="bottom" secondItem="Lg2-04-32b" secondAttribute="bottom" id="biJ-nG-UC7"/>
                             <constraint firstItem="NX7-bA-oV6" firstAttribute="leading" secondItem="1tM-WJ-sOR" secondAttribute="leading" id="gBp-HF-jUV"/>
                             <constraint firstItem="WRK-EC-lm4" firstAttribute="leading" secondItem="rWT-1T-WUd" secondAttribute="trailing" constant="6" id="hYc-bH-xpu"/>
+                            <constraint firstItem="1tM-WJ-sOR" firstAttribute="top" secondItem="6KP-bC-1sz" secondAttribute="bottom" constant="-36" id="igL-wy-kYm"/>
+                            <constraint firstItem="6KP-bC-1sz" firstAttribute="centerX" secondItem="ngt-Nd-jYB" secondAttribute="centerX" id="loG-1j-Cb5"/>
                             <constraint firstItem="WRK-EC-lm4" firstAttribute="centerY" secondItem="pmy-BK-jFt" secondAttribute="centerY" id="qFj-J0-rQ9"/>
                             <constraint firstItem="1tM-WJ-sOR" firstAttribute="trailing" secondItem="WRK-EC-lm4" secondAttribute="trailing" constant="16" id="qjI-og-jtI"/>
                             <constraint firstItem="1tM-WJ-sOR" firstAttribute="trailing" secondItem="NX7-bA-oV6" secondAttribute="trailing" id="rk6-js-o7d"/>
@@ -626,7 +637,8 @@
                         <viewLayoutGuide key="safeArea" id="1tM-WJ-sOR"/>
                     </view>
                     <connections>
-                        <outlet property="floatingTitleLabel" destination="P1h-OL-Jg5" id="JL8-qa-GAE"/>
+                        <outlet property="floatingTitleLabel" destination="5da-ff-ebA" id="eY5-Fi-7ff"/>
+                        <outlet property="floatingTitleView" destination="6KP-bC-1sz" id="hGq-XA-Ap4"/>
                         <outlet property="homeButton" destination="WRK-EC-lm4" id="M21-Rv-pdj"/>
                         <outlet property="placeCardsTableView" destination="Lg2-04-32b" id="rem-0K-EVa"/>
                         <outlet property="placeImageView" destination="NX7-bA-oV6" id="dS6-Yy-Ut3"/>
