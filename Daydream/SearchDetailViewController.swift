@@ -26,12 +26,17 @@ class SearchDetailViewController: UIViewController {
     private let networkService = NetworkService()
 
     // Constants
-    private let searchBarOffset: CGFloat = 12 + 45 // bottom offset + height
+    private var searchBarYOffset: CGFloat { // sets search bar's Y offset (not for transition)
+        return deviceSize == .iPhoneSE || deviceSize == .iPhone8 ? 100 : 120
+    }
+    private let searchBarOffset: CGFloat = 12 + 45 // bottom offset + height (used as transition range)
     private let headerContentInset: CGFloat = 142
     private var headerFadeInStartPoint: CGFloat {
         return 142 + notchHeight
     }
-    private let headerFadeInEndPoint: CGFloat = 129
+    private var headerFadeInEndPoint: CGFloat {
+        return 85 + notchHeight
+    }
     private let headerFadeOutStartPoint: CGFloat = 100
     private let headerFadeOutEndPoint: CGFloat = 80
     private let floatingTitleLabelFadeInStartPoint: CGFloat = 85
@@ -92,8 +97,7 @@ class SearchDetailViewController: UIViewController {
         resultsViewController?.setStyle()
 
         let searchBarWidth = view.bounds.width
-        let yOffset: CGFloat = deviceSize == .iPhoneSE ? 84 : 120
-        let subView = UIView(frame: CGRect(x: 0, y: yOffset, width: searchBarWidth, height: 45.0))
+        let subView = UIView(frame: CGRect(x: 0, y: searchBarYOffset, width: searchBarWidth, height: 45.0))
         subView.addSubview((searchController?.searchBar)!)
         view.addSubview(subView)
         searchController?.searchBar.sizeToFit()
