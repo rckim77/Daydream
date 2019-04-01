@@ -54,7 +54,7 @@ class DaydreamUITests: XCTestCase {
 
         app.buttons["nightIcon"].tap()
 
-        sleep(2)
+        sleep(4)
 
         snapshot("05MapVCDark")
     }
