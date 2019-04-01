@@ -59,7 +59,7 @@ platform :ios do
       xcodeproj: "Daydream.xcodeproj"
     )
     increment_version_number(
-    	bump_type: "minor"
+    	bump_type: "major"
     )
     build_app(scheme: "Daydream") # Build your app - more options available
     upload_to_app_store(force: true)

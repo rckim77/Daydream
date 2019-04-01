@@ -25,7 +25,7 @@ PODS:
   - GoogleToolboxForMac/Defines (2.1.3)
   - GoogleToolboxForMac/NSData+zlib (2.1.3):
     - GoogleToolboxForMac/Defines (= 2.1.3)
-  - Hero (1.1.0)
+  - Hero (1.4.0)
   - nanopb (0.3.8):
     - nanopb/decode (= 0.3.8)
     - nanopb/encode (= 0.3.8)
@@ -42,7 +42,7 @@ DEPENDENCIES:
   - Firebase/Core
   - GoogleMaps (~> 3.0)
   - GooglePlaces (~> 3.0)
-  - Hero
+  - Hero (~> 1.4.0)
   - SVProgressHUD
   - SwiftLint (~> 0.25)
   - SwiftyJSON
@@ -58,12 +58,12 @@ SPEC CHECKSUMS:
   GoogleMaps: fd5c9fa58871781b9fb94d4936f19c69fe60ce32
   GooglePlaces: f09e76993c9c3ee4af8f4f7f535bb94d6aa3b649
   GoogleToolboxForMac: 2501e2ad72a52eb3dfe7bd9aee7dad11b858bd20
-  Hero: ce59e81c79390613d97b43da7179e2c5e1017e04
+  Hero: bac92350d7201a1a940003e0767c7b52ce7c99a1
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   SwiftLint: ce933681be10c3266e82576dad676fa815a602e9
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
 
-PODFILE CHECKSUM: 7ced3fc4bd3ec80d3a1f9ff2790d7f28d4ce10fd
+PODFILE CHECKSUM: 9323f809e80820526d900c24c70102a0c9db998c
 
 COCOAPODS: 1.4.0

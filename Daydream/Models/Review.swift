@@ -21,5 +21,4 @@ class Review: Reviewable {
         self.authorProfileUrl = authorProfileUrl
     }
 
-    
 }

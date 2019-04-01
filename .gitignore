@@ -19,11 +19,13 @@ DerivedData/
 *.perspectivev3
 !default.perspectivev3
 xcuserdata/
+xcdebugger/
 
 ## Other
 *.moved-aside
 *.xccheckout
 *.xcscmblueprint
+*.orig
 
 ## Obj-C/Swift specific
 *.hmap
