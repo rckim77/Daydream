@@ -71,16 +71,10 @@ class SightsCardCell: UITableViewCell {
         pointOfInterest3ImageView.image = nil
 
         hero.id = "pointOfInterestCard"
-    }
-
-    override func setNeedsLayout() {
-        super.setNeedsLayout()
 
         pointOfInterest1View.addTopRoundedCorners()
         pointOfInterest2View.layer.masksToBounds = true
         pointOfInterest3View.addBottomRoundedCorners()
-
-        layoutIfNeeded()
     }
 
     @objc
