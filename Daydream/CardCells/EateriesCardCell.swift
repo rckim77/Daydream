@@ -69,9 +69,25 @@ class EateriesCardCell: UITableViewCell {
         eatery2ImageView.image = nil
         eatery3ImageView.image = nil
 
-        eatery1View.addTopRoundedCorners()
-        eatery2View.layer.masksToBounds = true
-        eatery3View.addBottomRoundedCorners()
+        if #available(iOS 13, *) {
+            eatery1View.addTopRoundedCorners()
+            eatery2View.layer.masksToBounds = true
+            eatery3View.addBottomRoundedCorners()
+        }
+    }
+
+    override func setNeedsLayout() {
+        super.setNeedsLayout()
+
+        if #available(iOS 13, *) {
+            return
+        } else {
+            eatery1View.addTopRoundedCorners()
+            eatery2View.layer.masksToBounds = true
+            eatery3View.addBottomRoundedCorners()
+
+            layoutIfNeeded()
+        }
     }
 
     @objc

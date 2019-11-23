@@ -72,9 +72,25 @@ class SightsCardCell: UITableViewCell {
 
         hero.id = "pointOfInterestCard"
 
-        pointOfInterest1View.addTopRoundedCorners()
-        pointOfInterest2View.layer.masksToBounds = true
-        pointOfInterest3View.addBottomRoundedCorners()
+        if #available(iOS 13, *) {
+            pointOfInterest1View.addTopRoundedCorners()
+            pointOfInterest2View.layer.masksToBounds = true
+            pointOfInterest3View.addBottomRoundedCorners()
+        }
+    }
+
+    override func setNeedsLayout() {
+        super.setNeedsLayout()
+
+        if #available(iOS 13, *) {
+            return
+        } else {
+            pointOfInterest1View.addTopRoundedCorners()
+            pointOfInterest2View.layer.masksToBounds = true
+            pointOfInterest3View.addBottomRoundedCorners()
+
+            layoutIfNeeded()
+        }
     }
 
     @objc

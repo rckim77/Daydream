@@ -82,19 +82,66 @@ extension UISearchController {
         let cancelBtnAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes(cancelBtnAttributes, for: .normal)
 
-        // style search bar text color
-        let searchBarTextField = self.searchBar.value(forKey: "searchField") as? UITextField
-        searchBarTextField?.textColor = .white
+        if #available(iOS 13, *) {
+            searchBar.searchTextField.textColor = .white
+            searchBar.searchTextField.placeholder = "e.g., Tokyo"
+            searchBar.setPlaceholderColor(.white)
+        } else {
+            // style search bar text color
+            let searchBarTextField = self.searchBar.value(forKey: "searchField") as? UITextField
+            searchBarTextField?.textColor = .white
 
-        // style placeholder text color
-        let placeholderTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-        searchBarTextField?.attributedPlaceholder = NSAttributedString(string: "e.g., Tokyo", attributes: placeholderTextAttributes)
+            // style placeholder text color
+            let placeholderTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+            searchBarTextField?.attributedPlaceholder = NSAttributedString(string: "e.g., Tokyo", attributes: placeholderTextAttributes)
+        }
 
         // style search icon
         searchBar.setImage(#imageLiteral(resourceName: "searchIconWhite"), for: .search, state: .normal)
 
         // style clear text icon
         searchBar.setImage(#imageLiteral(resourceName: "clearIcon"), for: .clear, state: .normal)
+    }
+}
+
+extension UISearchBar {
+    func setPlaceholderColor(_ color: UIColor) {
+        searchTextField.setPlaceholder(textColor: color)
+    }
+}
+
+extension UITextField {
+    private class Label: UILabel {
+        private var _textColor: UIColor = .lightGray
+
+        override var textColor: UIColor! {
+            get { return _textColor }
+            set { super.textColor = _textColor }
+        }
+
+        init(label: UILabel, textColor: UIColor) {
+            _textColor = textColor
+            super.init(frame: label.frame)
+            self.text = label.text
+            self.font = label.font
+        }
+
+        required init?(coder: NSCoder) {
+            super.init(coder: coder)
+        }
+    }
+
+    var placeholderLabel: UILabel? {
+        return value(forKey: "placeholderLabel") as? UILabel
+    }
+
+    func setPlaceholder(textColor: UIColor) {
+        guard let placeholderLabel = placeholderLabel else {
+            return
+        }
+
+        let label = Label(label: placeholderLabel, textColor: textColor)
+        setValue(label, forKey: "placeholderLabel")
     }
 }
 
