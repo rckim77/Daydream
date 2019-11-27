@@ -84,8 +84,8 @@ class EateriesCardCell: UITableViewCell {
         }
     }
 
-    // Note: On iOS 13, setNeedsLayout() is called before UIViews so we can't update
-    // UIViews just yet. Update after their added as subviews.
+    // Note: On iOS 13, setNeedsLayout() is called first before UIViews are
+    // added as subviews so we can't update UIViews just yet.
     private func updateCellLayout() {
         eatery1View.addTopRoundedCorners()
         eatery2View.layer.masksToBounds = true
