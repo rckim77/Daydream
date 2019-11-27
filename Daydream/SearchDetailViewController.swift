@@ -25,14 +25,14 @@ class SearchDetailViewController: UIViewController {
     }()
     private let networkService = NetworkService()
 
-    // Constants
+    // MARK: - Constants
     private var searchBarYOffset: CGFloat { // sets search bar's Y offset (not for transition)
         let offset: CGFloat = deviceSize == .iPhoneSE || deviceSize == .iPhone8 ? 100 : 120
         return offset - modalOffset
     }
 
-    // iOS 13 introduced a new modal UI that changes how much to offset content from the top
     private var modalOffset: CGFloat {
+        // iOS 13 introduced a new modal UI that changes how much to offset content from the top
         if #available(iOS 13, *) {
             return 38
         } else {
@@ -52,6 +52,8 @@ class SearchDetailViewController: UIViewController {
     private let floatingTitleViewFadeInStartPoint: CGFloat = 85
     private let floatingTitleViewFadeInEndPoint: CGFloat = 65
 
+    // MARK: - IBOutlet vars
+
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var placeImageView: UIImageView!
     @IBOutlet weak var placeCardsTableView: UITableView!
@@ -59,16 +61,6 @@ class SearchDetailViewController: UIViewController {
     @IBOutlet weak var homeButton: UIButton!
     @IBOutlet weak var floatingTitleView: DesignableView!
     @IBOutlet weak var floatingTitleLabel: UILabel!
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        configureAutocompleteVC()
-        configureTableView()
-        configureFloatingTitleLabel()
-        addSearchController()
-        loadDataSource()
-    }
 
     // MARK: - IBActions
     @IBAction func homeBtnTapped(_ sender: UIButton) {
@@ -103,7 +95,20 @@ class SearchDetailViewController: UIViewController {
         })
     }
 
+    // MARK: - Lifecycle Methods
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        configureAutocompleteVC()
+        configureTableView()
+        configureFloatingTitleLabel()
+        addSearchController()
+        loadDataSource()
+    }
+
     // MARK: - Search
+
     private func addSearchController() {
         searchController = UISearchController(searchResultsController: resultsViewController)
         searchController?.searchResultsUpdater = resultsViewController
@@ -193,6 +198,7 @@ class SearchDetailViewController: UIViewController {
     }
 
     // MARK: - Segue
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destinationVC = segue.destination as? MapViewController, let sender = sender as? Placeable {
             // segue from Top Sights cell
@@ -204,7 +210,6 @@ class SearchDetailViewController: UIViewController {
     }
 }
 
-// MARK: - UITableView datasource and delegate methods
 extension SearchDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         guard let dataSource = dataSource else {
@@ -292,7 +297,6 @@ extension SearchDetailViewController: UITableViewDelegate {
     }
 }
 
-// MARK: - GooglePlaces Autocomplete methods
 extension SearchDetailViewController: GMSAutocompleteResultsViewControllerDelegate {
 
     // Handle user's selection
