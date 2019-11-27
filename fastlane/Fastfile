@@ -85,7 +85,7 @@ platform :ios do
     desc "Deploy a new patch version to the App Store (bug fixes with backwards compatibility)"
   lane :release_new_patch_version do
     # sync_code_signing(type: "appstore")
-    capture_screenshots
+    # capture_screenshots
     increment_build_number(
       build_number: app_store_build_number + 1,
       xcodeproj: "Daydream.xcodeproj"
