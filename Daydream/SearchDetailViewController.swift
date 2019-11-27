@@ -27,7 +27,17 @@ class SearchDetailViewController: UIViewController {
 
     // Constants
     private var searchBarYOffset: CGFloat { // sets search bar's Y offset (not for transition)
-        return deviceSize == .iPhoneSE || deviceSize == .iPhone8 ? 100 : 120
+        let offset: CGFloat = deviceSize == .iPhoneSE || deviceSize == .iPhone8 ? 100 : 120
+        return offset - modalOffset
+    }
+
+    // iOS 13 introduced a new modal UI that changes how much to offset content from the top
+    private var modalOffset: CGFloat {
+        if #available(iOS 13, *) {
+            return 38
+        } else {
+            return 0
+        }
     }
     private let searchBarOffset: CGFloat = 12 + 45 // bottom offset + height (used as transition range)
     private let headerContentInset: CGFloat = 142
@@ -215,8 +225,8 @@ extension SearchDetailViewController: UITableViewDelegate {
     }
 
     private func transitionSearchBar(_ yOffset: CGFloat) {
-        if yOffset > -headerFadeInStartPoint {
-            let calculatedAlpha = (-yOffset - headerFadeInEndPoint) / searchBarOffset
+        if yOffset > -headerFadeInStartPoint + modalOffset {
+            let calculatedAlpha = (-yOffset + modalOffset - headerFadeInEndPoint) / searchBarOffset
             searchController?.searchBar.alpha = max(calculatedAlpha, 0)
             view.insertSubview(floatingTitleView, aboveSubview: placeCardsTableView)
         } else {
