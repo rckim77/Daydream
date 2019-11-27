@@ -71,12 +71,6 @@ class SightsCardCell: UITableViewCell {
         pointOfInterest3ImageView.image = nil
 
         hero.id = "pointOfInterestCard"
-
-        if #available(iOS 13, *) {
-            pointOfInterest1View.addTopRoundedCorners()
-            pointOfInterest2View.layer.masksToBounds = true
-            pointOfInterest3View.addBottomRoundedCorners()
-        }
     }
 
     override func setNeedsLayout() {
