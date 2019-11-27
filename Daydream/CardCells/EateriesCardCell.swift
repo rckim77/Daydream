@@ -90,9 +90,21 @@ class EateriesCardCell: UITableViewCell {
         }
     }
 
+    // Note: On iOS 13, setNeedsLayout() is called before UIViews so we can't update
+    // UIViews just yet. Update after their added as subviews.
+    private func updateCellLayout() {
+        eatery1View.addTopRoundedCorners()
+        eatery2View.layer.masksToBounds = true
+        eatery3View.addBottomRoundedCorners()
+
+        layoutIfNeeded()
+    }
+
     @objc
     private func handleTapGesture(withSender sender: UITapGestureRecognizer) {
-        guard let eateries = eateries else { return }
+        guard let eateries = eateries else {
+            return
+        }
 
         var eatery = eateries[0]
 
@@ -110,10 +122,14 @@ class EateriesCardCell: UITableViewCell {
     private func loadBackgroundImage(for button: Int, with eatery: Eatery) {
         if let imageUrl = URL(string: eatery.imageUrl) {
            URLSession.shared.dataTask(with: imageUrl) { [weak self] data, _, _ in
-                guard let strongSelf = self, let data = data else { return }
+                guard let strongSelf = self, let data = data else {
+                    return
+                }
 
                 DispatchQueue.main.async {
-                    guard let image = UIImage(data: data) else { return }
+                    guard let image = UIImage(data: data) else {
+                        return
+                    }
 
                     var imageView = UIImageView()
                     switch button {
@@ -127,6 +143,7 @@ class EateriesCardCell: UITableViewCell {
                         break
                     }
 
+                    strongSelf.updateCellLayout()
                     strongSelf.fadeInImage(image, forImageView: imageView)
                 }
             }.resume()
