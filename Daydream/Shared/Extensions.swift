@@ -200,6 +200,11 @@ extension UIViewController {
         return UIDevice().notchHeight
     }
 
+    var hasNotch: Bool {
+        // swiftlint:disable discouraged_direct_init
+        return UIDevice().hasNotch
+    }
+
     func add(_ childVC: UIViewController) {
         addChild(childVC)
         view.addSubview(childVC.view)

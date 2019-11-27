@@ -27,14 +27,14 @@ class SearchDetailViewController: UIViewController {
 
     // MARK: - Constants
     private var searchBarYOffset: CGFloat { // sets search bar's Y offset (not for transition)
-        let offset: CGFloat = deviceSize == .iPhoneSE || deviceSize == .iPhone8 ? 100 : 120
+        let offset: CGFloat = hasNotch ? 120 : 100
         return offset - modalOffset
     }
 
     private var modalOffset: CGFloat {
         // iOS 13 introduced a new modal UI that changes how much to offset content from the top
         if #available(iOS 13, *) {
-            return 38
+            return hasNotch ? 38 : 18
         } else {
             return 0
         }
