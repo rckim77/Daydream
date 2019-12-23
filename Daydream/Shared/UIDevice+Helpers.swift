@@ -54,10 +54,6 @@ extension UIDevice {
     }
 
     var hasNotch: Bool {
-        if deviceSize == .iPhoneSE || deviceSize == .iPhone8 || deviceSize == .iPhone8Plus { // no notch devices
-            return false
-        } else { // notch devices
-            return true
-        }
+        return deviceSize == .iPhoneXR || deviceSize == .iPhoneXSMax || deviceSize == .iPhoneXS
     }
 }
