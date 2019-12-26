@@ -27,7 +27,6 @@ class SearchViewController: UIViewController {
     }
 
     @IBAction func randomBtnTapped(_ sender: Any) {
-        logEvent(contentType: "random button tapped", title)
         guard let randomCity = getRandomCity() else { return }
         let loadingVC = LoadingViewController()
         add(loadingVC)
@@ -38,10 +37,8 @@ class SearchViewController: UIViewController {
 
             strongSelf.placeData = place
             strongSelf.performSegue(withIdentifier: "toSearchDetailVCSegue", sender: nil)
-        }, failure: { [weak self] error in
+        }, failure: { _ in
             loadingVC.remove()
-            guard let strongSelf = self else { return }
-            strongSelf.logErrorEvent(error)
         })
     }
 
@@ -115,9 +112,6 @@ class SearchViewController: UIViewController {
 extension SearchViewController: GMSAutocompleteResultsViewControllerDelegate {
     // Handle the user's selection
     func resultsController(_ resultsController: GMSAutocompleteResultsViewController, didAutocompleteWith place: GMSPlace) {
-        let searchBarText = searchController?.searchBar.text ?? "Couldn't get search bar text"
-        let placeId = place.placeID ?? "Couldn't get place ID"
-        logSearchEvent(searchTerm: searchBarText, placeId: placeId)
         placeData = place
         dismiss(animated: true, completion: {
             self.performSegue(withIdentifier: "toSearchDetailVCSegue", sender: nil)
@@ -126,7 +120,6 @@ extension SearchViewController: GMSAutocompleteResultsViewControllerDelegate {
 
     // Handle the error
     func resultsController(_ resultsController: GMSAutocompleteResultsViewController, didFailAutocompleteWithError error: Error) {
-        logErrorEvent(error)
     }
 
     // User canceled the operation
@@ -162,4 +155,4 @@ extension SearchViewController: UISearchControllerDelegate {
     }
 }
 
-extension SearchViewController: RandomCitySelectable, Loggable {}
+extension SearchViewController: RandomCitySelectable {}

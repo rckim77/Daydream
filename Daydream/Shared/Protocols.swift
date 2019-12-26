@@ -9,7 +9,6 @@
 import Foundation
 import SwiftyJSON
 import CoreLocation
-import Firebase
 
 protocol Placeable: class {
     var placeableId: String? { get }
@@ -73,26 +72,4 @@ protocol Loggable {
     func logEvent(contentType: String, _ title: String?)
     func logSearchEvent(searchTerm: String, placeId: String)
     func logErrorEvent(_ error: Error?)
-}
-
-extension Loggable {
-    func logEvent(contentType: String, _ title: String?) {
-        Analytics.logEvent(AnalyticsEventSelectContent, parameters: [
-            AnalyticsParameterItemID: "id-\(String(describing: title))",
-            AnalyticsParameterContentType: contentType
-        ])
-    }
-
-    func logSearchEvent(searchTerm: String, placeId: String) {
-        Analytics.logEvent(AnalyticsEventSearch, parameters: [
-            AnalyticsParameterSearchTerm: searchTerm,
-            AnalyticsParameterLocation: placeId
-        ])
-    }
-
-    func logErrorEvent(_ error: Error?) {
-        Analytics.logEvent("DaydreamAppError", parameters: [
-            "Error": String(describing: error)
-        ])
-    }
 }

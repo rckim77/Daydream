@@ -64,12 +64,10 @@ class SearchDetailViewController: UIViewController {
 
     // MARK: - IBActions
     @IBAction func homeBtnTapped(_ sender: UIButton) {
-        logEvent(contentType: "home button tapped", title)
         dismiss(animated: true, completion: nil)
     }
 
     @IBAction func randomCityBtnTapped(_ sender: UIButton) {
-        logEvent(contentType: "random button tapped", title)
         guard let randomCity = getRandomCity() else {
             return
         }
@@ -85,13 +83,8 @@ class SearchDetailViewController: UIViewController {
 
             dataSource.place = place
             strongSelf.loadDataSource(reloadMapCard: true)
-        }, failure: { [weak self] error in
+        }, failure: { _ in
             loadingVC.remove()
-            guard let strongSelf = self else {
-                return
-            }
-
-            strongSelf.logErrorEvent(error)
         })
     }
 
@@ -151,12 +144,7 @@ class SearchDetailViewController: UIViewController {
                 strongSelf.placeImageView.contentMode = .scaleAspectFill
                 strongSelf.placeImageView.addSubview(strongSelf.visualEffectView)
             }
-        }, failure: { [weak self] error in
-            guard let strongSelf = self else {
-                return
-            }
-
-            strongSelf.logErrorEvent(error)
+        }, failure: { _ in
         })
 
         dataSource.loadSightsAndEateries(success: { [weak self] indexPaths in
@@ -167,12 +155,7 @@ class SearchDetailViewController: UIViewController {
             DispatchQueue.main.async {
                 strongSelf.placeCardsTableView.reloadRows(at: indexPaths, with: .fade)
             }
-        }, failure: { [weak self] error in
-            guard let strongSelf = self else {
-                return
-            }
-
-            strongSelf.logErrorEvent(error)
+        }, failure: { _ in
         })
 
         if reloadMapCard {
@@ -230,8 +213,6 @@ extension SearchDetailViewController: UITableViewDelegate {
         }
 
         if indexPath.row == 0 {
-            logEvent(contentType: "select map card cell", title)
-
             if let mapUrl = dataSource.place.placeableMapUrl {
                 openUrl(mapUrl)
             } else if let placeId = dataSource.place.placeableId {
@@ -241,12 +222,7 @@ extension SearchDetailViewController: UITableViewDelegate {
                     }
 
                     strongSelf.openUrl(mapUrl)
-                }, failure: { [weak self] error in
-                    guard let strongSelf = self else {
-                        return
-                    }
-
-                    strongSelf.logErrorEvent(error)
+                }, failure: { _ in
                 })
             }
         }
@@ -302,9 +278,6 @@ extension SearchDetailViewController: GMSAutocompleteResultsViewControllerDelega
     // Handle user's selection
     func resultsController(_ resultsController: GMSAutocompleteResultsViewController,
                            didAutocompleteWith place: GMSPlace) {
-        let searchBarText = searchController?.searchBar.text ?? "Couldn't get search bar text"
-        let placeId = place.placeID ?? "Couldn't get place ID"
-        logSearchEvent(searchTerm: searchBarText, placeId: placeId)
         searchController?.searchBar.text = nil // reset to search bar text
 
         dismiss(animated: true, completion: {
@@ -317,7 +290,6 @@ extension SearchDetailViewController: GMSAutocompleteResultsViewControllerDelega
 
     func resultsController(_ resultsController: GMSAutocompleteResultsViewController,
                            didFailAutocompleteWithError error: Error) {
-        logErrorEvent(error)
     }
 
     // Turn the network activity indicator on and off again
@@ -332,16 +304,14 @@ extension SearchDetailViewController: GMSAutocompleteResultsViewControllerDelega
 
 extension SearchDetailViewController: SightsCardCellDelegate {
     func sightsCardCell(_ cell: SightsCardCell, didSelectPlace place: Placeable) {
-        logEvent(contentType: "select point of interest", title)
         performSegue(withIdentifier: "genericMapSegue", sender: place)
     }
 }
 
 extension SearchDetailViewController: EateriesCardCellDelegate {
     func eateriesCardCell(_ cell: EateriesCardCell, didSelectEatery eatery: Eatery) {
-        logEvent(contentType: "select eatery", title)
         openUrl(eatery.url)
     }
 }
 
-extension SearchDetailViewController: RandomCitySelectable, Loggable {}
+extension SearchDetailViewController: RandomCitySelectable {}

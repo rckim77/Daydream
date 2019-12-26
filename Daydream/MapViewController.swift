@@ -49,7 +49,6 @@ class MapViewController: UIViewController {
                     sender.setImage(#imageLiteral(resourceName: "sunIcon"), for: .normal)
                 }
             } catch {
-                logErrorEvent(error)
             }
         }
     }
@@ -137,9 +136,7 @@ class MapViewController: UIViewController {
             DispatchQueue.main.async {
                 strongSelf.displayReviews(place.placeableReviews, index: 0)
             }
-        }, failure: { [weak self] error in
-            guard let strongSelf = self else { return }
-            strongSelf.logErrorEvent(error)
+        }, failure: { _ in
         })
     }
 
@@ -250,17 +247,15 @@ class MapViewController: UIViewController {
 
 extension MapViewController: GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, didTapPOIWithPlaceID placeID: String, name: String, location: CLLocationCoordinate2D) {
-        logEvent(contentType: "POI on map tapped", title)
         stopDisplayingReviews()
         addOrUpdateMapView(for: placeID, name: name, location: location)
     }
 
     func mapView(_ mapView: GMSMapView, didTapInfoWindowOf marker: GMSMarker) {
-        logEvent(contentType: "info window on marker tapped", title)
         if let mapUrl = place?.placeableMapUrl, let url = URL(string: mapUrl) {
             UIApplication.shared.open(url, options: [:])
         }
     }
 }
 
-extension MapViewController: Loggable, ImageViewFadeable {}
+extension MapViewController: ImageViewFadeable {}
