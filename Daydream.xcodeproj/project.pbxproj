@@ -231,7 +231,6 @@
 				2C1A16EE59777786F623EDDF /* [CP] Embed Pods Frameworks */,
 				8007B826663EE312D427A181 /* [CP] Copy Pods Resources */,
 				947EC659204B27CC004A911D /* ShellScript */,
-				941CD8C32090FC1000A1D9B8 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -370,20 +369,6 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Daydream/Pods-Daydream-resources.sh\"\n";
 			showEnvVarsInLog = 0;
-		};
-		941CD8C32090FC1000A1D9B8 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "${PODS_ROOT}/Fabric/run\n";
 		};
 		947EC659204B27CC004A911D /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;

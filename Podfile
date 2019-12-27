@@ -13,6 +13,4 @@ target 'Daydream' do
   pod 'SwiftyJSON'
   pod 'Hero', '~> 1.4.0'
   pod 'SVProgressHUD'
-  pod 'Fabric'
-  pod 'Crashlytics'
 end
