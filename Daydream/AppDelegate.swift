@@ -17,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     static let googleAPIKey = "ENTER GOOGLE API KEY"
     static let yelpAPIKey = "ENTER YELP API KEY"
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         GMSPlacesClient.provideAPIKey(AppDelegate.googleAPIKey)
         GMSServices.provideAPIKey(AppDelegate.googleAPIKey)
