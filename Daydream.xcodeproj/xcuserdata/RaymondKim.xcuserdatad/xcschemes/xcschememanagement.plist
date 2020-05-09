@@ -9,10 +9,13 @@
 			<key>orderHint</key>
 			<integer>9</integer>
 		</dict>
-		<key>DaydreamUITests.xcscheme_^#shared#^_</key>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>9490BA08206C8C8000B880E7</key>
 		<dict>
-			<key>orderHint</key>
-			<integer>8</integer>
+			<key>primary</key>
+			<true/>
 		</dict>
 	</dict>
 </dict>

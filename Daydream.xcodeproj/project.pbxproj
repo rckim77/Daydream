@@ -22,8 +22,6 @@
 		9481EC5A204B358C00863A5A /* SightsCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9481EC59204B358C00863A5A /* SightsCardCell.swift */; };
 		9490BA02206AF6F700B880E7 /* randomCitiesJSON.json in Resources */ = {isa = PBXBuildFile; fileRef = 9490BA01206AF6F700B880E7 /* randomCitiesJSON.json */; };
 		9490BA04206B03B300B880E7 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9490BA03206B03B300B880E7 /* Protocols.swift */; };
-		9490BA0C206C8C8000B880E7 /* DaydreamUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9490BA0B206C8C8000B880E7 /* DaydreamUITests.swift */; };
-		9490BA14206C8CCA00B880E7 /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9490BA13206C8CCA00B880E7 /* SnapshotHelper.swift */; };
 		9490BA18206CAA8300B880E7 /* Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9490BA17206CAA8300B880E7 /* Place.swift */; };
 		949630BA203BCBBD007139CA /* SearchDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949630B9203BCBBD007139CA /* SearchDetailViewController.swift */; };
 		94A7B7DB20780D39003E28A8 /* Review.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A7B7DA20780D39003E28A8 /* Review.swift */; };
@@ -72,9 +70,6 @@
 		9490BA01206AF6F700B880E7 /* randomCitiesJSON.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = randomCitiesJSON.json; sourceTree = "<group>"; };
 		9490BA03206B03B300B880E7 /* Protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
 		9490BA09206C8C8000B880E7 /* DaydreamUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DaydreamUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		9490BA0B206C8C8000B880E7 /* DaydreamUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaydreamUITests.swift; sourceTree = "<group>"; };
-		9490BA0D206C8C8000B880E7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		9490BA13206C8CCA00B880E7 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SnapshotHelper.swift; path = fastlane/SnapshotHelper.swift; sourceTree = SOURCE_ROOT; };
 		9490BA17206CAA8300B880E7 /* Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Place.swift; sourceTree = "<group>"; };
 		949630B9203BCBBD007139CA /* SearchDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDetailViewController.swift; sourceTree = "<group>"; };
 		94A7B7DA20780D39003E28A8 /* Review.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Review.swift; sourceTree = "<group>"; };
@@ -122,7 +117,6 @@
 			isa = PBXGroup;
 			children = (
 				94380AC6203BAE1D00684863 /* Daydream */,
-				9490BA0A206C8C8000B880E7 /* DaydreamUITests */,
 				94380AC5203BAE1D00684863 /* Products */,
 				C82D49DAB7A4A35EC3FA2142 /* Pods */,
 				16D2AFFF8EADF7C12E01E00C /* Frameworks */,
@@ -156,16 +150,6 @@
 				94E392AC2070B4300073E8C9 /* GoogleService-Info.plist */,
 			);
 			path = Daydream;
-			sourceTree = "<group>";
-		};
-		9490BA0A206C8C8000B880E7 /* DaydreamUITests */ = {
-			isa = PBXGroup;
-			children = (
-				9490BA13206C8CCA00B880E7 /* SnapshotHelper.swift */,
-				9490BA0B206C8C8000B880E7 /* DaydreamUITests.swift */,
-				9490BA0D206C8C8000B880E7 /* Info.plist */,
-			);
-			path = DaydreamUITests;
 			sourceTree = "<group>";
 		};
 		94B7DB5A205E2C800040D61C /* Models */ = {
@@ -456,8 +440,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9490BA0C206C8C8000B880E7 /* DaydreamUITests.swift in Sources */,
-				9490BA14206C8CCA00B880E7 /* SnapshotHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
