@@ -2,7 +2,6 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -60,28 +59,11 @@
                     </view>
                     <connections>
                         <outlet property="randomBtn" destination="wyW-dr-4PC" id="Na6-ko-ZcB"/>
-                        <outlet property="searchDisplayController" destination="3QI-pJ-GPe" id="vse-jb-lwP"/>
                         <outlet property="titleLabel" destination="JHi-Ty-WLR" id="ex4-nX-Bqc"/>
                         <segue destination="mAC-Ym-g6i" kind="presentation" identifier="toSearchDetailVCSegue" modalPresentationStyle="overFullScreen" modalTransitionStyle="crossDissolve" id="0Kk-Mo-0ud"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
-                <searchDisplayController id="49S-dF-W2l">
-                    <connections>
-                        <outlet property="delegate" destination="BYZ-38-t0r" id="ErZ-FO-jP3"/>
-                        <outlet property="searchContentsController" destination="BYZ-38-t0r" id="VS3-LZ-O28"/>
-                        <outlet property="searchResultsDataSource" destination="BYZ-38-t0r" id="tRe-S8-w7J"/>
-                        <outlet property="searchResultsDelegate" destination="BYZ-38-t0r" id="3vX-YB-2zi"/>
-                    </connections>
-                </searchDisplayController>
-                <searchDisplayController id="3QI-pJ-GPe">
-                    <connections>
-                        <outlet property="delegate" destination="BYZ-38-t0r" id="FbW-uv-itq"/>
-                        <outlet property="searchContentsController" destination="BYZ-38-t0r" id="raN-xN-drU"/>
-                        <outlet property="searchResultsDataSource" destination="BYZ-38-t0r" id="mMu-6l-KkE"/>
-                        <outlet property="searchResultsDelegate" destination="BYZ-38-t0r" id="wh0-Ns-IJq"/>
-                    </connections>
-                </searchDisplayController>
             </objects>
             <point key="canvasLocation" x="238" y="31"/>
         </scene>
