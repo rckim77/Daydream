@@ -55,7 +55,9 @@ class MapViewController: UIViewController {
     }
 
     @IBAction func reviewViewTapped(_ sender: UITapGestureRecognizer) {
-        guard let reviews = currentReviews, let authorUrl = reviews[currentReviewIndex].authorUrl else { return }
+        guard let reviews = currentReviews, let authorUrl = reviews[currentReviewIndex].authorUrl else {
+            return
+        }
         openUrl(authorUrl)
     }
 
@@ -84,7 +86,9 @@ class MapViewController: UIViewController {
     }
 
     private func addOrUpdateMapView(for placeId: String?, name: String?, location: CLLocationCoordinate2D?) {
-        guard let placeId = placeId, let name = name, let location = location else { return }
+        guard let placeId = placeId, let name = name, let location = location else {
+            return
+        }
 
         let camera = GMSCameraPosition.camera(withLatitude: location.latitude,
                                               longitude: location.longitude,
@@ -99,7 +103,9 @@ class MapViewController: UIViewController {
 
             dynamicMapView = mapViewNew
 
-            guard let dynamicMapView = dynamicMapView else { return }
+            guard let dynamicMapView = dynamicMapView else {
+                return
+            }
             dynamicMapView.delegate = self
             view.addSubview(dynamicMapView)
             view.sendSubviewToBack(dynamicMapView)
@@ -123,14 +129,18 @@ class MapViewController: UIViewController {
             dynamicMarker = marker
         }
 
-        guard let dynamicMarker = dynamicMarker else { return }
+        guard let dynamicMarker = dynamicMarker else {
+            return
+        }
 
         mapView.selectedMarker = dynamicMarker
 
         dynamicMarker.tracksInfoWindowChanges = true
 
         networkService.getPlace(with: placeId, success: { [weak self] place in
-            guard let strongSelf = self else { return }
+            guard let strongSelf = self else {
+                return
+            }
             dynamicMarker.snippet = strongSelf.createSnippet(for: place)
             dynamicMarker.tracksInfoWindowChanges = false
             strongSelf.place = place
@@ -138,7 +148,9 @@ class MapViewController: UIViewController {
                 strongSelf.displayReviews(place.placeableReviews, index: 0)
             }
         }, failure: { [weak self] error in
-            guard let strongSelf = self else { return }
+            guard let strongSelf = self else {
+                return
+            }
             strongSelf.logErrorEvent(error)
         })
     }
@@ -162,7 +174,9 @@ class MapViewController: UIViewController {
     // MARK: - Review-specific methods
 
     private func displayReviews(_ reviews: [Reviewable]?, index: Int) {
-        guard let reviews = reviews, !reviews.isEmpty else { return }
+        guard let reviews = reviews, !reviews.isEmpty else {
+            return
+        }
         currentReviews = reviews
         currentReviewIndex = index
         loadReviewContent(reviews[index])
@@ -203,7 +217,9 @@ class MapViewController: UIViewController {
     }
 
     private func displayReviewForUITest(_ reviews: [Reviewable]) {
-        guard let firstReview = reviews.first else { return }
+        guard let firstReview = reviews.first else {
+            return
+        }
         reviewView.isHidden = false
         currentReviewIndex = 1
         loadReviewContent(firstReview)
@@ -211,7 +227,9 @@ class MapViewController: UIViewController {
 
     @objc
     private func restartDisplayingCurrentReviews() {
-        guard let reviews = currentReviews else { return }
+        guard let reviews = currentReviews else {
+            return
+        }
         displayReviews(reviews, index: currentReviewIndex)
     }
 
@@ -236,12 +254,18 @@ class MapViewController: UIViewController {
     }
 
     private func loadImage(from urlString: String?) {
-        guard let urlString = urlString, let url = URL(string: urlString) else { return }
+        guard let urlString = urlString, let url = URL(string: urlString) else {
+            return
+        }
 
         URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
-            guard let strongSelf = self, let data = data else { return }
+            guard let strongSelf = self, let data = data else {
+                return
+            }
             DispatchQueue.main.async {
-                guard let image = UIImage(data: data) else { return }
+                guard let image = UIImage(data: data) else {
+                    return
+                }
                 strongSelf.fadeInImage(image, forImageView: strongSelf.authorImageView)
             }
         }.resume()

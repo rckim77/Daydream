@@ -79,23 +79,21 @@ class SightsCardCell: UITableViewCell {
         }
     }
 
-    override func setNeedsLayout() {
-        super.setNeedsLayout()
+    // Note: On iOS 13, setNeedsLayout() is called before UIViews so we can't update
+    // UIViews just yet. Update after their added as subviews.
+    private func updateCellLayout() {
+        pointOfInterest1View.addTopRoundedCorners()
+        pointOfInterest2View.layer.masksToBounds = true
+        pointOfInterest3View.addBottomRoundedCorners()
 
-        if #available(iOS 13, *) {
-            return
-        } else {
-            pointOfInterest1View.addTopRoundedCorners()
-            pointOfInterest2View.layer.masksToBounds = true
-            pointOfInterest3View.addBottomRoundedCorners()
-
-            layoutIfNeeded()
-        }
+        layoutIfNeeded()
     }
 
     @objc
     private func handleTapGesture(withSender sender: UITapGestureRecognizer) {
-        guard let pointsOfInterest = pointsOfInterest else { return }
+        guard let pointsOfInterest = pointsOfInterest else {
+            return
+        }
 
         var pointOfInterest = pointsOfInterest[0]
 
@@ -111,7 +109,9 @@ class SightsCardCell: UITableViewCell {
     }
 
     private func getViewport(for pointOfInterest: Placeable) -> GMSCoordinateBounds? {
-        guard let viewport = pointOfInterest.placeableViewport else { return nil }
+        guard let viewport = pointOfInterest.placeableViewport else {
+            return nil
+        }
         let northeast = CLLocationCoordinate2D(latitude: viewport.northeastLat, longitude: viewport.northeastLng)
         let southwest = CLLocationCoordinate2D(latitude: viewport.southwestLat, longitude: viewport.southwestLng)
 
@@ -119,9 +119,13 @@ class SightsCardCell: UITableViewCell {
     }
 
     private func loadBackgroundImage(for button: Int, with pointOfInterest: Placeable) {
-        guard let placeId = pointOfInterest.placeableId else { return }
+        guard let placeId = pointOfInterest.placeableId else {
+            return
+        }
         NetworkService().loadPhoto(with: placeId, success: { [weak self] image in
-            guard let strongSelf = self else { return }
+            guard let strongSelf = self else {
+                return
+            }
             var imageView = UIImageView()
 
             switch button {
@@ -135,6 +139,7 @@ class SightsCardCell: UITableViewCell {
                 break
             }
 
+            strongSelf.updateCellLayout()
             strongSelf.fadeInImage(image, forImageView: imageView)
         }, failure: { [weak self] error in
             self?.logErrorEvent(error)

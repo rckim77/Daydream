@@ -22,7 +22,9 @@ class MapCardCell: UITableViewCell {
 
     weak var place: Placeable? {
         didSet {
-            guard let place = place, place !== oldValue else { return }
+            guard let place = place, place !== oldValue else {
+                return
+            }
 
             if let mapView = mapView {
                 update(mapView, with: place)
