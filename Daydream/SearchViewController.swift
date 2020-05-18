@@ -8,6 +8,7 @@
 
 import UIKit
 import GooglePlaces
+import SnapKit
 
 class SearchViewController: UIViewController {
 
@@ -17,6 +18,14 @@ class SearchViewController: UIViewController {
     private var searchBarView: UIView!
     private let searchBarViewHeight: CGFloat = 45.0
     private var placeData: Placeable?
+
+    private lazy var feedbackButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Got feedback?", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.addTarget(self, action: #selector(feedbackButtonTapped), for: .touchUpInside)
+        return button
+    }()
 
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var randomBtn: UIButton! {
@@ -59,6 +68,7 @@ class SearchViewController: UIViewController {
         resultsViewController = GMSAutocompleteResultsViewController()
         resultsViewController?.delegate = self
         addSearchController()
+        addFeedbackButton()
         fadeInTitleAndButton()
     }
 
@@ -112,6 +122,28 @@ class SearchViewController: UIViewController {
             self.searchBarView.alpha = 1
         }, completion: nil)
     }
+
+    private func addFeedbackButton() {
+        view.addSubview(feedbackButton)
+        feedbackButton.snp.makeConstraints { make in
+            make.bottom.equalToSuperview().inset(30)
+            make.centerX.equalToSuperview()
+        }
+    }
+
+    // MARK: - Button selector method
+
+    @objc
+    private func feedbackButtonTapped() {
+        let alert = UIAlertController(title: "Got feedback? Email me!", message: nil, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Email", style: .default, handler: { _ in
+            self.openUrl("mailto:daydreamiosapp@gmail.com")
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
+
+    // MARK: - Segue method
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destinationVC = segue.destination as? SearchDetailViewController, let place = placeData {

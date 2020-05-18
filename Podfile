@@ -16,4 +16,5 @@ target 'Daydream' do
   pod 'Firebase/Core'
   pod 'Fabric'
   pod 'Crashlytics'
+  pod 'SnapKit'
 end
