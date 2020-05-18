@@ -68,31 +68,23 @@ class EateriesCardCell: UITableViewCell {
         eatery1ImageView.image = nil
         eatery2ImageView.image = nil
         eatery3ImageView.image = nil
-
-        if #available(iOS 13, *) {
-            eatery1View.addTopRoundedCorners()
-            eatery2View.layer.masksToBounds = true
-            eatery3View.addBottomRoundedCorners()
-        }
     }
 
-    override func setNeedsLayout() {
-        super.setNeedsLayout()
+    // Note: On iOS 13, setNeedsLayout() is called first before UIViews are
+    // added as subviews so we can't update UIViews just yet.
+    private func updateCellLayout() {
+        eatery1View.addTopRoundedCorners()
+        eatery2View.layer.masksToBounds = true
+        eatery3View.addBottomRoundedCorners()
 
-        if #available(iOS 13, *) {
-            return
-        } else {
-            eatery1View.addTopRoundedCorners()
-            eatery2View.layer.masksToBounds = true
-            eatery3View.addBottomRoundedCorners()
-
-            layoutIfNeeded()
-        }
+        layoutIfNeeded()
     }
 
     @objc
     private func handleTapGesture(withSender sender: UITapGestureRecognizer) {
-        guard let eateries = eateries else { return }
+        guard let eateries = eateries else {
+            return
+        }
 
         var eatery = eateries[0]
 
@@ -110,10 +102,14 @@ class EateriesCardCell: UITableViewCell {
     private func loadBackgroundImage(for button: Int, with eatery: Eatery) {
         if let imageUrl = URL(string: eatery.imageUrl) {
            URLSession.shared.dataTask(with: imageUrl) { [weak self] data, _, _ in
-                guard let strongSelf = self, let data = data else { return }
+                guard let strongSelf = self, let data = data else {
+                    return
+                }
 
                 DispatchQueue.main.async {
-                    guard let image = UIImage(data: data) else { return }
+                    guard let image = UIImage(data: data) else {
+                        return
+                    }
 
                     var imageView = UIImageView()
                     switch button {
@@ -127,6 +123,7 @@ class EateriesCardCell: UITableViewCell {
                         break
                     }
 
+                    strongSelf.updateCellLayout()
                     strongSelf.fadeInImage(image, forImageView: imageView)
                 }
             }.resume()

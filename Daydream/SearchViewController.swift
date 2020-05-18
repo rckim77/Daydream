@@ -28,19 +28,27 @@ class SearchViewController: UIViewController {
 
     @IBAction func randomBtnTapped(_ sender: Any) {
         logEvent(contentType: "random button tapped", title)
-        guard let randomCity = getRandomCity() else { return }
+        guard let randomCity = getRandomCity() else {
+            return
+        }
         let loadingVC = LoadingViewController()
         add(loadingVC)
 
         NetworkService().getPlaceId(with: randomCity, success: { [weak self] place in
             loadingVC.remove()
-            guard let strongSelf = self else { return }
+            guard let strongSelf = self else {
+                return
+
+            }
 
             strongSelf.placeData = place
             strongSelf.performSegue(withIdentifier: "toSearchDetailVCSegue", sender: nil)
         }, failure: { [weak self] error in
             loadingVC.remove()
-            guard let strongSelf = self else { return }
+            guard let strongSelf = self else {
+                return
+
+            }
             strongSelf.logErrorEvent(error)
         })
     }
@@ -132,15 +140,6 @@ extension SearchViewController: GMSAutocompleteResultsViewControllerDelegate {
     // User canceled the operation
     func wasCancelled(_ viewController: GMSAutocompleteViewController) {
         dismiss(animated: true, completion: nil)
-    }
-
-    // Turn the network activity indicator on and off again
-    func didRequestAutocompletePredictions(_ viewController: GMSAutocompleteViewController) {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-    }
-
-    func didUpdateAutocompletePredictions(_ viewController: GMSAutocompleteViewController) {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = false
     }
 }
 
