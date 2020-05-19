@@ -35,7 +35,9 @@ extension GMSPlace: Placeable {
     }
 
     var placeableViewport: Viewport? {
-        guard let viewport = self.viewport else { return nil }
+        guard let viewport = self.viewport else {
+            return nil
+        }
         return Viewport(northeastLat: viewport.northEast.latitude,
                         northeastLng: viewport.northEast.longitude,
                         southwestLat: viewport.southWest.latitude,
@@ -131,14 +133,18 @@ extension UIViewController {
     }
 
     func remove() {
-        guard parent != nil else { return }
+        guard parent != nil else {
+            return
+        }
         willMove(toParent: nil)
         removeFromParent()
         view.removeFromSuperview()
     }
 
     func openUrl(_ url: String) {
-        guard let url = URL(string: url) else { return }
+        guard let url = URL(string: url) else {
+            return
+        }
         UIApplication.shared.open(url, options: [:])
     }
 }
@@ -146,7 +152,9 @@ extension UIViewController {
 extension String {
     var abbreviated: String {
         let nameParts = self.components(separatedBy: " ")
-        guard let first = nameParts.first, let lastInitial = nameParts.last?.first else { return self }
+        guard let first = nameParts.first, let lastInitial = nameParts.last?.first else {
+            return self
+        }
         return first + " " + String(lastInitial) + "."
     }
 }
@@ -163,6 +171,7 @@ extension UITextField {
 
         override var textColor: UIColor! {
             get { return _textColor }
+            // swiftlint:disable unused_setter_value
             set { super.textColor = _textColor }
         }
 
