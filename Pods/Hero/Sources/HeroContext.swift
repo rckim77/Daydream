@@ -172,9 +172,11 @@ extension HeroContext {
       #if os(tvOS)
         snapshot = view.snapshotView(afterScreenUpdates: true)!
       #else
-        if #available(iOS 9.0, *), let stackView = view as? UIStackView {
+        if let customSnapshotView = view as? HeroCustomSnapshotView, let snapshotView = customSnapshotView.heroSnapshot {
+          snapshot = snapshotView
+        } else if #available(iOS 9.0, *), let stackView = view as? UIStackView {
           snapshot = stackView.slowSnapshotView()
-        } else if let imageView = view as? UIImageView, view.subviews.isEmpty {
+        } else if let imageView = view as? UIImageView, view.subviews.filter({!$0.isHidden}).isEmpty {
           let contentView = UIImageView(image: imageView.image)
           contentView.frame = imageView.bounds
           contentView.contentMode = imageView.contentMode
@@ -387,4 +389,9 @@ extension HeroContext {
       storeViewAlpha(rootView: subview)
     }
   }
+}
+
+/// Allows a view to create their own custom snapshot when using **Optimized** snapshot
+public protocol HeroCustomSnapshotView {
+	var heroSnapshot: UIView? { get }
 }
