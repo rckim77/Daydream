@@ -143,14 +143,6 @@
                                                                     <rect key="frame" x="0.0" y="0.0" width="343" height="170.66666666666666"/>
                                                                     <gestureRecognizers/>
                                                                 </imageView>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Point of Interest 1" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yHN-6d-7DC">
-                                                                    <rect key="frame" x="16" y="127.33333333333333" width="311" height="27.333333333333329"/>
-                                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleTitle2"/>
-                                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                    <nil key="highlightedColor"/>
-                                                                    <color key="shadowColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                    <size key="shadowOffset" width="0.0" height="1"/>
-                                                                </label>
                                                             </subviews>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <accessibility key="accessibilityConfiguration" identifier="poi1Card">
@@ -158,12 +150,9 @@
                                                             </accessibility>
                                                             <gestureRecognizers/>
                                                             <constraints>
-                                                                <constraint firstAttribute="bottom" secondItem="yHN-6d-7DC" secondAttribute="bottom" constant="16" id="bnj-gm-jrb"/>
-                                                                <constraint firstAttribute="trailing" secondItem="yHN-6d-7DC" secondAttribute="trailing" constant="16" id="c6h-VQ-Yqg"/>
                                                                 <constraint firstItem="UIt-au-apq" firstAttribute="top" secondItem="Ciz-Vh-WN7" secondAttribute="top" id="cPM-54-Q5K"/>
                                                                 <constraint firstAttribute="bottom" secondItem="UIt-au-apq" secondAttribute="bottom" id="msd-vL-jNR"/>
                                                                 <constraint firstAttribute="trailing" secondItem="UIt-au-apq" secondAttribute="trailing" id="uHT-Ie-JrL"/>
-                                                                <constraint firstItem="yHN-6d-7DC" firstAttribute="leading" secondItem="Ciz-Vh-WN7" secondAttribute="leading" constant="16" id="vRP-GV-rVj"/>
                                                                 <constraint firstItem="UIt-au-apq" firstAttribute="leading" secondItem="Ciz-Vh-WN7" secondAttribute="leading" id="z9g-af-aBH"/>
                                                             </constraints>
                                                         </view>
@@ -173,14 +162,6 @@
                                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="1VR-CS-te4">
                                                                     <rect key="frame" x="0.0" y="0.0" width="343" height="170.66666666666666"/>
                                                                 </imageView>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Point of Interest 2" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ezb-Nw-YUk">
-                                                                    <rect key="frame" x="16" y="127.33333333333333" width="311" height="27.333333333333329"/>
-                                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleTitle2"/>
-                                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                    <nil key="highlightedColor"/>
-                                                                    <color key="shadowColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                    <size key="shadowOffset" width="0.0" height="1"/>
-                                                                </label>
                                                             </subviews>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <accessibility key="accessibilityConfiguration" identifier="poi2Card">
@@ -188,11 +169,8 @@
                                                             </accessibility>
                                                             <constraints>
                                                                 <constraint firstItem="1VR-CS-te4" firstAttribute="leading" secondItem="cCe-zg-RYa" secondAttribute="leading" id="4KI-cS-N9R"/>
-                                                                <constraint firstAttribute="bottom" secondItem="ezb-Nw-YUk" secondAttribute="bottom" constant="16" id="A4B-gw-enK"/>
                                                                 <constraint firstAttribute="trailing" secondItem="1VR-CS-te4" secondAttribute="trailing" id="ZBm-CA-pQF"/>
-                                                                <constraint firstAttribute="trailing" secondItem="ezb-Nw-YUk" secondAttribute="trailing" constant="16" id="dNm-oZ-w11"/>
                                                                 <constraint firstItem="1VR-CS-te4" firstAttribute="top" secondItem="cCe-zg-RYa" secondAttribute="top" id="g3H-kE-NxV"/>
-                                                                <constraint firstItem="ezb-Nw-YUk" firstAttribute="leading" secondItem="cCe-zg-RYa" secondAttribute="leading" constant="16" id="h6k-yn-hro"/>
                                                                 <constraint firstAttribute="bottom" secondItem="1VR-CS-te4" secondAttribute="bottom" id="pK6-io-QMo"/>
                                                             </constraints>
                                                         </view>
@@ -202,14 +180,6 @@
                                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="P01-u6-tgK">
                                                                     <rect key="frame" x="0.0" y="0.0" width="343" height="170.66666666666666"/>
                                                                 </imageView>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Point of Interest 3" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Ot-hh-287">
-                                                                    <rect key="frame" x="16" y="127.3333333333333" width="311" height="27.333333333333329"/>
-                                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleTitle2"/>
-                                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                    <nil key="highlightedColor"/>
-                                                                    <color key="shadowColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                    <size key="shadowOffset" width="0.0" height="1"/>
-                                                                </label>
                                                             </subviews>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <accessibility key="accessibilityConfiguration" identifier="poi3Card">
@@ -217,11 +187,8 @@
                                                             </accessibility>
                                                             <constraints>
                                                                 <constraint firstAttribute="trailing" secondItem="P01-u6-tgK" secondAttribute="trailing" id="4qG-yc-fKF"/>
-                                                                <constraint firstAttribute="bottom" secondItem="4Ot-hh-287" secondAttribute="bottom" constant="16" id="BQy-V7-Lpj"/>
                                                                 <constraint firstItem="P01-u6-tgK" firstAttribute="leading" secondItem="cWo-q2-xtE" secondAttribute="leading" id="E0S-Sr-b68"/>
-                                                                <constraint firstAttribute="trailing" secondItem="4Ot-hh-287" secondAttribute="trailing" constant="16" id="eed-97-POu"/>
                                                                 <constraint firstItem="P01-u6-tgK" firstAttribute="top" secondItem="cWo-q2-xtE" secondAttribute="top" id="rg5-7B-qzB"/>
-                                                                <constraint firstItem="4Ot-hh-287" firstAttribute="leading" secondItem="cWo-q2-xtE" secondAttribute="leading" constant="16" id="uwb-Pg-eIG"/>
                                                                 <constraint firstAttribute="bottom" secondItem="P01-u6-tgK" secondAttribute="bottom" id="xaL-9f-HZN"/>
                                                             </constraints>
                                                         </view>
@@ -286,13 +253,10 @@
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
                                             <outlet property="pointOfInterest1ImageView" destination="UIt-au-apq" id="xzq-Sq-gbl"/>
-                                            <outlet property="pointOfInterest1Label" destination="yHN-6d-7DC" id="vjk-V4-vEU"/>
                                             <outlet property="pointOfInterest1View" destination="Ciz-Vh-WN7" id="RyB-se-OHb"/>
                                             <outlet property="pointOfInterest2ImageView" destination="1VR-CS-te4" id="OUj-9C-nNQ"/>
-                                            <outlet property="pointOfInterest2Label" destination="ezb-Nw-YUk" id="k2U-8y-eM1"/>
                                             <outlet property="pointOfInterest2View" destination="cCe-zg-RYa" id="Ldu-oU-wU9"/>
                                             <outlet property="pointOfInterest3ImageView" destination="P01-u6-tgK" id="swU-Od-ee7"/>
-                                            <outlet property="pointOfInterest3Label" destination="4Ot-hh-287" id="loI-ML-A92"/>
                                             <outlet property="pointOfInterest3View" destination="cWo-q2-xtE" id="2Ot-Rw-r0x"/>
                                         </connections>
                                     </tableViewCell>
