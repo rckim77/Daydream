@@ -10,6 +10,7 @@
 		1798BE5CF61FDC04CA194644 /* Pods_Daydream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 35BB11CB5A171934921E51F1 /* Pods_Daydream.framework */; };
 		9409090A205F4613002A65EF /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94090909205F4613002A65EF /* MapViewController.swift */; };
 		9434BA3A24738C25004294F0 /* DaydreamUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9434BA3924738C25004294F0 /* DaydreamUITests.swift */; };
+		9434BA4424738D2F004294F0 /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9434BA4324738D2F004294F0 /* SnapshotHelper.swift */; };
 		94380AC8203BAE1D00684863 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94380AC7203BAE1D00684863 /* AppDelegate.swift */; };
 		94380ACA203BAE1D00684863 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94380AC9203BAE1D00684863 /* SearchViewController.swift */; };
 		94380ACD203BAE1D00684863 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 94380ACB203BAE1D00684863 /* Main.storyboard */; };
@@ -55,6 +56,7 @@
 		9434BA3724738C25004294F0 /* DaydreamUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DaydreamUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9434BA3924738C25004294F0 /* DaydreamUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaydreamUITests.swift; sourceTree = "<group>"; };
 		9434BA3B24738C25004294F0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9434BA4324738D2F004294F0 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SnapshotHelper.swift; path = fastlane/SnapshotHelper.swift; sourceTree = SOURCE_ROOT; };
 		94380AC4203BAE1D00684863 /* Daydream.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Daydream.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94380AC7203BAE1D00684863 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		94380AC9203BAE1D00684863 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
@@ -115,6 +117,7 @@
 			isa = PBXGroup;
 			children = (
 				9434BA3924738C25004294F0 /* DaydreamUITests.swift */,
+				9434BA4324738D2F004294F0 /* SnapshotHelper.swift */,
 				9434BA3B24738C25004294F0 /* Info.plist */,
 			);
 			path = DaydreamUITests;
@@ -416,6 +419,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9434BA3A24738C25004294F0 /* DaydreamUITests.swift in Sources */,
+				9434BA4424738D2F004294F0 /* SnapshotHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
