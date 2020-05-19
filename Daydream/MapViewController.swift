@@ -9,16 +9,18 @@
 import UIKit
 import GoogleMaps
 import GooglePlaces
+import SnapKit
 
+// swiftlint:disable type_body_length
 class MapViewController: UIViewController {
 
     var place: Placeable?
-    var heroId: String?
     var dynamicMapView: GMSMapView?
     var dynamicMarker: GMSMarker?
     var currentReviews: [Reviewable]?
-    var currentReviewIndex: Int = 0
-    var isInNightMode: Bool = false
+    var currentReviewIndex = 0
+    var isViewingDarkMode = false
+
     private let networkService = NetworkService()
     
     @IBOutlet weak var reviewView: DesignableView!
@@ -30,29 +32,32 @@ class MapViewController: UIViewController {
     @IBOutlet weak var star3: UIImageView!
     @IBOutlet weak var star4: UIImageView!
     @IBOutlet weak var star5: UIImageView!
-    
-    @IBAction func closeBtnTapped(_ sender: Any) {
-        dismiss(animated: true, completion: nil)
-    }
 
-    @IBAction func nightModeBtnTapped(_ sender: UIButton) {
-        if isInNightMode {
-            dynamicMapView?.mapStyle = nil
-            isInNightMode = false
-            sender.setImage(#imageLiteral(resourceName: "nightIcon"), for: .normal)
-        } else {
-            do {
-                // Set the map style by passing the URL of the local file.
-                if let styleURL = Bundle.main.url(forResource: "style", withExtension: "json"), let mapView = dynamicMapView {
-                    mapView.mapStyle = try GMSMapStyle(contentsOfFileURL: styleURL)
-                    isInNightMode = true
-                    sender.setImage(#imageLiteral(resourceName: "sunIcon"), for: .normal)
-                }
-            } catch {
-                logErrorEvent(error)
-            }
-        }
-    }
+    // contains close and dark mode buttons (and creates frame for gradient)
+    private lazy var containerView: UIView = {
+        let view = UIView()
+        return view
+    }()
+
+    private lazy var gradientLayer: CAGradientLayer = {
+        let layer = CAGradientLayer()
+        layer.colors = [UIColor.black.withAlphaComponent(0.5).cgColor, UIColor.clear.cgColor]
+        return layer
+    }()
+
+    private lazy var closeButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(named: "mapCloseIconSoftShadow")?.withRenderingMode(.alwaysOriginal), for: .normal)
+        button.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
+        return button
+    }()
+
+    private lazy var darkModeButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(named: "nightIcon")?.withRenderingMode(.alwaysOriginal), for: .normal)
+        button.addTarget(self, action: #selector(darkModeButtonTapped), for: .touchUpInside)
+        return button
+    }()
 
     @IBAction func reviewViewTapped(_ sender: UITapGestureRecognizer) {
         guard let reviews = currentReviews, let authorUrl = reviews[currentReviewIndex].authorUrl else {
@@ -76,11 +81,42 @@ class MapViewController: UIViewController {
         reviewView.isHidden = true
 
         addOrUpdateMapView(for: place?.placeableId, name: place?.placeableName, location: place?.placeableCoordinate)
+        addMapHeader()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         stopDisplayingReviews()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        gradientLayer.frame = containerView.bounds
+    }
+
+    /// Map header includes a gradient so that buttons are easier to see and creates a pannable section above the map view
+    /// so users can dismiss.
+    private func addMapHeader() {
+        view.addSubview(containerView)
+        containerView.layer.addSublayer(gradientLayer)
+        containerView.addSubview(closeButton)
+        containerView.addSubview(darkModeButton)
+
+        containerView.snp.makeConstraints { make in
+            make.leading.top.trailing.equalToSuperview()
+            make.height.equalTo(60)
+        }
+
+        closeButton.snp.makeConstraints { make in
+            make.top.trailing.equalToSuperview().inset(18)
+            make.height.equalTo(48)
+        }
+
+        darkModeButton.snp.makeConstraints { make in
+            make.leading.top.equalToSuperview().inset(18)
+            make.height.equalTo(48)
+        }
     }
 
     private func addOrUpdateMapView(for placeId: String?, name: String?, location: CLLocationCoordinate2D?) {
@@ -267,6 +303,33 @@ class MapViewController: UIViewController {
                 strongSelf.fadeInImage(image, forImageView: strongSelf.authorImageView)
             }
         }.resume()
+    }
+
+    // MARK: - Button selector methods
+
+    @objc
+    private func closeButtonTapped() {
+        dismiss(animated: true, completion: nil)
+    }
+
+    @objc
+    private func darkModeButtonTapped() {
+        if isViewingDarkMode {
+            dynamicMapView?.mapStyle = nil
+            isViewingDarkMode = false
+            darkModeButton.setImage(UIImage(named: "nightIcon")?.withRenderingMode(.alwaysOriginal), for: .normal)
+        } else {
+            do {
+                // Set the map style by passing the URL of the local file.
+                if let styleURL = Bundle.main.url(forResource: "style", withExtension: "json"), let mapView = dynamicMapView {
+                    mapView.mapStyle = try GMSMapStyle(contentsOfFileURL: styleURL)
+                    isViewingDarkMode = true
+                    darkModeButton.setImage(UIImage(named: "sunIcon")?.withRenderingMode(.alwaysOriginal), for: .normal)
+                }
+            } catch {
+                logErrorEvent(error)
+            }
+        }
     }
 }
 

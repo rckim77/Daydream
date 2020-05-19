@@ -640,28 +640,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="758"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7yK-lk-pp6">
-                                <rect key="frame" x="313" y="8" width="48" height="48"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="48" id="5pn-ZJ-310"/>
-                                    <constraint firstAttribute="width" constant="48" id="mlZ-Cg-JY2"/>
-                                </constraints>
-                                <state key="normal" image="mapCloseIconSoftShadow"/>
-                                <connections>
-                                    <action selector="closeBtnTapped:" destination="CGg-aC-4y8" eventType="touchUpInside" id="TQp-Y3-dqo"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="omz-Nd-4J3">
-                                <rect key="frame" x="14" y="8" width="48" height="48"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="48" id="GGp-s3-6Rn"/>
-                                    <constraint firstAttribute="height" constant="48" id="Yvg-GS-mux"/>
-                                </constraints>
-                                <state key="normal" image="nightIcon"/>
-                                <connections>
-                                    <action selector="nightModeBtnTapped:" destination="CGg-aC-4y8" eventType="touchUpInside" id="B4Y-Ri-zLn"/>
-                                </connections>
-                            </button>
                             <view contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="U6Y-KM-3Xa" customClass="DesignableView" customModule="Daydream" customModuleProvider="target">
                                 <rect key="frame" x="16" y="534" width="343" height="160"/>
                                 <subviews>
@@ -777,12 +755,8 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="Yii-Ue-V4b" firstAttribute="trailing" secondItem="U6Y-KM-3Xa" secondAttribute="trailing" constant="16" id="7yR-i8-Y3T"/>
-                            <constraint firstItem="omz-Nd-4J3" firstAttribute="leading" secondItem="Yii-Ue-V4b" secondAttribute="leading" constant="14" id="FlH-13-R5K"/>
                             <constraint firstItem="U6Y-KM-3Xa" firstAttribute="leading" secondItem="Yii-Ue-V4b" secondAttribute="leading" constant="16" id="Khg-Aw-tis"/>
-                            <constraint firstItem="7yK-lk-pp6" firstAttribute="top" secondItem="Yii-Ue-V4b" secondAttribute="top" constant="8" id="VbW-c3-mDJ"/>
-                            <constraint firstItem="Yii-Ue-V4b" firstAttribute="trailing" secondItem="7yK-lk-pp6" secondAttribute="trailing" constant="14" id="kYX-1O-uCy"/>
                             <constraint firstItem="Yii-Ue-V4b" firstAttribute="bottom" secondItem="U6Y-KM-3Xa" secondAttribute="bottom" constant="30" id="pjB-7l-j9C"/>
-                            <constraint firstItem="omz-Nd-4J3" firstAttribute="centerY" secondItem="7yK-lk-pp6" secondAttribute="centerY" id="xuM-Oq-Ku3"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Yii-Ue-V4b"/>
                     </view>
@@ -812,8 +786,6 @@
         <image name="diceCubeHardShadow" width="70" height="72"/>
         <image name="emptyStarIcon" width="32" height="30"/>
         <image name="homeWhiteShadow" width="30" height="27"/>
-        <image name="mapCloseIconSoftShadow" width="32" height="32"/>
-        <image name="nightIcon" width="32" height="32"/>
         <image name="sunriseJungle" width="2246" height="3644"/>
     </resources>
 </document>
