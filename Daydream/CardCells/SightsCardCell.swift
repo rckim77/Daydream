@@ -9,7 +9,6 @@
 import UIKit
 import SwiftyJSON
 import GooglePlaces
-import Hero
 
 protocol SightsCardCellDelegate: AnyObject {
     func sightsCardCell(_ cell: SightsCardCell, didSelectPlace place: Placeable)
@@ -69,8 +68,6 @@ class SightsCardCell: UITableViewCell {
         pointOfInterest1ImageView.image = nil
         pointOfInterest2ImageView.image = nil
         pointOfInterest3ImageView.image = nil
-
-        hero.id = "pointOfInterestCard"
 
         if #available(iOS 13, *) {
             pointOfInterest1View.addTopRoundedCorners()

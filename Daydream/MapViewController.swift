@@ -73,8 +73,6 @@ class MapViewController: UIViewController {
                                                name: UIApplication.willEnterForegroundNotification,
                                                object: nil)
 
-        view.hero.id = heroId
-
         reviewView.isHidden = true
 
         addOrUpdateMapView(for: place?.placeableId, name: place?.placeableName, location: place?.placeableCoordinate)

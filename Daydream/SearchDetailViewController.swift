@@ -9,7 +9,6 @@
 import UIKit
 import GooglePlaces
 import GoogleMaps
-import Hero
 
 class SearchDetailViewController: UIViewController {
 
@@ -184,7 +183,6 @@ class SearchDetailViewController: UIViewController {
             // segue from Top Sights cell
             if segue.identifier == "genericMapSegue" {
                 destinationVC.place = sender
-                destinationVC.heroId = "pointOfInterestCard"
             }
         }
     }

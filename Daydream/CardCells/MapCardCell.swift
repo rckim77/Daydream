@@ -9,15 +9,10 @@
 import UIKit
 import GooglePlaces
 import GoogleMaps
-import Hero
 
 class MapCardCell: UITableViewCell {
 
-    @IBOutlet weak var mainView: DesignableView! {
-        didSet {
-            hero.id = "mapCard"
-        }
-    }
+    @IBOutlet weak var mainView: DesignableView!
     weak var mapView: GMSMapView?
 
     weak var place: Placeable? {

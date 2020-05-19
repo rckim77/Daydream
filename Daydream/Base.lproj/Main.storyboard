@@ -786,9 +786,6 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Yii-Ue-V4b"/>
                     </view>
-                    <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="boolean" keyPath="isHeroEnabled" value="YES"/>
-                    </userDefinedRuntimeAttributes>
                     <connections>
                         <outlet property="authorImageView" destination="voN-Ie-cpO" id="c7x-Tj-f26"/>
                         <outlet property="authorLabel" destination="VPC-mb-fDk" id="Iqb-qh-O1k"/>
