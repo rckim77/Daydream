@@ -11,7 +11,6 @@ target 'Daydream' do
   pod 'SwiftLint', '~> 0.39'
   pod 'Alamofire', '~> 4.7'
   pod 'SwiftyJSON'
-  pod 'Hero'
   pod 'SVProgressHUD'
   pod 'Firebase/Core'
   pod 'Fabric'
