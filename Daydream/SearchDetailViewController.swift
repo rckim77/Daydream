@@ -25,10 +25,8 @@ class SearchDetailViewController: UIViewController {
     }()
     private let networkService = NetworkService()
 
-    // Constants
-    private var searchBarYOffset: CGFloat { // sets search bar's Y offset (not for transition)
-        return deviceSize == .iPhoneSE || deviceSize == .iPhone8 ? 100 : 120
-    }
+    // MARK: - Constants
+
     private let searchBarOffset: CGFloat = 12 + 45 // bottom offset + height (used as transition range)
     private let headerContentInset: CGFloat = 142
     private var headerFadeInStartPoint: CGFloat {
@@ -42,58 +40,88 @@ class SearchDetailViewController: UIViewController {
     private let floatingTitleViewFadeInStartPoint: CGFloat = 85
     private let floatingTitleViewFadeInEndPoint: CGFloat = 65
 
-    @IBOutlet weak var titleLabel: UILabel!
+    private lazy var titleLabel: UILabel = {
+        let label = UILabel()
+        label.font = .preferredFont(forTextStyle: .largeTitle)
+        label.textColor = .white
+        label.shadowColor = .black
+        label.shadowOffset = CGSize(width: 0, height: 1)
+        return label
+    }()
+
+    private lazy var randomCityButton: UIButton = {
+        let button = UIButton(type: .system)
+        let heavyConfig = UIImage.SymbolConfiguration(weight: .heavy)
+        let largeConfig = UIImage.SymbolConfiguration(scale: .large)
+        let symbolConfig = largeConfig.applying(heavyConfig)
+        let refreshIcon = UIImage(systemName: "arrow.clockwise")
+        button.setImage(refreshIcon, for: .normal)
+        button.setPreferredSymbolConfiguration(symbolConfig, forImageIn: .normal)
+        button.tintColor = .white
+        button.layer.shadowColor = UIColor.black.cgColor
+        button.layer.shadowOffset = CGSize(width: 0, height: 1)
+        button.layer.shadowRadius = 0.5
+        button.layer.shadowOpacity = 1
+        button.addTarget(self, action: #selector(randomCityButtonTapped), for: .touchUpInside)
+        return button
+    }()
+
+    private lazy var homeButton: UIButton = {
+        let button = UIButton(type: .system)
+        let heavyConfig = UIImage.SymbolConfiguration(weight: .heavy)
+        let largeConfig = UIImage.SymbolConfiguration(scale: .large)
+        let symbolConfig = largeConfig.applying(heavyConfig)
+        let homeIcon = UIImage(systemName: "house.fill")
+        button.setImage(homeIcon, for: .normal)
+        button.setPreferredSymbolConfiguration(symbolConfig, forImageIn: .normal)
+        button.tintColor = .white
+        button.layer.shadowColor = UIColor.black.cgColor
+        button.layer.shadowOffset = CGSize(width: 0, height: 1)
+        button.layer.shadowRadius = 0.5
+        button.layer.shadowOpacity = 1
+        button.addTarget(self, action: #selector(homeButtonTapped), for: .touchUpInside)
+        return button
+    }()
 
     @IBOutlet weak var placeImageView: UIImageView!
     @IBOutlet weak var placeCardsTableView: UITableView!
-    @IBOutlet weak var randomCityButton: UIButton!
-    @IBOutlet weak var homeButton: UIButton!
     @IBOutlet weak var floatingTitleView: DesignableView!
     @IBOutlet weak var floatingTitleLabel: UILabel!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        addSearchComponents()
+
         configureTableView()
+        addProgrammaticComponents()
         configureFloatingTitleLabel()
         loadDataSource()
     }
 
-    // MARK: - IBActions
-    @IBAction func homeBtnTapped(_ sender: UIButton) {
-        logEvent(contentType: "home button tapped", title)
-        dismiss(animated: true, completion: nil)
-    }
-
-    @IBAction func randomCityBtnTapped(_ sender: UIButton) {
-        logEvent(contentType: "random button tapped", title)
-        guard let randomCity = getRandomCity() else {
-            return
-        }
-        let loadingVC = LoadingViewController()
-        add(loadingVC)
-        
-        networkService.getPlaceId(with: randomCity, success: { [weak self] place in
-            loadingVC.remove()
-            guard let strongSelf = self, let dataSource = strongSelf.dataSource else {
-                return
-
-            }
-            dataSource.place = place
-            strongSelf.loadDataSource(reloadMapCard: true)
-        }, failure: { [weak self] error in
-            loadingVC.remove()
-            guard let strongSelf = self else {
-                return
-
-            }
-            strongSelf.logErrorEvent(error)
-        })
-    }
-
     // MARK: - Search
-    private func addSearchComponents() {
+
+    private func addProgrammaticComponents() {
+        view.addSubview(titleLabel)
+        view.addSubview(randomCityButton)
+        view.addSubview(homeButton)
+
+        titleLabel.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(24)
+            make.leading.equalToSuperview().offset(18)
+        }
+
+        randomCityButton.snp.makeConstraints { make in
+            make.centerY.equalTo(titleLabel.snp.centerY)
+            make.size.equalTo(40)
+            make.leading.equalTo(titleLabel.snp.trailing).offset(6)
+        }
+
+        homeButton.snp.makeConstraints { make in
+            make.centerY.equalTo(titleLabel.snp.centerY)
+            make.size.equalTo(40)
+            make.leading.equalTo(randomCityButton.snp.trailing)
+            make.trailing.equalToSuperview().inset(14)
+        }
+
         resultsViewController = GMSAutocompleteResultsViewController()
         resultsViewController?.delegate = self
         let autocompleteFilter = GMSAutocompleteFilter()
@@ -109,7 +137,7 @@ class SearchDetailViewController: UIViewController {
         if let searchBar = searchController?.searchBar {
             view.addSubview(searchBar)
             searchBar.snp.makeConstraints { make in
-                make.top.equalToSuperview().inset(searchBarYOffset)
+                make.top.equalTo(titleLabel.snp.bottom).offset(12)
                 make.leading.trailing.equalToSuperview().inset(12)
             }
         }
@@ -184,6 +212,41 @@ class SearchDetailViewController: UIViewController {
                 destinationVC.place = sender
             }
         }
+    }
+
+    // MARK: - Button selector methods
+
+    @objc
+    private func homeButtonTapped() {
+        logEvent(contentType: "home button tapped", title)
+        dismiss(animated: true, completion: nil)
+    }
+
+    @objc
+    private func randomCityButtonTapped() {
+        logEvent(contentType: "random button tapped", title)
+        guard let randomCity = getRandomCity() else {
+            return
+        }
+        let loadingVC = LoadingViewController()
+        add(loadingVC)
+
+        networkService.getPlaceId(with: randomCity, success: { [weak self] place in
+            loadingVC.remove()
+            guard let strongSelf = self, let dataSource = strongSelf.dataSource else {
+                return
+
+            }
+            dataSource.place = place
+            strongSelf.loadDataSource(reloadMapCard: true)
+        }, failure: { [weak self] error in
+            loadingVC.remove()
+            guard let strongSelf = self else {
+                return
+
+            }
+            strongSelf.logErrorEvent(error)
+        })
     }
 }
 
