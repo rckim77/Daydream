@@ -9,7 +9,7 @@
 import UIKit
 import SwiftyJSON
 import GooglePlaces
-import Hero
+import SnapKit
 
 protocol SightsCardCellDelegate: AnyObject {
     func sightsCardCell(_ cell: SightsCardCell, didSelectPlace place: Placeable)
@@ -18,13 +18,37 @@ protocol SightsCardCellDelegate: AnyObject {
 class SightsCardCell: UITableViewCell {
 
     @IBOutlet weak var pointOfInterest1View: UIView!
-    @IBOutlet weak var pointOfInterest1Label: UILabel!
+    private lazy var pointOfInterest1Label: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.font = UIFont.preferredFont(forTextStyle: .title2)
+        label.adjustsFontForContentSizeCategory = true
+        label.shadowColor = .black
+        label.shadowOffset = CGSize(width: 0, height: 1)
+        return label
+    }()
     @IBOutlet weak var pointOfInterest1ImageView: UIImageView!
     @IBOutlet weak var pointOfInterest2View: UIView!
-    @IBOutlet weak var pointOfInterest2Label: UILabel!
+    private lazy var pointOfInterest2Label: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.font = UIFont.preferredFont(forTextStyle: .title2)
+        label.adjustsFontForContentSizeCategory = true
+        label.shadowColor = .black
+        label.shadowOffset = CGSize(width: 0, height: 1)
+        return label
+    }()
     @IBOutlet weak var pointOfInterest2ImageView: UIImageView!
     @IBOutlet weak var pointOfInterest3View: UIView!
-    @IBOutlet weak var pointOfInterest3Label: UILabel!
+    private lazy var pointOfInterest3Label: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.font = UIFont.preferredFont(forTextStyle: .title2)
+        label.adjustsFontForContentSizeCategory = true
+        label.shadowColor = .black
+        label.shadowOffset = CGSize(width: 0, height: 1)
+        return label
+    }()
     @IBOutlet weak var pointOfInterest3ImageView: UIImageView!
     
     weak var delegate: SightsCardCellDelegate?
@@ -70,12 +94,28 @@ class SightsCardCell: UITableViewCell {
         pointOfInterest2ImageView.image = nil
         pointOfInterest3ImageView.image = nil
 
-        hero.id = "pointOfInterestCard"
+        pointOfInterest1View.addTopRoundedCorners()
+        pointOfInterest2View.layer.masksToBounds = true
+        pointOfInterest3View.addBottomRoundedCorners()
 
-        if #available(iOS 13, *) {
-            pointOfInterest1View.addTopRoundedCorners()
-            pointOfInterest2View.layer.masksToBounds = true
-            pointOfInterest3View.addBottomRoundedCorners()
+        // Add programmatic labels to views
+
+        pointOfInterest1View.addSubview(pointOfInterest1Label)
+        pointOfInterest1Label.snp.makeConstraints { make in
+            make.bottom.equalToSuperview().inset(12)
+            make.leading.trailing.equalToSuperview().inset(16)
+        }
+
+        pointOfInterest2View.addSubview(pointOfInterest2Label)
+        pointOfInterest2Label.snp.makeConstraints { make in
+            make.bottom.equalToSuperview().inset(12)
+            make.leading.trailing.equalToSuperview().inset(16)
+        }
+
+        pointOfInterest3View.addSubview(pointOfInterest3Label)
+        pointOfInterest3Label.snp.makeConstraints { make in
+            make.bottom.equalToSuperview().inset(12)
+            make.leading.trailing.equalToSuperview().inset(16)
         }
     }
 

@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		1798BE5CF61FDC04CA194644 /* Pods_Daydream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 35BB11CB5A171934921E51F1 /* Pods_Daydream.framework */; };
 		9409090A205F4613002A65EF /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94090909205F4613002A65EF /* MapViewController.swift */; };
+		9434BA3A24738C25004294F0 /* DaydreamUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9434BA3924738C25004294F0 /* DaydreamUITests.swift */; };
+		9434BA4424738D2F004294F0 /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9434BA4324738D2F004294F0 /* SnapshotHelper.swift */; };
 		94380AC8203BAE1D00684863 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94380AC7203BAE1D00684863 /* AppDelegate.swift */; };
 		94380ACA203BAE1D00684863 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94380AC9203BAE1D00684863 /* SearchViewController.swift */; };
 		94380ACD203BAE1D00684863 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 94380ACB203BAE1D00684863 /* Main.storyboard */; };
@@ -34,14 +36,27 @@
 		94E392AD2070B4300073E8C9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 94E392AC2070B4300073E8C9 /* GoogleService-Info.plist */; };
 		94E392B02074B29E0073E8C9 /* style.json in Resources */ = {isa = PBXBuildFile; fileRef = 94E392AF2074B29E0073E8C9 /* style.json */; };
 		94E3D9582097EEC800384680 /* ExpiringCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E3D9572097EEC800384680 /* ExpiringCache.swift */; };
-		94F837042070022700ADB690 /* SummaryCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F837032070022600ADB690 /* SummaryCardCell.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		9434BA3C24738C25004294F0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 94380ABC203BAE1D00684863 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 94380AC3203BAE1D00684863;
+			remoteInfo = Daydream;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		275E3DD2282C7EA762CA98E6 /* Pods-Daydream.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Daydream.release.xcconfig"; path = "Pods/Target Support Files/Pods-Daydream/Pods-Daydream.release.xcconfig"; sourceTree = "<group>"; };
 		35BB11CB5A171934921E51F1 /* Pods_Daydream.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Daydream.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CF615F1B0F8AF65A624CDBF /* Pods-Daydream.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Daydream.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Daydream/Pods-Daydream.debug.xcconfig"; sourceTree = "<group>"; };
 		94090909205F4613002A65EF /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		9434BA3724738C25004294F0 /* DaydreamUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DaydreamUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9434BA3924738C25004294F0 /* DaydreamUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaydreamUITests.swift; sourceTree = "<group>"; };
+		9434BA3B24738C25004294F0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9434BA4324738D2F004294F0 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SnapshotHelper.swift; path = fastlane/SnapshotHelper.swift; sourceTree = SOURCE_ROOT; };
 		94380AC4203BAE1D00684863 /* Daydream.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Daydream.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94380AC7203BAE1D00684863 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		94380AC9203BAE1D00684863 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
@@ -69,10 +84,16 @@
 		94E392AC2070B4300073E8C9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		94E392AF2074B29E0073E8C9 /* style.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = style.json; sourceTree = "<group>"; };
 		94E3D9572097EEC800384680 /* ExpiringCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpiringCache.swift; sourceTree = "<group>"; };
-		94F837032070022600ADB690 /* SummaryCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryCardCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		9434BA3424738C25004294F0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		94380AC1203BAE1D00684863 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -92,10 +113,21 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		9434BA3824738C25004294F0 /* DaydreamUITests */ = {
+			isa = PBXGroup;
+			children = (
+				9434BA3924738C25004294F0 /* DaydreamUITests.swift */,
+				9434BA4324738D2F004294F0 /* SnapshotHelper.swift */,
+				9434BA3B24738C25004294F0 /* Info.plist */,
+			);
+			path = DaydreamUITests;
+			sourceTree = "<group>";
+		};
 		94380ABB203BAE1D00684863 = {
 			isa = PBXGroup;
 			children = (
 				94380AC6203BAE1D00684863 /* Daydream */,
+				9434BA3824738C25004294F0 /* DaydreamUITests */,
 				94380AC5203BAE1D00684863 /* Products */,
 				C82D49DAB7A4A35EC3FA2142 /* Pods */,
 				16D2AFFF8EADF7C12E01E00C /* Frameworks */,
@@ -106,6 +138,7 @@
 			isa = PBXGroup;
 			children = (
 				94380AC4203BAE1D00684863 /* Daydream.app */,
+				9434BA3724738C25004294F0 /* DaydreamUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -161,7 +194,6 @@
 		94E392AB20700B4B0073E8C9 /* CardCells */ = {
 			isa = PBXGroup;
 			children = (
-				94F837032070022600ADB690 /* SummaryCardCell.swift */,
 				947EC655204667EB004A911D /* MapCardCell.swift */,
 				9481EC59204B358C00863A5A /* SightsCardCell.swift */,
 				94DB8FE6204B946200FA7CF7 /* EateriesCardCell.swift */,
@@ -181,6 +213,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		9434BA3624738C25004294F0 /* DaydreamUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9434BA3E24738C25004294F0 /* Build configuration list for PBXNativeTarget "DaydreamUITests" */;
+			buildPhases = (
+				9434BA3324738C25004294F0 /* Sources */,
+				9434BA3424738C25004294F0 /* Frameworks */,
+				9434BA3524738C25004294F0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9434BA3D24738C25004294F0 /* PBXTargetDependency */,
+			);
+			name = DaydreamUITests;
+			productName = DaydreamUITests;
+			productReference = 9434BA3724738C25004294F0 /* DaydreamUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		94380AC3203BAE1D00684863 /* Daydream */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 94380AD6203BAE1D00684863 /* Build configuration list for PBXNativeTarget "Daydream" */;
@@ -209,10 +259,15 @@
 		94380ABC203BAE1D00684863 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0920;
+				LastSwiftUpdateCheck = 1130;
 				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = "Raymond Kim";
 				TargetAttributes = {
+					9434BA3624738C25004294F0 = {
+						CreatedOnToolsVersion = 11.3;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 94380AC3203BAE1D00684863;
+					};
 					94380AC3203BAE1D00684863 = {
 						CreatedOnToolsVersion = 9.2;
 						LastSwiftMigration = 1010;
@@ -234,11 +289,19 @@
 			projectRoot = "";
 			targets = (
 				94380AC3203BAE1D00684863 /* Daydream */,
+				9434BA3624738C25004294F0 /* DaydreamUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		9434BA3524738C25004294F0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		94380AC2203BAE1D00684863 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -264,7 +327,6 @@
 				"${PODS_ROOT}/Target Support Files/Pods-Daydream/Pods-Daydream-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
-				"${BUILT_PRODUCTS_DIR}/Hero/Hero.framework",
 				"${BUILT_PRODUCTS_DIR}/SVProgressHUD/SVProgressHUD.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
@@ -274,7 +336,6 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Hero.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SVProgressHUD.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
@@ -353,6 +414,15 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		9434BA3324738C25004294F0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9434BA3A24738C25004294F0 /* DaydreamUITests.swift in Sources */,
+				9434BA4424738D2F004294F0 /* SnapshotHelper.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		94380AC0203BAE1D00684863 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -367,7 +437,6 @@
 				9481EC5A204B358C00863A5A /* SightsCardCell.swift in Sources */,
 				94380AC8203BAE1D00684863 /* AppDelegate.swift in Sources */,
 				947EC656204667EB004A911D /* MapCardCell.swift in Sources */,
-				94F837042070022700ADB690 /* SummaryCardCell.swift in Sources */,
 				94AE9B852094DAF500450399 /* LoadingViewController.swift in Sources */,
 				94B7DB57205DEE980040D61C /* Viewport.swift in Sources */,
 				94B7DB59205E06080040D61C /* Eatery.swift in Sources */,
@@ -382,6 +451,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		9434BA3D24738C25004294F0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 94380AC3203BAE1D00684863 /* Daydream */;
+			targetProxy = 9434BA3C24738C25004294F0 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		94380ACB203BAE1D00684863 /* Main.storyboard */ = {
@@ -403,6 +480,43 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		9434BA3F24738C25004294F0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 49BZEB79BF;
+				INFOPLIST_FILE = DaydreamUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rckim.DaydreamUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Daydream;
+			};
+			name = Debug;
+		};
+		9434BA4024738C25004294F0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 49BZEB79BF;
+				INFOPLIST_FILE = DaydreamUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rckim.DaydreamUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Daydream;
+			};
+			name = Release;
+		};
 		94380AD4203BAE1D00684863 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -436,7 +550,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 20;
+				CURRENT_PROJECT_VERSION = 21;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -497,7 +611,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 20;
+				CURRENT_PROJECT_VERSION = 21;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -560,6 +674,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		9434BA3E24738C25004294F0 /* Build configuration list for PBXNativeTarget "DaydreamUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9434BA3F24738C25004294F0 /* Debug */,
+				9434BA4024738C25004294F0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		94380ABF203BAE1D00684863 /* Build configuration list for PBXProject "Daydream" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
