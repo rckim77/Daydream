@@ -106,7 +106,7 @@ class SearchDetailViewController: UIViewController {
 
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(24)
-            make.leading.equalToSuperview().offset(18)
+            make.leading.equalToSuperview().offset(12)
         }
 
         randomCityButton.snp.makeConstraints { make in
@@ -119,7 +119,7 @@ class SearchDetailViewController: UIViewController {
             make.centerY.equalTo(titleLabel.snp.centerY)
             make.size.equalTo(40)
             make.leading.equalTo(randomCityButton.snp.trailing)
-            make.trailing.equalToSuperview().inset(14)
+            make.trailing.equalToSuperview().inset(8)
         }
 
         resultsViewController = GMSAutocompleteResultsViewController()
@@ -135,16 +135,22 @@ class SearchDetailViewController: UIViewController {
         searchController?.setStyle()
 
         if let searchBar = searchController?.searchBar {
-            view.addSubview(searchBar)
-            searchBar.snp.makeConstraints { make in
-                make.top.equalTo(titleLabel.snp.bottom).offset(12)
-                make.leading.trailing.equalToSuperview().inset(12)
-            }
-        }
+            let containerView = UIView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 45))
+            containerView.addSubview(searchBar)
+            view.addSubview(containerView)
 
-        // When UISearchController presents the results view, present it in
-        // this view controller, not one further up the chain.
-        definesPresentationContext = true
+            containerView.snp.makeConstraints { make in
+                make.top.equalTo(titleLabel.snp.bottom).offset(12)
+                make.leading.trailing.equalToSuperview()
+                make.height.equalTo(45)
+            }
+
+            searchBar.sizeToFit()
+
+            // When UISearchController presents the results view, present it in
+            // this view controller, not one further up the chain.
+            definesPresentationContext = true
+        }
     }
 
     private func loadDataSource(reloadMapCard: Bool = false) {
@@ -336,12 +342,8 @@ extension SearchDetailViewController: UITableViewDelegate {
     }
 }
 
-// MARK: - GooglePlaces Autocomplete methods
 extension SearchDetailViewController: GMSAutocompleteResultsViewControllerDelegate {
-
-    // Handle user's selection
-    func resultsController(_ resultsController: GMSAutocompleteResultsViewController,
-                           didAutocompleteWith place: GMSPlace) {
+    func resultsController(_ resultsController: GMSAutocompleteResultsViewController, didAutocompleteWith place: GMSPlace) {
         let searchBarText = searchController?.searchBar.text ?? "Couldn't get search bar text"
         let placeId = place.placeID ?? "Couldn't get place ID"
         logSearchEvent(searchTerm: searchBarText, placeId: placeId)
@@ -357,8 +359,7 @@ extension SearchDetailViewController: GMSAutocompleteResultsViewControllerDelega
         })
     }
 
-    func resultsController(_ resultsController: GMSAutocompleteResultsViewController,
-                           didFailAutocompleteWithError error: Error) {
+    func resultsController(_ resultsController: GMSAutocompleteResultsViewController, didFailAutocompleteWithError error: Error) {
         logErrorEvent(error)
     }
 }
