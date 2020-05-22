@@ -96,14 +96,10 @@ class SearchViewController: UIViewController {
     private func addSearchController() {
         searchController = UISearchController(searchResultsController: resultsViewController)
         searchController?.searchResultsUpdater = resultsViewController
-        searchController?.searchBar.searchBarStyle = .minimal
         searchController?.setStyle()
         searchController?.delegate = self
 
-        // filter autocomplete results by only showing cities and set styling
-        let autocompleteFilter = GMSAutocompleteFilter()
-        autocompleteFilter.type = .city
-        resultsViewController?.autocompleteFilter = autocompleteFilter
+        resultsViewController?.setAutocompleteFilter(.city)
         resultsViewController?.setStyle()
 
         let yCoordinate = view.bounds.height

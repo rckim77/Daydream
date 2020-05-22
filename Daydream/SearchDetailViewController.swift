@@ -51,34 +51,14 @@ class SearchDetailViewController: UIViewController {
 
     private lazy var randomCityButton: UIButton = {
         let button = UIButton(type: .system)
-        let heavyConfig = UIImage.SymbolConfiguration(weight: .heavy)
-        let largeConfig = UIImage.SymbolConfiguration(scale: .large)
-        let symbolConfig = largeConfig.applying(heavyConfig)
-        let refreshIcon = UIImage(systemName: "arrow.clockwise")
-        button.setImage(refreshIcon, for: .normal)
-        button.setPreferredSymbolConfiguration(symbolConfig, forImageIn: .normal)
-        button.tintColor = .white
-        button.layer.shadowColor = UIColor.black.cgColor
-        button.layer.shadowOffset = CGSize(width: 0, height: 1)
-        button.layer.shadowRadius = 0.5
-        button.layer.shadowOpacity = 1
+        button.configureWithSystemIcon("arrow.clockwise")
         button.addTarget(self, action: #selector(randomCityButtonTapped), for: .touchUpInside)
         return button
     }()
 
     private lazy var homeButton: UIButton = {
         let button = UIButton(type: .system)
-        let heavyConfig = UIImage.SymbolConfiguration(weight: .heavy)
-        let largeConfig = UIImage.SymbolConfiguration(scale: .large)
-        let symbolConfig = largeConfig.applying(heavyConfig)
-        let homeIcon = UIImage(systemName: "house.fill")
-        button.setImage(homeIcon, for: .normal)
-        button.setPreferredSymbolConfiguration(symbolConfig, forImageIn: .normal)
-        button.tintColor = .white
-        button.layer.shadowColor = UIColor.black.cgColor
-        button.layer.shadowOffset = CGSize(width: 0, height: 1)
-        button.layer.shadowRadius = 0.5
-        button.layer.shadowOpacity = 1
+        button.configureWithSystemIcon("house.fill")
         button.addTarget(self, action: #selector(homeButtonTapped), for: .touchUpInside)
         return button
     }()
@@ -124,14 +104,11 @@ class SearchDetailViewController: UIViewController {
 
         resultsViewController = GMSAutocompleteResultsViewController()
         resultsViewController?.delegate = self
-        let autocompleteFilter = GMSAutocompleteFilter()
-        autocompleteFilter.type = .city
-        resultsViewController?.autocompleteFilter = autocompleteFilter
+        resultsViewController?.setAutocompleteFilter(.city)
         resultsViewController?.setStyle()
 
         searchController = UISearchController(searchResultsController: resultsViewController)
         searchController?.searchResultsUpdater = resultsViewController
-        searchController?.searchBar.searchBarStyle = .minimal
         searchController?.setStyle()
 
         if let searchBar = searchController?.searchBar {
@@ -211,6 +188,7 @@ class SearchDetailViewController: UIViewController {
     }
 
     // MARK: - Segue
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destinationVC = segue.destination as? MapViewController, let sender = sender as? Placeable {
             // segue from Top Sights cell
@@ -256,7 +234,6 @@ class SearchDetailViewController: UIViewController {
     }
 }
 
-// MARK: - UITableView datasource and delegate methods
 extension SearchDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         guard let dataSource = dataSource else {
