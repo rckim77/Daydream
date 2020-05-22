@@ -9,6 +9,7 @@
 import UIKit
 import GooglePlaces
 import GoogleMaps
+import SnapKit
 
 class SearchDetailViewController: UIViewController {
 
@@ -42,6 +43,7 @@ class SearchDetailViewController: UIViewController {
     private let floatingTitleViewFadeInEndPoint: CGFloat = 65
 
     @IBOutlet weak var titleLabel: UILabel!
+
     @IBOutlet weak var placeImageView: UIImageView!
     @IBOutlet weak var placeCardsTableView: UITableView!
     @IBOutlet weak var randomCityButton: UIButton!
@@ -52,10 +54,9 @@ class SearchDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        configureAutocompleteVC()
+        addSearchComponents()
         configureTableView()
         configureFloatingTitleLabel()
-        addSearchController()
         loadDataSource()
     }
 
@@ -92,23 +93,26 @@ class SearchDetailViewController: UIViewController {
     }
 
     // MARK: - Search
-    private func addSearchController() {
-        searchController = UISearchController(searchResultsController: resultsViewController)
-        searchController?.searchResultsUpdater = resultsViewController
-        searchController?.searchBar.searchBarStyle = .minimal
-        searchController?.setStyle()
-
-        // filter autocomplete results by only showing cities and set styling
+    private func addSearchComponents() {
+        resultsViewController = GMSAutocompleteResultsViewController()
+        resultsViewController?.delegate = self
         let autocompleteFilter = GMSAutocompleteFilter()
         autocompleteFilter.type = .city
         resultsViewController?.autocompleteFilter = autocompleteFilter
         resultsViewController?.setStyle()
 
-        let searchBarWidth = view.bounds.width
-        let subView = UIView(frame: CGRect(x: 0, y: searchBarYOffset, width: searchBarWidth, height: 45.0))
-        subView.addSubview((searchController?.searchBar)!)
-        view.addSubview(subView)
-        searchController?.searchBar.sizeToFit()
+        searchController = UISearchController(searchResultsController: resultsViewController)
+        searchController?.searchResultsUpdater = resultsViewController
+        searchController?.searchBar.searchBarStyle = .minimal
+        searchController?.setStyle()
+
+        if let searchBar = searchController?.searchBar {
+            view.addSubview(searchBar)
+            searchBar.snp.makeConstraints { make in
+                make.top.equalToSuperview().inset(searchBarYOffset)
+                make.leading.trailing.equalToSuperview().inset(12)
+            }
+        }
 
         // When UISearchController presents the results view, present it in
         // this view controller, not one further up the chain.
@@ -158,11 +162,6 @@ class SearchDetailViewController: UIViewController {
         if reloadMapCard {
             placeCardsTableView.reloadRows(at: [dataSource.mapCardCellIndexPath], with: .fade)
         }
-    }
-
-    private func configureAutocompleteVC() {
-        resultsViewController = GMSAutocompleteResultsViewController()
-        resultsViewController?.delegate = self
     }
 
     private func configureTableView() {
