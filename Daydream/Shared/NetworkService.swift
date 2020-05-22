@@ -85,9 +85,14 @@ class NetworkService {
 
     func loadTopEateries(with place: Placeable, success: @escaping(_ eateries: [Eatery]) -> Void,
                          failure: @escaping(_ error: Error?) -> Void) {
+        guard let yelpAPIKey = AppDelegate.getAPIKeys()?.yelpAPI else {
+            failure(nil)
+            return
+        }
+
         let url = createUrl(with: place, and: "eateries")
         let headers: HTTPHeaders = [
-            "Authorization": "Bearer \(AppDelegate.yelpAPIKey)"
+            "Authorization": "Bearer \(yelpAPIKey)"
         ]
 
         Alamofire.request(url, headers: headers).validate().responseJSON { response in
@@ -132,7 +137,10 @@ class NetworkService {
     }
 
     func getPlaceId(with placeName: String, success: @escaping(_ place: Place) -> Void, failure: @escaping(_ error: Error?) -> Void) {
-        let url = createUrlWithPlaceName(placeName)
+        guard let url = createUrlWithPlaceName(placeName) else {
+            failure(nil)
+            return
+        }
 
         Alamofire.request(url).validate().responseJSON { response in
             switch response.result {
@@ -156,7 +164,10 @@ class NetworkService {
     }
 
     func getPlace(with placeId: String, success: @escaping(_ place: Place) -> Void, failure: @escaping(_ error: Error?) -> Void) {
-        let url = createUrlWithPlaceId(placeId)
+        guard let url = createUrlWithPlaceId(placeId) else {
+            failure(nil)
+            return
+        }
 
         Alamofire.request(url).validate().responseJSON { response in
             switch response.result {
@@ -233,8 +244,7 @@ class NetworkService {
     }
 
     private func createUrl(with place: Placeable, and type: String) -> String {
-        if let placeableName = place.placeableName, type == "point_of_interest" {
-            let keyParam = AppDelegate.googleAPIKey
+        if let placeableName = place.placeableName, type == "point_of_interest", let keyParam = AppDelegate.getAPIKeys()?.googleAPI {
             let placeName = placeableName.split(separator: " ")
             var queryParam = "tourist+spots+in"
             placeName.forEach { word in
@@ -255,8 +265,11 @@ class NetworkService {
         }
     }
 
-    private func createUrlWithPlaceName(_ placeName: String) -> String {
-        let keyParam = AppDelegate.googleAPIKey
+    private func createUrlWithPlaceName(_ placeName: String) -> String? {
+        guard let keyParam = AppDelegate.getAPIKeys()?.googleAPI else {
+            return nil
+        }
+
         let placeWords = placeName.split(separator: " ")
         var placeNameParam = placeWords[0]
         for i in 1..<placeWords.count {
@@ -268,8 +281,11 @@ class NetworkService {
         return url
     }
 
-    private func createUrlWithPlaceId(_ placeId: String) -> String {
-        let keyParam = AppDelegate.googleAPIKey
+    private func createUrlWithPlaceId(_ placeId: String) -> String? {
+        guard let keyParam = AppDelegate.getAPIKeys()?.googleAPI else {
+            return nil
+        }
+
         let placeIdParam = placeId
         let url = "https://maps.googleapis.com/maps/api/place/details/json?placeid=\(placeIdParam)&key=\(keyParam)"
 
