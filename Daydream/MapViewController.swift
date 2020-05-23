@@ -12,7 +12,7 @@ import GooglePlaces
 import SnapKit
 
 // swiftlint:disable type_body_length
-class MapViewController: UIViewController {
+final class MapViewController: UIViewController {
 
     var place: Placeable?
     var dynamicMapView: GMSMapView?

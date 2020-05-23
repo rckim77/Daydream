@@ -10,7 +10,7 @@ import UIKit
 import GooglePlaces
 import SnapKit
 
-class SearchViewController: UIViewController {
+final class SearchViewController: UIViewController {
 
     private var resultsViewController: GMSAutocompleteResultsViewController?
     private var searchController: UISearchController?
@@ -18,6 +18,9 @@ class SearchViewController: UIViewController {
     private var searchBarView: UIView!
     private let searchBarViewHeight: CGFloat = 45.0
     private var placeData: Placeable?
+    private var defaultSearchBarYOffset: CGFloat {
+        return  (view.bounds.height / 2) - (searchBarViewHeight / 2)
+    }
 
     private lazy var feedbackButton: UIButton = {
         let button = UIButton(type: .system)
@@ -76,8 +79,7 @@ class SearchViewController: UIViewController {
         super.viewWillAppear(animated)
 
         fadeInTitleAndButton()
-        let yCoordinate = view.bounds.height
-        searchBarView.frame.origin.y = (yCoordinate / 2) - (searchBarViewHeight / 2)
+        searchBarView.frame.origin.y = defaultSearchBarYOffset
         searchController?.searchBar.text = ""
     }
 
@@ -102,8 +104,7 @@ class SearchViewController: UIViewController {
         resultsViewController?.setAutocompleteFilter(.city)
         resultsViewController?.setStyle()
 
-        let yCoordinate = view.bounds.height
-        let frame = CGRect(x: 0, y: (yCoordinate / 2) - (searchBarViewHeight / 2), width: view.bounds.width, height: searchBarViewHeight)
+        let frame = CGRect(x: 0, y: defaultSearchBarYOffset, width: view.bounds.width, height: searchBarViewHeight)
         searchBarView = UIView(frame: frame)
         searchBarView.alpha = 0
         searchBarView.addSubview((searchController?.searchBar)!)
@@ -155,7 +156,12 @@ extension SearchViewController: GMSAutocompleteResultsViewControllerDelegate {
         let placeId = place.placeID ?? "Couldn't get place ID"
         logSearchEvent(searchTerm: searchBarText, placeId: placeId)
         placeData = place
+
         dismiss(animated: true, completion: {
+            // reset search bar
+            self.searchController?.searchBar.text = nil
+            let initialFrame = CGRect(x: 0, y: self.defaultSearchBarYOffset, width: self.view.bounds.width, height: self.searchBarViewHeight)
+            self.searchBarView.frame = initialFrame
             self.performSegue(withIdentifier: "toSearchDetailVCSegue", sender: nil)
         })
     }
@@ -163,11 +169,6 @@ extension SearchViewController: GMSAutocompleteResultsViewControllerDelegate {
     // Handle the error
     func resultsController(_ resultsController: GMSAutocompleteResultsViewController, didFailAutocompleteWithError error: Error) {
         logErrorEvent(error)
-    }
-
-    // User canceled the operation
-    func wasCancelled(_ viewController: GMSAutocompleteViewController) {
-        dismiss(animated: true, completion: nil)
     }
 }
 
