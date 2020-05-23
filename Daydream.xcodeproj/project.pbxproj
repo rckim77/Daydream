@@ -12,6 +12,7 @@
 		9434BA3A24738C25004294F0 /* DaydreamUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9434BA3924738C25004294F0 /* DaydreamUITests.swift */; };
 		9434BA4424738D2F004294F0 /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9434BA4324738D2F004294F0 /* SnapshotHelper.swift */; };
 		9434BA4824775C9C004294F0 /* apiKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9434BA4724775C9C004294F0 /* apiKeys.plist */; };
+		9434BA4C247998D4004294F0 /* MapReviewCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9434BA4B247998D4004294F0 /* MapReviewCard.swift */; };
 		94380AC8203BAE1D00684863 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94380AC7203BAE1D00684863 /* AppDelegate.swift */; };
 		94380ACA203BAE1D00684863 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94380AC9203BAE1D00684863 /* SearchViewController.swift */; };
 		94380ACD203BAE1D00684863 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 94380ACB203BAE1D00684863 /* Main.storyboard */; };
@@ -59,6 +60,7 @@
 		9434BA3B24738C25004294F0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9434BA4324738D2F004294F0 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SnapshotHelper.swift; path = fastlane/SnapshotHelper.swift; sourceTree = SOURCE_ROOT; };
 		9434BA4724775C9C004294F0 /* apiKeys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = apiKeys.plist; sourceTree = "<group>"; };
+		9434BA4B247998D4004294F0 /* MapReviewCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapReviewCard.swift; sourceTree = "<group>"; };
 		94380AC4203BAE1D00684863 /* Daydream.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Daydream.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94380AC7203BAE1D00684863 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		94380AC9203BAE1D00684863 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
@@ -154,6 +156,7 @@
 				949630B9203BCBBD007139CA /* SearchDetailViewController.swift */,
 				94B8CEB2207DC31D00CA8101 /* SearchDetailDataSource.swift */,
 				94090909205F4613002A65EF /* MapViewController.swift */,
+				9434BA4B247998D4004294F0 /* MapReviewCard.swift */,
 				94E392AB20700B4B0073E8C9 /* CardCells */,
 				94B7DB5A205E2C800040D61C /* Models */,
 				94B7DB5B205E2C920040D61C /* Shared */,
@@ -441,6 +444,7 @@
 				9481EC5A204B358C00863A5A /* SightsCardCell.swift in Sources */,
 				94380AC8203BAE1D00684863 /* AppDelegate.swift in Sources */,
 				947EC656204667EB004A911D /* MapCardCell.swift in Sources */,
+				9434BA4C247998D4004294F0 /* MapReviewCard.swift in Sources */,
 				94AE9B852094DAF500450399 /* LoadingViewController.swift in Sources */,
 				94B7DB57205DEE980040D61C /* Viewport.swift in Sources */,
 				94B7DB59205E06080040D61C /* Eatery.swift in Sources */,

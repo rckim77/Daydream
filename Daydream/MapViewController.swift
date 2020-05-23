@@ -22,16 +22,6 @@ final class MapViewController: UIViewController {
     var isViewingDarkMode = false
 
     private let networkService = NetworkService()
-    
-    @IBOutlet weak var reviewView: DesignableView!
-    @IBOutlet weak var authorLabel: UILabel!
-    @IBOutlet weak var authorImageView: UIImageView!
-    @IBOutlet weak var reviewLabel: UILabel!
-    @IBOutlet weak var star1: UIImageView!
-    @IBOutlet weak var star2: UIImageView!
-    @IBOutlet weak var star3: UIImageView!
-    @IBOutlet weak var star4: UIImageView!
-    @IBOutlet weak var star5: UIImageView!
 
     // contains close and dark mode buttons (and creates frame for gradient)
     private lazy var containerView: UIView = {
@@ -66,12 +56,12 @@ final class MapViewController: UIViewController {
         return button
     }()
 
-    @IBAction func reviewViewTapped(_ sender: UITapGestureRecognizer) {
-        guard let reviews = currentReviews, let authorUrl = reviews[currentReviewIndex].authorUrl else {
-            return
-        }
-        openUrl(authorUrl)
-    }
+    private lazy var reviewCard: MapReviewCard = {
+        let card = MapReviewCard()
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(reviewCardTapped))
+        card.addGestureRecognizer(tapGesture)
+        return card
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -85,10 +75,8 @@ final class MapViewController: UIViewController {
                                                name: UIApplication.willEnterForegroundNotification,
                                                object: nil)
 
-        reviewView.isHidden = true
-
         addOrUpdateMapView(for: place?.placeableId, name: place?.placeableName, location: place?.placeableCoordinate)
-        addMapHeader()
+        addProgrammaticViews()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -102,14 +90,17 @@ final class MapViewController: UIViewController {
         gradientLayer.frame = containerView.bounds
     }
 
-    /// Map header includes a gradient so that buttons are easier to see and creates a pannable section above the map view
-    /// so users can dismiss.
-    private func addMapHeader() {
+    private func addProgrammaticViews() {
         view.addSubview(containerView)
+
+        // Map header includes a gradient so that buttons are easier to see and creates a pannable section above
+        // the map view so users can dismiss.
         containerView.layer.addSublayer(gradientLayer)
         containerView.addSubview(closeButton)
         containerView.addSubview(darkModeButton)
         containerView.addSubview(aboutButton)
+
+        view.addSubview(reviewCard)
 
         containerView.snp.makeConstraints { make in
             make.leading.top.trailing.equalToSuperview()
@@ -131,6 +122,14 @@ final class MapViewController: UIViewController {
             make.top.trailing.equalToSuperview().inset(12)
             make.size.equalTo(40)
         }
+
+        reviewCard.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(12)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(12)
+            make.height.equalTo(MapReviewCard.height)
+        }
+
+        reviewCard.isHidden = true
     }
 
     private func addOrUpdateMapView(for placeId: String?, name: String?, location: CLLocationCoordinate2D?) {
@@ -227,38 +226,46 @@ final class MapViewController: UIViewController {
         currentReviews = reviews
         currentReviewIndex = index
         loadReviewContent(reviews[index])
-        reviewView.isHidden = false
-        reviewView.alpha = 1
+        reviewCard.isHidden = false
+        reviewCard.alpha = 1
 
         if ProcessInfo.processInfo.environment["isUITest"] == "true" {
             displayReviewForUITest(reviews)
         } else {
-            startDisplayingReviews(reviews, index: index + 1)   
+            startDisplayingReviews(reviews, index: index + 1)
         }
     }
 
     private func startDisplayingReviews(_ reviews: [Reviewable], index: Int) {
         if index < reviews.count - 1 {
             UIView.animate(withDuration: 0.7, animations: {
-                self.reviewView.subviews.forEach { $0.alpha = 1 }
+                self.reviewCard.alpha = 1
             }, completion: { finished in
                 if finished {
-                    UIView.animate(withDuration: 0.7, delay: 6, animations: {
-                        self.reviewView.subviews.forEach { $0.alpha = 0 }
-                    }, completion: { finished in
-                        if finished {
-                            self.currentReviewIndex = index
-                            self.loadReviewContent(reviews[index])
-                            self.startDisplayingReviews(reviews, index: index + 1)
-                        }
-                    })
+                    // Bug fix: In order for the map review card to be tappable and
+                    // animatable, we need to wrap the animate function in a timeout
+                    // function. Adding a delay to the animate function will not work
+                    // because the view's frame changes as soon as the animation begins
+                    // and ignores the delay. The tap gesture recognizer needs the frame
+                    // to actually execute.
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 6) {
+                        UIView.animate(withDuration: 0.7, animations: {
+                            self.reviewCard.alpha = 0
+                        }, completion: { finished in
+                            if finished {
+                                self.currentReviewIndex = index
+                                self.loadReviewContent(reviews[index])
+                                self.startDisplayingReviews(reviews, index: index + 1)
+                            }
+                        })
+                    }
                 }
             })
         } else {
             UIView.animate(withDuration: 0.8, animations: {
-                self.reviewView.alpha = 0
+                self.reviewCard.alpha = 0
             }, completion: { _ in
-                self.reviewView.isHidden = true
+                self.reviewCard.isHidden = true
             })
         }
     }
@@ -267,7 +274,7 @@ final class MapViewController: UIViewController {
         guard let firstReview = reviews.first else {
             return
         }
-        reviewView.isHidden = false
+        reviewCard.isHidden = false
         currentReviewIndex = 1
         loadReviewContent(firstReview)
     }
@@ -282,40 +289,14 @@ final class MapViewController: UIViewController {
 
     @objc
     private func stopDisplayingReviews() {
-        reviewView.subviews.forEach { $0.layer.removeAllAnimations() }
-        reviewView.layer.removeAllAnimations()
-        reviewView.alpha = 0
-        reviewView.isHidden = true
+        reviewCard.subviews.forEach { $0.layer.removeAllAnimations() }
+        reviewCard.layer.removeAllAnimations()
+        reviewCard.alpha = 0
+        reviewCard.isHidden = true
     }
 
     private func loadReviewContent(_ review: Reviewable) {
-        authorLabel.text = review.author
-
-        let stars: [UIImageView] = [star5, star4, star3, star2, star1]
-        for i in 0..<review.rating {
-            stars[i].image = #imageLiteral(resourceName: "filledStarIcon")
-        }
-
-        reviewLabel.text = review.review ?? ""
-        loadImage(from: review.authorProfileUrl)
-    }
-
-    private func loadImage(from urlString: String?) {
-        guard let urlString = urlString, let url = URL(string: urlString) else {
-            return
-        }
-
-        URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
-            guard let strongSelf = self, let data = data else {
-                return
-            }
-            DispatchQueue.main.async {
-                guard let image = UIImage(data: data) else {
-                    return
-                }
-                strongSelf.fadeInImage(image, forImageView: strongSelf.authorImageView)
-            }
-        }.resume()
+        reviewCard.configure(review)
     }
 
     // MARK: - Button selector methods
@@ -351,6 +332,14 @@ final class MapViewController: UIViewController {
         let alert = UIAlertController(title: "About Google Maps", message: openSourceMessage, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Got it", style: .cancel, handler: nil))
         present(alert, animated: true, completion: nil)
+    }
+
+    @objc
+    private func reviewCardTapped() {
+        guard let reviews = currentReviews, let authorUrl = reviews[currentReviewIndex].authorUrl else {
+            return
+        }
+        openUrl(authorUrl)
     }
 }
 
