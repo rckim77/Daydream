@@ -125,8 +125,12 @@ final class MapReviewCard: UIView {
     func configure(_ review: Reviewable) {
         authorLabel.text = review.author
         reviewLabel.text = review.review
-        loadImage(from: review.authorProfileUrl)
         updateStars(rating: review.rating)
+        if let profileUrl = review.authorProfileUrl {
+            NetworkService.loadImage(from: profileUrl, completion: { [weak self] image in
+                self?.authorImageView.image = image
+            })
+        }
     }
 
     private func updateStars(rating: Int) {
@@ -144,24 +148,6 @@ final class MapReviewCard: UIView {
                 starImageViews[i-1].tintColor = .lightGray
             }
         }
-    }
-
-    private func loadImage(from urlString: String?) {
-        guard let urlString = urlString, let url = URL(string: urlString) else {
-            return
-        }
-
-        URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
-            guard let strongSelf = self, let data = data else {
-                return
-            }
-            DispatchQueue.main.async {
-                guard let image = UIImage(data: data) else {
-                    return
-                }
-                strongSelf.authorImageView.image = image
-            }
-        }.resume()
     }
 
     required init?(coder: NSCoder) {
