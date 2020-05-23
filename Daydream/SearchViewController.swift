@@ -128,6 +128,12 @@ final class SearchViewController: UIViewController {
         }
     }
 
+    private func resetSearchUI() {
+        searchController?.searchBar.text = nil
+        searchBarView.frame = CGRect(x: 0, y: defaultSearchBarYOffset, width: view.bounds.width, height: searchBarViewHeight)
+        titleLabel.alpha = 1
+    }
+
     // MARK: - Button selector method
 
     @objc
@@ -158,10 +164,7 @@ extension SearchViewController: GMSAutocompleteResultsViewControllerDelegate {
         placeData = place
 
         dismiss(animated: true, completion: {
-            // reset search bar
-            self.searchController?.searchBar.text = nil
-            let initialFrame = CGRect(x: 0, y: self.defaultSearchBarYOffset, width: self.view.bounds.width, height: self.searchBarViewHeight)
-            self.searchBarView.frame = initialFrame
+            self.resetSearchUI()
             self.performSegue(withIdentifier: "toSearchDetailVCSegue", sender: nil)
         })
     }
@@ -181,11 +184,11 @@ extension SearchViewController: UISearchControllerDelegate {
         })
     }
 
+    // Note: only called when the user taps Cancel or out of the search bar to close autocorrect results VC and NOT when
+    // the user has tapped on a place.
     func didDismissSearchController(_ searchController: UISearchController) {
         UIView.animate(withDuration: 0.3, animations: {
-            let yCoordinate = self.view.bounds.height
-            self.searchBarView.frame.origin.y = (yCoordinate / 2) - (self.searchBarViewHeight / 2)
-            self.titleLabel.alpha = 1
+            self.resetSearchUI()
         })
     }
 }
