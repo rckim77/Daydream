@@ -39,6 +39,7 @@ final class MapViewController: UIViewController {
         let button = UIButton(type: .system)
         button.configureWithSystemIcon("xmark.circle.fill")
         button.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
+        button.accessibilityIdentifier = "map-close-button"
         return button
     }()
 
@@ -46,6 +47,7 @@ final class MapViewController: UIViewController {
         let button = UIButton(type: .system)
         button.configureWithSystemIcon("moon.fill")
         button.addTarget(self, action: #selector(darkModeButtonTapped), for: .touchUpInside)
+        button.accessibilityIdentifier = "map-dark-mode-button"
         return button
     }()
 
