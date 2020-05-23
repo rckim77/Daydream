@@ -61,6 +61,7 @@ extension UISearchController {
 
         searchBar.searchTextField.textColor = .white
         searchBar.searchTextField.placeholder = "e.g., Tokyo"
+        searchBar.searchBarStyle = .minimal
         searchBar.setPlaceholderColor(.white)
 
         // style search icon
@@ -77,6 +78,12 @@ extension GMSAutocompleteResultsViewController {
         primaryTextHighlightColor = .white
         primaryTextColor = .lightGray
         secondaryTextColor = .lightGray
+    }
+
+    func setAutocompleteFilter(_ type: GMSPlacesAutocompleteTypeFilter) {
+        let filter = GMSAutocompleteFilter()
+        filter.type = type
+        autocompleteFilter = filter
     }
 }
 
@@ -198,5 +205,21 @@ extension UITextField {
 
         let label = Label(label: placeholderLabel, textColor: textColor)
         setValue(label, forKey: "placeholderLabel")
+    }
+}
+
+extension UIButton {
+    func configureWithSystemIcon(_ name: String) {
+        let heavyConfig = UIImage.SymbolConfiguration(weight: .heavy)
+        let largeConfig = UIImage.SymbolConfiguration(scale: .large)
+        let symbolConfig = largeConfig.applying(heavyConfig)
+        let icon = UIImage(systemName: name)
+        setImage(icon, for: .normal)
+        setPreferredSymbolConfiguration(symbolConfig, forImageIn: .normal)
+        tintColor = .white
+        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowOffset = CGSize(width: 0, height: 1)
+        layer.shadowRadius = 0.5
+        layer.shadowOpacity = 1
     }
 }

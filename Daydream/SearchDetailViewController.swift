@@ -9,6 +9,7 @@
 import UIKit
 import GooglePlaces
 import GoogleMaps
+import SnapKit
 
 class SearchDetailViewController: UIViewController {
 
@@ -24,10 +25,8 @@ class SearchDetailViewController: UIViewController {
     }()
     private let networkService = NetworkService()
 
-    // Constants
-    private var searchBarYOffset: CGFloat { // sets search bar's Y offset (not for transition)
-        return deviceSize == .iPhoneSE || deviceSize == .iPhone8 ? 100 : 120
-    }
+    // MARK: - Constants
+
     private let searchBarOffset: CGFloat = 12 + 45 // bottom offset + height (used as transition range)
     private let headerContentInset: CGFloat = 142
     private var headerFadeInStartPoint: CGFloat {
@@ -41,78 +40,94 @@ class SearchDetailViewController: UIViewController {
     private let floatingTitleViewFadeInStartPoint: CGFloat = 85
     private let floatingTitleViewFadeInEndPoint: CGFloat = 65
 
-    @IBOutlet weak var titleLabel: UILabel!
+    private lazy var titleLabel: UILabel = {
+        let label = UILabel()
+        label.font = .preferredFont(forTextStyle: .largeTitle)
+        label.textColor = .white
+        label.shadowColor = .black
+        label.shadowOffset = CGSize(width: 0, height: 1)
+        return label
+    }()
+
+    private lazy var randomCityButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.configureWithSystemIcon("arrow.clockwise")
+        button.addTarget(self, action: #selector(randomCityButtonTapped), for: .touchUpInside)
+        return button
+    }()
+
+    private lazy var homeButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.configureWithSystemIcon("house.fill")
+        button.addTarget(self, action: #selector(homeButtonTapped), for: .touchUpInside)
+        return button
+    }()
+
     @IBOutlet weak var placeImageView: UIImageView!
     @IBOutlet weak var placeCardsTableView: UITableView!
-    @IBOutlet weak var randomCityButton: UIButton!
-    @IBOutlet weak var homeButton: UIButton!
     @IBOutlet weak var floatingTitleView: DesignableView!
     @IBOutlet weak var floatingTitleLabel: UILabel!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        configureAutocompleteVC()
+
         configureTableView()
+        addProgrammaticComponents()
         configureFloatingTitleLabel()
-        addSearchController()
         loadDataSource()
     }
 
-    // MARK: - IBActions
-    @IBAction func homeBtnTapped(_ sender: UIButton) {
-        logEvent(contentType: "home button tapped", title)
-        dismiss(animated: true, completion: nil)
-    }
-
-    @IBAction func randomCityBtnTapped(_ sender: UIButton) {
-        logEvent(contentType: "random button tapped", title)
-        guard let randomCity = getRandomCity() else {
-            return
-        }
-        let loadingVC = LoadingViewController()
-        add(loadingVC)
-        
-        networkService.getPlaceId(with: randomCity, success: { [weak self] place in
-            loadingVC.remove()
-            guard let strongSelf = self, let dataSource = strongSelf.dataSource else {
-                return
-
-            }
-            dataSource.place = place
-            strongSelf.loadDataSource(reloadMapCard: true)
-        }, failure: { [weak self] error in
-            loadingVC.remove()
-            guard let strongSelf = self else {
-                return
-
-            }
-            strongSelf.logErrorEvent(error)
-        })
-    }
-
     // MARK: - Search
-    private func addSearchController() {
-        searchController = UISearchController(searchResultsController: resultsViewController)
-        searchController?.searchResultsUpdater = resultsViewController
-        searchController?.searchBar.searchBarStyle = .minimal
-        searchController?.setStyle()
 
-        // filter autocomplete results by only showing cities and set styling
-        let autocompleteFilter = GMSAutocompleteFilter()
-        autocompleteFilter.type = .city
-        resultsViewController?.autocompleteFilter = autocompleteFilter
+    private func addProgrammaticComponents() {
+        view.addSubview(titleLabel)
+        view.addSubview(randomCityButton)
+        view.addSubview(homeButton)
+
+        titleLabel.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(24)
+            make.leading.equalToSuperview().offset(12)
+        }
+
+        randomCityButton.snp.makeConstraints { make in
+            make.centerY.equalTo(titleLabel.snp.centerY)
+            make.size.equalTo(40)
+            make.leading.equalTo(titleLabel.snp.trailing).offset(6)
+        }
+
+        homeButton.snp.makeConstraints { make in
+            make.centerY.equalTo(titleLabel.snp.centerY)
+            make.size.equalTo(40)
+            make.leading.equalTo(randomCityButton.snp.trailing)
+            make.trailing.equalToSuperview().inset(8)
+        }
+
+        resultsViewController = GMSAutocompleteResultsViewController()
+        resultsViewController?.delegate = self
+        resultsViewController?.setAutocompleteFilter(.city)
         resultsViewController?.setStyle()
 
-        let searchBarWidth = view.bounds.width
-        let subView = UIView(frame: CGRect(x: 0, y: searchBarYOffset, width: searchBarWidth, height: 45.0))
-        subView.addSubview((searchController?.searchBar)!)
-        view.addSubview(subView)
-        searchController?.searchBar.sizeToFit()
+        searchController = UISearchController(searchResultsController: resultsViewController)
+        searchController?.searchResultsUpdater = resultsViewController
+        searchController?.setStyle()
 
-        // When UISearchController presents the results view, present it in
-        // this view controller, not one further up the chain.
-        definesPresentationContext = true
+        if let searchBar = searchController?.searchBar {
+            let containerView = UIView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 45))
+            containerView.addSubview(searchBar)
+            view.addSubview(containerView)
+
+            containerView.snp.makeConstraints { make in
+                make.top.equalTo(titleLabel.snp.bottom).offset(12)
+                make.leading.trailing.equalToSuperview()
+                make.height.equalTo(45)
+            }
+
+            searchBar.sizeToFit()
+
+            // When UISearchController presents the results view, present it in
+            // this view controller, not one further up the chain.
+            definesPresentationContext = true
+        }
     }
 
     private func loadDataSource(reloadMapCard: Bool = false) {
@@ -160,11 +175,6 @@ class SearchDetailViewController: UIViewController {
         }
     }
 
-    private func configureAutocompleteVC() {
-        resultsViewController = GMSAutocompleteResultsViewController()
-        resultsViewController?.delegate = self
-    }
-
     private func configureTableView() {
         placeCardsTableView.dataSource = dataSource
         placeCardsTableView.delegate = self
@@ -178,6 +188,7 @@ class SearchDetailViewController: UIViewController {
     }
 
     // MARK: - Segue
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destinationVC = segue.destination as? MapViewController, let sender = sender as? Placeable {
             // segue from Top Sights cell
@@ -186,9 +197,43 @@ class SearchDetailViewController: UIViewController {
             }
         }
     }
+
+    // MARK: - Button selector methods
+
+    @objc
+    private func homeButtonTapped() {
+        logEvent(contentType: "home button tapped", title)
+        dismiss(animated: true, completion: nil)
+    }
+
+    @objc
+    private func randomCityButtonTapped() {
+        logEvent(contentType: "random button tapped", title)
+        guard let randomCity = getRandomCity() else {
+            return
+        }
+        let loadingVC = LoadingViewController()
+        add(loadingVC)
+
+        networkService.getPlaceId(with: randomCity, success: { [weak self] place in
+            loadingVC.remove()
+            guard let strongSelf = self, let dataSource = strongSelf.dataSource else {
+                return
+
+            }
+            dataSource.place = place
+            strongSelf.loadDataSource(reloadMapCard: true)
+        }, failure: { [weak self] error in
+            loadingVC.remove()
+            guard let strongSelf = self else {
+                return
+
+            }
+            strongSelf.logErrorEvent(error)
+        })
+    }
 }
 
-// MARK: - UITableView datasource and delegate methods
 extension SearchDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         guard let dataSource = dataSource else {
@@ -274,12 +319,8 @@ extension SearchDetailViewController: UITableViewDelegate {
     }
 }
 
-// MARK: - GooglePlaces Autocomplete methods
 extension SearchDetailViewController: GMSAutocompleteResultsViewControllerDelegate {
-
-    // Handle user's selection
-    func resultsController(_ resultsController: GMSAutocompleteResultsViewController,
-                           didAutocompleteWith place: GMSPlace) {
+    func resultsController(_ resultsController: GMSAutocompleteResultsViewController, didAutocompleteWith place: GMSPlace) {
         let searchBarText = searchController?.searchBar.text ?? "Couldn't get search bar text"
         let placeId = place.placeID ?? "Couldn't get place ID"
         logSearchEvent(searchTerm: searchBarText, placeId: placeId)
@@ -295,8 +336,7 @@ extension SearchDetailViewController: GMSAutocompleteResultsViewControllerDelega
         })
     }
 
-    func resultsController(_ resultsController: GMSAutocompleteResultsViewController,
-                           didFailAutocompleteWithError error: Error) {
+    func resultsController(_ resultsController: GMSAutocompleteResultsViewController, didFailAutocompleteWithError error: Error) {
         logErrorEvent(error)
     }
 }
