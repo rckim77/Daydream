@@ -47,15 +47,22 @@ final class MapViewController: UIViewController {
 
     private lazy var closeButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(UIImage(named: "mapCloseIconSoftShadow")?.withRenderingMode(.alwaysOriginal), for: .normal)
+        button.configureWithSystemIcon("xmark.circle.fill")
         button.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
         return button
     }()
 
     private lazy var darkModeButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(UIImage(named: "nightIcon")?.withRenderingMode(.alwaysOriginal), for: .normal)
+        button.configureWithSystemIcon("moon.fill")
         button.addTarget(self, action: #selector(darkModeButtonTapped), for: .touchUpInside)
+        return button
+    }()
+
+    private lazy var aboutButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.configureWithSystemIcon("questionmark.circle.fill")
+        button.addTarget(self, action: #selector(aboutButtonTapped), for: .touchUpInside)
         return button
     }()
 
@@ -102,20 +109,27 @@ final class MapViewController: UIViewController {
         containerView.layer.addSublayer(gradientLayer)
         containerView.addSubview(closeButton)
         containerView.addSubview(darkModeButton)
+        containerView.addSubview(aboutButton)
 
         containerView.snp.makeConstraints { make in
             make.leading.top.trailing.equalToSuperview()
-            make.height.equalTo(60)
-        }
-
-        closeButton.snp.makeConstraints { make in
-            make.top.trailing.equalToSuperview().inset(18)
-            make.height.equalTo(48)
+            make.height.equalTo(68)
         }
 
         darkModeButton.snp.makeConstraints { make in
-            make.leading.top.equalToSuperview().inset(18)
-            make.height.equalTo(48)
+            make.leading.top.equalToSuperview().inset(12)
+            make.size.equalTo(40)
+        }
+
+        aboutButton.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(12)
+            make.size.equalTo(40)
+        }
+
+        closeButton.snp.makeConstraints { make in
+            make.leading.equalTo(aboutButton.snp.trailing)
+            make.top.trailing.equalToSuperview().inset(12)
+            make.size.equalTo(40)
         }
     }
 
@@ -134,7 +148,6 @@ final class MapViewController: UIViewController {
         } else {
             let frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
             let mapViewNew = GMSMapView.map(withFrame: frame, camera: camera)
-
             dynamicMapView = mapViewNew
 
             guard let dynamicMapView = dynamicMapView else {
@@ -317,19 +330,27 @@ final class MapViewController: UIViewController {
         if isViewingDarkMode {
             dynamicMapView?.mapStyle = nil
             isViewingDarkMode = false
-            darkModeButton.setImage(UIImage(named: "nightIcon")?.withRenderingMode(.alwaysOriginal), for: .normal)
+            darkModeButton.configureWithSystemIcon("moon.fill")
         } else {
             do {
                 // Set the map style by passing the URL of the local file.
                 if let styleURL = Bundle.main.url(forResource: "style", withExtension: "json"), let mapView = dynamicMapView {
                     mapView.mapStyle = try GMSMapStyle(contentsOfFileURL: styleURL)
                     isViewingDarkMode = true
-                    darkModeButton.setImage(UIImage(named: "sunIcon")?.withRenderingMode(.alwaysOriginal), for: .normal)
+                    darkModeButton.configureWithSystemIcon("sun.max.fill")
                 }
             } catch {
                 logErrorEvent(error)
             }
         }
+    }
+
+    @objc
+    private func aboutButtonTapped() {
+        let openSourceMessage = GMSServices.openSourceLicenseInfo()
+        let alert = UIAlertController(title: "About Google Maps", message: openSourceMessage, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Got it", style: .cancel, handler: nil))
+        present(alert, animated: true, completion: nil)
     }
 }
 
