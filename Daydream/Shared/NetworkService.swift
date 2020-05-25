@@ -243,6 +243,24 @@ class NetworkService {
         }
     }
 
+    // MARK: - Convenience methods
+
+    static func loadImage(from urlString: String, completion: @escaping(_ image: UIImage) -> Void) {
+        guard let url = URL(string: urlString) else {
+            return
+        }
+        URLSession.shared.dataTask(with: url) { data, _, _ in
+            guard let data = data, let image = UIImage(data: data) else {
+                return
+            }
+            DispatchQueue.main.async {
+                completion(image)
+            }
+        }.resume()
+    }
+
+    // MARK: - Private helper methods
+
     private func createUrl(with place: Placeable, and type: String) -> String {
         if let placeableName = place.placeableName, type == "point_of_interest", let keyParam = AppDelegate.getAPIKeys()?.googleAPI {
             let placeName = placeableName.split(separator: " ")

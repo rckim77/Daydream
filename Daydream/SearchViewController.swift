@@ -10,7 +10,7 @@ import UIKit
 import GooglePlaces
 import SnapKit
 
-class SearchViewController: UIViewController {
+final class SearchViewController: UIViewController {
 
     private var resultsViewController: GMSAutocompleteResultsViewController?
     private var searchController: UISearchController?
@@ -18,6 +18,9 @@ class SearchViewController: UIViewController {
     private var searchBarView: UIView!
     private let searchBarViewHeight: CGFloat = 45.0
     private var placeData: Placeable?
+    private var defaultSearchBarYOffset: CGFloat {
+        return  (view.bounds.height / 2) - (searchBarViewHeight / 2)
+    }
 
     private lazy var feedbackButton: UIButton = {
         let button = UIButton(type: .system)
@@ -76,8 +79,7 @@ class SearchViewController: UIViewController {
         super.viewWillAppear(animated)
 
         fadeInTitleAndButton()
-        let yCoordinate = view.bounds.height
-        searchBarView.frame.origin.y = (yCoordinate / 2) - (searchBarViewHeight / 2)
+        searchBarView.frame.origin.y = defaultSearchBarYOffset
         searchController?.searchBar.text = ""
     }
 
@@ -102,8 +104,7 @@ class SearchViewController: UIViewController {
         resultsViewController?.setAutocompleteFilter(.city)
         resultsViewController?.setStyle()
 
-        let yCoordinate = view.bounds.height
-        let frame = CGRect(x: 0, y: (yCoordinate / 2) - (searchBarViewHeight / 2), width: view.bounds.width, height: searchBarViewHeight)
+        let frame = CGRect(x: 0, y: defaultSearchBarYOffset, width: view.bounds.width, height: searchBarViewHeight)
         searchBarView = UIView(frame: frame)
         searchBarView.alpha = 0
         searchBarView.addSubview((searchController?.searchBar)!)
@@ -125,6 +126,12 @@ class SearchViewController: UIViewController {
             make.bottom.equalToSuperview().inset(30)
             make.centerX.equalToSuperview()
         }
+    }
+
+    private func resetSearchUI() {
+        searchController?.searchBar.text = nil
+        searchBarView.frame = CGRect(x: 0, y: defaultSearchBarYOffset, width: view.bounds.width, height: searchBarViewHeight)
+        titleLabel.alpha = 1
     }
 
     // MARK: - Button selector method
@@ -155,7 +162,9 @@ extension SearchViewController: GMSAutocompleteResultsViewControllerDelegate {
         let placeId = place.placeID ?? "Couldn't get place ID"
         logSearchEvent(searchTerm: searchBarText, placeId: placeId)
         placeData = place
+
         dismiss(animated: true, completion: {
+            self.resetSearchUI()
             self.performSegue(withIdentifier: "toSearchDetailVCSegue", sender: nil)
         })
     }
@@ -163,11 +172,6 @@ extension SearchViewController: GMSAutocompleteResultsViewControllerDelegate {
     // Handle the error
     func resultsController(_ resultsController: GMSAutocompleteResultsViewController, didFailAutocompleteWithError error: Error) {
         logErrorEvent(error)
-    }
-
-    // User canceled the operation
-    func wasCancelled(_ viewController: GMSAutocompleteViewController) {
-        dismiss(animated: true, completion: nil)
     }
 }
 
@@ -180,11 +184,11 @@ extension SearchViewController: UISearchControllerDelegate {
         })
     }
 
+    // Note: only called when the user taps Cancel or out of the search bar to close autocorrect results VC and NOT when
+    // the user has tapped on a place.
     func didDismissSearchController(_ searchController: UISearchController) {
         UIView.animate(withDuration: 0.3, animations: {
-            let yCoordinate = self.view.bounds.height
-            self.searchBarView.frame.origin.y = (yCoordinate / 2) - (self.searchBarViewHeight / 2)
-            self.titleLabel.alpha = 1
+            self.resetSearchUI()
         })
     }
 }

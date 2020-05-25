@@ -11,7 +11,7 @@ import GooglePlaces
 import GoogleMaps
 import SnapKit
 
-class SearchDetailViewController: UIViewController {
+final class SearchDetailViewController: UIViewController {
 
     var dataSource: SearchDetailDataSource?
     private var resultsViewController: GMSAutocompleteResultsViewController?
