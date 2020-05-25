@@ -39,6 +39,7 @@ final class MapReviewCard: UIView {
     private lazy var reviewLabel: UILabel = {
         let label = UILabel()
         label.font = .preferredFont(forTextStyle: .footnote)
+        label.textColor = .black
         label.numberOfLines = 0
         return label
     }()
