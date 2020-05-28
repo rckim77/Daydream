@@ -39,7 +39,7 @@ class NetworkService {
                        failure: @escaping(_ error: Error?) -> Void) {
         let url = createUrl(with: place, and: "point_of_interest")
 
-        Alamofire.request(url).validate().responseJSON { response in
+        AF.request(url).validate().responseJSON { response in
             switch response.result {
             case .success(let value):
                 let json = JSON(value)
@@ -95,7 +95,7 @@ class NetworkService {
             "Authorization": "Bearer \(yelpAPIKey)"
         ]
 
-        Alamofire.request(url, headers: headers).validate().responseJSON { response in
+        AF.request(url, headers: headers).validate().responseJSON { response in
             switch response.result {
             case .success(let value):
                 let json = JSON(value)
@@ -142,7 +142,7 @@ class NetworkService {
             return
         }
 
-        Alamofire.request(url).validate().responseJSON { response in
+        AF.request(url).validate().responseJSON { response in
             switch response.result {
             case .success(let value):
                 let json = JSON(value)
@@ -169,7 +169,7 @@ class NetworkService {
             return
         }
 
-        Alamofire.request(url).validate().responseJSON { response in
+        AF.request(url).validate().responseJSON { response in
             switch response.result {
             case .success(let value):
                 let json = JSON(value)
@@ -229,7 +229,7 @@ class NetworkService {
 
         let url = "https://en.wikivoyage.org/w/api.php?action=query&prop=extracts&explaintext&format=json&titles=\(cityParam)"
 
-        Alamofire.request(url).validate().responseJSON { response in
+        AF.request(url).validate().responseJSON { response in
             switch response.result {
             case .success(let value):
                 let json = JSON(value)
