@@ -5,4 +5,4 @@ Explore cities around the world
 
 [Privacy Policy](https://rckim77.github.io/Daydream-Site/)
 
-![daydreamdemoshorter](https://user-images.githubusercontent.com/2919157/38461134-5a3adf30-3a7d-11e8-8436-171565dcfc9e.gif)
+![daydreamdemoshorter](https://user-images.githubusercontent.com/2919157/83190847-16561180-a101-11ea-91af-ba3f41378d7c.gif)
