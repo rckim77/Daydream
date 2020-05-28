@@ -92,8 +92,7 @@ class ExpiringCache<K: Hashable, V: Any> {
     }
 
     deinit {
-        print("removing observer")
-        NotificationCenter.default.removeObserver(observer,
+        NotificationCenter.default.removeObserver(observer as Any,
                                                   name: UIApplication.didReceiveMemoryWarningNotification,
                                                   object: nil)
     }
