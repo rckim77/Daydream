@@ -121,11 +121,14 @@ class NetworkService {
 
     func loadPhoto(with placeId: String, success: @escaping(_ photo: UIImage) -> Void,
                    failure: @escaping(_ error: Error) -> Void) {
-        GMSPlacesClient.shared().lookUpPhotos(forPlaceID: placeId) { (photos, error) in
-            if let firstPhoto = photos?.results.first {
-                GMSPlacesClient.shared().loadPlacePhoto(firstPhoto) { photo, error in
-                    if let photo = photo {
-                        success(photo)
+        guard let photoField = GMSPlaceField(rawValue: UInt(GMSPlaceField.photos.rawValue)) else {
+            return
+        }
+        GMSPlacesClient.shared().fetchPlace(fromPlaceID: placeId, placeFields: photoField, sessionToken: nil) { place, error in
+            if let photoMetadata = place?.photos?.first {
+                GMSPlacesClient.shared().loadPlacePhoto(photoMetadata) { image, error in
+                    if let image = image {
+                        success(image)
                     } else if let error = error {
                         failure(error)
                     }
