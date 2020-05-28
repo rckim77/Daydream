@@ -11,6 +11,12 @@ import SwiftyJSON
 import CoreLocation
 import Firebase
 
+enum PlaceBusinessStatus: String {
+    case operational = "OPERATIONAL"
+    case closedTemporarily = "CLOSED_TEMPORARILY"
+    case closedPermanently = "CLOSED_PERMANENTLY"
+}
+
 protocol Placeable: class {
     var placeableId: String? { get }
     var placeableName: String? { get }
@@ -21,6 +27,7 @@ protocol Placeable: class {
     var placeableViewport: Viewport? { get }
     var placeableMapUrl: String? { get }
     var placeableReviews: [Reviewable]? { get }
+    var placeableBusinessStatus: PlaceBusinessStatus? { get }
 }
 
 protocol Reviewable: class {

@@ -51,6 +51,33 @@ extension GMSPlace: Placeable {
     var placeableReviews: [Reviewable]? {
         return nil
     }
+
+    /*
+
+     typedef NS_ENUM(NSInteger, GMSPlacesBusinessStatus) {
+       /** The business status is not known. */
+       GMSPlacesBusinessStatusUnknown,
+       /** The business is operational. */
+       GMSPlacesBusinessStatusOperational,
+       /** The business is closed temporarily. */
+       GMSPlacesBusinessStatusClosedTemporarily,
+       /** The business is closed permanently. */
+       GMSPlacesBusinessStatusClosedPermanently,
+     };
+
+     */
+    var placeableBusinessStatus: PlaceBusinessStatus? {
+        switch self.businessStatus {
+        case .operational:
+            return .operational
+        case .closedTemporarily:
+            return .closedTemporarily
+        case .closedPermanently:
+            return .closedPermanently
+        default:
+            return nil
+        }
+    }
 }
 
 extension UISearchController {
