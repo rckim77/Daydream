@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Google Inc. All rights reserved.
+ * Copyright 2019 Google Inc. All rights reserved.
  *
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
@@ -13,15 +13,13 @@
  * permissions and limitations under the License.
  */
 
+#import <CoreLocation/CoreLocation.h>
 #import <UIKit/UIKit.h>
 
 /**
- * A class which manages the behavior of a |UISplitViewController| to achieve the UX we want for
- * this demo app. Specifically it tells the |UISplitViewController| to display the list of demos on
- * first launch if there is not enough space to have two panes, instead of just the first demo in
- * the list. After first launch if the device transitions from regular to compact it will instead
- * show the demo which is currently open.
+ * Demo that exposes the findPlaceLikelihoodsForLocation API.
  */
-@interface MainSplitViewControllerBehaviorManager : NSObject <UISplitViewControllerDelegate>
+@interface FindPlaceLikelihoodListViewController
+    : UIViewController <UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate>
 
 @end

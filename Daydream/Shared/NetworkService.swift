@@ -39,7 +39,7 @@ class NetworkService {
                        failure: @escaping(_ error: Error?) -> Void) {
         let url = createUrl(with: place, and: "point_of_interest")
 
-        Alamofire.request(url).validate().responseJSON { response in
+        AF.request(url).validate().responseJSON { response in
             switch response.result {
             case .success(let value):
                 let json = JSON(value)
@@ -95,7 +95,7 @@ class NetworkService {
             "Authorization": "Bearer \(yelpAPIKey)"
         ]
 
-        Alamofire.request(url, headers: headers).validate().responseJSON { response in
+        AF.request(url, headers: headers).validate().responseJSON { response in
             switch response.result {
             case .success(let value):
                 let json = JSON(value)
@@ -121,11 +121,14 @@ class NetworkService {
 
     func loadPhoto(with placeId: String, success: @escaping(_ photo: UIImage) -> Void,
                    failure: @escaping(_ error: Error) -> Void) {
-        GMSPlacesClient.shared().lookUpPhotos(forPlaceID: placeId) { (photos, error) in
-            if let firstPhoto = photos?.results.first {
-                GMSPlacesClient.shared().loadPlacePhoto(firstPhoto) { photo, error in
-                    if let photo = photo {
-                        success(photo)
+        guard let photoField = GMSPlaceField(rawValue: UInt(GMSPlaceField.photos.rawValue)) else {
+            return
+        }
+        GMSPlacesClient.shared().fetchPlace(fromPlaceID: placeId, placeFields: photoField, sessionToken: nil) { place, error in
+            if let photoMetadata = place?.photos?.first {
+                GMSPlacesClient.shared().loadPlacePhoto(photoMetadata) { image, error in
+                    if let image = image {
+                        success(image)
                     } else if let error = error {
                         failure(error)
                     }
@@ -142,7 +145,7 @@ class NetworkService {
             return
         }
 
-        Alamofire.request(url).validate().responseJSON { response in
+        AF.request(url).validate().responseJSON { response in
             switch response.result {
             case .success(let value):
                 let json = JSON(value)
@@ -169,7 +172,7 @@ class NetworkService {
             return
         }
 
-        Alamofire.request(url).validate().responseJSON { response in
+        AF.request(url).validate().responseJSON { response in
             switch response.result {
             case .success(let value):
                 let json = JSON(value)
@@ -229,7 +232,7 @@ class NetworkService {
 
         let url = "https://en.wikivoyage.org/w/api.php?action=query&prop=extracts&explaintext&format=json&titles=\(cityParam)"
 
-        Alamofire.request(url).validate().responseJSON { response in
+        AF.request(url).validate().responseJSON { response in
             switch response.result {
             case .success(let value):
                 let json = JSON(value)

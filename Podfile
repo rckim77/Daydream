@@ -6,11 +6,11 @@ target 'Daydream' do
   use_frameworks!
 
   # Pods for Daydream
-  pod 'GooglePlaces', '~> 3.0'
-  pod 'GoogleMaps', '~> 3.0'
+  pod 'GooglePlaces', '~> 3.9'
+  pod 'GoogleMaps', '~> 3.9'
   pod 'SwiftLint', '~> 0.39'
-  pod 'Alamofire', '~> 4.7'
-  pod 'SwiftyJSON'
+  pod 'Alamofire', '~> 5.2'
+  pod 'SwiftyJSON', '~> 5.0.0'
   pod 'SVProgressHUD'
   pod 'Firebase/Core'
   pod 'Fabric'

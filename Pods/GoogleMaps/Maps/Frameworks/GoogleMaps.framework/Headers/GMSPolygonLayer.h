@@ -2,7 +2,7 @@
 //  GMSPolygonLayer.h
 //  Google Maps SDK for iOS
 //
-//  Copyright 2018 Google Inc.
+//  Copyright 2018 Google LLC
 //
 //  Usage of this SDK is subject to the Google Maps/Google Earth APIs Terms of
 //  Service: https://developers.google.com/maps/terms
@@ -13,7 +13,7 @@
 
 #import "GMSOverlayLayer.h"
 
-NS_ASSUME_NONNULL_BEGIN;
+NS_ASSUME_NONNULL_BEGIN
 
 /**
  * GMSPolygonLayer is a subclass of GMSOverlayLayer, available on a per-polygon basis, that allows
@@ -26,7 +26,7 @@ NS_ASSUME_NONNULL_BEGIN;
 @interface GMSPolygonLayer : GMSOverlayLayer
 
 /** The width of the polygon outline in screen points. */
-@property(nonatomic, assign) CGFloat strokeWidth;
+@property(nonatomic) CGFloat strokeWidth;
 
 /**
  * The color of the polygon outline. This is an assign property, there is an expectation for the
@@ -46,4 +46,4 @@ extern NSString *const kGMSPolygonLayerStrokeWidth;
 extern NSString *const kGMSPolygonLayerStrokeColor;
 extern NSString *const kGMSPolygonLayerFillColor;
 
-NS_ASSUME_NONNULL_END;
+NS_ASSUME_NONNULL_END

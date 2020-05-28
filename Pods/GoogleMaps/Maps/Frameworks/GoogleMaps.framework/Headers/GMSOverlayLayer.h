@@ -2,7 +2,7 @@
 //  GMSOverlayLayer.h
 //  Google Maps SDK for iOS
 //
-//  Copyright 2018 Google Inc.
+//  Copyright 2018 Google LLC
 //
 //  Usage of this SDK is subject to the Google Maps/Google Earth APIs Terms of
 //  Service: https://developers.google.com/maps/terms
@@ -11,7 +11,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import <QuartzCore/QuartzCore.h>
 
-NS_ASSUME_NONNULL_BEGIN;
+NS_ASSUME_NONNULL_BEGIN
 
 /**
  * GMSOverlayLayer is a custom subclass of CALayer, and an abstract baseclass for GMSOverlay layers

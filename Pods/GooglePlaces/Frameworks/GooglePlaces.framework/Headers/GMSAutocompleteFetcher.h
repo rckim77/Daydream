@@ -1,25 +1,21 @@
 //
 //  GMSAutocompleteFetcher.h
-//  Google Places API for iOS
+//  Google Places SDK for iOS
 //
-//  Copyright 2016 Google Inc.
+//  Copyright 2016 Google LLC
 //
 //  Usage of this SDK is subject to the Google Maps/Google Earth APIs Terms of
 //  Service: https://developers.google.com/maps/terms
 //
 
-#if __has_feature(modules)
-@import GoogleMapsBase;
-#else
-#import <GoogleMapsBase/GoogleMapsBase.h>
-#endif
 #import "GMSAutocompleteBoundsMode.h"
 #import "GMSAutocompleteFilter.h"
 
 @class GMSAutocompletePrediction;
 @class GMSAutocompleteSessionToken;
+@class GMSCoordinateBounds;
 
-NS_ASSUME_NONNULL_BEGIN;
+NS_ASSUME_NONNULL_BEGIN
 
 /**
  * Protocol for objects that can receive callbacks from GMSAutocompleteFetcher
@@ -73,14 +69,18 @@ NS_ASSUME_NONNULL_BEGIN;
  * Bounds used to bias or restrict the autocomplete results depending on the value of
  * |autocompleteBoundsMode| (can be nil).
  */
-@property(nonatomic, strong, nullable) GMSCoordinateBounds *autocompleteBounds;
+@property(nonatomic, strong, nullable) GMSCoordinateBounds *autocompleteBounds __deprecated_msg(
+    "autocompleteBounds property is deprecated in favor of GMSAutocompleteFilter.locationBias or "
+    "GMSAutocompleteFilter.locationRestriction");
 
 /**
  * How to treat the |autocompleteBounds| property. Defaults to |kGMSAutocompleteBoundsModeBias|.
  *
  * Has no effect if |autocompleteBounds| is nil.
  */
-@property(nonatomic, assign) GMSAutocompleteBoundsMode autocompleteBoundsMode;
+@property(nonatomic, assign) GMSAutocompleteBoundsMode autocompleteBoundsMode __deprecated_msg(
+    "autocompleteBoundsMode property is deprecated in favor of GMSAutocompleteFilter.locationBias "
+    "or GMSAutocompleteFilter.locationRestriction");
 
 /** Filter to apply to autocomplete suggestions (can be nil). */
 @property(nonatomic, strong, nullable) GMSAutocompleteFilter *autocompleteFilter;
@@ -88,7 +88,7 @@ NS_ASSUME_NONNULL_BEGIN;
 /**
  * Provide a |GMSAutocompleteSessionToken| for tracking the specific autocomplete query flow.
  */
-- (void)provideSessionToken:(GMSAutocompleteSessionToken *)sessionToken;
+- (void)provideSessionToken:(nullable GMSAutocompleteSessionToken *)sessionToken;
 
 /**
  * Notify the fetcher that the source text to autocomplete has changed.
@@ -104,4 +104,4 @@ NS_ASSUME_NONNULL_BEGIN;
 
 @end
 
-NS_ASSUME_NONNULL_END;
+NS_ASSUME_NONNULL_END

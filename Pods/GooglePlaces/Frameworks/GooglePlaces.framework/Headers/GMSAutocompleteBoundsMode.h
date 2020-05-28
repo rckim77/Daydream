@@ -1,8 +1,8 @@
 //
 //  GMSAutocompleteBoundsMode.h
-//  Google Places API for iOS
+//  Google Places SDK for iOS
 //
-//  Copyright 2017 Google Inc.
+//  Copyright 2017 Google LLC
 //
 //  Usage of this SDK is subject to the Google Maps/Google Earth APIs Terms of
 //  Service: https://developers.google.com/maps/terms
@@ -15,7 +15,7 @@
 
 #import <Foundation/Foundation.h>
 
-NS_ASSUME_NONNULL_BEGIN;
+NS_ASSUME_NONNULL_BEGIN
 
 /**
  * Specifies how autocomplete should interpret the |bounds| parameters.
@@ -27,6 +27,6 @@ typedef NS_ENUM(NSUInteger, GMSAutocompleteBoundsMode) {
   kGMSAutocompleteBoundsModeRestrict
 };
 
-NS_ASSUME_NONNULL_END;
+NS_ASSUME_NONNULL_END
 
 /**@}*/
