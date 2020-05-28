@@ -148,16 +148,6 @@ class SightsCardCell: UITableViewCell {
         delegate?.sightsCardCell(self, didSelectPlace: pointOfInterest)
     }
 
-    private func getViewport(for pointOfInterest: Placeable) -> GMSCoordinateBounds? {
-        guard let viewport = pointOfInterest.placeableViewport else {
-            return nil
-        }
-        let northeast = CLLocationCoordinate2D(latitude: viewport.northeastLat, longitude: viewport.northeastLng)
-        let southwest = CLLocationCoordinate2D(latitude: viewport.southwestLat, longitude: viewport.southwestLng)
-
-        return GMSCoordinateBounds(coordinate: northeast, coordinate: southwest)
-    }
-
     private func loadBackgroundImage(for button: Int, with pointOfInterest: Placeable) {
         guard let placeId = pointOfInterest.placeableId else {
             return

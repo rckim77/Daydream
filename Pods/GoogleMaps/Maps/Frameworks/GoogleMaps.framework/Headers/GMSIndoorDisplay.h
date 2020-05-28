@@ -2,7 +2,7 @@
 //  GMSIndoorDisplay.h
 //  Google Maps SDK for iOS
 //
-//  Copyright 2013 Google Inc.
+//  Copyright 2013 Google LLC
 //
 //  Usage of this SDK is subject to the Google Maps/Google Earth APIs Terms of
 //  Service: https://developers.google.com/maps/terms
@@ -13,7 +13,7 @@
 @class GMSIndoorBuilding;
 @class GMSIndoorLevel;
 
-NS_ASSUME_NONNULL_BEGIN;
+NS_ASSUME_NONNULL_BEGIN
 
 /** Delegate for events on GMSIndoorDisplay. */
 @protocol GMSIndoorDisplayDelegate<NSObject>
@@ -47,7 +47,7 @@ NS_ASSUME_NONNULL_BEGIN;
  * Provides the currently focused building, will be nil if there is no building with indoor data
  * currently under focus.
  */
-@property(nonatomic, strong, readonly, nullable) GMSIndoorBuilding *activeBuilding;
+@property(nonatomic, readonly, nullable) GMSIndoorBuilding *activeBuilding;
 
 /**
  * Provides and controls the active level for activeBuilding.  Will be updated whenever
@@ -59,8 +59,8 @@ NS_ASSUME_NONNULL_BEGIN;
  *
  * Any attempt to set it to an invalid value will be ignored.
  */
-@property(nonatomic, strong, nullable) GMSIndoorLevel *activeLevel;
+@property(nonatomic, nullable) GMSIndoorLevel *activeLevel;
 
 @end
 
-NS_ASSUME_NONNULL_END;
+NS_ASSUME_NONNULL_END

@@ -22,19 +22,6 @@
  */
 @interface AutocompleteBaseViewController : BaseDemoViewController
 
-/**
- * Bounds used to bias or restrict the autocomplete results depending on the value of
- * |autocompleteBoundsMode| (can be nil).
- */
-@property(nonatomic, strong) GMSCoordinateBounds *autocompleteBounds;
-
-/**
- * How to treat the |autocompleteBounds| property. Defaults to |kGMSAutocompleteBoundsModeBias|.
- *
- * Has no effect if |autocompleteBounds| is nil.
- */
-@property(nonatomic, assign) GMSAutocompleteBoundsMode autocompleteBoundsMode;
-
 /** Filter to apply to autocomplete suggestions (can be nil). */
 @property(nonatomic, strong) GMSAutocompleteFilter *autocompleteFilter;
 

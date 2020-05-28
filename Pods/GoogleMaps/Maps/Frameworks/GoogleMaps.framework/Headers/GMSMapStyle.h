@@ -2,7 +2,7 @@
 //  GMSMapStyle.h
 //  Google Maps SDK for iOS
 //
-//  Copyright 2016 Google Inc.
+//  Copyright 2016 Google LLC
 //
 //  Usage of this SDK is subject to the Google Maps/Google Earth APIs Terms of
 //  Service: https://developers.google.com/maps/terms
@@ -10,7 +10,7 @@
 
 #import <Foundation/Foundation.h>
 
-NS_ASSUME_NONNULL_BEGIN;
+NS_ASSUME_NONNULL_BEGIN
 
 /**
  * GMSMapStyle holds details about a style which can be applied to a map.
@@ -44,4 +44,12 @@ NS_ASSUME_NONNULL_BEGIN;
 
 @end
 
-NS_ASSUME_NONNULL_END;
+/**
+ * Calculates a hash value for the given string.
+ * @param string The string to use to calculate the hash value.
+ * @return The hash value.
+ * @note The current implementation uses an MD5 hash, which is sufficient for uniquifying styles.
+ */
+NSUInteger GMSStyleHashForString(NSString *string);
+
+NS_ASSUME_NONNULL_END
