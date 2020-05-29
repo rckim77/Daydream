@@ -27,6 +27,9 @@ final class SearchViewController: UIViewController {
         button.setTitle("Got feedback?", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.addTarget(self, action: #selector(feedbackButtonTapped), for: .touchUpInside)
+        if #available(iOS 13.4, *) {
+            button.pointerStyleProvider = buttonProvider
+        }
         return button
     }()
 
@@ -35,6 +38,9 @@ final class SearchViewController: UIViewController {
         didSet {
             randomBtn.addRoundedCorners(radius: 16)
             randomBtn.addBorder()
+            if #available(iOS 13.4, *) {
+                randomBtn.pointerStyleProvider = buttonProvider
+            }
         }
     }
 
