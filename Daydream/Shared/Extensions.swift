@@ -153,6 +153,20 @@ extension UIView {
         layer.shadowOffset = offset
         layer.shadowRadius = radius
     }
+
+    /// This is called when the pointer moves over the button.
+    @available(iOS 13.4, *)
+    func buttonProvider(button: UIButton, pointerEffect: UIPointerEffect, pointerShape: UIPointerShape) -> UIPointerStyle? {
+        // Use the pointer effect's preview that's passed in.
+        let targetedPreview = pointerEffect.preview
+
+        /** UIPointerEffect.automatic attempts to determine the appropriate effect for the given preview automatically.
+            The pointer effect has an automatic nature which adapts to the aspects of the button (background color, corner radius, size)
+        */
+        let buttonPointerEffect = UIPointerEffect.highlight(targetedPreview)
+        let buttonPointerStyle = UIPointerStyle(effect: buttonPointerEffect, shape: pointerShape)
+        return buttonPointerStyle
+    }
 }
 
 extension UIViewController {

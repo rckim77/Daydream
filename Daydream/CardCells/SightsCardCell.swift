@@ -32,6 +32,9 @@ class SightsCardCell: UITableViewCell {
         let button = UIButton(type: .system)
         button.addShadow(opacity: 0.8, offset: CGSize(width: 0, height: 1))
         button.addTarget(self, action: #selector(pointOfInterest1BusinessStatusButtonTapped), for: .touchUpInside)
+        if #available(iOS 13.4, *) {
+            button.pointerStyleProvider = buttonProvider
+        }
         return button
     }()
     @IBOutlet weak var pointOfInterest1ImageView: UIImageView!
@@ -49,6 +52,9 @@ class SightsCardCell: UITableViewCell {
         let button = UIButton(type: .system)
         button.addShadow(opacity: 0.8, offset: CGSize(width: 0, height: 1))
         button.addTarget(self, action: #selector(pointOfInterest2BusinessStatusButtonTapped), for: .touchUpInside)
+        if #available(iOS 13.4, *) {
+            button.pointerStyleProvider = buttonProvider
+        }
         return button
     }()
     @IBOutlet weak var pointOfInterest2ImageView: UIImageView!
@@ -66,6 +72,9 @@ class SightsCardCell: UITableViewCell {
         let button = UIButton(type: .system)
         button.addShadow(opacity: 0.8, offset: CGSize(width: 0, height: 1))
         button.addTarget(self, action: #selector(pointOfInterest3BusinessStatusButtonTapped), for: .touchUpInside)
+        if #available(iOS 13.4, *) {
+            button.pointerStyleProvider = buttonProvider
+        }
         return button
     }()
     @IBOutlet weak var pointOfInterest3ImageView: UIImageView!
