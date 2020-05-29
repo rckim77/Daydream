@@ -6,10 +6,49 @@
 //  Copyright © 2018 Raymond Kim. All rights reserved.
 //
 
-import Foundation
+import UIKit
 import SwiftyJSON
 import CoreLocation
 import Firebase
+
+enum PlaceBusinessStatus: String {
+    case operational = "OPERATIONAL"
+    case closedTemporarily = "CLOSED_TEMPORARILY"
+    case closedPermanently = "CLOSED_PERMANENTLY"
+
+    var displayValue: String {
+        switch self {
+        case .operational:
+            return "operational"
+        case .closedTemporarily:
+            return "closed temporarily"
+        case .closedPermanently:
+            return "closed permanently"
+        }
+    }
+
+    var displayColor: UIColor {
+        switch self {
+        case .operational:
+            return .systemGreen
+        case .closedTemporarily:
+            return .systemOrange
+        case .closedPermanently:
+            return .systemRed
+        }
+    }
+
+    var imageName: String? {
+        switch self {
+        case .closedTemporarily:
+            return "exclamationmark.triangle.fill"
+        case .closedPermanently:
+            return "nosign"
+        case .operational:
+            return nil
+        }
+    }
+}
 
 protocol Placeable: class {
     var placeableId: String? { get }
@@ -21,6 +60,7 @@ protocol Placeable: class {
     var placeableViewport: Viewport? { get }
     var placeableMapUrl: String? { get }
     var placeableReviews: [Reviewable]? { get }
+    var placeableBusinessStatus: PlaceBusinessStatus? { get }
 }
 
 protocol Reviewable: class {

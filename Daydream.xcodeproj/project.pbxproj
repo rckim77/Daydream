@@ -11,7 +11,6 @@
 		9409090A205F4613002A65EF /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94090909205F4613002A65EF /* MapViewController.swift */; };
 		9434BA3A24738C25004294F0 /* DaydreamUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9434BA3924738C25004294F0 /* DaydreamUITests.swift */; };
 		9434BA4424738D2F004294F0 /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9434BA4324738D2F004294F0 /* SnapshotHelper.swift */; };
-		9434BA4824775C9C004294F0 /* apiKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9434BA4724775C9C004294F0 /* apiKeys.plist */; };
 		9434BA4C247998D4004294F0 /* MapReviewCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9434BA4B247998D4004294F0 /* MapReviewCard.swift */; };
 		94380AC8203BAE1D00684863 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94380AC7203BAE1D00684863 /* AppDelegate.swift */; };
 		94380ACA203BAE1D00684863 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94380AC9203BAE1D00684863 /* SearchViewController.swift */; };
@@ -35,6 +34,7 @@
 		94B8CEB3207DC31D00CA8101 /* SearchDetailDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B8CEB2207DC31D00CA8101 /* SearchDetailDataSource.swift */; };
 		94C9385022500D31005E0653 /* UIDevice+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C9384F22500D31005E0653 /* UIDevice+Helpers.swift */; };
 		94DB8FE7204B946200FA7CF7 /* EateriesCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94DB8FE6204B946200FA7CF7 /* EateriesCardCell.swift */; };
+		94E108692480615C0091D043 /* apiKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 94E108682480615C0091D043 /* apiKeys.plist */; };
 		94E392AD2070B4300073E8C9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 94E392AC2070B4300073E8C9 /* GoogleService-Info.plist */; };
 		94E392B02074B29E0073E8C9 /* style.json in Resources */ = {isa = PBXBuildFile; fileRef = 94E392AF2074B29E0073E8C9 /* style.json */; };
 		94E3D9582097EEC800384680 /* ExpiringCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E3D9572097EEC800384680 /* ExpiringCache.swift */; };
@@ -59,7 +59,6 @@
 		9434BA3924738C25004294F0 /* DaydreamUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaydreamUITests.swift; sourceTree = "<group>"; };
 		9434BA3B24738C25004294F0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9434BA4324738D2F004294F0 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SnapshotHelper.swift; path = fastlane/SnapshotHelper.swift; sourceTree = SOURCE_ROOT; };
-		9434BA4724775C9C004294F0 /* apiKeys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = apiKeys.plist; sourceTree = "<group>"; };
 		9434BA4B247998D4004294F0 /* MapReviewCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapReviewCard.swift; sourceTree = "<group>"; };
 		94380AC4203BAE1D00684863 /* Daydream.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Daydream.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94380AC7203BAE1D00684863 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -85,6 +84,7 @@
 		94B8CEB2207DC31D00CA8101 /* SearchDetailDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDetailDataSource.swift; sourceTree = "<group>"; };
 		94C9384F22500D31005E0653 /* UIDevice+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice+Helpers.swift"; sourceTree = "<group>"; };
 		94DB8FE6204B946200FA7CF7 /* EateriesCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EateriesCardCell.swift; sourceTree = "<group>"; };
+		94E108682480615C0091D043 /* apiKeys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = apiKeys.plist; sourceTree = "<group>"; };
 		94E392AC2070B4300073E8C9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		94E392AF2074B29E0073E8C9 /* style.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = style.json; sourceTree = "<group>"; };
 		94E3D9572097EEC800384680 /* ExpiringCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpiringCache.swift; sourceTree = "<group>"; };
@@ -151,7 +151,6 @@
 			isa = PBXGroup;
 			children = (
 				94380AC7203BAE1D00684863 /* AppDelegate.swift */,
-				9434BA4724775C9C004294F0 /* apiKeys.plist */,
 				94380AC9203BAE1D00684863 /* SearchViewController.swift */,
 				949630B9203BCBBD007139CA /* SearchDetailViewController.swift */,
 				94B8CEB2207DC31D00CA8101 /* SearchDetailDataSource.swift */,
@@ -192,6 +191,7 @@
 				9490BA01206AF6F700B880E7 /* randomCitiesJSON.json */,
 				94E392AF2074B29E0073E8C9 /* style.json */,
 				947EC657204673BF004A911D /* ShadowView.swift */,
+				94E108682480615C0091D043 /* apiKeys.plist */,
 				94E3D9572097EEC800384680 /* ExpiringCache.swift */,
 			);
 			path = Shared;
@@ -313,7 +313,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				94380AD2203BAE1D00684863 /* LaunchScreen.storyboard in Resources */,
-				9434BA4824775C9C004294F0 /* apiKeys.plist in Resources */,
+				94E108692480615C0091D043 /* apiKeys.plist in Resources */,
 				9490BA02206AF6F700B880E7 /* randomCitiesJSON.json in Resources */,
 				94E392AD2070B4300073E8C9 /* GoogleService-Info.plist in Resources */,
 				94E392B02074B29E0073E8C9 /* style.json in Resources */,

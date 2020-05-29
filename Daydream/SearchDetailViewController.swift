@@ -53,6 +53,9 @@ final class SearchDetailViewController: UIViewController {
         let button = UIButton(type: .system)
         button.configureWithSystemIcon("arrow.clockwise")
         button.addTarget(self, action: #selector(randomCityButtonTapped), for: .touchUpInside)
+        if #available(iOS 13.4, *) {
+            button.pointerStyleProvider = buttonProvider
+        }
         return button
     }()
 
@@ -60,6 +63,9 @@ final class SearchDetailViewController: UIViewController {
         let button = UIButton(type: .system)
         button.configureWithSystemIcon("house.fill")
         button.addTarget(self, action: #selector(homeButtonTapped), for: .touchUpInside)
+        if #available(iOS 13.4, *) {
+            button.pointerStyleProvider = buttonProvider
+        }
         return button
     }()
 
@@ -345,6 +351,12 @@ extension SearchDetailViewController: SightsCardCellDelegate {
     func sightsCardCell(_ cell: SightsCardCell, didSelectPlace place: Placeable) {
         logEvent(contentType: "select point of interest", title)
         performSegue(withIdentifier: "genericMapSegue", sender: place)
+    }
+
+    func sightsCardCellDidTapBusinessStatusButton(_ businessStatus: PlaceBusinessStatus) {
+        let alert = UIAlertController(title: "This place is \(businessStatus.displayValue).", message: nil, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        present(alert, animated: true, completion: nil)
     }
 }
 

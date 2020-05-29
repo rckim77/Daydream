@@ -38,7 +38,6 @@ class NetworkService {
     func loadTopSights(with place: Placeable, success: @escaping(_ pointsOfInterest: [Placeable]) -> Void,
                        failure: @escaping(_ error: Error?) -> Void) {
         let url = createUrl(with: place, and: "point_of_interest")
-
         AF.request(url).validate().responseJSON { response in
             switch response.result {
             case .success(let value):
@@ -57,7 +56,8 @@ class NetworkService {
                         let northeastLat = result["geometry"]["viewport"]["northeast"]["lat"].double,
                         let northeastLng = result["geometry"]["viewport"]["northeast"]["lng"].double,
                         let southwestLat = result["geometry"]["viewport"]["southwest"]["lat"].double,
-                        let southwestLng = result["geometry"]["viewport"]["southwest"]["lng"].double else {
+                        let southwestLng = result["geometry"]["viewport"]["southwest"]["lng"].double,
+                        let businessStatus = result["business_status"].string else {
                         return nil
                     }
 
@@ -72,7 +72,8 @@ class NetworkService {
                     return Place(placeID: placeId,
                                  name: name,
                                  coordinate: coordinate,
-                                 viewport: viewport)
+                                 viewport: viewport,
+                                 businessStatus: businessStatus)
                 }
 
                 success(pointsOfInterest)

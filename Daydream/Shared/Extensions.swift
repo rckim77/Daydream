@@ -51,6 +51,33 @@ extension GMSPlace: Placeable {
     var placeableReviews: [Reviewable]? {
         return nil
     }
+
+    /*
+
+     typedef NS_ENUM(NSInteger, GMSPlacesBusinessStatus) {
+       /** The business status is not known. */
+       GMSPlacesBusinessStatusUnknown,
+       /** The business is operational. */
+       GMSPlacesBusinessStatusOperational,
+       /** The business is closed temporarily. */
+       GMSPlacesBusinessStatusClosedTemporarily,
+       /** The business is closed permanently. */
+       GMSPlacesBusinessStatusClosedPermanently,
+     };
+
+     */
+    var placeableBusinessStatus: PlaceBusinessStatus? {
+        switch self.businessStatus {
+        case .operational:
+            return .operational
+        case .closedTemporarily:
+            return .closedTemporarily
+        case .closedPermanently:
+            return .closedPermanently
+        default:
+            return nil
+        }
+    }
 }
 
 extension UISearchController {
@@ -126,6 +153,15 @@ extension UIView {
         layer.shadowOffset = offset
         layer.shadowRadius = radius
     }
+
+    /// This is called when the pointer moves over the button.
+    @available(iOS 13.4, *)
+    func buttonProvider(button: UIButton, pointerEffect: UIPointerEffect, pointerShape: UIPointerShape) -> UIPointerStyle? {
+        let targetedPreview = pointerEffect.preview
+        let buttonPointerEffect = UIPointerEffect.highlight(targetedPreview)
+        let buttonPointerStyle = UIPointerStyle(effect: buttonPointerEffect, shape: pointerShape)
+        return buttonPointerStyle
+    }
 }
 
 extension UIViewController {
@@ -160,6 +196,15 @@ extension UIViewController {
             return
         }
         UIApplication.shared.open(url, options: [:])
+    }
+
+    /// This is called when the pointer moves over the button.
+    @available(iOS 13.4, *)
+    func buttonProvider(button: UIButton, pointerEffect: UIPointerEffect, pointerShape: UIPointerShape) -> UIPointerStyle? {
+        let targetedPreview = pointerEffect.preview
+        let buttonPointerEffect = UIPointerEffect.highlight(targetedPreview)
+        let buttonPointerStyle = UIPointerStyle(effect: buttonPointerEffect, shape: pointerShape)
+        return buttonPointerStyle
     }
 }
 

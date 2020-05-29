@@ -40,6 +40,9 @@ final class MapViewController: UIViewController {
         button.configureWithSystemIcon("xmark.circle.fill")
         button.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
         button.accessibilityIdentifier = "map-close-button"
+        if #available(iOS 13.4, *) {
+            button.pointerStyleProvider = buttonProvider
+        }
         return button
     }()
 
@@ -48,6 +51,9 @@ final class MapViewController: UIViewController {
         button.configureWithSystemIcon("moon.fill")
         button.addTarget(self, action: #selector(darkModeButtonTapped), for: .touchUpInside)
         button.accessibilityIdentifier = "map-dark-mode-button"
+        if #available(iOS 13.4, *) {
+            button.pointerStyleProvider = buttonProvider
+        }
         return button
     }()
 
@@ -55,6 +61,9 @@ final class MapViewController: UIViewController {
         let button = UIButton(type: .system)
         button.configureWithSystemIcon("questionmark.circle.fill")
         button.addTarget(self, action: #selector(aboutButtonTapped), for: .touchUpInside)
+        if #available(iOS 13.4, *) {
+            button.pointerStyleProvider = buttonProvider
+        }
         return button
     }()
 
