@@ -107,7 +107,7 @@ class EateriesCardCell: UITableViewCell {
        delegate?.eateriesCardCell(self, didSelectEatery: eatery)
     }
 
-    private func loadBackgroundImage(for button: Int, with eatery: Eatery) {
+    private func loadBackgroundImage(forButton button: Int, with eatery: Eatery) {
         if let imageUrl = URL(string: eatery.imageUrl) {
            URLSession.shared.dataTask(with: imageUrl) { [weak self] data, _, _ in
                 guard let strongSelf = self, let data = data else {
@@ -141,18 +141,22 @@ class EateriesCardCell: UITableViewCell {
     private func configure(_ eateries: [Eatery]) {
         isHidden = false
 
-        eatery1Label.text = "\(eateries[0].name) (\(eateries[0].price))"
-        eatery2Label.text = "\(eateries[1].name) (\(eateries[1].price))"
-        eatery3Label.text = "\(eateries[2].name) (\(eateries[2].price))"
+        [eatery1Label, eatery2Label, eatery3Label].enumerated().forEach { (index, label) in
+            label.text = createDisplayText(eateries[index])
+        }
 
         // reset image (to prevent background images being reused due to dequeueing reusable cells)
-        eatery1ImageView.image = nil
-        eatery2ImageView.image = nil
-        eatery3ImageView.image = nil
+        [eatery1ImageView, eatery2ImageView, eatery3ImageView].forEach { imageView in
+            imageView?.image = nil
+        }
 
-        loadBackgroundImage(for: 1, with: eateries[0])
-        loadBackgroundImage(for: 2, with: eateries[1])
-        loadBackgroundImage(for: 3, with: eateries[2])
+        eateries.enumerated().forEach { (index, eatery) in
+            loadBackgroundImage(forButton: index + 1, with: eatery)
+        }
+    }
+
+    private func createDisplayText(_ eatery: Eatery) -> String {
+        return "\(eatery.name) • \(eatery.price)"
     }
 }
 
