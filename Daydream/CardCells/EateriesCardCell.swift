@@ -165,9 +165,9 @@ class EateriesCardCell: UITableViewCell {
     private func configure(_ eateries: [Eatery]) {
         isHidden = false
 
-        eatery1Label.text = eateries[0].name
-        eatery2Label.text = eateries[1].name
-        eatery3Label.text = eateries[2].name
+        eatery1Label.text = "\(eateries[0].name) (\(eateries[0].price))"
+        eatery2Label.text = "\(eateries[1].name) (\(eateries[1].price))"
+        eatery3Label.text = "\(eateries[2].name) (\(eateries[2].price))"
 
         // reset image (to prevent background images being reused due to dequeueing reusable cells)
         eatery1ImageView.image = nil

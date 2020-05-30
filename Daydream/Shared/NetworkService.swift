@@ -108,11 +108,12 @@ class NetworkService {
                 let eateries = results.compactMap { result -> Eatery? in
                     guard let name = result["name"].string,
                         let imageUrl = result["image_url"].string,
-                        let url = result["url"].string else {
+                        let url = result["url"].string,
+                        let price = result["price"].string else {
                             return nil
                     }
 
-                    return Eatery(name: name, imageUrl: imageUrl, url: url)
+                    return Eatery(name: name, imageUrl: imageUrl, url: url, price: price)
                 }
 
                 success(eateries)

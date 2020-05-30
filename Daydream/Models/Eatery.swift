@@ -7,7 +7,8 @@
 //
 
 struct Eatery: Codable {
-    var name: String
-    var imageUrl: String
-    var url: String
+    let name: String
+    let imageUrl: String
+    let url: String
+    let price: String // e.g., $, $$, $$$
 }
