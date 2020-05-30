@@ -14,13 +14,43 @@ import GoogleMaps
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    /// Temporary variable to hold a shortcut item from the launching or activation of the app.
+    private var shortcutItemToProcess: UIApplicationShortcutItem?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         if let keys = AppDelegate.getAPIKeys() {
             GMSPlacesClient.provideAPIKey(keys.googleAPI)
             GMSServices.provideAPIKey(keys.googleAPI)
         }
+        // If launchOptions contains the appropriate launch options key, a Home screen quick action
+        // is responsible for launching the app. Store the action for processing once the app has
+        // completed initialization.
+        if let shortcutItem = launchOptions?[UIApplication.LaunchOptionsKey.shortcutItem] as? UIApplicationShortcutItem {
+            shortcutItemToProcess = shortcutItem
+        }
         return true
+    }
+
+    func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
+        // Alternatively, a shortcut item may be passed in through this delegate method if the app was
+        // still in memory when the Home screen quick action was used. Again, store it for processing.
+        shortcutItemToProcess = shortcutItem
+    }
+
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        if var topVC = window?.rootViewController, shortcutItemToProcess != nil {
+            while let presentedVC = topVC.presentedViewController {
+                topVC = presentedVC
+            }
+            if let topVC = topVC as? SearchViewController {
+                topVC.randomBtnTapped(UIButton())
+            } else if let topVC = topVC as? SearchDetailViewController {
+                topVC.randomCityButtonTapped()
+            }
+
+            // Reset the shortcut item so it's never processed twice.
+            shortcutItemToProcess = nil
+        }
     }
 
     static func getAPIKeys() -> APIKeys? {

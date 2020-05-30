@@ -213,7 +213,7 @@ final class SearchDetailViewController: UIViewController {
     }
 
     @objc
-    private func randomCityButtonTapped() {
+    func randomCityButtonTapped() {
         logEvent(contentType: "random button tapped", title)
         guard let randomCity = getRandomCity() else {
             return
