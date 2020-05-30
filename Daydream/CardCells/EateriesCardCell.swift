@@ -9,6 +9,7 @@
 import UIKit
 import SwiftyJSON
 import GooglePlaces
+import SnapKit
 
 protocol EateriesCardCellDelegate: AnyObject {
     func eateriesCardCell(_ cell: EateriesCardCell, didSelectEatery eatery: Eatery)
@@ -18,13 +19,37 @@ class EateriesCardCell: UITableViewCell {
 
     @IBOutlet weak var eatery1View: UIView!
     @IBOutlet weak var eatery1ImageView: UIImageView!
-    @IBOutlet weak var eatery1Label: UILabel!
+    private lazy var eatery1Label: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.font = UIFont.preferredFont(forTextStyle: .title2)
+        label.adjustsFontForContentSizeCategory = true
+        label.shadowColor = .black
+        label.shadowOffset = CGSize(width: 0, height: 1)
+        return label
+    }()
     @IBOutlet weak var eatery2View: UIView!
     @IBOutlet weak var eatery2ImageView: UIImageView!
-    @IBOutlet weak var eatery2Label: UILabel!
+    private lazy var eatery2Label: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.font = UIFont.preferredFont(forTextStyle: .title2)
+        label.adjustsFontForContentSizeCategory = true
+        label.shadowColor = .black
+        label.shadowOffset = CGSize(width: 0, height: 1)
+        return label
+    }()
     @IBOutlet weak var eatery3View: UIView!
     @IBOutlet weak var eatery3ImageView: UIImageView!
-    @IBOutlet weak var eatery3Label: UILabel!
+    private lazy var eatery3Label: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.font = UIFont.preferredFont(forTextStyle: .title2)
+        label.adjustsFontForContentSizeCategory = true
+        label.shadowColor = .black
+        label.shadowOffset = CGSize(width: 0, height: 1)
+        return label
+    }()
 
     weak var delegate: EateriesCardCellDelegate?
     var eateries: [Eatery]? {
@@ -33,20 +58,7 @@ class EateriesCardCell: UITableViewCell {
                 // display content only if we've made another API call, otherwise do nothing
                 // POSTLAUNCH: - Update url comparison
                 if oldValue == nil || eateries[0].url != oldValue?[0].url {
-                    isHidden = false
-
-                    eatery1Label.text = eateries[0].name
-                    eatery2Label.text = eateries[1].name
-                    eatery3Label.text = eateries[2].name
-
-                    // reset image (to prevent background images being reused due to dequeueing reusable cells)
-                    eatery1ImageView.image = nil
-                    eatery2ImageView.image = nil
-                    eatery3ImageView.image = nil
-
-                    loadBackgroundImage(for: 1, with: eateries[0])
-                    loadBackgroundImage(for: 2, with: eateries[1])
-                    loadBackgroundImage(for: 3, with: eateries[2])
+                    configure(eateries)
                 }
             } else { // before response from API or error
                 isHidden = true
@@ -68,6 +80,26 @@ class EateriesCardCell: UITableViewCell {
         eatery1ImageView.image = nil
         eatery2ImageView.image = nil
         eatery3ImageView.image = nil
+
+        // add programmatic labels to views
+        eatery1View.addSubview(eatery1Label)
+        eatery2View.addSubview(eatery2Label)
+        eatery3View.addSubview(eatery3Label)
+
+        eatery1Label.snp.makeConstraints { make in
+            make.bottom.equalToSuperview().inset(12)
+            make.leading.trailing.equalToSuperview().inset(16)
+        }
+
+        eatery2Label.snp.makeConstraints { make in
+            make.bottom.equalToSuperview().inset(12)
+            make.leading.trailing.equalToSuperview().inset(16)
+        }
+
+        eatery3Label.snp.makeConstraints { make in
+            make.bottom.equalToSuperview().inset(12)
+            make.leading.trailing.equalToSuperview().inset(16)
+        }
     }
 
     // Note: On iOS 13, setNeedsLayout() is called first before UIViews are
@@ -128,6 +160,23 @@ class EateriesCardCell: UITableViewCell {
                 }
             }.resume()
         }
+    }
+
+    private func configure(_ eateries: [Eatery]) {
+        isHidden = false
+
+        eatery1Label.text = eateries[0].name
+        eatery2Label.text = eateries[1].name
+        eatery3Label.text = eateries[2].name
+
+        // reset image (to prevent background images being reused due to dequeueing reusable cells)
+        eatery1ImageView.image = nil
+        eatery2ImageView.image = nil
+        eatery3ImageView.image = nil
+
+        loadBackgroundImage(for: 1, with: eateries[0])
+        loadBackgroundImage(for: 2, with: eateries[1])
+        loadBackgroundImage(for: 3, with: eateries[2])
     }
 }
 
