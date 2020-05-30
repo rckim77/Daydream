@@ -19,37 +19,13 @@ class EateriesCardCell: UITableViewCell {
 
     @IBOutlet weak var eatery1View: UIView!
     @IBOutlet weak var eatery1ImageView: UIImageView!
-    private lazy var eatery1Label: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.font = UIFont.preferredFont(forTextStyle: .title2)
-        label.adjustsFontForContentSizeCategory = true
-        label.shadowColor = .black
-        label.shadowOffset = CGSize(width: 0, height: 1)
-        return label
-    }()
+    private let eatery1Label = CardLabel()
     @IBOutlet weak var eatery2View: UIView!
     @IBOutlet weak var eatery2ImageView: UIImageView!
-    private lazy var eatery2Label: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.font = UIFont.preferredFont(forTextStyle: .title2)
-        label.adjustsFontForContentSizeCategory = true
-        label.shadowColor = .black
-        label.shadowOffset = CGSize(width: 0, height: 1)
-        return label
-    }()
+    private let eatery2Label = CardLabel()
     @IBOutlet weak var eatery3View: UIView!
     @IBOutlet weak var eatery3ImageView: UIImageView!
-    private lazy var eatery3Label: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.font = UIFont.preferredFont(forTextStyle: .title2)
-        label.adjustsFontForContentSizeCategory = true
-        label.shadowColor = .black
-        label.shadowOffset = CGSize(width: 0, height: 1)
-        return label
-    }()
+    private let eatery3Label = CardLabel()
 
     weak var delegate: EateriesCardCellDelegate?
     var eateries: [Eatery]? {

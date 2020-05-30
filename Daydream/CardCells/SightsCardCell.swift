@@ -19,15 +19,7 @@ protocol SightsCardCellDelegate: AnyObject {
 class SightsCardCell: UITableViewCell {
 
     @IBOutlet weak var pointOfInterest1View: UIView!
-    private lazy var pointOfInterest1Label: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.font = UIFont.preferredFont(forTextStyle: .title2)
-        label.adjustsFontForContentSizeCategory = true
-        label.shadowColor = .black
-        label.shadowOffset = CGSize(width: 0, height: 1)
-        return label
-    }()
+    private let pointOfInterest1Label = CardLabel()
     private lazy var pointOfInterest1BusinessStatusButton: UIButton = {
         let button = UIButton(type: .system)
         button.addShadow(opacity: 0.8, offset: CGSize(width: 0, height: 1))
@@ -39,15 +31,7 @@ class SightsCardCell: UITableViewCell {
     }()
     @IBOutlet weak var pointOfInterest1ImageView: UIImageView!
     @IBOutlet weak var pointOfInterest2View: UIView!
-    private lazy var pointOfInterest2Label: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.font = UIFont.preferredFont(forTextStyle: .title2)
-        label.adjustsFontForContentSizeCategory = true
-        label.shadowColor = .black
-        label.shadowOffset = CGSize(width: 0, height: 1)
-        return label
-    }()
+    private let pointOfInterest2Label = CardLabel()
     private lazy var pointOfInterest2BusinessStatusButton: UIButton = {
         let button = UIButton(type: .system)
         button.addShadow(opacity: 0.8, offset: CGSize(width: 0, height: 1))
@@ -59,15 +43,7 @@ class SightsCardCell: UITableViewCell {
     }()
     @IBOutlet weak var pointOfInterest2ImageView: UIImageView!
     @IBOutlet weak var pointOfInterest3View: UIView!
-    private lazy var pointOfInterest3Label: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.font = UIFont.preferredFont(forTextStyle: .title2)
-        label.adjustsFontForContentSizeCategory = true
-        label.shadowColor = .black
-        label.shadowOffset = CGSize(width: 0, height: 1)
-        return label
-    }()
+    private let pointOfInterest3Label = CardLabel()
     private lazy var pointOfInterest3BusinessStatusButton: UIButton = {
         let button = UIButton(type: .system)
         button.addShadow(opacity: 0.8, offset: CGSize(width: 0, height: 1))
