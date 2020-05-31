@@ -18,6 +18,7 @@ protocol EateriesCardCellDelegate: AnyObject {
 
 class EateriesCardCell: UITableViewCell {
 
+    private lazy var titleLabel = CardLabel(textStyle: .title1, text: "Top Eateries")
     @IBOutlet weak var eatery1View: UIView!
     private let eatery1GradientView = GradientView()
     @IBOutlet weak var eatery1ImageView: UIImageView!
@@ -51,12 +52,17 @@ class EateriesCardCell: UITableViewCell {
         eatery3ImageView.image = nil
 
         // add programmatic labels to views
+        contentView.addSubview(titleLabel)
         eatery1View.addSubview(eatery1GradientView)
         eatery1View.addSubview(eatery1Label)
         eatery2View.addSubview(eatery2GradientView)
         eatery2View.addSubview(eatery2Label)
         eatery3View.addSubview(eatery3GradientView)
         eatery3View.addSubview(eatery3Label)
+
+        titleLabel.snp.makeConstraints { make in
+            make.leading.top.trailing.equalToSuperview().inset(16)
+        }
 
         eatery1Label.snp.makeConstraints { make in
             make.bottom.equalToSuperview().inset(12)
