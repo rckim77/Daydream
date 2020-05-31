@@ -44,3 +44,10 @@ class Place: Placeable {
         }
     }
 }
+
+extension Place: Equatable {
+    static func == (lhs: Place, rhs: Place) -> Bool {
+        return lhs.placeableId == rhs.placeableId &&
+            lhs.placeableName == rhs.placeableName
+    }
+}

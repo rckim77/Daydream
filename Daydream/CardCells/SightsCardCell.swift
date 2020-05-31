@@ -19,6 +19,7 @@ protocol SightsCardCellDelegate: AnyObject {
 class SightsCardCell: UITableViewCell {
 
     @IBOutlet weak var pointOfInterest1View: UIView!
+    private let pointOfInterest1GradientView = GradientView()
     private let pointOfInterest1Label = CardLabel()
     private lazy var pointOfInterest1BusinessStatusButton: UIButton = {
         let button = UIButton(type: .system)
@@ -31,6 +32,7 @@ class SightsCardCell: UITableViewCell {
     }()
     @IBOutlet weak var pointOfInterest1ImageView: UIImageView!
     @IBOutlet weak var pointOfInterest2View: UIView!
+    private let pointOfInterest2GradientView = GradientView()
     private let pointOfInterest2Label = CardLabel()
     private lazy var pointOfInterest2BusinessStatusButton: UIButton = {
         let button = UIButton(type: .system)
@@ -43,6 +45,7 @@ class SightsCardCell: UITableViewCell {
     }()
     @IBOutlet weak var pointOfInterest2ImageView: UIImageView!
     @IBOutlet weak var pointOfInterest3View: UIView!
+    private let pointOfInterest3GradientView = GradientView()
     private let pointOfInterest3Label = CardLabel()
     private lazy var pointOfInterest3BusinessStatusButton: UIButton = {
         let button = UIButton(type: .system)
@@ -70,6 +73,7 @@ class SightsCardCell: UITableViewCell {
         }
     }
 
+    // swiftlint:disable function_body_length
     override func awakeFromNib() {
         super.awakeFromNib()
 
@@ -91,10 +95,13 @@ class SightsCardCell: UITableViewCell {
 
         // Add programmatic labels to views
 
+        pointOfInterest1View.addSubview(pointOfInterest1GradientView)
         pointOfInterest1View.addSubview(pointOfInterest1Label)
         pointOfInterest1View.addSubview(pointOfInterest1BusinessStatusButton)
+        pointOfInterest2View.addSubview(pointOfInterest2GradientView)
         pointOfInterest2View.addSubview(pointOfInterest2Label)
         pointOfInterest2View.addSubview(pointOfInterest2BusinessStatusButton)
+        pointOfInterest3View.addSubview(pointOfInterest3GradientView)
         pointOfInterest3View.addSubview(pointOfInterest3Label)
         pointOfInterest3View.addSubview(pointOfInterest3BusinessStatusButton)
 
@@ -106,6 +113,10 @@ class SightsCardCell: UITableViewCell {
             make.top.equalToSuperview().inset(16)
             make.leading.equalTo(pointOfInterest1Label.snp.leading)
         }
+        pointOfInterest1GradientView.snp.makeConstraints { make in
+            make.leading.trailing.bottom.equalToSuperview()
+            make.height.equalTo(42)
+        }
         pointOfInterest2Label.snp.makeConstraints { make in
             make.bottom.equalToSuperview().inset(12)
             make.leading.trailing.equalToSuperview().inset(16)
@@ -113,6 +124,10 @@ class SightsCardCell: UITableViewCell {
         pointOfInterest2BusinessStatusButton.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(16)
             make.leading.equalTo(pointOfInterest2Label.snp.leading)
+        }
+        pointOfInterest2GradientView.snp.makeConstraints { make in
+            make.leading.trailing.bottom.equalToSuperview()
+            make.height.equalTo(42)
         }
         pointOfInterest3Label.snp.makeConstraints { make in
             make.bottom.equalToSuperview().inset(12)
@@ -122,6 +137,10 @@ class SightsCardCell: UITableViewCell {
             make.top.equalToSuperview().inset(16)
             make.leading.equalTo(pointOfInterest3Label.snp.leading)
         }
+        pointOfInterest3GradientView.snp.makeConstraints { make in
+            make.leading.trailing.bottom.equalToSuperview()
+            make.height.equalTo(42)
+        }
     }
 
     // Note: On iOS 13, setNeedsLayout() is called first before UIViews are
@@ -130,6 +149,10 @@ class SightsCardCell: UITableViewCell {
         pointOfInterest1View.addTopRoundedCorners()
         pointOfInterest2View.layer.masksToBounds = true
         pointOfInterest3View.addBottomRoundedCorners()
+
+        pointOfInterest1GradientView.gradientLayer.frame = pointOfInterest1GradientView.bounds
+        pointOfInterest2GradientView.gradientLayer.frame = pointOfInterest2GradientView.bounds
+        pointOfInterest3GradientView.gradientLayer.frame = pointOfInterest3GradientView.bounds
 
         layoutIfNeeded()
     }
@@ -152,6 +175,8 @@ class SightsCardCell: UITableViewCell {
 
         delegate?.sightsCardCell(self, didSelectPlace: pointOfInterest)
     }
+
+    // MARK: - Networking methods
 
     private func loadBackgroundImage(forButton button: Int, with pointOfInterest: Placeable) {
         guard let placeId = pointOfInterest.placeableId else {
@@ -181,6 +206,8 @@ class SightsCardCell: UITableViewCell {
         })
     }
 
+    // MARK: - Configuration methods
+
     private func configure(_ pointsOfInterest: [Placeable]) {
         isHidden = false
 
@@ -206,6 +233,8 @@ class SightsCardCell: UITableViewCell {
             loadBackgroundImage(forButton: index + 1, with: pointOfInterest)
         }
     }
+
+    // MARK: - Button selector methods
 
     @objc
     private func pointOfInterest1BusinessStatusButtonTapped() {

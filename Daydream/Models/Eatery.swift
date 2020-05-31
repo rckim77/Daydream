@@ -6,7 +6,7 @@
 //  Copyright © 2018 Raymond Kim. All rights reserved.
 //
 
-struct Eatery: Codable {
+struct Eatery: Codable, Equatable {
     let name: String
     let imageUrl: String
     let url: String

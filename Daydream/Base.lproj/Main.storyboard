@@ -268,13 +268,13 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="S4O-10-Qll" customClass="DesignableView" customModule="Daydream" customModuleProvider="target">
-                                                    <rect key="frame" x="16" y="72" width="343" height="512"/>
+                                                    <rect key="frame" x="16" y="83" width="343" height="501"/>
                                                     <subviews>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ckR-co-8xu">
-                                                            <rect key="frame" x="0.0" y="0.0" width="343" height="170.66666666666666"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="343" height="167"/>
                                                             <subviews>
                                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="fWx-Dg-Obi">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="343" height="170.66666666666666"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="343" height="167"/>
                                                                 </imageView>
                                                             </subviews>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -289,10 +289,10 @@
                                                             </constraints>
                                                         </view>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qCj-Lu-ZCV">
-                                                            <rect key="frame" x="0.0" y="170.66666666666669" width="343" height="170.66666666666669"/>
+                                                            <rect key="frame" x="0.0" y="167" width="343" height="167"/>
                                                             <subviews>
                                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="T2T-CZ-Lqm">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="343" height="170.66666666666666"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="343" height="167"/>
                                                                 </imageView>
                                                             </subviews>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -307,10 +307,10 @@
                                                             </constraints>
                                                         </view>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1UT-Ql-mCF">
-                                                            <rect key="frame" x="0.0" y="341.33333333333331" width="343" height="170.66666666666669"/>
+                                                            <rect key="frame" x="0.0" y="334" width="343" height="167"/>
                                                             <subviews>
                                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="vYf-LJ-afM">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="343" height="170.66666666666666"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="343" height="167"/>
                                                                 </imageView>
                                                             </subviews>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -359,24 +359,10 @@
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                 </view>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Top Eateries" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Qn-ZQ-k3h">
-                                                    <rect key="frame" x="16" y="16" width="146.66666666666666" height="32"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="32" id="jJL-cF-kXi"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
-                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    <nil key="highlightedColor"/>
-                                                    <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <size key="shadowOffset" width="0.0" height="1"/>
-                                                </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="7Qn-ZQ-k3h" secondAttribute="trailing" id="1Zq-g9-Sbr"/>
-                                                <constraint firstItem="S4O-10-Qll" firstAttribute="top" secondItem="7Qn-ZQ-k3h" secondAttribute="bottom" constant="24" id="6cd-hm-G4V"/>
+                                                <constraint firstItem="S4O-10-Qll" firstAttribute="top" secondItem="nkI-M7-1OO" secondAttribute="topMargin" constant="60" id="CqK-pR-XC9"/>
                                                 <constraint firstAttribute="bottom" secondItem="S4O-10-Qll" secondAttribute="bottom" constant="16" id="Tub-jJ-Fje"/>
-                                                <constraint firstItem="7Qn-ZQ-k3h" firstAttribute="leading" secondItem="nkI-M7-1OO" secondAttribute="leading" constant="16" id="hGJ-qh-trW"/>
-                                                <constraint firstItem="7Qn-ZQ-k3h" firstAttribute="top" secondItem="nkI-M7-1OO" secondAttribute="top" constant="16" id="qnT-dt-8xJ"/>
                                                 <constraint firstItem="S4O-10-Qll" firstAttribute="leading" secondItem="nkI-M7-1OO" secondAttribute="leading" constant="16" id="s6l-eg-ATm"/>
                                                 <constraint firstAttribute="trailing" secondItem="S4O-10-Qll" secondAttribute="trailing" constant="16" id="vdu-Oa-waI"/>
                                             </constraints>

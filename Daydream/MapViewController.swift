@@ -59,7 +59,7 @@ final class MapViewController: UIViewController {
 
     private lazy var aboutButton: UIButton = {
         let button = UIButton(type: .system)
-        button.configureWithSystemIcon("questionmark.circle.fill")
+        button.configureWithSystemIcon("info.circle.fill")
         button.addTarget(self, action: #selector(aboutButtonTapped), for: .touchUpInside)
         if #available(iOS 13.4, *) {
             button.pointerStyleProvider = buttonProvider
@@ -340,9 +340,7 @@ final class MapViewController: UIViewController {
     @objc
     private func aboutButtonTapped() {
         let openSourceMessage = GMSServices.openSourceLicenseInfo()
-        let alert = UIAlertController(title: "About Google Maps", message: openSourceMessage, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Got it", style: .cancel, handler: nil))
-        present(alert, animated: true, completion: nil)
+        presentInfoAlertModal(title: "About Google Maps", message: openSourceMessage)
     }
 
     @objc
