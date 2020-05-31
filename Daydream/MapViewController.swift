@@ -59,7 +59,7 @@ final class MapViewController: UIViewController {
 
     private lazy var aboutButton: UIButton = {
         let button = UIButton(type: .system)
-        button.configureWithSystemIcon("questionmark.circle.fill")
+        button.configureWithSystemIcon("info.circle.fill")
         button.addTarget(self, action: #selector(aboutButtonTapped), for: .touchUpInside)
         if #available(iOS 13.4, *) {
             button.pointerStyleProvider = buttonProvider
