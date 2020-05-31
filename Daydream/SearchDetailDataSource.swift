@@ -13,7 +13,9 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
     var place: Placeable
     var pointsOfInterest: [Placeable]?
     var eateries: [Eatery]?
+    private var prevEateries: [Eatery]?
     var fallbackEateries: [Placeable]?
+    private var prevFallbackEateries: [Placeable]?
     weak var viewController: SearchDetailViewController?
 
     private let networkService = NetworkService()
@@ -48,17 +50,21 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
             strongSelf.pointsOfInterest = sights
 
             if !eateries.isEmpty {
+                strongSelf.prevEateries = strongSelf.eateries
                 strongSelf.eateries = eateries
                 strongSelf.fallbackEateries = nil
+                strongSelf.prevFallbackEateries = nil
                 success([strongSelf.sightsCardCellIndexPath, strongSelf.eateriesCardCellIndexPath])
-            } else { // fallback to Google restaurants search
+            } else {
                 strongSelf.networkService.loadGoogleRestaurants(place: strongSelf.place, success: { [weak self] restaurants in
                     guard let strongSelf = self else {
                         failure(nil)
                         return
                     }
+                    strongSelf.prevFallbackEateries = strongSelf.fallbackEateries
                     strongSelf.fallbackEateries = restaurants
                     strongSelf.eateries = nil
+                    strongSelf.prevEateries = nil
                     success([strongSelf.sightsCardCellIndexPath, strongSelf.eateriesCardCellIndexPath])
                 }, failure: { error in
                     failure(error)
@@ -78,47 +84,58 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
         return 3
     }
 
+    // swiftlint:disable cyclomatic_complexity
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath {
         case mapCardCellIndexPath:
             let cell = tableView.dequeueReusableCell(withIdentifier: "mapCardCell", for: indexPath)
 
-            if let mapCardCell = cell as? MapCardCell {
-                mapCardCell.place = place
-
-                return mapCardCell
+            guard let mapCardCell = cell as? MapCardCell else {
+                return cell
             }
 
-            return cell
+            mapCardCell.place = place
+
+            return mapCardCell
         case sightsCardCellIndexPath:
             let cell = tableView.dequeueReusableCell(withIdentifier: "sightsCardCell", for: indexPath)
 
-            if let sightsCardCell = cell as? SightsCardCell {
-                sightsCardCell.delegate = viewController
-                sightsCardCell.pointsOfInterest = pointsOfInterest
-
-                return sightsCardCell
+            guard let sightsCardCell = cell as? SightsCardCell else {
+                return cell
             }
 
-            return cell
+            sightsCardCell.delegate = viewController
+            sightsCardCell.pointsOfInterest = pointsOfInterest
+
+            return sightsCardCell
         case eateriesCardCellIndexPath:
             let cell = tableView.dequeueReusableCell(withIdentifier: "eateriesCardCell", for: indexPath)
 
-            if let eateriesCardCell = cell as? EateriesCardCell {
-                eateriesCardCell.delegate = viewController
-
-                if let eateries = eateries, eateries.count > 2 {
-                    eateriesCardCell.configure(eateries)
-                } else if let fallbackEateries = fallbackEateries, fallbackEateries.count > 2 {
-                    eateriesCardCell.configureWithFallbackEateries(fallbackEateries)
-                } else {
-                    eateriesCardCell.configureForNoResults()
-                }
-
-                return eateriesCardCell
+            guard let eateriesCardCell = cell as? EateriesCardCell else {
+                return cell
             }
 
-            return cell
+            eateriesCardCell.delegate = viewController
+
+            if let prevEateries = prevEateries, let eateries = eateries, prevEateries == eateries {
+                // this is for when the user is simply scrolling and hasn't reloaded
+                return eateriesCardCell
+            } else if let prevFallbackEateries = prevFallbackEateries as? [Place],
+                let fallbackEateries = fallbackEateries as? [Place],
+                    prevFallbackEateries == fallbackEateries {
+                // this is for when the user is simply scrolling and hasn't reloaded
+                return eateriesCardCell
+            } else if let eateries = eateries, eateries.count > 2, eateries != prevEateries {
+                eateriesCardCell.configure(eateries)
+                prevEateries = eateries
+            } else if let fallbackEateries = fallbackEateries, fallbackEateries.count > 2 {
+                eateriesCardCell.configureWithFallbackEateries(fallbackEateries)
+                prevFallbackEateries = fallbackEateries
+            } else {
+                eateriesCardCell.configureForNoResults()
+            }
+
+            return eateriesCardCell
         default:
             return UITableViewCell()
         }
