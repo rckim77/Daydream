@@ -14,11 +14,22 @@ import SnapKit
 protocol EateriesCardCellDelegate: AnyObject {
     func eateriesCardCell(_ cell: EateriesCardCell, didSelectEatery eatery: Eatery)
     func eateriesCardCell(_ cell: EateriesCardCell, didSelectFallbackEatery eatery: Placeable)
+    func eateriesCardCellDidTapInfoButtonForEatery()
+    func eateriesCardCellDidTapInfoButtonForFallbackEatery()
 }
 
 class EateriesCardCell: UITableViewCell {
 
     private lazy var titleLabel = CardLabel(textStyle: .title1, text: "Top Eateries")
+    private lazy var infoButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.configureWithSystemIcon("info.circle.fill")
+        button.addTarget(self, action: #selector(infoButtonTapped), for: .touchUpInside)
+        if #available(iOS 13.4, *) {
+            button.pointerStyleProvider = buttonProvider
+        }
+        return button
+    }()
     @IBOutlet weak var eatery1View: UIView!
     private let eatery1GradientView = GradientView()
     @IBOutlet weak var eatery1ImageView: UIImageView!
@@ -36,6 +47,7 @@ class EateriesCardCell: UITableViewCell {
     private var eateries: [Eatery]?
     private var fallbackEateries: [Placeable]?
 
+    // swiftlint:disable function_body_length
     override func awakeFromNib() {
         super.awakeFromNib()
 
@@ -52,7 +64,9 @@ class EateriesCardCell: UITableViewCell {
         eatery3ImageView.image = nil
 
         // add programmatic labels to views
+
         contentView.addSubview(titleLabel)
+        contentView.addSubview(infoButton)
         eatery1View.addSubview(eatery1GradientView)
         eatery1View.addSubview(eatery1Label)
         eatery2View.addSubview(eatery2GradientView)
@@ -61,7 +75,15 @@ class EateriesCardCell: UITableViewCell {
         eatery3View.addSubview(eatery3Label)
 
         titleLabel.snp.makeConstraints { make in
-            make.leading.top.trailing.equalToSuperview().inset(16)
+            make.top.equalToSuperview().inset(8)
+            make.leading.equalToSuperview().inset(16)
+        }
+
+        infoButton.snp.makeConstraints { make in
+            make.leading.equalTo(titleLabel.snp.trailing).offset(4)
+            make.centerY.equalTo(titleLabel.snp.centerY)
+            make.trailing.equalToSuperview().inset(16)
+            make.size.equalTo(40)
         }
 
         eatery1Label.snp.makeConstraints { make in
@@ -138,6 +160,8 @@ class EateriesCardCell: UITableViewCell {
         }
     }
 
+    // MARK: - Networking methods
+
     private func loadBackgroundImage(forButton button: Int, with eatery: Eatery) {
         if let imageUrl = URL(string: eatery.imageUrl) {
            URLSession.shared.dataTask(with: imageUrl) { [weak self] data, _, _ in
@@ -195,6 +219,8 @@ class EateriesCardCell: UITableViewCell {
         }, failure: { _ in })
     }
 
+    // MARK: - Configuration methods
+
     func configure(_ eateries: [Eatery]) {
         self.eateries = eateries
         self.fallbackEateries = nil
@@ -244,6 +270,17 @@ class EateriesCardCell: UITableViewCell {
             return "\(name) • \(priceRating)"
         } else {
             return name
+        }
+    }
+
+    // MARK: - Button selector methods
+
+    @objc
+    private func infoButtonTapped() {
+        if eateries != nil {
+            delegate?.eateriesCardCellDidTapInfoButtonForEatery()
+        } else if fallbackEateries != nil {
+            delegate?.eateriesCardCellDidTapInfoButtonForFallbackEatery()
         }
     }
 }

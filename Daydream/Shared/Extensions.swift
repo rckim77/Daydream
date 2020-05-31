@@ -206,6 +206,14 @@ extension UIViewController {
         let buttonPointerStyle = UIPointerStyle(effect: buttonPointerEffect, shape: pointerShape)
         return buttonPointerStyle
     }
+
+    /// Present a simple alert modal with informational text and a dismiss button. The default text
+    /// for the dismiss button is "Got it".
+    func presentInfoAlertModal(title: String, message: String?, dismissText: String = "Got it") {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: dismissText, style: .cancel, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
 }
 
 extension String {

@@ -370,6 +370,16 @@ extension SearchDetailViewController: EateriesCardCellDelegate {
         logEvent(contentType: "select fallback eatery using Google", title)
         performSegue(withIdentifier: "genericMapSegue", sender: eatery)
     }
+
+    func eateriesCardCellDidTapInfoButtonForEatery() {
+        presentInfoAlertModal(title: "Top Eateries",
+                              message: "These results are powered by Yelp's Fusion API. Tapping on an eatery will open up Yelp.")
+    }
+
+    func eateriesCardCellDidTapInfoButtonForFallbackEatery() {
+        presentInfoAlertModal(title: "Top Eateries",
+                              message: "These results are powered by Google's Places API. Tapping on an eatery will open up a map view.")
+    }
 }
 
 extension SearchDetailViewController: RandomCitySelectable, Loggable {}
