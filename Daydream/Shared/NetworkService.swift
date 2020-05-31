@@ -108,9 +108,12 @@ class NetworkService {
                 let eateries = results.compactMap { result -> Eatery? in
                     guard let name = result["name"].string,
                         let imageUrl = result["image_url"].string,
-                        let url = result["url"].string else { return nil }
+                        let url = result["url"].string,
+                        let price = result["price"].string else {
+                            return nil
+                    }
 
-                    return Eatery(name: name, imageUrl: imageUrl, url: url)
+                    return Eatery(name: name, imageUrl: imageUrl, url: url, price: price)
                 }
 
                 success(eateries)
@@ -279,7 +282,7 @@ class NetworkService {
         } else if type == "eateries" {
             let latitude = place.placeableCoordinate.latitude
             let longitude = place.placeableCoordinate.longitude
-            let url = "https://api.yelp.com/v3/businesses/search?latitude=\(latitude)&longitude=\(longitude)"
+            let url = "https://api.yelp.com/v3/businesses/search?latitude=\(latitude)&longitude=\(longitude)&categories=restaurants"
 
             return url
         } else {

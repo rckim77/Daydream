@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -276,14 +276,6 @@
                                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="fWx-Dg-Obi">
                                                                     <rect key="frame" x="0.0" y="0.0" width="343" height="170.66666666666666"/>
                                                                 </imageView>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Eatery 1" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hMl-U2-MRA">
-                                                                    <rect key="frame" x="16" y="127.33333333333333" width="311" height="27.333333333333329"/>
-                                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleTitle2"/>
-                                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                    <nil key="highlightedColor"/>
-                                                                    <color key="shadowColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                    <size key="shadowOffset" width="0.0" height="1"/>
-                                                                </label>
                                                             </subviews>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <accessibility key="accessibilityConfiguration" identifier="eatery1Card">
@@ -291,11 +283,8 @@
                                                             </accessibility>
                                                             <constraints>
                                                                 <constraint firstAttribute="bottom" secondItem="fWx-Dg-Obi" secondAttribute="bottom" id="9r8-pQ-ctT"/>
-                                                                <constraint firstAttribute="trailing" secondItem="hMl-U2-MRA" secondAttribute="trailing" constant="16" id="GkG-j3-RMF"/>
-                                                                <constraint firstItem="hMl-U2-MRA" firstAttribute="leading" secondItem="ckR-co-8xu" secondAttribute="leading" constant="16" id="HrL-db-JMj"/>
                                                                 <constraint firstItem="fWx-Dg-Obi" firstAttribute="top" secondItem="ckR-co-8xu" secondAttribute="top" id="OrC-PP-TTF"/>
                                                                 <constraint firstItem="fWx-Dg-Obi" firstAttribute="leading" secondItem="ckR-co-8xu" secondAttribute="leading" id="RNW-sv-NNj"/>
-                                                                <constraint firstAttribute="bottom" secondItem="hMl-U2-MRA" secondAttribute="bottom" constant="16" id="S5U-Ma-2Xq"/>
                                                                 <constraint firstAttribute="trailing" secondItem="fWx-Dg-Obi" secondAttribute="trailing" id="xZT-Ng-EXf"/>
                                                             </constraints>
                                                         </view>
@@ -305,14 +294,6 @@
                                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="T2T-CZ-Lqm">
                                                                     <rect key="frame" x="0.0" y="0.0" width="343" height="170.66666666666666"/>
                                                                 </imageView>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Eatery 2" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yYx-aq-N5p">
-                                                                    <rect key="frame" x="16" y="127.33333333333333" width="311" height="27.333333333333329"/>
-                                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleTitle2"/>
-                                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                    <nil key="highlightedColor"/>
-                                                                    <color key="shadowColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                    <size key="shadowOffset" width="0.0" height="1"/>
-                                                                </label>
                                                             </subviews>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <accessibility key="accessibilityConfiguration" identifier="eatery2Card">
@@ -321,11 +302,8 @@
                                                             <constraints>
                                                                 <constraint firstItem="T2T-CZ-Lqm" firstAttribute="top" secondItem="qCj-Lu-ZCV" secondAttribute="top" id="0c9-Fg-su6"/>
                                                                 <constraint firstItem="T2T-CZ-Lqm" firstAttribute="leading" secondItem="qCj-Lu-ZCV" secondAttribute="leading" id="IOp-B3-FTj"/>
-                                                                <constraint firstAttribute="bottom" secondItem="yYx-aq-N5p" secondAttribute="bottom" constant="16" id="KI5-6n-tkM"/>
                                                                 <constraint firstAttribute="bottom" secondItem="T2T-CZ-Lqm" secondAttribute="bottom" id="bm4-zG-taj"/>
                                                                 <constraint firstAttribute="trailing" secondItem="T2T-CZ-Lqm" secondAttribute="trailing" id="ciC-Ey-ZW0"/>
-                                                                <constraint firstItem="yYx-aq-N5p" firstAttribute="leading" secondItem="qCj-Lu-ZCV" secondAttribute="leading" constant="16" id="zDX-yn-FS5"/>
-                                                                <constraint firstAttribute="trailing" secondItem="yYx-aq-N5p" secondAttribute="trailing" constant="16" id="zRG-bi-TLU"/>
                                                             </constraints>
                                                         </view>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1UT-Ql-mCF">
@@ -334,25 +312,14 @@
                                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="vYf-LJ-afM">
                                                                     <rect key="frame" x="0.0" y="0.0" width="343" height="170.66666666666666"/>
                                                                 </imageView>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Eatery 3" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lqu-VO-YGn">
-                                                                    <rect key="frame" x="16" y="127.3333333333333" width="311" height="27.333333333333329"/>
-                                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleTitle2"/>
-                                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                    <nil key="highlightedColor"/>
-                                                                    <color key="shadowColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                    <size key="shadowOffset" width="0.0" height="1"/>
-                                                                </label>
                                                             </subviews>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <accessibility key="accessibilityConfiguration" identifier="eatery3Card">
                                                                 <bool key="isElement" value="YES"/>
                                                             </accessibility>
                                                             <constraints>
-                                                                <constraint firstAttribute="bottom" secondItem="Lqu-VO-YGn" secondAttribute="bottom" constant="16" id="113-HV-HD3"/>
                                                                 <constraint firstAttribute="trailing" secondItem="vYf-LJ-afM" secondAttribute="trailing" id="81c-bJ-ere"/>
                                                                 <constraint firstItem="vYf-LJ-afM" firstAttribute="top" secondItem="1UT-Ql-mCF" secondAttribute="top" id="BOb-tA-MMp"/>
-                                                                <constraint firstAttribute="trailing" secondItem="Lqu-VO-YGn" secondAttribute="trailing" constant="16" id="KH5-Eo-EoF"/>
-                                                                <constraint firstItem="Lqu-VO-YGn" firstAttribute="leading" secondItem="1UT-Ql-mCF" secondAttribute="leading" constant="16" id="UnL-FP-Mge"/>
                                                                 <constraint firstItem="vYf-LJ-afM" firstAttribute="leading" secondItem="1UT-Ql-mCF" secondAttribute="leading" id="sco-Gf-E8V"/>
                                                                 <constraint firstAttribute="bottom" secondItem="vYf-LJ-afM" secondAttribute="bottom" id="uah-1K-KjN"/>
                                                             </constraints>
@@ -417,13 +384,10 @@
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
                                             <outlet property="eatery1ImageView" destination="fWx-Dg-Obi" id="jFr-eK-t7t"/>
-                                            <outlet property="eatery1Label" destination="hMl-U2-MRA" id="vEa-1q-n5O"/>
                                             <outlet property="eatery1View" destination="ckR-co-8xu" id="2Kb-Mb-E3n"/>
                                             <outlet property="eatery2ImageView" destination="T2T-CZ-Lqm" id="321-rm-jc2"/>
-                                            <outlet property="eatery2Label" destination="yYx-aq-N5p" id="zEk-Pk-9Ag"/>
                                             <outlet property="eatery2View" destination="qCj-Lu-ZCV" id="ywp-tV-LWU"/>
                                             <outlet property="eatery3ImageView" destination="vYf-LJ-afM" id="tJn-jL-1S4"/>
-                                            <outlet property="eatery3Label" destination="Lqu-VO-YGn" id="YJx-Qj-xZs"/>
                                             <outlet property="eatery3View" destination="1UT-Ql-mCF" id="DWi-TM-2d8"/>
                                         </connections>
                                     </tableViewCell>

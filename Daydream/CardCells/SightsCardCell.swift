@@ -19,15 +19,7 @@ protocol SightsCardCellDelegate: AnyObject {
 class SightsCardCell: UITableViewCell {
 
     @IBOutlet weak var pointOfInterest1View: UIView!
-    private lazy var pointOfInterest1Label: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.font = UIFont.preferredFont(forTextStyle: .title2)
-        label.adjustsFontForContentSizeCategory = true
-        label.shadowColor = .black
-        label.shadowOffset = CGSize(width: 0, height: 1)
-        return label
-    }()
+    private let pointOfInterest1Label = CardLabel()
     private lazy var pointOfInterest1BusinessStatusButton: UIButton = {
         let button = UIButton(type: .system)
         button.addShadow(opacity: 0.8, offset: CGSize(width: 0, height: 1))
@@ -39,15 +31,7 @@ class SightsCardCell: UITableViewCell {
     }()
     @IBOutlet weak var pointOfInterest1ImageView: UIImageView!
     @IBOutlet weak var pointOfInterest2View: UIView!
-    private lazy var pointOfInterest2Label: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.font = UIFont.preferredFont(forTextStyle: .title2)
-        label.adjustsFontForContentSizeCategory = true
-        label.shadowColor = .black
-        label.shadowOffset = CGSize(width: 0, height: 1)
-        return label
-    }()
+    private let pointOfInterest2Label = CardLabel()
     private lazy var pointOfInterest2BusinessStatusButton: UIButton = {
         let button = UIButton(type: .system)
         button.addShadow(opacity: 0.8, offset: CGSize(width: 0, height: 1))
@@ -59,15 +43,7 @@ class SightsCardCell: UITableViewCell {
     }()
     @IBOutlet weak var pointOfInterest2ImageView: UIImageView!
     @IBOutlet weak var pointOfInterest3View: UIView!
-    private lazy var pointOfInterest3Label: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.font = UIFont.preferredFont(forTextStyle: .title2)
-        label.adjustsFontForContentSizeCategory = true
-        label.shadowColor = .black
-        label.shadowOffset = CGSize(width: 0, height: 1)
-        return label
-    }()
+    private let pointOfInterest3Label = CardLabel()
     private lazy var pointOfInterest3BusinessStatusButton: UIButton = {
         let button = UIButton(type: .system)
         button.addShadow(opacity: 0.8, offset: CGSize(width: 0, height: 1))
@@ -177,7 +153,7 @@ class SightsCardCell: UITableViewCell {
         delegate?.sightsCardCell(self, didSelectPlace: pointOfInterest)
     }
 
-    private func loadBackgroundImage(for button: Int, with pointOfInterest: Placeable) {
+    private func loadBackgroundImage(forButton button: Int, with pointOfInterest: Placeable) {
         guard let placeId = pointOfInterest.placeableId else {
             return
         }
@@ -208,27 +184,27 @@ class SightsCardCell: UITableViewCell {
     private func configure(_ pointsOfInterest: [Placeable]) {
         isHidden = false
 
-        pointOfInterest1Label.text = pointsOfInterest[0].placeableName
-        pointOfInterest1BusinessStatusButton.configureWithSystemIcon(pointsOfInterest[0].placeableBusinessStatus?.imageName ?? "")
-        pointOfInterest1BusinessStatusButton.tintColor = pointsOfInterest[0].placeableBusinessStatus?.displayColor
-        pointOfInterest1BusinessStatusButton.isHidden = pointsOfInterest[0].placeableBusinessStatus == .operational
-        pointOfInterest2Label.text = pointsOfInterest[1].placeableName
-        pointOfInterest2BusinessStatusButton.configureWithSystemIcon(pointsOfInterest[1].placeableBusinessStatus?.imageName ?? "")
-        pointOfInterest2BusinessStatusButton.tintColor = pointsOfInterest[1].placeableBusinessStatus?.displayColor
-        pointOfInterest2BusinessStatusButton.isHidden = pointsOfInterest[1].placeableBusinessStatus == .operational
-        pointOfInterest3Label.text = pointsOfInterest[2].placeableName
-        pointOfInterest3BusinessStatusButton.configureWithSystemIcon(pointsOfInterest[2].placeableBusinessStatus?.imageName ?? "")
-        pointOfInterest3BusinessStatusButton.tintColor = pointsOfInterest[2].placeableBusinessStatus?.displayColor
-        pointOfInterest3BusinessStatusButton.isHidden = pointsOfInterest[2].placeableBusinessStatus == .operational
+        [pointOfInterest1Label, pointOfInterest2Label, pointOfInterest3Label].enumerated().forEach { (index, label) in
+            label.text = pointsOfInterest[index].placeableName
+        }
+
+        [pointOfInterest1BusinessStatusButton,
+         pointOfInterest2BusinessStatusButton,
+         pointOfInterest3BusinessStatusButton].enumerated().forEach { (index, button) in
+            let businessStatus = pointsOfInterest[index].placeableBusinessStatus
+            button.configureWithSystemIcon(businessStatus?.imageName ?? "")
+            button.tintColor = businessStatus?.displayColor
+            button.isHidden = businessStatus == .operational
+        }
 
         // reset image (to prevent background images being reused due to dequeueing reusable cells)
-        pointOfInterest1ImageView.image = nil
-        pointOfInterest2ImageView.image = nil
-        pointOfInterest3ImageView.image = nil
+        [pointOfInterest1ImageView, pointOfInterest2ImageView, pointOfInterest3ImageView].forEach { imageView in
+            imageView?.image = nil
+        }
 
-        loadBackgroundImage(for: 1, with: pointsOfInterest[0])
-        loadBackgroundImage(for: 2, with: pointsOfInterest[1])
-        loadBackgroundImage(for: 3, with: pointsOfInterest[2])
+        pointsOfInterest.enumerated().forEach { (index, pointOfInterest) in
+            loadBackgroundImage(forButton: index + 1, with: pointOfInterest)
+        }
     }
 
     @objc
