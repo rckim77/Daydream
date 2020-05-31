@@ -73,6 +73,7 @@ class SightsCardCell: UITableViewCell {
         }
     }
 
+    // swiftlint:disable function_body_length
     override func awakeFromNib() {
         super.awakeFromNib()
 

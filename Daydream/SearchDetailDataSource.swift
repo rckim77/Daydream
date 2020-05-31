@@ -13,6 +13,7 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
     var place: Placeable
     var pointsOfInterest: [Placeable]?
     var eateries: [Eatery]?
+    var fallbackEateries: [Placeable]?
     weak var viewController: SearchDetailViewController?
 
     private let networkService = NetworkService()
@@ -46,7 +47,21 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
 
             strongSelf.pointsOfInterest = sights
             strongSelf.eateries = eateries
-            success([strongSelf.sightsCardCellIndexPath, strongSelf.eateriesCardCellIndexPath])
+
+            if eateries?.isEmpty == true { // fallback to Google restaurants search
+                strongSelf.networkService.loadGoogleRestaurants(place: strongSelf.place, success: { [weak self] restaurants in
+                    guard let strongSelf = self else {
+                        failure(nil)
+                        return
+                    }
+                    strongSelf.fallbackEateries = restaurants
+                    success([strongSelf.sightsCardCellIndexPath, strongSelf.eateriesCardCellIndexPath])
+                }, failure: { error in
+                    failure(error)
+                })
+            } else {
+                success([strongSelf.sightsCardCellIndexPath, strongSelf.eateriesCardCellIndexPath])
+            }
         }, failure: { error in
             failure(error)
         })
@@ -90,11 +105,17 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
             if let eateriesCardCell = cell as? EateriesCardCell {
                 eateriesCardCell.delegate = viewController
 
-                if let eateries = eateries, eateries.count >= 3 {
-                    eateriesCardCell.eateries = eateries
+                if let eateries = eateries, eateries.count > 2 {
+                    eateriesCardCell.configure(eateries)
+                } else if let fallbackEateries = fallbackEateries, fallbackEateries.count > 2 {
+                    eateriesCardCell.configureWithFallbackEateries(fallbackEateries)
                 } else {
-                    eateriesCardCell.eateries = nil
+                    eateriesCardCell.configureForNoResults()
                 }
+
+                // clear for next refresh
+                self.eateries = nil
+                self.fallbackEateries = nil
 
                 return eateriesCardCell
             }

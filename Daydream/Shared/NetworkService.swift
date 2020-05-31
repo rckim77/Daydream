@@ -10,7 +10,12 @@ import Alamofire
 import GooglePlaces
 import SwiftyJSON
 
+// swiftlint:disable type_body_length
 class NetworkService {
+
+    enum UrlType {
+        case topSights, googleRestaurants, topEateries
+    }
 
     func loadSightsAndEateries(with place: Placeable,
                                success: @escaping(_ pointsOfInterest: [Placeable], _ eateries: [Eatery]?) -> Void,
@@ -27,8 +32,8 @@ class NetworkService {
 
             strongSelf.loadTopEateries(with: place, success: { eateries in
                 success(sights, eateries)
-            }, failure: { error in
-                failure(error)
+            }, failure: { _ in
+                success(sights, [])
             })
         }, failure: { error in
             failure(error)
@@ -37,18 +42,18 @@ class NetworkService {
 
     func loadTopSights(with place: Placeable, success: @escaping(_ pointsOfInterest: [Placeable]) -> Void,
                        failure: @escaping(_ error: Error?) -> Void) {
-        let url = createUrl(with: place, and: "point_of_interest")
+        let url = createUrl(with: place, and: .topSights)
         AF.request(url).validate().responseJSON { response in
             switch response.result {
             case .success(let value):
                 let json = JSON(value)
                 // POSTLAUNCH: - refactor into a JSON init method
-                guard let results = json["results"].array else {
+                guard let results = json["results"].array, results.count > 2 else {
                     failure(nil)
                     return
                 }
 
-                let pointsOfInterest = results.compactMap { result -> Place? in
+                let pointsOfInterest = results[0..<3].compactMap { result -> Place? in
                     guard let name = result["name"].string,
                         let placeId = result["place_id"].string,
                         let centerLat = result["geometry"]["location"]["lat"].double,
@@ -91,7 +96,7 @@ class NetworkService {
             return
         }
 
-        let url = createUrl(with: place, and: "eateries")
+        let url = createUrl(with: place, and: .topEateries)
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(yelpAPIKey)"
         ]
@@ -100,12 +105,12 @@ class NetworkService {
             switch response.result {
             case .success(let value):
                 let json = JSON(value)
-                guard let results = json["businesses"].array else {
+                guard let results = json["businesses"].array, results.count > 2 else {
                     failure(nil)
                     return
                 }
 
-                let eateries = results.compactMap { result -> Eatery? in
+                let eateries = results[0..<3].compactMap { result -> Eatery? in
                     guard let name = result["name"].string,
                         let imageUrl = result["image_url"].string,
                         let url = result["url"].string,
@@ -120,6 +125,54 @@ class NetworkService {
             case .failure(let error):
                 failure(error)
             }
+        }
+    }
+
+    func loadGoogleRestaurants(place: Placeable, success: @escaping(_ restaurants: [Placeable]) -> Void, failure: @escaping(_ error: Error?) -> Void) {
+        let url = createUrl(with: place, and: .googleRestaurants)
+        AF.request(url).validate().responseJSON { response in
+            switch response.result {
+            case .success(let value):
+                let json = JSON(value)
+                // POSTLAUNCH: - refactor into a JSON init method
+                guard let results = json["results"].array, results.count > 2 else {
+                    failure(nil)
+                    return
+                }
+
+                let restaurants = results[0..<3].compactMap { result -> Place? in
+                    guard let name = result["name"].string,
+                        let placeId = result["place_id"].string,
+                        let centerLat = result["geometry"]["location"]["lat"].double,
+                        let centerLng = result["geometry"]["location"]["lng"].double,
+                        let northeastLat = result["geometry"]["viewport"]["northeast"]["lat"].double,
+                        let northeastLng = result["geometry"]["viewport"]["northeast"]["lng"].double,
+                        let southwestLat = result["geometry"]["viewport"]["southwest"]["lat"].double,
+                        let southwestLng = result["geometry"]["viewport"]["southwest"]["lng"].double,
+                        let businessStatus = result["business_status"].string else {
+                        return nil
+                    }
+
+                    // NOTE: A text search request doesn't return data on address, phone number, nor rating.
+                    // Documentation: https://developers.google.com/places/web-service/search
+                    let coordinate = CLLocationCoordinate2D(latitude: centerLat, longitude: centerLng)
+                    let viewport = Viewport(northeastLat: northeastLat,
+                                            northeastLng: northeastLng,
+                                            southwestLat: southwestLat,
+                                            southwestLng: southwestLng)
+
+                    return Place(placeID: placeId,
+                                 name: name,
+                                 coordinate: coordinate,
+                                 viewport: viewport,
+                                 businessStatus: businessStatus)
+                }
+
+                success(restaurants)
+            case .failure(let error):
+                failure(error)
+            }
+
         }
     }
 
@@ -268,8 +321,12 @@ class NetworkService {
 
     // MARK: - Private helper methods
 
-    private func createUrl(with place: Placeable, and type: String) -> String {
-        if let placeableName = place.placeableName, type == "point_of_interest", let keyParam = AppDelegate.getAPIKeys()?.googleAPI {
+    private func createUrl(with place: Placeable, and type: UrlType) -> String {
+        switch type {
+        case .topSights:
+            guard let placeableName = place.placeableName, let keyParam = AppDelegate.getAPIKeys()?.googleAPI else {
+                return ""
+            }
             let placeName = placeableName.split(separator: " ")
             var queryParam = "tourist+spots+in"
             placeName.forEach { word in
@@ -279,14 +336,25 @@ class NetworkService {
             let url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=\(queryParam)&key=\(keyParam)"
 
             return url
-        } else if type == "eateries" {
+        case .googleRestaurants:
+            guard let placeableName = place.placeableName, let keyParam = AppDelegate.getAPIKeys()?.googleAPI else {
+                return ""
+            }
+            let placeName = placeableName.split(separator: " ")
+            var queryParam = "restaurants+in"
+            placeName.forEach { word in
+                queryParam += "+" + word
+            }
+
+            let url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=\(queryParam)&key=\(keyParam)"
+
+            return url
+        case .topEateries:
             let latitude = place.placeableCoordinate.latitude
             let longitude = place.placeableCoordinate.longitude
             let url = "https://api.yelp.com/v3/businesses/search?latitude=\(latitude)&longitude=\(longitude)&categories=restaurants"
 
             return url
-        } else {
-            return ""
         }
     }
 

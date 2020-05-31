@@ -13,6 +13,7 @@ import SnapKit
 
 protocol EateriesCardCellDelegate: AnyObject {
     func eateriesCardCell(_ cell: EateriesCardCell, didSelectEatery eatery: Eatery)
+    func eateriesCardCell(_ cell: EateriesCardCell, didSelectFallbackEatery eatery: Placeable)
 }
 
 class EateriesCardCell: UITableViewCell {
@@ -31,19 +32,8 @@ class EateriesCardCell: UITableViewCell {
     private let eatery3Label = CardLabel()
 
     weak var delegate: EateriesCardCellDelegate?
-    var eateries: [Eatery]? {
-        didSet {
-            if let eateries = eateries {
-                // display content only if we've made another API call, otherwise do nothing
-                // POSTLAUNCH: - Update url comparison
-                if oldValue == nil || eateries[0].url != oldValue?[0].url {
-                    configure(eateries)
-                }
-            } else { // before response from API or error
-                isHidden = true
-            }
-        }
-    }
+    private var eateries: [Eatery]?
+    private var fallbackEateries: [Placeable]?
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -115,21 +105,31 @@ class EateriesCardCell: UITableViewCell {
 
     @objc
     private func handleTapGesture(withSender sender: UITapGestureRecognizer) {
-        guard let eateries = eateries else {
-            return
+        if let eateries = eateries {
+             var eatery = eateries[0]
+
+             if sender.view  == eatery1View {
+                 eatery = eateries[0]
+             } else if sender.view == eatery2View {
+                 eatery = eateries[1]
+             } else if sender.view == eatery3View {
+                 eatery = eateries[2]
+             }
+
+            delegate?.eateriesCardCell(self, didSelectEatery: eatery)
+        } else if let fallbackEateries = fallbackEateries {
+             var eatery = fallbackEateries[0]
+
+             if sender.view  == eatery1View {
+                 eatery = fallbackEateries[0]
+             } else if sender.view == eatery2View {
+                 eatery = fallbackEateries[1]
+             } else if sender.view == eatery3View {
+                 eatery = fallbackEateries[2]
+             }
+
+            delegate?.eateriesCardCell(self, didSelectFallbackEatery: eatery)
         }
-
-        var eatery = eateries[0]
-
-        if sender.view  == eatery1View {
-            eatery = eateries[0]
-        } else if sender.view == eatery2View {
-            eatery = eateries[1]
-        } else if sender.view == eatery3View {
-            eatery = eateries[2]
-        }
-
-       delegate?.eateriesCardCell(self, didSelectEatery: eatery)
     }
 
     private func loadBackgroundImage(forButton button: Int, with eatery: Eatery) {
@@ -163,11 +163,39 @@ class EateriesCardCell: UITableViewCell {
         }
     }
 
-    private func configure(_ eateries: [Eatery]) {
+    private func loadBackgroundImage(forButton button: Int, withFallbackEatery eatery: Placeable) {
+        guard let placeId = eatery.placeableId else {
+            return
+        }
+        NetworkService().loadPhoto(with: placeId, success: { [weak self] image in
+            guard let strongSelf = self else {
+                return
+            }
+            var imageView = UIImageView()
+
+            switch button {
+            case 1:
+                imageView = strongSelf.eatery1ImageView
+            case 2:
+                imageView = strongSelf.eatery2ImageView
+            case 3:
+                imageView = strongSelf.eatery3ImageView
+            default:
+                break
+            }
+
+            strongSelf.updateCellLayout()
+            strongSelf.fadeInImage(image, forImageView: imageView)
+        }, failure: { _ in })
+    }
+
+    func configure(_ eateries: [Eatery]) {
+        self.eateries = eateries
+        self.fallbackEateries = nil
         isHidden = false
 
         [eatery1Label, eatery2Label, eatery3Label].enumerated().forEach { (index, label) in
-            label.text = createDisplayText(eateries[index])
+            label.text = createDisplayText(eateries[index].name, priceRating: eateries[index].price)
         }
 
         // reset image (to prevent background images being reused due to dequeueing reusable cells)
@@ -180,8 +208,37 @@ class EateriesCardCell: UITableViewCell {
         }
     }
 
-    private func createDisplayText(_ eatery: Eatery) -> String {
-        return "\(eatery.name) • \(eatery.price)"
+    func configureWithFallbackEateries(_ eateries: [Placeable]) {
+        self.eateries = nil
+        self.fallbackEateries = eateries
+        isHidden = false
+
+        [eatery1Label, eatery2Label, eatery3Label].enumerated().forEach { (index, label) in
+            if let name = eateries[index].placeableName {
+                label.text = createDisplayText(name)
+            }
+        }
+
+        // reset image (to prevent background images being reused due to dequeueing reusable cells)
+        [eatery1ImageView, eatery2ImageView, eatery3ImageView].forEach { imageView in
+            imageView?.image = nil
+        }
+
+        eateries.enumerated().forEach { (index, eatery) in
+            loadBackgroundImage(forButton: index + 1, withFallbackEatery: eatery)
+        }
+    }
+
+    func configureForNoResults() {
+        isHidden = true
+    }
+
+    private func createDisplayText(_ name: String, priceRating: String? = nil) -> String {
+        if let priceRating = priceRating {
+            return "\(name) • \(priceRating)"
+        } else {
+            return name
+        }
     }
 }
 

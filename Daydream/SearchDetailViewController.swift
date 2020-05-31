@@ -365,6 +365,11 @@ extension SearchDetailViewController: EateriesCardCellDelegate {
         logEvent(contentType: "select eatery", title)
         openUrl(eatery.url)
     }
+
+    func eateriesCardCell(_ cell: EateriesCardCell, didSelectFallbackEatery eatery: Placeable) {
+        logEvent(contentType: "select fallback eatery using Google", title)
+        performSegue(withIdentifier: "genericMapSegue", sender: eatery)
+    }
 }
 
 extension SearchDetailViewController: RandomCitySelectable, Loggable {}
