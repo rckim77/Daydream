@@ -46,21 +46,23 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
             }
 
             strongSelf.pointsOfInterest = sights
-            strongSelf.eateries = eateries
 
-            if eateries?.isEmpty == true { // fallback to Google restaurants search
+            if !eateries.isEmpty {
+                strongSelf.eateries = eateries
+                strongSelf.fallbackEateries = nil
+                success([strongSelf.sightsCardCellIndexPath, strongSelf.eateriesCardCellIndexPath])
+            } else { // fallback to Google restaurants search
                 strongSelf.networkService.loadGoogleRestaurants(place: strongSelf.place, success: { [weak self] restaurants in
                     guard let strongSelf = self else {
                         failure(nil)
                         return
                     }
                     strongSelf.fallbackEateries = restaurants
+                    strongSelf.eateries = nil
                     success([strongSelf.sightsCardCellIndexPath, strongSelf.eateriesCardCellIndexPath])
                 }, failure: { error in
                     failure(error)
                 })
-            } else {
-                success([strongSelf.sightsCardCellIndexPath, strongSelf.eateriesCardCellIndexPath])
             }
         }, failure: { error in
             failure(error)
@@ -112,10 +114,6 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
                 } else {
                     eateriesCardCell.configureForNoResults()
                 }
-
-                // clear for next refresh
-                self.eateries = nil
-                self.fallbackEateries = nil
 
                 return eateriesCardCell
             }

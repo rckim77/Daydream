@@ -17,8 +17,9 @@ class NetworkService {
         case topSights, googleRestaurants, topEateries
     }
 
+    /// The pointsOfInterest array is guaranteed to return at least three elements if the call succeeds. The eateries array
     func loadSightsAndEateries(with place: Placeable,
-                               success: @escaping(_ pointsOfInterest: [Placeable], _ eateries: [Eatery]?) -> Void,
+                               success: @escaping(_ pointsOfInterest: [Placeable], _ eateries: [Eatery]) -> Void,
                                failure: @escaping(_ error: Error?) -> Void) {
         var sights: [Placeable] = []
 
