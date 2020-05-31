@@ -176,6 +176,8 @@ class SightsCardCell: UITableViewCell {
         delegate?.sightsCardCell(self, didSelectPlace: pointOfInterest)
     }
 
+    // MARK: - Networking methods
+
     private func loadBackgroundImage(forButton button: Int, with pointOfInterest: Placeable) {
         guard let placeId = pointOfInterest.placeableId else {
             return
@@ -204,6 +206,8 @@ class SightsCardCell: UITableViewCell {
         })
     }
 
+    // MARK: - Configuration methods
+
     private func configure(_ pointsOfInterest: [Placeable]) {
         isHidden = false
 
@@ -229,6 +233,8 @@ class SightsCardCell: UITableViewCell {
             loadBackgroundImage(forButton: index + 1, with: pointOfInterest)
         }
     }
+
+    // MARK: - Button selector methods
 
     @objc
     private func pointOfInterest1BusinessStatusButtonTapped() {
