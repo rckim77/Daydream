@@ -18,12 +18,15 @@ protocol EateriesCardCellDelegate: AnyObject {
 class EateriesCardCell: UITableViewCell {
 
     @IBOutlet weak var eatery1View: UIView!
+    private let eatery1GradientView = GradientView()
     @IBOutlet weak var eatery1ImageView: UIImageView!
     private let eatery1Label = CardLabel()
     @IBOutlet weak var eatery2View: UIView!
+    private let eatery2GradientView = GradientView()
     @IBOutlet weak var eatery2ImageView: UIImageView!
     private let eatery2Label = CardLabel()
     @IBOutlet weak var eatery3View: UIView!
+    private let eatery3GradientView = GradientView()
     @IBOutlet weak var eatery3ImageView: UIImageView!
     private let eatery3Label = CardLabel()
 
@@ -58,8 +61,11 @@ class EateriesCardCell: UITableViewCell {
         eatery3ImageView.image = nil
 
         // add programmatic labels to views
+        eatery1View.addSubview(eatery1GradientView)
         eatery1View.addSubview(eatery1Label)
+        eatery2View.addSubview(eatery2GradientView)
         eatery2View.addSubview(eatery2Label)
+        eatery3View.addSubview(eatery3GradientView)
         eatery3View.addSubview(eatery3Label)
 
         eatery1Label.snp.makeConstraints { make in
@@ -67,14 +73,29 @@ class EateriesCardCell: UITableViewCell {
             make.leading.trailing.equalToSuperview().inset(16)
         }
 
+        eatery1GradientView.snp.makeConstraints { make in
+            make.leading.trailing.bottom.equalToSuperview()
+            make.height.equalTo(42)
+        }
+
         eatery2Label.snp.makeConstraints { make in
             make.bottom.equalToSuperview().inset(12)
             make.leading.trailing.equalToSuperview().inset(16)
         }
 
+        eatery2GradientView.snp.makeConstraints { make in
+            make.leading.trailing.bottom.equalToSuperview()
+            make.height.equalTo(42)
+        }
+
         eatery3Label.snp.makeConstraints { make in
             make.bottom.equalToSuperview().inset(12)
             make.leading.trailing.equalToSuperview().inset(16)
+        }
+
+        eatery3GradientView.snp.makeConstraints { make in
+            make.leading.trailing.bottom.equalToSuperview()
+            make.height.equalTo(42)
         }
     }
 
@@ -84,6 +105,10 @@ class EateriesCardCell: UITableViewCell {
         eatery1View.addTopRoundedCorners()
         eatery2View.layer.masksToBounds = true
         eatery3View.addBottomRoundedCorners()
+
+        eatery1GradientView.gradientLayer.frame = eatery1GradientView.bounds
+        eatery2GradientView.gradientLayer.frame = eatery2GradientView.bounds
+        eatery3GradientView.gradientLayer.frame = eatery3GradientView.bounds
 
         layoutIfNeeded()
     }
