@@ -18,12 +18,6 @@ protocol SightsCardCellDelegate: AnyObject {
 
 class SightsCardCell: UITableViewCell {
 
-    private lazy var visualEffectView: UIVisualEffectView = {
-        let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
-        visualEffectView.frame = bounds
-        return visualEffectView
-    }()
-
     @IBOutlet weak var pointOfInterest1View: UIView!
     private let pointOfInterest1GradientView = GradientView()
     private let pointOfInterest1Label = CardLabel()
