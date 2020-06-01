@@ -37,6 +37,7 @@
 		94E108692480615C0091D043 /* apiKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 94E108682480615C0091D043 /* apiKeys.plist */; };
 		94E1086B248228790091D043 /* CardLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E1086A248228790091D043 /* CardLabel.swift */; };
 		94E1086D24836F660091D043 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E1086C24836F660091D043 /* GradientView.swift */; };
+		94E108712484AF5A0091D043 /* CellLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E108702484AF5A0091D043 /* CellLoadingView.swift */; };
 		94E392AD2070B4300073E8C9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 94E392AC2070B4300073E8C9 /* GoogleService-Info.plist */; };
 		94E392B02074B29E0073E8C9 /* style.json in Resources */ = {isa = PBXBuildFile; fileRef = 94E392AF2074B29E0073E8C9 /* style.json */; };
 		94E3D9582097EEC800384680 /* ExpiringCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E3D9572097EEC800384680 /* ExpiringCache.swift */; };
@@ -89,6 +90,7 @@
 		94E108682480615C0091D043 /* apiKeys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = apiKeys.plist; sourceTree = "<group>"; };
 		94E1086A248228790091D043 /* CardLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardLabel.swift; sourceTree = "<group>"; };
 		94E1086C24836F660091D043 /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
+		94E108702484AF5A0091D043 /* CellLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellLoadingView.swift; sourceTree = "<group>"; };
 		94E392AC2070B4300073E8C9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		94E392AF2074B29E0073E8C9 /* style.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = style.json; sourceTree = "<group>"; };
 		94E3D9572097EEC800384680 /* ExpiringCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpiringCache.swift; sourceTree = "<group>"; };
@@ -188,6 +190,7 @@
 			children = (
 				947EC6512043F28F004A911D /* Extensions.swift */,
 				94673BAB225075AA00EC04FD /* DesignableView.swift */,
+				94E108702484AF5A0091D043 /* CellLoadingView.swift */,
 				94E1086A248228790091D043 /* CardLabel.swift */,
 				94C9384F22500D31005E0653 /* UIDevice+Helpers.swift */,
 				94AE9B842094DAF500450399 /* LoadingViewController.swift */,
@@ -453,6 +456,7 @@
 				94380AC8203BAE1D00684863 /* AppDelegate.swift in Sources */,
 				947EC656204667EB004A911D /* MapCardCell.swift in Sources */,
 				9434BA4C247998D4004294F0 /* MapReviewCard.swift in Sources */,
+				94E108712484AF5A0091D043 /* CellLoadingView.swift in Sources */,
 				94AE9B852094DAF500450399 /* LoadingViewController.swift in Sources */,
 				94B7DB57205DEE980040D61C /* Viewport.swift in Sources */,
 				94B7DB59205E06080040D61C /* Eatery.swift in Sources */,

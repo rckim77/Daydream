@@ -32,6 +32,7 @@ class EateriesCardCell: UITableViewCell {
     }()
     @IBOutlet weak var eatery1View: UIView!
     private let eatery1GradientView = GradientView()
+    private let eatery1LoadingView = CellLoadingView()
     private lazy var eatery1ImageView: UIImageView = {
         let imageView = UIImageView()
         return imageView
@@ -39,6 +40,7 @@ class EateriesCardCell: UITableViewCell {
     private let eatery1Label = CardLabel()
     @IBOutlet weak var eatery2View: UIView!
     private let eatery2GradientView = GradientView()
+    private let eatery2LoadingView = CellLoadingView()
     private lazy var eatery2ImageView: UIImageView = {
         let imageView = UIImageView()
         return imageView
@@ -46,6 +48,7 @@ class EateriesCardCell: UITableViewCell {
     private let eatery2Label = CardLabel()
     @IBOutlet weak var eatery3View: UIView!
     private let eatery3GradientView = GradientView()
+    private let eatery3LoadingView = CellLoadingView()
     private lazy var eatery3ImageView: UIImageView = {
         let imageView = UIImageView()
         return imageView
@@ -76,12 +79,15 @@ class EateriesCardCell: UITableViewCell {
 
         contentView.addSubview(titleLabel)
         contentView.addSubview(infoButton)
+        eatery1View.addSubview(eatery1LoadingView)
         eatery1View.addSubview(eatery1ImageView)
         eatery1View.addSubview(eatery1GradientView)
         eatery1View.addSubview(eatery1Label)
+        eatery2View.addSubview(eatery2LoadingView)
         eatery2View.addSubview(eatery2ImageView)
         eatery2View.addSubview(eatery2GradientView)
         eatery2View.addSubview(eatery2Label)
+        eatery3View.addSubview(eatery3LoadingView)
         eatery3View.addSubview(eatery3ImageView)
         eatery3View.addSubview(eatery3GradientView)
         eatery3View.addSubview(eatery3Label)
@@ -90,51 +96,50 @@ class EateriesCardCell: UITableViewCell {
             make.top.equalToSuperview().inset(8)
             make.leading.equalToSuperview().inset(16)
         }
-
         infoButton.snp.makeConstraints { make in
             make.leading.equalTo(titleLabel.snp.trailing).offset(4)
             make.centerY.equalTo(titleLabel.snp.centerY)
             make.trailing.equalToSuperview().inset(16)
             make.size.equalTo(40)
         }
-
+        eatery1LoadingView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         eatery1ImageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-
         eatery1Label.snp.makeConstraints { make in
             make.bottom.equalToSuperview().inset(12)
             make.leading.trailing.equalToSuperview().inset(16)
         }
-
         eatery1GradientView.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalToSuperview()
             make.height.equalTo(42)
         }
-
+        eatery2LoadingView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         eatery2ImageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-
         eatery2Label.snp.makeConstraints { make in
             make.bottom.equalToSuperview().inset(12)
             make.leading.trailing.equalToSuperview().inset(16)
         }
-
         eatery2GradientView.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalToSuperview()
             make.height.equalTo(42)
         }
-
+        eatery3LoadingView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         eatery3ImageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-
         eatery3Label.snp.makeConstraints { make in
             make.bottom.equalToSuperview().inset(12)
             make.leading.trailing.equalToSuperview().inset(16)
         }
-
         eatery3GradientView.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalToSuperview()
             make.height.equalTo(42)
@@ -244,6 +249,16 @@ class EateriesCardCell: UITableViewCell {
     }
 
     // MARK: - Configuration methods
+
+    func configureLoading() {
+        [eatery1ImageView, eatery2ImageView, eatery3ImageView].forEach { imageView in
+            imageView.image = nil
+        }
+
+        [eatery1Label, eatery2Label, eatery3Label].enumerated().forEach { (index, label) in
+            label.text = "Loading..."
+        }
+    }
 
     func configure(_ eateries: [Eatery]) {
         self.eateries = eateries

@@ -124,7 +124,9 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
 
             eateriesCardCell.delegate = viewController
 
-            if let prevEateries = prevEateries, let eateries = eateries, prevEateries == eateries {
+            if isLoading {
+                eateriesCardCell.configureLoading()
+            } else if let prevEateries = prevEateries, let eateries = eateries, prevEateries == eateries {
                 // this is for when the user is simply scrolling and hasn't reloaded
                 return eateriesCardCell
             } else if let prevFallbackEateries = prevFallbackEateries as? [Place],

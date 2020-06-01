@@ -16,6 +16,7 @@ protocol SightsCardCellDelegate: AnyObject {
     func sightsCardCellDidTapBusinessStatusButton(_ businessStatus: PlaceBusinessStatus)
 }
 
+// swiftlint:disable type_body_length
 class SightsCardCell: UITableViewCell {
 
     private lazy var visualEffectView: UIVisualEffectView = {
@@ -36,10 +37,7 @@ class SightsCardCell: UITableViewCell {
         }
         return button
     }()
-    private lazy var pointOfInterest1LoadingView: UIVisualEffectView = {
-        let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
-        return visualEffectView
-    }()
+    private let pointOfInterest1LoadingView = CellLoadingView()
     private lazy var pointOfInterest1ImageView: UIImageView = {
         let imageView = UIImageView()
         return imageView
@@ -56,10 +54,7 @@ class SightsCardCell: UITableViewCell {
         }
         return button
     }()
-    private lazy var pointOfInterest2LoadingView: UIVisualEffectView = {
-        let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
-        return visualEffectView
-    }()
+    private let pointOfInterest2LoadingView = CellLoadingView()
     private lazy var pointOfInterest2ImageView: UIImageView = {
         let imageView = UIImageView()
         return imageView
@@ -76,10 +71,7 @@ class SightsCardCell: UITableViewCell {
         }
         return button
     }()
-    private lazy var pointOfInterest3LoadingView: UIVisualEffectView = {
-        let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
-        return visualEffectView
-    }()
+    private let pointOfInterest3LoadingView = CellLoadingView()
     private lazy var pointOfInterest3ImageView: UIImageView = {
         let imageView = UIImageView()
         return imageView
@@ -120,7 +112,7 @@ class SightsCardCell: UITableViewCell {
         pointOfInterest2View.layer.masksToBounds = true
         pointOfInterest3View.addBottomRoundedCorners()
 
-        // Add programmatic labels to views
+        // add programmatic labels to views
 
         pointOfInterest1View.addSubview(pointOfInterest1LoadingView)
         pointOfInterest1View.addSubview(pointOfInterest1ImageView)
@@ -267,6 +259,10 @@ class SightsCardCell: UITableViewCell {
 
         [pointOfInterest1Label, pointOfInterest2Label, pointOfInterest3Label].enumerated().forEach { (index, label) in
             label.text = "Loading..."
+        }
+
+        [pointOfInterest1BusinessStatusButton, pointOfInterest2BusinessStatusButton, pointOfInterest3BusinessStatusButton].forEach { button in
+            button.isHidden = true
         }
     }
 
