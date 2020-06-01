@@ -14,7 +14,6 @@ final class SearchViewController: UIViewController {
 
     private var resultsViewController: GMSAutocompleteResultsViewController?
     private var searchController: UISearchController?
-    private var resultView: UITextView?
     private var searchBarView: UIView!
     private let searchBarViewHeight: CGFloat = 45.0
     private var placeData: Placeable?
