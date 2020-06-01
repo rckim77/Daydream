@@ -85,7 +85,7 @@ final class SearchDetailViewController: UIViewController {
         placeImageView.contentMode = .scaleAspectFill
         placeImageView.addSubview(visualEffectView)
 
-        loadDataSource(reloadMapCard: false, fetchBackground: false)
+        loadDataSource(reloadMapCard: false, fetchBackground: false, completion: {})
     }
 
     // MARK: - Search
@@ -141,7 +141,7 @@ final class SearchDetailViewController: UIViewController {
         }
     }
 
-    private func loadDataSource(reloadMapCard: Bool = false, fetchBackground: Bool = true) {
+    private func loadDataSource(reloadMapCard: Bool = false, fetchBackground: Bool = true, completion: @escaping(() -> Void)) {
         guard let dataSource = dataSource else {
             return
         }
@@ -170,6 +170,7 @@ final class SearchDetailViewController: UIViewController {
         }
 
         dataSource.loadSightsAndEateries(success: { [weak self] indexPaths in
+            completion()
             guard let strongSelf = self else {
                 return
             }
@@ -177,6 +178,7 @@ final class SearchDetailViewController: UIViewController {
                 strongSelf.placeCardsTableView.reloadRows(at: indexPaths, with: .fade)
             }
         }, failure: { [weak self] error in
+            completion()
             guard let strongSelf = self else {
                 return
             }
@@ -231,13 +233,14 @@ final class SearchDetailViewController: UIViewController {
         placeCardsTableView.reloadData()
 
         networkService.getPlaceId(with: randomCity, success: { [weak self] place in
-            loadingVC.remove()
             guard let strongSelf = self, let dataSource = strongSelf.dataSource else {
+                loadingVC.remove()
                 return
-
             }
             dataSource.place = place
-            strongSelf.loadDataSource(reloadMapCard: true)
+            strongSelf.loadDataSource(reloadMapCard: true, completion: {
+                loadingVC.remove()
+            })
         }, failure: { [weak self] error in
             loadingVC.remove()
             guard let strongSelf = self else {
@@ -347,7 +350,11 @@ extension SearchDetailViewController: GMSAutocompleteResultsViewControllerDelega
             }
 
             dataSource.place = place
-            self.loadDataSource(reloadMapCard: true)
+            let loadingVC = LoadingViewController()
+            self.add(loadingVC)
+            self.loadDataSource(reloadMapCard: true, completion: {
+                loadingVC.remove()
+            })
         })
     }
 
