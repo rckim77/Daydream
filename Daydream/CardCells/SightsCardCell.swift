@@ -36,6 +36,10 @@ class SightsCardCell: UITableViewCell {
         }
         return button
     }()
+    private lazy var pointOfInterest1LoadingView: UIVisualEffectView = {
+        let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
+        return visualEffectView
+    }()
     private lazy var pointOfInterest1ImageView: UIImageView = {
         let imageView = UIImageView()
         return imageView
@@ -52,6 +56,10 @@ class SightsCardCell: UITableViewCell {
         }
         return button
     }()
+    private lazy var pointOfInterest2LoadingView: UIVisualEffectView = {
+        let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
+        return visualEffectView
+    }()
     private lazy var pointOfInterest2ImageView: UIImageView = {
         let imageView = UIImageView()
         return imageView
@@ -67,6 +75,10 @@ class SightsCardCell: UITableViewCell {
             button.pointerStyleProvider = buttonProvider
         }
         return button
+    }()
+    private lazy var pointOfInterest3LoadingView: UIVisualEffectView = {
+        let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
+        return visualEffectView
     }()
     private lazy var pointOfInterest3ImageView: UIImageView = {
         let imageView = UIImageView()
@@ -110,19 +122,25 @@ class SightsCardCell: UITableViewCell {
 
         // Add programmatic labels to views
 
+        pointOfInterest1View.addSubview(pointOfInterest1LoadingView)
         pointOfInterest1View.addSubview(pointOfInterest1ImageView)
         pointOfInterest1View.addSubview(pointOfInterest1GradientView)
         pointOfInterest1View.addSubview(pointOfInterest1Label)
         pointOfInterest1View.addSubview(pointOfInterest1BusinessStatusButton)
+        pointOfInterest2View.addSubview(pointOfInterest2LoadingView)
         pointOfInterest2View.addSubview(pointOfInterest2ImageView)
         pointOfInterest2View.addSubview(pointOfInterest2GradientView)
         pointOfInterest2View.addSubview(pointOfInterest2Label)
         pointOfInterest2View.addSubview(pointOfInterest2BusinessStatusButton)
+        pointOfInterest3View.addSubview(pointOfInterest3LoadingView)
         pointOfInterest3View.addSubview(pointOfInterest3ImageView)
         pointOfInterest3View.addSubview(pointOfInterest3GradientView)
         pointOfInterest3View.addSubview(pointOfInterest3Label)
         pointOfInterest3View.addSubview(pointOfInterest3BusinessStatusButton)
 
+        pointOfInterest1LoadingView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         pointOfInterest1ImageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
@@ -138,6 +156,9 @@ class SightsCardCell: UITableViewCell {
             make.leading.trailing.bottom.equalToSuperview()
             make.height.equalTo(42)
         }
+        pointOfInterest2LoadingView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         pointOfInterest2ImageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
@@ -152,6 +173,9 @@ class SightsCardCell: UITableViewCell {
         pointOfInterest2GradientView.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalToSuperview()
             make.height.equalTo(42)
+        }
+        pointOfInterest3LoadingView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
         pointOfInterest3ImageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -209,9 +233,7 @@ class SightsCardCell: UITableViewCell {
         guard let placeId = pointOfInterest.placeableId else {
             return
         }
-
-
-
+        
         NetworkService().loadPhoto(with: placeId, success: { [weak self] image in
             guard let strongSelf = self else {
                 return
@@ -237,6 +259,16 @@ class SightsCardCell: UITableViewCell {
     }
 
     // MARK: - Configuration methods
+
+    func configureLoading() {
+        [pointOfInterest1ImageView, pointOfInterest2ImageView, pointOfInterest3ImageView].forEach { imageView in
+            imageView.image = nil
+        }
+
+        [pointOfInterest1Label, pointOfInterest2Label, pointOfInterest3Label].enumerated().forEach { (index, label) in
+            label.text = "Loading..."
+        }
+    }
 
     private func configure(_ pointsOfInterest: [Placeable]) {
         isHidden = false

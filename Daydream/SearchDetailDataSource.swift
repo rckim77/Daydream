@@ -17,6 +17,7 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
     var fallbackEateries: [Placeable]?
     private var prevFallbackEateries: [Placeable]?
     weak var viewController: SearchDetailViewController?
+    var isLoading = false
 
     private let networkService = NetworkService()
     let mapCardCellHeight: CGFloat = 190
@@ -48,6 +49,7 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
             }
 
             strongSelf.pointsOfInterest = sights
+            strongSelf.isLoading = false
 
             if !eateries.isEmpty {
                 strongSelf.prevEateries = strongSelf.eateries
@@ -105,7 +107,12 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
             }
 
             sightsCardCell.delegate = viewController
-            sightsCardCell.pointsOfInterest = pointsOfInterest
+
+            if isLoading {
+                sightsCardCell.configureLoading()
+            } else {
+                sightsCardCell.pointsOfInterest = pointsOfInterest
+            }
 
             return sightsCardCell
         case eateriesCardCellIndexPath:

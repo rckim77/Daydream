@@ -227,6 +227,8 @@ final class SearchDetailViewController: UIViewController {
         }
         let loadingVC = LoadingViewController()
         add(loadingVC)
+        dataSource?.isLoading = true
+        placeCardsTableView.reloadData()
 
         networkService.getPlaceId(with: randomCity, success: { [weak self] place in
             loadingVC.remove()
