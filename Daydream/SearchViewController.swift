@@ -17,6 +17,7 @@ final class SearchViewController: UIViewController {
     private var searchBarView: UIView!
     private let searchBarViewHeight: CGFloat = 45.0
     private var placeData: Placeable?
+    private var placeBackgroundImage: UIImage?
     private var defaultSearchBarYOffset: CGFloat {
         return  (view.bounds.height / 2) - (searchBarViewHeight / 2)
     }
@@ -51,15 +52,30 @@ final class SearchViewController: UIViewController {
         let loadingVC = LoadingViewController()
         add(loadingVC)
 
-        NetworkService().getPlaceId(with: randomCity, success: { [weak self] place in
+        let networkService = NetworkService()
+
+        networkService.getPlaceId(with: randomCity, success: { [weak self] place in
             loadingVC.remove()
             guard let strongSelf = self else {
                 return
-
             }
 
             strongSelf.placeData = place
-            strongSelf.performSegue(withIdentifier: "toSearchDetailVCSegue", sender: nil)
+            guard let placeId = place.placeableId else {
+                return
+            }
+            networkService.loadPhoto(with: placeId, success: { [weak self] image in
+                guard let strongSelf = self else {
+                    return
+                }
+                strongSelf.placeBackgroundImage = image
+                strongSelf.performSegue(withIdentifier: "toSearchDetailVCSegue", sender: nil)
+            }, failure: { [weak self] _ in
+                guard let strongSelf = self else {
+                    return
+                }
+                strongSelf.performSegue(withIdentifier: "toSearchDetailVCSegue", sender: nil)
+            })
         }, failure: { [weak self] error in
             loadingVC.remove()
             guard let strongSelf = self else {
@@ -154,9 +170,14 @@ final class SearchViewController: UIViewController {
     // MARK: - Segue method
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let destinationVC = segue.destination as? SearchDetailViewController, let place = placeData {
-            destinationVC.dataSource = SearchDetailDataSource(place: place)
+        guard let destinationVC = segue.destination as? SearchDetailViewController,
+            let place = placeData,
+            let backgroundImage = placeBackgroundImage else {
+            return
         }
+
+        destinationVC.dataSource = SearchDetailDataSource(place: place)
+        destinationVC.backgroundImage = backgroundImage
     }
 }
 

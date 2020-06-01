@@ -14,6 +14,7 @@ import SnapKit
 final class SearchDetailViewController: UIViewController {
 
     var dataSource: SearchDetailDataSource?
+    var backgroundImage: UIImage?
     private var resultsViewController: GMSAutocompleteResultsViewController?
     private var searchController: UISearchController?
     private var mapView: GMSMapView?
@@ -79,7 +80,12 @@ final class SearchDetailViewController: UIViewController {
         configureTableView()
         addProgrammaticComponents()
         configureFloatingTitleLabel()
-        loadDataSource()
+
+        placeImageView.image = backgroundImage
+        placeImageView.contentMode = .scaleAspectFill
+        placeImageView.addSubview(visualEffectView)
+
+        loadDataSource(reloadMapCard: false, fetchBackground: false)
     }
 
     // MARK: - Search
@@ -135,7 +141,7 @@ final class SearchDetailViewController: UIViewController {
         }
     }
 
-    private func loadDataSource(reloadMapCard: Bool = false) {
+    private func loadDataSource(reloadMapCard: Bool = false, fetchBackground: Bool = true) {
         guard let dataSource = dataSource else {
             return
         }
@@ -143,23 +149,25 @@ final class SearchDetailViewController: UIViewController {
         titleLabel.text = dataSource.place.placeableName
         floatingTitleLabel.text = dataSource.place.placeableName
 
-        dataSource.loadPhoto(success: { [weak self] image in
-            guard let strongSelf = self else {
-                return
-            }
+        if fetchBackground {
+            dataSource.loadPhoto(success: { [weak self] image in
+                guard let strongSelf = self else {
+                    return
+                }
 
-            DispatchQueue.main.async {
-                strongSelf.placeImageView.subviews.forEach { $0.removeFromSuperview() }
-                strongSelf.placeImageView.image = image
-                strongSelf.placeImageView.contentMode = .scaleAspectFill
-                strongSelf.placeImageView.addSubview(strongSelf.visualEffectView)
-            }
-        }, failure: { [weak self] error in
-            guard let strongSelf = self else {
-                return
-            }
-            strongSelf.logErrorEvent(error)
-        })
+                DispatchQueue.main.async {
+                    strongSelf.placeImageView.subviews.forEach { $0.removeFromSuperview() }
+                    strongSelf.placeImageView.image = image
+                    strongSelf.placeImageView.contentMode = .scaleAspectFill
+                    strongSelf.placeImageView.addSubview(strongSelf.visualEffectView)
+                }
+            }, failure: { [weak self] error in
+                guard let strongSelf = self else {
+                    return
+                }
+                strongSelf.logErrorEvent(error)
+            })
+        }
 
         dataSource.loadSightsAndEateries(success: { [weak self] indexPaths in
             guard let strongSelf = self else {
