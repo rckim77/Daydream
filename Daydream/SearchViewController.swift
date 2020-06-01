@@ -190,7 +190,10 @@ extension SearchViewController: GMSAutocompleteResultsViewControllerDelegate {
 
         dismiss(animated: true, completion: {
             self.resetSearchUI()
+            let loadingVC = LoadingViewController()
+            self.add(loadingVC)
             self.networkService.loadPhoto(with: placeId, success: { [weak self] image in
+                loadingVC.remove()
                 guard let strongSelf = self else {
                     return
                 }

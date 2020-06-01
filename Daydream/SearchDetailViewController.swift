@@ -348,7 +348,6 @@ extension SearchDetailViewController: GMSAutocompleteResultsViewControllerDelega
             guard let dataSource = self.dataSource else {
                 return
             }
-
             dataSource.place = place
             let loadingVC = LoadingViewController()
             self.add(loadingVC)

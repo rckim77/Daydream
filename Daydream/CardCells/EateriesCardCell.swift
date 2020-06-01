@@ -19,7 +19,6 @@ protocol EateriesCardCellDelegate: AnyObject {
 }
 
 class EateriesCardCell: UITableViewCell {
-
     private lazy var titleLabel = CardLabel(textStyle: .title1, text: "Top Eateries")
     private lazy var infoButton: UIButton = {
         let button = UIButton(type: .system)
@@ -59,7 +58,6 @@ class EateriesCardCell: UITableViewCell {
     private var eateries: [Eatery]?
     private var fallbackEateries: [Placeable]?
 
-    // swiftlint:disable function_body_length
     override func awakeFromNib() {
         super.awakeFromNib()
 
@@ -76,7 +74,6 @@ class EateriesCardCell: UITableViewCell {
         eatery3ImageView.image = nil
 
         // add programmatic labels to views
-
         contentView.addSubview(titleLabel)
         contentView.addSubview(infoButton)
         eatery1View.addSubview(eatery1LoadingView)
@@ -255,7 +252,7 @@ class EateriesCardCell: UITableViewCell {
             imageView.image = nil
         }
 
-        [eatery1Label, eatery2Label, eatery3Label].enumerated().forEach { (index, label) in
+        [eatery1Label, eatery2Label, eatery3Label].forEach { label in
             label.text = "Loading..."
         }
     }

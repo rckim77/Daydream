@@ -16,7 +16,6 @@ protocol SightsCardCellDelegate: AnyObject {
     func sightsCardCellDidTapBusinessStatusButton(_ businessStatus: PlaceBusinessStatus)
 }
 
-// swiftlint:disable type_body_length
 class SightsCardCell: UITableViewCell {
 
     private lazy var visualEffectView: UIVisualEffectView = {
@@ -92,7 +91,6 @@ class SightsCardCell: UITableViewCell {
         }
     }
 
-    // swiftlint:disable function_body_length
     override func awakeFromNib() {
         super.awakeFromNib()
 
@@ -257,7 +255,7 @@ class SightsCardCell: UITableViewCell {
             imageView.image = nil
         }
 
-        [pointOfInterest1Label, pointOfInterest2Label, pointOfInterest3Label].enumerated().forEach { (index, label) in
+        [pointOfInterest1Label, pointOfInterest2Label, pointOfInterest3Label].forEach { label in
             label.text = "Loading..."
         }
 
