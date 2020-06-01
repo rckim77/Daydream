@@ -21,6 +21,7 @@ final class SearchViewController: UIViewController {
     private var defaultSearchBarYOffset: CGFloat {
         return  (view.bounds.height / 2) - (searchBarViewHeight / 2)
     }
+    private let networkService = NetworkService()
 
     private lazy var feedbackButton: UIButton = {
         let button = UIButton(type: .system)
@@ -52,8 +53,6 @@ final class SearchViewController: UIViewController {
         let loadingVC = LoadingViewController()
         add(loadingVC)
 
-        let networkService = NetworkService()
-
         networkService.getPlaceId(with: randomCity, success: { [weak self] place in
             loadingVC.remove()
             guard let strongSelf = self else {
@@ -64,7 +63,7 @@ final class SearchViewController: UIViewController {
             guard let placeId = place.placeableId else {
                 return
             }
-            networkService.loadPhoto(with: placeId, success: { [weak self] image in
+            strongSelf.networkService.loadPhoto(with: placeId, success: { [weak self] image in
                 guard let strongSelf = self else {
                     return
                 }
@@ -191,7 +190,18 @@ extension SearchViewController: GMSAutocompleteResultsViewControllerDelegate {
 
         dismiss(animated: true, completion: {
             self.resetSearchUI()
-            self.performSegue(withIdentifier: "toSearchDetailVCSegue", sender: nil)
+            self.networkService.loadPhoto(with: placeId, success: { [weak self] image in
+                guard let strongSelf = self else {
+                    return
+                }
+                strongSelf.placeBackgroundImage = image
+                strongSelf.performSegue(withIdentifier: "toSearchDetailVCSegue", sender: nil)
+            }, failure: { [weak self] _ in
+                guard let strongSelf = self else {
+                    return
+                }
+                strongSelf.performSegue(withIdentifier: "toSearchDetailVCSegue", sender: nil)
+            })
         })
     }
 
