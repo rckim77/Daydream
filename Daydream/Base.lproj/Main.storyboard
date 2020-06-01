@@ -138,59 +138,25 @@
                                                     <subviews>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ciz-Vh-WN7">
                                                             <rect key="frame" x="0.0" y="0.0" width="343" height="170.66666666666666"/>
-                                                            <subviews>
-                                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="UIt-au-apq">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="343" height="170.66666666666666"/>
-                                                                    <gestureRecognizers/>
-                                                                </imageView>
-                                                            </subviews>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <accessibility key="accessibilityConfiguration" identifier="poi1Card">
                                                                 <bool key="isElement" value="YES"/>
                                                             </accessibility>
                                                             <gestureRecognizers/>
-                                                            <constraints>
-                                                                <constraint firstItem="UIt-au-apq" firstAttribute="top" secondItem="Ciz-Vh-WN7" secondAttribute="top" id="cPM-54-Q5K"/>
-                                                                <constraint firstAttribute="bottom" secondItem="UIt-au-apq" secondAttribute="bottom" id="msd-vL-jNR"/>
-                                                                <constraint firstAttribute="trailing" secondItem="UIt-au-apq" secondAttribute="trailing" id="uHT-Ie-JrL"/>
-                                                                <constraint firstItem="UIt-au-apq" firstAttribute="leading" secondItem="Ciz-Vh-WN7" secondAttribute="leading" id="z9g-af-aBH"/>
-                                                            </constraints>
                                                         </view>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cCe-zg-RYa">
                                                             <rect key="frame" x="0.0" y="170.66666666666669" width="343" height="170.66666666666669"/>
-                                                            <subviews>
-                                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="1VR-CS-te4">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="343" height="170.66666666666666"/>
-                                                                </imageView>
-                                                            </subviews>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <accessibility key="accessibilityConfiguration" identifier="poi2Card">
                                                                 <bool key="isElement" value="YES"/>
                                                             </accessibility>
-                                                            <constraints>
-                                                                <constraint firstItem="1VR-CS-te4" firstAttribute="leading" secondItem="cCe-zg-RYa" secondAttribute="leading" id="4KI-cS-N9R"/>
-                                                                <constraint firstAttribute="trailing" secondItem="1VR-CS-te4" secondAttribute="trailing" id="ZBm-CA-pQF"/>
-                                                                <constraint firstItem="1VR-CS-te4" firstAttribute="top" secondItem="cCe-zg-RYa" secondAttribute="top" id="g3H-kE-NxV"/>
-                                                                <constraint firstAttribute="bottom" secondItem="1VR-CS-te4" secondAttribute="bottom" id="pK6-io-QMo"/>
-                                                            </constraints>
                                                         </view>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cWo-q2-xtE">
                                                             <rect key="frame" x="0.0" y="341.33333333333331" width="343" height="170.66666666666669"/>
-                                                            <subviews>
-                                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="P01-u6-tgK">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="343" height="170.66666666666666"/>
-                                                                </imageView>
-                                                            </subviews>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <accessibility key="accessibilityConfiguration" identifier="poi3Card">
                                                                 <bool key="isElement" value="YES"/>
                                                             </accessibility>
-                                                            <constraints>
-                                                                <constraint firstAttribute="trailing" secondItem="P01-u6-tgK" secondAttribute="trailing" id="4qG-yc-fKF"/>
-                                                                <constraint firstItem="P01-u6-tgK" firstAttribute="leading" secondItem="cWo-q2-xtE" secondAttribute="leading" id="E0S-Sr-b68"/>
-                                                                <constraint firstItem="P01-u6-tgK" firstAttribute="top" secondItem="cWo-q2-xtE" secondAttribute="top" id="rg5-7B-qzB"/>
-                                                                <constraint firstAttribute="bottom" secondItem="P01-u6-tgK" secondAttribute="bottom" id="xaL-9f-HZN"/>
-                                                            </constraints>
                                                         </view>
                                                     </subviews>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -252,11 +218,8 @@
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
-                                            <outlet property="pointOfInterest1ImageView" destination="UIt-au-apq" id="xzq-Sq-gbl"/>
                                             <outlet property="pointOfInterest1View" destination="Ciz-Vh-WN7" id="RyB-se-OHb"/>
-                                            <outlet property="pointOfInterest2ImageView" destination="1VR-CS-te4" id="OUj-9C-nNQ"/>
                                             <outlet property="pointOfInterest2View" destination="cCe-zg-RYa" id="Ldu-oU-wU9"/>
-                                            <outlet property="pointOfInterest3ImageView" destination="P01-u6-tgK" id="swU-Od-ee7"/>
                                             <outlet property="pointOfInterest3View" destination="cWo-q2-xtE" id="2Ot-Rw-r0x"/>
                                         </connections>
                                     </tableViewCell>
@@ -268,61 +231,28 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="S4O-10-Qll" customClass="DesignableView" customModule="Daydream" customModuleProvider="target">
-                                                    <rect key="frame" x="16" y="83" width="343" height="501"/>
+                                                    <rect key="frame" x="16" y="71" width="343" height="513"/>
                                                     <subviews>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ckR-co-8xu">
-                                                            <rect key="frame" x="0.0" y="0.0" width="343" height="167"/>
-                                                            <subviews>
-                                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="fWx-Dg-Obi">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="343" height="167"/>
-                                                                </imageView>
-                                                            </subviews>
+                                                            <rect key="frame" x="0.0" y="0.0" width="343" height="171"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <accessibility key="accessibilityConfiguration" identifier="eatery1Card">
                                                                 <bool key="isElement" value="YES"/>
                                                             </accessibility>
-                                                            <constraints>
-                                                                <constraint firstAttribute="bottom" secondItem="fWx-Dg-Obi" secondAttribute="bottom" id="9r8-pQ-ctT"/>
-                                                                <constraint firstItem="fWx-Dg-Obi" firstAttribute="top" secondItem="ckR-co-8xu" secondAttribute="top" id="OrC-PP-TTF"/>
-                                                                <constraint firstItem="fWx-Dg-Obi" firstAttribute="leading" secondItem="ckR-co-8xu" secondAttribute="leading" id="RNW-sv-NNj"/>
-                                                                <constraint firstAttribute="trailing" secondItem="fWx-Dg-Obi" secondAttribute="trailing" id="xZT-Ng-EXf"/>
-                                                            </constraints>
                                                         </view>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qCj-Lu-ZCV">
-                                                            <rect key="frame" x="0.0" y="167" width="343" height="167"/>
-                                                            <subviews>
-                                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="T2T-CZ-Lqm">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="343" height="167"/>
-                                                                </imageView>
-                                                            </subviews>
+                                                            <rect key="frame" x="0.0" y="171" width="343" height="171"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <accessibility key="accessibilityConfiguration" identifier="eatery2Card">
                                                                 <bool key="isElement" value="YES"/>
                                                             </accessibility>
-                                                            <constraints>
-                                                                <constraint firstItem="T2T-CZ-Lqm" firstAttribute="top" secondItem="qCj-Lu-ZCV" secondAttribute="top" id="0c9-Fg-su6"/>
-                                                                <constraint firstItem="T2T-CZ-Lqm" firstAttribute="leading" secondItem="qCj-Lu-ZCV" secondAttribute="leading" id="IOp-B3-FTj"/>
-                                                                <constraint firstAttribute="bottom" secondItem="T2T-CZ-Lqm" secondAttribute="bottom" id="bm4-zG-taj"/>
-                                                                <constraint firstAttribute="trailing" secondItem="T2T-CZ-Lqm" secondAttribute="trailing" id="ciC-Ey-ZW0"/>
-                                                            </constraints>
                                                         </view>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1UT-Ql-mCF">
-                                                            <rect key="frame" x="0.0" y="334" width="343" height="167"/>
-                                                            <subviews>
-                                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="vYf-LJ-afM">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="343" height="167"/>
-                                                                </imageView>
-                                                            </subviews>
+                                                            <rect key="frame" x="0.0" y="342" width="343" height="171"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <accessibility key="accessibilityConfiguration" identifier="eatery3Card">
                                                                 <bool key="isElement" value="YES"/>
                                                             </accessibility>
-                                                            <constraints>
-                                                                <constraint firstAttribute="trailing" secondItem="vYf-LJ-afM" secondAttribute="trailing" id="81c-bJ-ere"/>
-                                                                <constraint firstItem="vYf-LJ-afM" firstAttribute="top" secondItem="1UT-Ql-mCF" secondAttribute="top" id="BOb-tA-MMp"/>
-                                                                <constraint firstItem="vYf-LJ-afM" firstAttribute="leading" secondItem="1UT-Ql-mCF" secondAttribute="leading" id="sco-Gf-E8V"/>
-                                                                <constraint firstAttribute="bottom" secondItem="vYf-LJ-afM" secondAttribute="bottom" id="uah-1K-KjN"/>
-                                                            </constraints>
                                                         </view>
                                                     </subviews>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -369,11 +299,8 @@
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
-                                            <outlet property="eatery1ImageView" destination="fWx-Dg-Obi" id="jFr-eK-t7t"/>
                                             <outlet property="eatery1View" destination="ckR-co-8xu" id="2Kb-Mb-E3n"/>
-                                            <outlet property="eatery2ImageView" destination="T2T-CZ-Lqm" id="321-rm-jc2"/>
                                             <outlet property="eatery2View" destination="qCj-Lu-ZCV" id="ywp-tV-LWU"/>
-                                            <outlet property="eatery3ImageView" destination="vYf-LJ-afM" id="tJn-jL-1S4"/>
                                             <outlet property="eatery3View" destination="1UT-Ql-mCF" id="DWi-TM-2d8"/>
                                         </connections>
                                     </tableViewCell>

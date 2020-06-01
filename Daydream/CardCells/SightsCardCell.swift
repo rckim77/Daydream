@@ -18,6 +18,12 @@ protocol SightsCardCellDelegate: AnyObject {
 
 class SightsCardCell: UITableViewCell {
 
+    private lazy var visualEffectView: UIVisualEffectView = {
+        let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
+        visualEffectView.frame = bounds
+        return visualEffectView
+    }()
+
     @IBOutlet weak var pointOfInterest1View: UIView!
     private let pointOfInterest1GradientView = GradientView()
     private let pointOfInterest1Label = CardLabel()
@@ -30,7 +36,10 @@ class SightsCardCell: UITableViewCell {
         }
         return button
     }()
-    @IBOutlet weak var pointOfInterest1ImageView: UIImageView!
+    private lazy var pointOfInterest1ImageView: UIImageView = {
+        let imageView = UIImageView()
+        return imageView
+    }()
     @IBOutlet weak var pointOfInterest2View: UIView!
     private let pointOfInterest2GradientView = GradientView()
     private let pointOfInterest2Label = CardLabel()
@@ -43,7 +52,10 @@ class SightsCardCell: UITableViewCell {
         }
         return button
     }()
-    @IBOutlet weak var pointOfInterest2ImageView: UIImageView!
+    private lazy var pointOfInterest2ImageView: UIImageView = {
+        let imageView = UIImageView()
+        return imageView
+    }()
     @IBOutlet weak var pointOfInterest3View: UIView!
     private let pointOfInterest3GradientView = GradientView()
     private let pointOfInterest3Label = CardLabel()
@@ -56,7 +68,10 @@ class SightsCardCell: UITableViewCell {
         }
         return button
     }()
-    @IBOutlet weak var pointOfInterest3ImageView: UIImageView!
+    private lazy var pointOfInterest3ImageView: UIImageView = {
+        let imageView = UIImageView()
+        return imageView
+    }()
     
     weak var delegate: SightsCardCellDelegate?
     var pointsOfInterest: [Placeable]? {
@@ -95,16 +110,22 @@ class SightsCardCell: UITableViewCell {
 
         // Add programmatic labels to views
 
+        pointOfInterest1View.addSubview(pointOfInterest1ImageView)
         pointOfInterest1View.addSubview(pointOfInterest1GradientView)
         pointOfInterest1View.addSubview(pointOfInterest1Label)
         pointOfInterest1View.addSubview(pointOfInterest1BusinessStatusButton)
+        pointOfInterest2View.addSubview(pointOfInterest2ImageView)
         pointOfInterest2View.addSubview(pointOfInterest2GradientView)
         pointOfInterest2View.addSubview(pointOfInterest2Label)
         pointOfInterest2View.addSubview(pointOfInterest2BusinessStatusButton)
+        pointOfInterest3View.addSubview(pointOfInterest3ImageView)
         pointOfInterest3View.addSubview(pointOfInterest3GradientView)
         pointOfInterest3View.addSubview(pointOfInterest3Label)
         pointOfInterest3View.addSubview(pointOfInterest3BusinessStatusButton)
 
+        pointOfInterest1ImageView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         pointOfInterest1Label.snp.makeConstraints { make in
             make.bottom.equalToSuperview().inset(12)
             make.leading.trailing.equalToSuperview().inset(16)
@@ -117,6 +138,9 @@ class SightsCardCell: UITableViewCell {
             make.leading.trailing.bottom.equalToSuperview()
             make.height.equalTo(42)
         }
+        pointOfInterest2ImageView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         pointOfInterest2Label.snp.makeConstraints { make in
             make.bottom.equalToSuperview().inset(12)
             make.leading.trailing.equalToSuperview().inset(16)
@@ -128,6 +152,9 @@ class SightsCardCell: UITableViewCell {
         pointOfInterest2GradientView.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalToSuperview()
             make.height.equalTo(42)
+        }
+        pointOfInterest3ImageView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
         pointOfInterest3Label.snp.makeConstraints { make in
             make.bottom.equalToSuperview().inset(12)
@@ -182,6 +209,9 @@ class SightsCardCell: UITableViewCell {
         guard let placeId = pointOfInterest.placeableId else {
             return
         }
+
+
+
         NetworkService().loadPhoto(with: placeId, success: { [weak self] image in
             guard let strongSelf = self else {
                 return
