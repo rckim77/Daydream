@@ -23,7 +23,11 @@ final class SightView: UIView {
     }
 
     private let loadingView = CellLoadingView()
-    private let backgroundImageView = UIImageView()
+    private lazy var backgroundImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        return imageView
+    }()
     private let gradientView = GradientView()
     private let titleLabel = CardLabel()
     private lazy var businessStatusButton: UIButton = {

@@ -34,6 +34,7 @@ class EateriesCardCell: UITableViewCell {
     private let eatery1LoadingView = CellLoadingView()
     private lazy var eatery1ImageView: UIImageView = {
         let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
         return imageView
     }()
     private let eatery1Label = CardLabel()
@@ -42,6 +43,7 @@ class EateriesCardCell: UITableViewCell {
     private let eatery2LoadingView = CellLoadingView()
     private lazy var eatery2ImageView: UIImageView = {
         let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
         return imageView
     }()
     private let eatery2Label = CardLabel()
@@ -50,6 +52,7 @@ class EateriesCardCell: UITableViewCell {
     private let eatery3LoadingView = CellLoadingView()
     private lazy var eatery3ImageView: UIImageView = {
         let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
         return imageView
     }()
     private let eatery3Label = CardLabel()
