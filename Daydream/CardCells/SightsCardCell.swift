@@ -41,6 +41,7 @@ class SightsCardCell: UITableViewCell {
     var pointsOfInterest: [Placeable]? {
         didSet {
             if let pointsOfInterest = pointsOfInterest, pointsOfInterest.count >= 3 {
+                isHidden = false
                 // display content only if we've made another API call, otherwise do nothing
                 // POSTLAUNCH: - Update comparison with placeId
                 if oldValue?.count == 0 || pointsOfInterest[0].placeableId != oldValue?[0].placeableId {
@@ -54,11 +55,6 @@ class SightsCardCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-
-        // reset image (to prevent background images being reused due to dequeueing reusable cells)
-        sight1View.resetBackgroundImage()
-        sight2View.resetBackgroundImage()
-        sight3View.resetBackgroundImage()
 
         contentView.addSubview(titleLabel)
         contentView.addSubview(sightsSectionView)
@@ -93,20 +89,11 @@ class SightsCardCell: UITableViewCell {
             make.leading.bottom.trailing.equalToSuperview()
             make.height.equalTo(sight1View)
         }
-    }
 
-    // Note: On iOS 13, setNeedsLayout() is called first before UIViews are
-    // added as subviews so we can't update UIViews just yet.
-    private func updateCellLayout() {
-        sight1View.addTopRoundedCorners()
-        sight2View.layer.masksToBounds = true
-        sight3View.addBottomRoundedCorners()
-
-        sight1View.updateGradient()
-        sight2View.updateGradient()
-        sight3View.updateGradient()
-
-        layoutIfNeeded()
+        // reset image (to prevent background images being reused due to dequeueing reusable cells)
+        sight1View.resetBackgroundImage()
+        sight2View.resetBackgroundImage()
+        sight3View.resetBackgroundImage()
     }
 
     // MARK: - Configuration methods
@@ -118,7 +105,6 @@ class SightsCardCell: UITableViewCell {
     }
 
     private func configure(_ pointsOfInterest: [Placeable]) {
-        isHidden = false
         sight1View.configure(sight: pointsOfInterest[0])
         sight2View.configure(sight: pointsOfInterest[1])
         sight3View.configure(sight: pointsOfInterest[2])

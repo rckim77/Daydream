@@ -184,6 +184,12 @@ final class SearchDetailViewController: UIViewController {
             guard let strongSelf = self else {
                 return
             }
+            DispatchQueue.main.async {
+                if let sightsIndexPath = strongSelf.dataSource?.sightsCardCellIndexPath,
+                    let eateriesIndexPath = strongSelf.dataSource?.eateriesCardCellIndexPath {
+                    strongSelf.placeCardsTableView.reloadRows(at: [sightsIndexPath, eateriesIndexPath], with: .fade)
+                }
+            }
             strongSelf.logErrorEvent(error)
         })
 
