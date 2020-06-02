@@ -38,6 +38,7 @@
 		94E1086B248228790091D043 /* CardLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E1086A248228790091D043 /* CardLabel.swift */; };
 		94E1086D24836F660091D043 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E1086C24836F660091D043 /* GradientView.swift */; };
 		94E108712484AF5A0091D043 /* CellLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E108702484AF5A0091D043 /* CellLoadingView.swift */; };
+		94E108732486050A0091D043 /* SightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E108722486050A0091D043 /* SightView.swift */; };
 		94E392AD2070B4300073E8C9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 94E392AC2070B4300073E8C9 /* GoogleService-Info.plist */; };
 		94E392B02074B29E0073E8C9 /* style.json in Resources */ = {isa = PBXBuildFile; fileRef = 94E392AF2074B29E0073E8C9 /* style.json */; };
 		94E3D9582097EEC800384680 /* ExpiringCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E3D9572097EEC800384680 /* ExpiringCache.swift */; };
@@ -91,6 +92,7 @@
 		94E1086A248228790091D043 /* CardLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardLabel.swift; sourceTree = "<group>"; };
 		94E1086C24836F660091D043 /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		94E108702484AF5A0091D043 /* CellLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellLoadingView.swift; sourceTree = "<group>"; };
+		94E108722486050A0091D043 /* SightView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SightView.swift; sourceTree = "<group>"; };
 		94E392AC2070B4300073E8C9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		94E392AF2074B29E0073E8C9 /* style.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = style.json; sourceTree = "<group>"; };
 		94E3D9572097EEC800384680 /* ExpiringCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpiringCache.swift; sourceTree = "<group>"; };
@@ -211,6 +213,7 @@
 			children = (
 				947EC655204667EB004A911D /* MapCardCell.swift */,
 				9481EC59204B358C00863A5A /* SightsCardCell.swift */,
+				94E108722486050A0091D043 /* SightView.swift */,
 				94DB8FE6204B946200FA7CF7 /* EateriesCardCell.swift */,
 			);
 			path = CardCells;
@@ -450,6 +453,7 @@
 				94A7B7DB20780D39003E28A8 /* Review.swift in Sources */,
 				94B8CEB3207DC31D00CA8101 /* SearchDetailDataSource.swift in Sources */,
 				94DB8FE7204B946200FA7CF7 /* EateriesCardCell.swift in Sources */,
+				94E108732486050A0091D043 /* SightView.swift in Sources */,
 				94E3D9582097EEC800384680 /* ExpiringCache.swift in Sources */,
 				949630BA203BCBBD007139CA /* SearchDetailViewController.swift in Sources */,
 				9481EC5A204B358C00863A5A /* SightsCardCell.swift in Sources */,

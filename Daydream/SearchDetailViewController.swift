@@ -85,6 +85,8 @@ final class SearchDetailViewController: UIViewController {
         placeImageView.contentMode = .scaleAspectFill
         placeImageView.addSubview(visualEffectView)
 
+        dataSource?.isLoading = true
+        placeCardsTableView.reloadData()
         loadDataSource(reloadMapCard: false, fetchBackground: false, completion: {})
     }
 
