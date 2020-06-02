@@ -136,8 +136,6 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
             } else if let fallbackEateries = fallbackEateries, fallbackEateries.count > 2 {
                 eateriesCardCell.configureWithFallbackEateries(fallbackEateries)
                 prevFallbackEateries = fallbackEateries
-            } else {
-                eateriesCardCell.configureForNoResults()
             }
 
             return eateriesCardCell

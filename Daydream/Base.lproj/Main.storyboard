@@ -141,80 +141,8 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="rPE-Bq-m44" id="nkI-M7-1OO">
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="600"/>
                                             <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="S4O-10-Qll" customClass="DesignableView" customModule="Daydream" customModuleProvider="target">
-                                                    <rect key="frame" x="16" y="71" width="382" height="513"/>
-                                                    <subviews>
-                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ckR-co-8xu">
-                                                            <rect key="frame" x="0.0" y="0.0" width="382" height="171"/>
-                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <accessibility key="accessibilityConfiguration" identifier="eatery1Card">
-                                                                <bool key="isElement" value="YES"/>
-                                                            </accessibility>
-                                                        </view>
-                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qCj-Lu-ZCV">
-                                                            <rect key="frame" x="0.0" y="171" width="382" height="171"/>
-                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <accessibility key="accessibilityConfiguration" identifier="eatery2Card">
-                                                                <bool key="isElement" value="YES"/>
-                                                            </accessibility>
-                                                        </view>
-                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1UT-Ql-mCF">
-                                                            <rect key="frame" x="0.0" y="342" width="382" height="171"/>
-                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <accessibility key="accessibilityConfiguration" identifier="eatery3Card">
-                                                                <bool key="isElement" value="YES"/>
-                                                            </accessibility>
-                                                        </view>
-                                                    </subviews>
-                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    <constraints>
-                                                        <constraint firstItem="ckR-co-8xu" firstAttribute="height" secondItem="qCj-Lu-ZCV" secondAttribute="height" id="2Zs-Ox-2xP"/>
-                                                        <constraint firstAttribute="trailing" secondItem="ckR-co-8xu" secondAttribute="trailing" id="4Yv-ng-DN9"/>
-                                                        <constraint firstAttribute="bottom" secondItem="1UT-Ql-mCF" secondAttribute="bottom" id="EJH-lt-nXl"/>
-                                                        <constraint firstAttribute="trailing" secondItem="1UT-Ql-mCF" secondAttribute="trailing" id="GTM-Z8-w7n"/>
-                                                        <constraint firstAttribute="trailing" secondItem="qCj-Lu-ZCV" secondAttribute="trailing" id="KbP-aS-Gpt"/>
-                                                        <constraint firstItem="qCj-Lu-ZCV" firstAttribute="height" secondItem="1UT-Ql-mCF" secondAttribute="height" id="O4u-CL-qxj"/>
-                                                        <constraint firstItem="ckR-co-8xu" firstAttribute="top" secondItem="S4O-10-Qll" secondAttribute="top" id="cdJ-YQ-8tJ"/>
-                                                        <constraint firstItem="qCj-Lu-ZCV" firstAttribute="leading" secondItem="S4O-10-Qll" secondAttribute="leading" id="dR7-06-Dds"/>
-                                                        <constraint firstAttribute="height" constant="515" id="iak-1O-fpN"/>
-                                                        <constraint firstItem="1UT-Ql-mCF" firstAttribute="top" secondItem="qCj-Lu-ZCV" secondAttribute="bottom" id="igw-sg-YIC"/>
-                                                        <constraint firstItem="qCj-Lu-ZCV" firstAttribute="top" secondItem="ckR-co-8xu" secondAttribute="bottom" id="jrK-if-1iN"/>
-                                                        <constraint firstItem="ckR-co-8xu" firstAttribute="leading" secondItem="S4O-10-Qll" secondAttribute="leading" id="xEM-Dg-cuz"/>
-                                                        <constraint firstItem="1UT-Ql-mCF" firstAttribute="leading" secondItem="S4O-10-Qll" secondAttribute="leading" id="yeS-Ea-ySx"/>
-                                                    </constraints>
-                                                    <userDefinedRuntimeAttributes>
-                                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                            <real key="value" value="10"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                        <userDefinedRuntimeAttribute type="number" keyPath="shadowRadius">
-                                                            <real key="value" value="3"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                        <userDefinedRuntimeAttribute type="color" keyPath="shadowColor">
-                                                            <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                        <userDefinedRuntimeAttribute type="size" keyPath="shadowOffset">
-                                                            <size key="value" width="0.0" height="3"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                        <userDefinedRuntimeAttribute type="number" keyPath="shadowOpacity">
-                                                            <real key="value" value="0.29999999999999999"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                    </userDefinedRuntimeAttributes>
-                                                </view>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="S4O-10-Qll" firstAttribute="top" secondItem="nkI-M7-1OO" secondAttribute="topMargin" constant="60" id="CqK-pR-XC9"/>
-                                                <constraint firstAttribute="bottom" secondItem="S4O-10-Qll" secondAttribute="bottom" constant="16" id="Tub-jJ-Fje"/>
-                                                <constraint firstItem="S4O-10-Qll" firstAttribute="leading" secondItem="nkI-M7-1OO" secondAttribute="leading" constant="16" id="s6l-eg-ATm"/>
-                                                <constraint firstAttribute="trailing" secondItem="S4O-10-Qll" secondAttribute="trailing" constant="16" id="vdu-Oa-waI"/>
-                                            </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <connections>
-                                            <outlet property="eatery1View" destination="ckR-co-8xu" id="2Kb-Mb-E3n"/>
-                                            <outlet property="eatery2View" destination="qCj-Lu-ZCV" id="ywp-tV-LWU"/>
-                                            <outlet property="eatery3View" destination="1UT-Ql-mCF" id="DWi-TM-2d8"/>
-                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
