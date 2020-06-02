@@ -100,10 +100,8 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
 
             return mapCardCell
         case sightsCardCellIndexPath:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "sightsCardCell", for: indexPath)
-
-            guard let sightsCardCell = cell as? SightsCardCell else {
-                return cell
+            guard let sightsCardCell = tableView.dequeueReusableCell(withIdentifier: "sightsCardCell", for: indexPath) as? SightsCardCell else {
+                return UITableViewCell()
             }
 
             sightsCardCell.delegate = viewController
@@ -116,10 +114,8 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
 
             return sightsCardCell
         case eateriesCardCellIndexPath:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "eateriesCardCell", for: indexPath)
-
-            guard let eateriesCardCell = cell as? EateriesCardCell else {
-                return cell
+            guard let eateriesCardCell = tableView.dequeueReusableCell(withIdentifier: "eateriesCardCell", for: indexPath) as? EateriesCardCell else {
+                return UITableViewCell()
             }
 
             eateriesCardCell.delegate = viewController

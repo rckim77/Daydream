@@ -48,7 +48,6 @@ final class SightView: UIView {
         self.init(frame: .zero)
         self.layoutType = layoutType
         self.delegate = delegate
-        updateLayer()
 
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture))
         addGestureRecognizer(tapGesture)
@@ -59,7 +58,7 @@ final class SightView: UIView {
         addViews()
     }
 
-    private func updateLayer() {
+    private func updateLayers() {
         switch layoutType {
         case .top:
             addTopRoundedCorners()
@@ -68,6 +67,7 @@ final class SightView: UIView {
         case .bottom:
             addBottomRoundedCorners()
         }
+        gradientView.gradientLayer.frame = gradientView.bounds
     }
 
     private func addViews() {
@@ -100,17 +100,14 @@ final class SightView: UIView {
         }
     }
 
-    func updateGradient() {
-        gradientView.gradientLayer.frame = gradientView.bounds
-    }
-
     func resetBackgroundImage() {
         backgroundImageView.image = nil
     }
 
     func configureLoading() {
+        updateLayers()
         backgroundImageView.image = nil
-        titleLabel.text = "Loading..."
+        titleLabel.text = ""
         businessStatusButton.isHidden = true
     }
 
@@ -121,14 +118,16 @@ final class SightView: UIView {
         businessStatusButton.configureWithSystemIcon(businessStatus?.imageName ?? "")
         businessStatusButton.tintColor = businessStatus?.displayColor
         businessStatusButton.isHidden = businessStatus == .operational
-        backgroundImageView.image = nil
 
         if let id = sight.placeableId {
+            updateLayers()
             NetworkService().loadPhoto(with: id, success: { [weak self] image in
-                self?.backgroundImageView.image = image
-                self?.updateLayer()
-                self?.updateGradient()
-                self?.layoutIfNeeded()
+                guard let strongSelf = self else {
+                    return
+                }
+                strongSelf.updateLayers()
+                strongSelf.fadeInImage(image, forImageView: strongSelf.backgroundImageView)
+                strongSelf.layoutIfNeeded()
             }, failure: { _ in })
         }
     }
@@ -152,3 +151,5 @@ final class SightView: UIView {
         delegate?.sightViewDidTapBusinessStatus(status: businessStatus)
     }
 }
+
+extension SightView: ImageViewFadeable {}

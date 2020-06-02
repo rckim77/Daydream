@@ -99,12 +99,14 @@ class SightsCardCell: UITableViewCell {
     // MARK: - Configuration methods
 
     func configureLoading() {
+        layoutIfNeeded()
         sight1View.configureLoading()
         sight2View.configureLoading()
         sight3View.configureLoading()
     }
 
     private func configure(_ pointsOfInterest: [Placeable]) {
+        layoutIfNeeded()
         sight1View.configure(sight: pointsOfInterest[0])
         sight2View.configure(sight: pointsOfInterest[1])
         sight3View.configure(sight: pointsOfInterest[2])

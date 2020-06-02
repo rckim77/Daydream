@@ -256,7 +256,7 @@ class EateriesCardCell: UITableViewCell {
         }
 
         [eatery1Label, eatery2Label, eatery3Label].forEach { label in
-            label.text = "Loading..."
+            label.text = ""
         }
     }
 
