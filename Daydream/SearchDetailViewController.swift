@@ -20,7 +20,7 @@ final class SearchDetailViewController: UIViewController {
     private var mapView: GMSMapView?
     private lazy var visualEffectView: UIVisualEffectView = {
         let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .regular))
-        visualEffectView.frame = placeImageView.bounds
+        visualEffectView.frame = view.bounds
         return visualEffectView
     }()
     private let networkService = NetworkService()
