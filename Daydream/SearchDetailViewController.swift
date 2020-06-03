@@ -14,13 +14,13 @@ import SnapKit
 final class SearchDetailViewController: UIViewController {
 
     var dataSource: SearchDetailDataSource?
+    var backgroundImage: UIImage?
     private var resultsViewController: GMSAutocompleteResultsViewController?
     private var searchController: UISearchController?
-    private var resultView: UITextView?
     private var mapView: GMSMapView?
     private lazy var visualEffectView: UIVisualEffectView = {
         let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .regular))
-        visualEffectView.frame = placeImageView.bounds
+        visualEffectView.frame = view.bounds
         return visualEffectView
     }()
     private let networkService = NetworkService()
@@ -80,7 +80,14 @@ final class SearchDetailViewController: UIViewController {
         configureTableView()
         addProgrammaticComponents()
         configureFloatingTitleLabel()
-        loadDataSource()
+
+        placeImageView.image = backgroundImage
+        placeImageView.contentMode = .scaleAspectFill
+        placeImageView.addSubview(visualEffectView)
+
+        dataSource?.isLoading = true
+        placeCardsTableView.reloadData()
+        loadDataSource(reloadMapCard: false, fetchBackground: false, completion: {})
     }
 
     // MARK: - Search
@@ -136,7 +143,7 @@ final class SearchDetailViewController: UIViewController {
         }
     }
 
-    private func loadDataSource(reloadMapCard: Bool = false) {
+    private func loadDataSource(reloadMapCard: Bool = false, fetchBackground: Bool = true, completion: @escaping(() -> Void)) {
         guard let dataSource = dataSource else {
             return
         }
@@ -144,25 +151,28 @@ final class SearchDetailViewController: UIViewController {
         titleLabel.text = dataSource.place.placeableName
         floatingTitleLabel.text = dataSource.place.placeableName
 
-        dataSource.loadPhoto(success: { [weak self] image in
-            guard let strongSelf = self else {
-                return
-            }
+        if fetchBackground {
+            dataSource.loadPhoto(success: { [weak self] image in
+                guard let strongSelf = self else {
+                    return
+                }
 
-            DispatchQueue.main.async {
-                strongSelf.placeImageView.subviews.forEach { $0.removeFromSuperview() }
-                strongSelf.placeImageView.image = image
-                strongSelf.placeImageView.contentMode = .scaleAspectFill
-                strongSelf.placeImageView.addSubview(strongSelf.visualEffectView)
-            }
-        }, failure: { [weak self] error in
-            guard let strongSelf = self else {
-                return
-            }
-            strongSelf.logErrorEvent(error)
-        })
+                DispatchQueue.main.async {
+                    strongSelf.placeImageView.subviews.forEach { $0.removeFromSuperview() }
+                    strongSelf.placeImageView.image = image
+                    strongSelf.placeImageView.contentMode = .scaleAspectFill
+                    strongSelf.placeImageView.addSubview(strongSelf.visualEffectView)
+                }
+            }, failure: { [weak self] error in
+                guard let strongSelf = self else {
+                    return
+                }
+                strongSelf.logErrorEvent(error)
+            })
+        }
 
         dataSource.loadSightsAndEateries(success: { [weak self] indexPaths in
+            completion()
             guard let strongSelf = self else {
                 return
             }
@@ -170,8 +180,15 @@ final class SearchDetailViewController: UIViewController {
                 strongSelf.placeCardsTableView.reloadRows(at: indexPaths, with: .fade)
             }
         }, failure: { [weak self] error in
+            completion()
             guard let strongSelf = self else {
                 return
+            }
+            DispatchQueue.main.async {
+                if let sightsIndexPath = strongSelf.dataSource?.sightsCardCellIndexPath,
+                    let eateriesIndexPath = strongSelf.dataSource?.eateriesCardCellIndexPath {
+                    strongSelf.placeCardsTableView.reloadRows(at: [sightsIndexPath, eateriesIndexPath], with: .fade)
+                }
             }
             strongSelf.logErrorEvent(error)
         })
@@ -220,15 +237,18 @@ final class SearchDetailViewController: UIViewController {
         }
         let loadingVC = LoadingViewController()
         add(loadingVC)
+        dataSource?.isLoading = true
+        placeCardsTableView.reloadData()
 
         networkService.getPlaceId(with: randomCity, success: { [weak self] place in
-            loadingVC.remove()
             guard let strongSelf = self, let dataSource = strongSelf.dataSource else {
+                loadingVC.remove()
                 return
-
             }
             dataSource.place = place
-            strongSelf.loadDataSource(reloadMapCard: true)
+            strongSelf.loadDataSource(reloadMapCard: true, completion: {
+                loadingVC.remove()
+            })
         }, failure: { [weak self] error in
             loadingVC.remove()
             guard let strongSelf = self else {
@@ -336,9 +356,12 @@ extension SearchDetailViewController: GMSAutocompleteResultsViewControllerDelega
             guard let dataSource = self.dataSource else {
                 return
             }
-
             dataSource.place = place
-            self.loadDataSource(reloadMapCard: true)
+            let loadingVC = LoadingViewController()
+            self.add(loadingVC)
+            self.loadDataSource(reloadMapCard: true, completion: {
+                loadingVC.remove()
+            })
         })
     }
 

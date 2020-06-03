@@ -17,6 +17,7 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
     var fallbackEateries: [Placeable]?
     private var prevFallbackEateries: [Placeable]?
     weak var viewController: SearchDetailViewController?
+    var isLoading = false
 
     private let networkService = NetworkService()
     let mapCardCellHeight: CGFloat = 190
@@ -48,6 +49,7 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
             }
 
             strongSelf.pointsOfInterest = sights
+            strongSelf.isLoading = false
 
             if !eateries.isEmpty {
                 strongSelf.prevEateries = strongSelf.eateries
@@ -98,26 +100,29 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
 
             return mapCardCell
         case sightsCardCellIndexPath:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "sightsCardCell", for: indexPath)
-
-            guard let sightsCardCell = cell as? SightsCardCell else {
-                return cell
+            guard let sightsCardCell = tableView.dequeueReusableCell(withIdentifier: "sightsCardCell", for: indexPath) as? SightsCardCell else {
+                return UITableViewCell()
             }
 
             sightsCardCell.delegate = viewController
-            sightsCardCell.pointsOfInterest = pointsOfInterest
+
+            if isLoading {
+                sightsCardCell.configureLoading()
+            } else {
+                sightsCardCell.pointsOfInterest = pointsOfInterest
+            }
 
             return sightsCardCell
         case eateriesCardCellIndexPath:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "eateriesCardCell", for: indexPath)
-
-            guard let eateriesCardCell = cell as? EateriesCardCell else {
-                return cell
+            guard let eateriesCardCell = tableView.dequeueReusableCell(withIdentifier: "eateriesCardCell", for: indexPath) as? EateriesCardCell else {
+                return UITableViewCell()
             }
 
             eateriesCardCell.delegate = viewController
 
-            if let prevEateries = prevEateries, let eateries = eateries, prevEateries == eateries {
+            if isLoading {
+                eateriesCardCell.configureLoading()
+            } else if let prevEateries = prevEateries, let eateries = eateries, prevEateries == eateries {
                 // this is for when the user is simply scrolling and hasn't reloaded
                 return eateriesCardCell
             } else if let prevFallbackEateries = prevFallbackEateries as? [Place],
@@ -131,8 +136,6 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
             } else if let fallbackEateries = fallbackEateries, fallbackEateries.count > 2 {
                 eateriesCardCell.configureWithFallbackEateries(fallbackEateries)
                 prevFallbackEateries = fallbackEateries
-            } else {
-                eateriesCardCell.configureForNoResults()
             }
 
             return eateriesCardCell
