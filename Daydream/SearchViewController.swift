@@ -158,7 +158,13 @@ final class SearchViewController: UIViewController {
 
     @objc
     private func feedbackButtonTapped() {
-        let alert = UIAlertController(title: "Got feedback? Email me!", message: nil, preferredStyle: .alert)
+        var message: String?
+
+        if let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
+            message = "The current app version is \(appVersion)"
+        }
+
+        let alert = UIAlertController(title: "Got feedback? Email me!", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Email", style: .default, handler: { _ in
             self.openUrl("mailto:daydreamiosapp@gmail.com")
         }))
