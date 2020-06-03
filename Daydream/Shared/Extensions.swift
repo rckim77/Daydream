@@ -8,6 +8,7 @@
 
 import UIKit
 import GooglePlaces
+import GoogleMaps
 
 extension GMSPlace: Placeable {
     var placeableId: String? {
@@ -111,6 +112,19 @@ extension GMSAutocompleteResultsViewController {
         let filter = GMSAutocompleteFilter()
         filter.type = type
         autocompleteFilter = filter
+    }
+}
+
+extension GMSMapView {
+    func configureMapStyle(isDark: Bool) {
+        if isDark {
+            guard let styleURL = Bundle.main.url(forResource: "style", withExtension: "json") else {
+                return
+            }
+            mapStyle = try? GMSMapStyle(contentsOfFileURL: styleURL)
+        } else {
+            mapStyle = nil
+        }
     }
 }
 
