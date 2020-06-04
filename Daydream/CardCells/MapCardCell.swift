@@ -13,7 +13,11 @@ import GoogleMaps
 class MapCardCell: UITableViewCell {
 
     @IBOutlet weak var mainView: DesignableView!
-    weak var mapView: GMSMapView?
+    weak var mapView: GMSMapView? {
+        didSet {
+             mapView?.configureMapStyle(isDark: traitCollection.userInterfaceStyle == .dark)
+        }
+    }
 
     weak var place: Placeable? {
         didSet {
@@ -73,5 +77,15 @@ class MapCardCell: UITableViewCell {
         marker.title = place.placeableName
         marker.snippet = place.placeableFormattedAddress
         marker.map = mapView
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        guard let previousTraitCollection = previousTraitCollection else {
+            return
+        }
+        if traitCollection.userInterfaceStyle != previousTraitCollection.userInterfaceStyle {
+            mapView?.configureMapStyle(isDark: traitCollection.userInterfaceStyle == .dark)
+        }
     }
 }
