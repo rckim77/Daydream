@@ -345,6 +345,16 @@ final class MapViewController: UIViewController {
         }
         openUrl(authorUrl)
     }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        guard let previousTraitCollection = previousTraitCollection else {
+            return
+        }
+        if traitCollection.userInterfaceStyle != previousTraitCollection.userInterfaceStyle {
+            isViewingDarkMode = traitCollection.userInterfaceStyle == .dark
+        }
+    }
 }
 
 extension MapViewController: GMSMapViewDelegate {
