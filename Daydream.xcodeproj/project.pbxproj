@@ -43,6 +43,7 @@
 		94E392AD2070B4300073E8C9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 94E392AC2070B4300073E8C9 /* GoogleService-Info.plist */; };
 		94E392B02074B29E0073E8C9 /* style.json in Resources */ = {isa = PBXBuildFile; fileRef = 94E392AF2074B29E0073E8C9 /* style.json */; };
 		94E3D9582097EEC800384680 /* ExpiringCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E3D9572097EEC800384680 /* ExpiringCache.swift */; };
+		94E9C0402488538300103770 /* GoogleExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E9C03F2488538300103770 /* GoogleExtensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -98,6 +99,7 @@
 		94E392AC2070B4300073E8C9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		94E392AF2074B29E0073E8C9 /* style.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = style.json; sourceTree = "<group>"; };
 		94E3D9572097EEC800384680 /* ExpiringCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpiringCache.swift; sourceTree = "<group>"; };
+		94E9C03F2488538300103770 /* GoogleExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleExtensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -193,6 +195,7 @@
 			isa = PBXGroup;
 			children = (
 				947EC6512043F28F004A911D /* Extensions.swift */,
+				94E9C03F2488538300103770 /* GoogleExtensions.swift */,
 				94673BAB225075AA00EC04FD /* DesignableView.swift */,
 				94E108702484AF5A0091D043 /* CellLoadingView.swift */,
 				94E1086A248228790091D043 /* CardLabel.swift */,
@@ -475,6 +478,7 @@
 				947EC658204673BF004A911D /* ShadowView.swift in Sources */,
 				94673BAC225075AA00EC04FD /* DesignableView.swift in Sources */,
 				9409090A205F4613002A65EF /* MapViewController.swift in Sources */,
+				94E9C0402488538300103770 /* GoogleExtensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

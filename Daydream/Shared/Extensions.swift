@@ -7,112 +7,6 @@
 //
 
 import UIKit
-import GooglePlaces
-
-extension GMSPlace: Placeable {
-    var placeableId: String? {
-        return self.placeID
-    }
-
-    var placeableName: String? {
-        return self.name
-    }
-
-    var placeableFormattedAddress: String? {
-        return self.formattedAddress
-    }
-
-    var placeableFormattedPhoneNumber: String? {
-        return self.phoneNumber
-    }
-
-    var placeableRating: Float? {
-        return self.rating
-    }
-
-    var placeableCoordinate: CLLocationCoordinate2D {
-        return self.coordinate
-    }
-
-    var placeableViewport: Viewport? {
-        guard let viewport = self.viewport else {
-            return nil
-        }
-        return Viewport(northeastLat: viewport.northEast.latitude,
-                        northeastLng: viewport.northEast.longitude,
-                        southwestLat: viewport.southWest.latitude,
-                        southwestLng: viewport.southWest.longitude)
-    }
-
-    var placeableMapUrl: String? {
-        return nil
-    }
-
-    var placeableReviews: [Reviewable]? {
-        return nil
-    }
-
-    /*
-
-     typedef NS_ENUM(NSInteger, GMSPlacesBusinessStatus) {
-       /** The business status is not known. */
-       GMSPlacesBusinessStatusUnknown,
-       /** The business is operational. */
-       GMSPlacesBusinessStatusOperational,
-       /** The business is closed temporarily. */
-       GMSPlacesBusinessStatusClosedTemporarily,
-       /** The business is closed permanently. */
-       GMSPlacesBusinessStatusClosedPermanently,
-     };
-
-     */
-    var placeableBusinessStatus: PlaceBusinessStatus? {
-        switch self.businessStatus {
-        case .operational:
-            return .operational
-        case .closedTemporarily:
-            return .closedTemporarily
-        case .closedPermanently:
-            return .closedPermanently
-        default:
-            return nil
-        }
-    }
-}
-
-extension UISearchController {
-    func setStyle() {
-        // style cancel button
-        let cancelBtnAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-        UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes(cancelBtnAttributes, for: .normal)
-
-        searchBar.searchTextField.textColor = .white
-        searchBar.searchTextField.placeholder = "e.g., Tokyo"
-        searchBar.searchBarStyle = .minimal
-        searchBar.setPlaceholderColor(.white)
-
-        // style search icon
-        searchBar.setImage(#imageLiteral(resourceName: "searchIconWhite"), for: .search, state: .normal)
-
-        // style clear text icon
-        searchBar.setImage(#imageLiteral(resourceName: "clearIcon"), for: .clear, state: .normal)
-    }
-}
-
-extension GMSAutocompleteResultsViewController {
-    func setStyle() {
-        tableCellBackgroundColor = UIColor.black.withAlphaComponent(0.3)
-        primaryTextHighlightColor = .white
-        primaryTextColor = .lightGray
-        secondaryTextColor = .lightGray
-    }
-
-    func setAutocompleteFilter(_ type: GMSPlacesAutocompleteTypeFilter) {
-        let filter = GMSAutocompleteFilter()
-        filter.type = type
-        autocompleteFilter = filter
-    }
-}
 
 extension UIView {
     func addRoundedCorners(radius: CGFloat) {
@@ -281,5 +175,24 @@ extension UIButton {
         layer.shadowOffset = CGSize(width: 0, height: 1)
         layer.shadowRadius = 0.5
         layer.shadowOpacity = 1
+    }
+}
+
+extension UISearchController {
+    func setStyle() {
+        // style cancel button
+        let cancelBtnAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes(cancelBtnAttributes, for: .normal)
+
+        searchBar.searchTextField.textColor = .white
+        searchBar.searchTextField.placeholder = "e.g., Tokyo"
+        searchBar.searchBarStyle = .minimal
+        searchBar.setPlaceholderColor(.white)
+
+        // style search icon
+        searchBar.setImage(#imageLiteral(resourceName: "searchIconWhite"), for: .search, state: .normal)
+
+        // style clear text icon
+        searchBar.setImage(#imageLiteral(resourceName: "clearIcon"), for: .clear, state: .normal)
     }
 }

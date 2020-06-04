@@ -19,7 +19,16 @@ final class MapViewController: UIViewController {
     var dynamicMarker: GMSMarker?
     var currentReviews: [Reviewable]?
     var currentReviewIndex = 0
-    var isViewingDarkMode = false
+
+    // Will automatically sync with system user interface style settings but can be overridden
+    // when the user taps the dark mode button. Note this must be called once dynamicMapView is set.
+    private var isViewingDarkMode = false {
+        didSet {
+            dynamicMapView?.configureMapStyle(isDark: isViewingDarkMode)
+            let imageName = isViewingDarkMode ? "sun.max.fill" : "moon.fill"
+            darkModeButton.configureWithSystemIcon(imageName)
+        }
+    }
 
     private let networkService = NetworkService()
 
@@ -168,6 +177,7 @@ final class MapViewController: UIViewController {
             view.sendSubviewToBack(dynamicMapView)
             addOrUpdateMarkerAndReviews(for: placeId, name: name, location: location, in: dynamicMapView)
         }
+        isViewingDarkMode = traitCollection.userInterfaceStyle == .dark
     }
 
     private func addOrUpdateMarkerAndReviews(for placeId: String, name: String, location: CLLocationCoordinate2D, in mapView: GMSMapView) {
@@ -319,22 +329,7 @@ final class MapViewController: UIViewController {
 
     @objc
     private func darkModeButtonTapped() {
-        if isViewingDarkMode {
-            dynamicMapView?.mapStyle = nil
-            isViewingDarkMode = false
-            darkModeButton.configureWithSystemIcon("moon.fill")
-        } else {
-            do {
-                // Set the map style by passing the URL of the local file.
-                if let styleURL = Bundle.main.url(forResource: "style", withExtension: "json"), let mapView = dynamicMapView {
-                    mapView.mapStyle = try GMSMapStyle(contentsOfFileURL: styleURL)
-                    isViewingDarkMode = true
-                    darkModeButton.configureWithSystemIcon("sun.max.fill")
-                }
-            } catch {
-                logErrorEvent(error)
-            }
-        }
+        isViewingDarkMode.toggle()
     }
 
     @objc
@@ -349,6 +344,16 @@ final class MapViewController: UIViewController {
             return
         }
         openUrl(authorUrl)
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        guard let previousTraitCollection = previousTraitCollection else {
+            return
+        }
+        if traitCollection.userInterfaceStyle != previousTraitCollection.userInterfaceStyle {
+            isViewingDarkMode = traitCollection.userInterfaceStyle == .dark
+        }
     }
 }
 
