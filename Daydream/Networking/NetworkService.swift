@@ -10,6 +10,10 @@ import Alamofire
 import GooglePlaces
 import SwiftyJSON
 
+enum NetworkError: Error {
+    case badURL, malformedJSON
+}
+
 // swiftlint:disable type_body_length
 class NetworkService {
 
@@ -213,10 +217,13 @@ class NetworkService {
                     return
                 }
 
-                NetworkService().getPlace(with: placeId, success: { place in
-                    success(place)
-                }, failure: { error in
-                    failure(error)
+                NetworkService().getPlace(id: placeId, completion: { result in
+                    switch result {
+                    case .success(let place):
+                        success(place)
+                    case .failure(let error):
+                        failure(error)
+                    }
                 })
             case .failure(let error):
                 failure(error)
@@ -224,9 +231,39 @@ class NetworkService {
         }
     }
 
-    func getPlace(with placeId: String, success: @escaping(_ place: Place) -> Void, failure: @escaping(_ error: Error?) -> Void) {
-        guard let url = createUrlWithPlaceId(placeId) else {
-            failure(nil)
+    func getResultPlaceId(name: String, completion: @escaping(Result<Place, Error>) -> Void) {
+        guard let url = createUrlWithPlaceName(name) else {
+            completion(.failure(NetworkError.badURL))
+            return
+        }
+
+        AF.request(url).validate().responseJSON { response in
+            switch response.result {
+            case .success(let value):
+                let json = JSON(value)
+                guard let result = json["results"].array?.first,
+                    let placeId = result["place_id"].string else {
+                        completion(.failure(NetworkError.malformedJSON))
+                    return
+                }
+
+                NetworkService().getPlace(id: placeId, completion: { result in
+                    switch result {
+                    case .success(let place):
+                        completion(.success(place))
+                    case .failure(let error):
+                        completion(.failure(error))
+                    }
+                })
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+
+    func getPlace(id: String, completion: @escaping(Result<Place, Error>) -> Void) {
+        guard let url = createUrlWithPlaceId(id) else {
+            completion(.failure(NetworkError.badURL))
             return
         }
 
@@ -241,7 +278,7 @@ class NetworkService {
                     let latitude = result["geometry"]?["location"]["lat"].double,
                     let longitude = result["geometry"]?["location"]["lng"].double,
                     let mapUrl = result["url"]?.string else {
-                    failure(nil)
+                    completion(.failure(NetworkError.malformedJSON))
                     return
                 }
 
@@ -255,7 +292,9 @@ class NetworkService {
                     reviews = reviewsJSON.compactMap { review -> Review? in
                         guard let dict = review.dictionary,
                             let author = dict["author_name"]?.string,
-                            let rating = dict["rating"]?.int else { return nil }
+                            let rating = dict["rating"]?.int else {
+                                return nil
+                        }
 
                         let review = dict["text"]?.string
                         let authorUrl = dict["author_url"]?.string
@@ -274,9 +313,9 @@ class NetworkService {
                                   mapUrl: mapUrl,
                                   reviews: reviews)
 
-                success(place)
+                completion(.success(place))
             case .failure(let error):
-                failure(error)
+                completion(.failure(error))
             }
         }
     }
