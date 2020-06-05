@@ -129,15 +129,16 @@ class NetworkService {
         }
     }
 
-    func loadGoogleRestaurants(place: Placeable, success: @escaping(_ restaurants: [Placeable]) -> Void, failure: @escaping(_ error: Error?) -> Void) {
+    func loadGoogleRestaurants(place: Placeable, completion: @escaping(Result<[Placeable], Error>) -> Void) {
         let url = createUrl(with: place, and: .googleRestaurants)
+
         AF.request(url).validate().responseJSON { response in
             switch response.result {
             case .success(let value):
                 let json = JSON(value)
                 // POSTLAUNCH: - refactor into a JSON init method
                 guard let results = json["results"].array, results.count > 2 else {
-                    failure(nil)
+                    completion(.failure(NetworkError.insufficientResults))
                     return
                 }
 
@@ -169,9 +170,9 @@ class NetworkService {
                                  businessStatus: businessStatus)
                 }
 
-                success(restaurants)
+                completion(.success(restaurants))
             case .failure(let error):
-                failure(error)
+                completion(.failure(error))
             }
 
         }

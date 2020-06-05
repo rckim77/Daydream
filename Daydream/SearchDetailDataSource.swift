@@ -60,18 +60,21 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
                     strongSelf.prevFallbackEateries = nil
                     success([strongSelf.sightsCardCellIndexPath, strongSelf.eateriesCardCellIndexPath])
                 } else {
-                    strongSelf.networkService.loadGoogleRestaurants(place: strongSelf.place, success: { [weak self] restaurants in
+                    strongSelf.networkService.loadGoogleRestaurants(place: strongSelf.place, completion: { [weak self] result in
                         guard let strongSelf = self else {
                             failure(nil)
                             return
                         }
-                        strongSelf.prevFallbackEateries = strongSelf.fallbackEateries
-                        strongSelf.fallbackEateries = restaurants
-                        strongSelf.eateries = nil
-                        strongSelf.prevEateries = nil
-                        success([strongSelf.sightsCardCellIndexPath, strongSelf.eateriesCardCellIndexPath])
-                    }, failure: { error in
-                        failure(error)
+                        switch result {
+                        case .success(let restaurants):
+                            strongSelf.prevFallbackEateries = strongSelf.fallbackEateries
+                            strongSelf.fallbackEateries = restaurants
+                            strongSelf.eateries = nil
+                            strongSelf.prevEateries = nil
+                            success([strongSelf.sightsCardCellIndexPath, strongSelf.eateriesCardCellIndexPath])
+                        case .failure(let error):
+                            failure(error)
+                        }
                     })
                 }
             case .failure(let error):
