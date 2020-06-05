@@ -10,15 +10,6 @@ import Alamofire
 import GooglePlaces
 import SwiftyJSON
 
-enum NetworkError: Error {
-    case malformedJSON
-    case insufficientResults
-    case malformedPhotoField
-    case photoMetadataMissing
-    case APIKeysFetchFailure
-    case unknown // e.g., 3rd party function returns nil data and nil error
-}
-
 typealias SightsAndEateries = ([Placeable], [Eatery])
 
 // swiftlint:disable type_body_length
@@ -330,7 +321,7 @@ class NetworkService {
         }
     }
 
-    func getSummaryFor(_ city: String, success: @escaping(_ summary: String) -> Void, failure: @escaping(_ error: Error?) -> Void) {
+    func getSummaryFor(_ city: String, completion: @escaping(Result<String, Error>) -> Void) {
         let cityWords = city.split(separator: " ")
         var cityParam = cityWords[0]
         for i in 1..<cityWords.count {
@@ -344,11 +335,12 @@ class NetworkService {
             case .success(let value):
                 let json = JSON(value)
                 guard let query = json["query"]["pages"].dictionary, let pageIdKey = query.keys.first,
-                    let extract = query[pageIdKey]?["extract"].string else { return }
-
-                success(extract)
+                    let extract = query[pageIdKey]?["extract"].string else {
+                    return
+                }
+                completion(.success(extract))
             case .failure(let error):
-                failure(error)
+                completion(.failure(error))
             }
         }
     }
