@@ -95,7 +95,7 @@ final class SearchDetailViewController: UIViewController {
     private func addProgrammaticComponents() {
         view.addSubview(titleLabel)
         view.addSubview(randomCityButton)
-        view.addSubview(homeButton)
+        view.insertSubview(homeButton, belowSubview: placeCardsTableView)
 
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(24)
