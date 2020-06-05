@@ -42,38 +42,41 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
     }
 
     func loadSightsAndEateries(success: @escaping(_ indexPaths: [IndexPath]) -> Void, failure: @escaping(_ error: Error?) -> Void) {
-        networkService.loadSightsAndEateries(with: place, success: { [weak self] sights, eateries in
+        networkService.loadSightsAndEateries(place: place, completion: { [weak self] result in
             guard let strongSelf = self else {
                 failure(nil)
                 return
             }
 
-            strongSelf.pointsOfInterest = sights
-            strongSelf.isLoading = false
+            switch result {
+            case .success(let (sights, eateries)):
+                strongSelf.pointsOfInterest = sights
+                strongSelf.isLoading = false
 
-            if !eateries.isEmpty {
-                strongSelf.prevEateries = strongSelf.eateries
-                strongSelf.eateries = eateries
-                strongSelf.fallbackEateries = nil
-                strongSelf.prevFallbackEateries = nil
-                success([strongSelf.sightsCardCellIndexPath, strongSelf.eateriesCardCellIndexPath])
-            } else {
-                strongSelf.networkService.loadGoogleRestaurants(place: strongSelf.place, success: { [weak self] restaurants in
-                    guard let strongSelf = self else {
-                        failure(nil)
-                        return
-                    }
-                    strongSelf.prevFallbackEateries = strongSelf.fallbackEateries
-                    strongSelf.fallbackEateries = restaurants
-                    strongSelf.eateries = nil
-                    strongSelf.prevEateries = nil
+                if !eateries.isEmpty {
+                    strongSelf.prevEateries = strongSelf.eateries
+                    strongSelf.eateries = eateries
+                    strongSelf.fallbackEateries = nil
+                    strongSelf.prevFallbackEateries = nil
                     success([strongSelf.sightsCardCellIndexPath, strongSelf.eateriesCardCellIndexPath])
-                }, failure: { error in
-                    failure(error)
-                })
+                } else {
+                    strongSelf.networkService.loadGoogleRestaurants(place: strongSelf.place, success: { [weak self] restaurants in
+                        guard let strongSelf = self else {
+                            failure(nil)
+                            return
+                        }
+                        strongSelf.prevFallbackEateries = strongSelf.fallbackEateries
+                        strongSelf.fallbackEateries = restaurants
+                        strongSelf.eateries = nil
+                        strongSelf.prevEateries = nil
+                        success([strongSelf.sightsCardCellIndexPath, strongSelf.eateriesCardCellIndexPath])
+                    }, failure: { error in
+                        failure(error)
+                    })
+                }
+            case .failure(let error):
+                failure(error)
             }
-        }, failure: { error in
-            failure(error)
         })
     }
 

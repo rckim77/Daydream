@@ -11,8 +11,10 @@ import GooglePlaces
 import SwiftyJSON
 
 enum NetworkError: Error {
-    case badURL, malformedJSON
+    case badURL, malformedJSON, insufficientResults
 }
+
+typealias SightsAndEateries = ([Placeable], [Eatery])
 
 // swiftlint:disable type_body_length
 class NetworkService {
@@ -22,39 +24,34 @@ class NetworkService {
     }
 
     /// The pointsOfInterest array is guaranteed to return at least three elements if the call succeeds. The eateries array
-    func loadSightsAndEateries(with place: Placeable,
-                               success: @escaping(_ pointsOfInterest: [Placeable], _ eateries: [Eatery]) -> Void,
-                               failure: @escaping(_ error: Error?) -> Void) {
-        var sights: [Placeable] = []
-
-        loadTopSights(with: place, success: { [weak self] pointsOfInterest in
-            guard let strongSelf = self else {
-                failure(nil)
-                return
+    func loadSightsAndEateries(place: Placeable, completion: @escaping(Result<SightsAndEateries, Error>) -> Void) {
+        loadTopSights(place: place, completion: { result in
+            switch result {
+            case .success(let places):
+                NetworkService().loadTopEateries(place: place, completion: { result in
+                    switch result {
+                    case .success(let eateries):
+                        completion(.success((places, eateries)))
+                    case .failure:
+                        completion(.success((places, [])))
+                    }
+                })
+            case .failure(let error):
+                completion(.failure(error))
             }
-
-            sights = pointsOfInterest
-
-            strongSelf.loadTopEateries(with: place, success: { eateries in
-                success(sights, eateries)
-            }, failure: { _ in
-                success(sights, [])
-            })
-        }, failure: { error in
-            failure(error)
         })
     }
 
-    func loadTopSights(with place: Placeable, success: @escaping(_ pointsOfInterest: [Placeable]) -> Void,
-                       failure: @escaping(_ error: Error?) -> Void) {
+    func loadTopSights(place: Placeable, completion: @escaping(Result<[Placeable], Error>) -> Void) {
         let url = createUrl(with: place, and: .topSights)
+
         AF.request(url).validate().responseJSON { response in
             switch response.result {
             case .success(let value):
                 let json = JSON(value)
                 // POSTLAUNCH: - refactor into a JSON init method
                 guard let results = json["results"].array, results.count > 2 else {
-                    failure(nil)
+                    completion(.failure(NetworkError.insufficientResults))
                     return
                 }
 
@@ -86,18 +83,17 @@ class NetworkService {
                                  businessStatus: businessStatus)
                 }
 
-                success(pointsOfInterest)
+                completion(.success(pointsOfInterest))
             case .failure(let error):
-                failure(error)
+                completion(.failure(error))
             }
 
         }
     }
 
-    func loadTopEateries(with place: Placeable, success: @escaping(_ eateries: [Eatery]) -> Void,
-                         failure: @escaping(_ error: Error?) -> Void) {
+    func loadTopEateries(place: Placeable, completion: @escaping(Result<[Eatery], Error>) -> Void) {
         guard let yelpAPIKey = AppDelegate.getAPIKeys()?.yelpAPI else {
-            failure(nil)
+            completion(.failure(NetworkError.badURL))
             return
         }
 
@@ -111,7 +107,7 @@ class NetworkService {
             case .success(let value):
                 let json = JSON(value)
                 guard let results = json["businesses"].array, results.count > 2 else {
-                    failure(nil)
+                    completion(.failure(NetworkError.insufficientResults))
                     return
                 }
 
@@ -126,9 +122,9 @@ class NetworkService {
                     return Eatery(name: name, imageUrl: imageUrl, url: url, price: price)
                 }
 
-                success(eateries)
+                completion(.success(eateries))
             case .failure(let error):
-                failure(error)
+                completion(.failure(error))
             }
         }
     }
