@@ -11,20 +11,14 @@ import Combine
 
 struct Agent {
 
-    /// Contains both a parsed value and the raw response object for, say, status code validation or logging.
-    struct Response<T> {
-        let value: T
-        let response: URLResponse
-    }
-
-    /// Use this function to execute requests with an optional decoder if you need a custom decoder.
-    func run<T: Decodable>(_ request: URLRequest, _ decoder: JSONDecoder = JSONDecoder()) -> AnyPublisher<Response<T>, Error> {
+    /// Use this function to execute requests with an optional decoder if you need to use
+    /// a custom one. In the future, you can use a tryMap instead of map to get access to
+    /// the response object to do things such as status code validation.
+    func run<T: Decodable>(_ url: URL, _ decoder: JSONDecoder = JSONDecoder()) -> AnyPublisher<T, Error> {
         return URLSession.shared
-            .dataTaskPublisher(for: request)
-            .tryMap { result in
-                let value = try decoder.decode(T.self, from: result.data)
-                return Response(value: value, response: result.response)
-            }
+            .dataTaskPublisher(for: url)
+            .map { $0.data }
+            .decode(type: T.self, decoder: decoder)
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher() // without this, it'll return a mess of nested types
     }

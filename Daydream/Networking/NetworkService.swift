@@ -320,6 +320,13 @@ class NetworkService {
         }.resume()
     }
 
+    /// Note: This returns a Data object because UIImage does not conform to Decodable. To use this, simply initialize a
+    /// UIImage at the callsite with the Data object. Returns on the main queue.
+//    static func loadCombineImage(urlString: String) -> AnyPublisher<Data, Error> {
+//        let url = URL(string: urlString)!
+//        return Agent().run(url)
+//    }
+
     // MARK: - Private helper methods
 
     private func createUrl(with place: Placeable, and type: UrlType) -> String {
