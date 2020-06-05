@@ -10,6 +10,7 @@ import Foundation
 
 enum NetworkError: Error {
     case malformedJSON
+    case jsonDecoding
     case insufficientResults
     case malformedPhotoField
     case photoMetadataMissing

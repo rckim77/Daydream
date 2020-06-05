@@ -19,6 +19,12 @@ class NetworkService {
         case topSights, googleRestaurants, topEateries
     }
 
+    private lazy var customDecoder: JSONDecoder = {
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        return decoder
+    }()
+
     /// The pointsOfInterest array is guaranteed to return at least three elements if the call succeeds. The eateries array
     func loadSightsAndEateries(place: Placeable, completion: @escaping(Result<SightsAndEateries, Error>) -> Void) {
         loadTopSights(place: place, completion: { result in
@@ -98,27 +104,20 @@ class NetworkService {
             "Authorization": "Bearer \(yelpAPIKey)"
         ]
 
-        AF.request(url, headers: headers).validate().responseJSON { response in
+        AF.request(url, headers: headers).responseData { response in
             switch response.result {
-            case .success(let value):
-                let json = JSON(value)
-                guard let results = json["businesses"].array, results.count > 2 else {
+            case .success(let data):
+                guard let eateryCollection = try? self.customDecoder.decode(EateryCollection.self, from: data) else {
+                    completion(.failure(NetworkError.jsonDecoding))
+                    return
+                }
+
+                guard eateryCollection.hasSufficientEateries else {
                     completion(.failure(NetworkError.insufficientResults))
                     return
                 }
 
-                let eateries = results[0..<3].compactMap { result -> Eatery? in
-                    guard let name = result["name"].string,
-                        let imageUrl = result["image_url"].string,
-                        let url = result["url"].string,
-                        let price = result["price"].string else {
-                            return nil
-                    }
-
-                    return Eatery(name: name, imageUrl: imageUrl, url: url, price: price)
-                }
-
-                completion(.success(eateries))
+                completion(.success(eateryCollection.businesses))
             case .failure(let error):
                 completion(.failure(error))
             }
