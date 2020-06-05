@@ -63,15 +63,12 @@ final class SearchViewController: UIViewController {
             guard let placeId = place.placeableId else {
                 return
             }
-            strongSelf.networkService.loadPhoto(with: placeId, success: { [weak self] image in
+            strongSelf.networkService.loadPhoto(placeId: placeId, completion: { [weak self] result in
                 guard let strongSelf = self else {
                     return
                 }
-                strongSelf.placeBackgroundImage = image
-                strongSelf.performSegue(withIdentifier: "toSearchDetailVCSegue", sender: nil)
-            }, failure: { [weak self] _ in
-                guard let strongSelf = self else {
-                    return
+                if case .success(let image) = result {
+                    strongSelf.placeBackgroundImage = image
                 }
                 strongSelf.performSegue(withIdentifier: "toSearchDetailVCSegue", sender: nil)
             })
@@ -198,17 +195,16 @@ extension SearchViewController: GMSAutocompleteResultsViewControllerDelegate {
             self.resetSearchUI()
             let loadingVC = LoadingViewController()
             self.add(loadingVC)
-            self.networkService.loadPhoto(with: placeId, success: { [weak self] image in
+            self.networkService.loadPhoto(placeId: placeId, completion: { [weak self] result in
                 loadingVC.remove()
                 guard let strongSelf = self else {
                     return
                 }
-                strongSelf.placeBackgroundImage = image
-                strongSelf.performSegue(withIdentifier: "toSearchDetailVCSegue", sender: nil)
-            }, failure: { [weak self] _ in
-                guard let strongSelf = self else {
-                    return
+
+                if case .success(let image) = result {
+                    strongSelf.placeBackgroundImage = image
                 }
+
                 strongSelf.performSegue(withIdentifier: "toSearchDetailVCSegue", sender: nil)
             })
         })

@@ -11,7 +11,12 @@ import GooglePlaces
 import SwiftyJSON
 
 enum NetworkError: Error {
-    case badURL, malformedJSON, insufficientResults
+    case badURL
+    case malformedJSON
+    case insufficientResults
+    case malformedPhotoField
+    case photoMetadataMissing
+    case unknown // e.g., 3rd party function returns nil data and nil error
 }
 
 typealias SightsAndEateries = ([Placeable], [Eatery])
@@ -178,22 +183,30 @@ class NetworkService {
         }
     }
 
-    func loadPhoto(with placeId: String, success: @escaping(_ photo: UIImage) -> Void,
-                   failure: @escaping(_ error: Error) -> Void) {
+    func loadPhoto(placeId: String, completion: @escaping(Result<UIImage, Error>) -> Void) {
         guard let photoField = GMSPlaceField(rawValue: UInt(GMSPlaceField.photos.rawValue)) else {
+            completion(.failure(NetworkError.malformedPhotoField))
             return
         }
         GMSPlacesClient.shared().fetchPlace(fromPlaceID: placeId, placeFields: photoField, sessionToken: nil) { place, error in
-            if let photoMetadata = place?.photos?.first {
-                GMSPlacesClient.shared().loadPlacePhoto(photoMetadata) { image, error in
-                    if let image = image {
-                        success(image)
-                    } else if let error = error {
-                        failure(error)
+            if let place = place {
+                if let photoMetadata = place.photos?.first {
+                    GMSPlacesClient.shared().loadPlacePhoto(photoMetadata) { image, error in
+                        if let image = image {
+                            completion(.success(image))
+                        } else if let error = error {
+                            completion(.failure(error))
+                        } else {
+                            completion(.failure(NetworkError.unknown))
+                        }
                     }
+                } else {
+                    completion(.failure(NetworkError.photoMetadataMissing))
                 }
             } else if let error = error {
-                failure(error)
+                completion(.failure(error))
+            } else {
+                completion(.failure(NetworkError.unknown))
             }
         }
     }

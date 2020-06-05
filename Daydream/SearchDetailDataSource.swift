@@ -34,10 +34,13 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
         guard let placeId = place.placeableId else {
             return
         }
-        networkService.loadPhoto(with: placeId, success: { photo in
-            success(photo)
-        }, failure: { error in
-            failure(error)
+        networkService.loadPhoto(placeId: placeId, completion: { result in
+            switch result {
+            case .success(let image):
+                success(image)
+            case .failure(let error):
+                failure(error)
+            }
         })
     }
 

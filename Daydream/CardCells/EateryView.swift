@@ -132,14 +132,16 @@ final class EateryView: UIView {
             return
         }
 
-        NetworkService().loadPhoto(with: placeId, success: { [weak self] image in
+        NetworkService().loadPhoto(placeId: placeId, completion: { [weak self] result in
             guard let strongSelf = self else {
                 return
             }
 
-            strongSelf.updateLayers()
-            strongSelf.fadeInImage(image, forImageView: strongSelf.backgroundImageView)
-        }, failure: { _ in })
+            if case .success(let image) = result {
+                strongSelf.updateLayers()
+                strongSelf.fadeInImage(image, forImageView: strongSelf.backgroundImageView)
+            }
+        })
     }
 
     private func createDisplayText(_ name: String, priceRating: String? = nil) -> String {
