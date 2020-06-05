@@ -53,32 +53,30 @@ final class SearchViewController: UIViewController {
         let loadingVC = LoadingViewController()
         add(loadingVC)
 
-        networkService.getPlaceId(with: randomCity, success: { [weak self] place in
+        networkService.getPlaceId(placeName: randomCity, completion: { [weak self] result in
             loadingVC.remove()
             guard let strongSelf = self else {
                 return
             }
 
-            strongSelf.placeData = place
-            guard let placeId = place.placeableId else {
-                return
-            }
-            strongSelf.networkService.loadPhoto(placeId: placeId, completion: { [weak self] result in
-                guard let strongSelf = self else {
+            switch result {
+            case .success(let place):
+                strongSelf.placeData = place
+                guard let placeId = place.placeableId else {
                     return
                 }
-                if case .success(let image) = result {
-                    strongSelf.placeBackgroundImage = image
-                }
-                strongSelf.performSegue(withIdentifier: "toSearchDetailVCSegue", sender: nil)
-            })
-        }, failure: { [weak self] error in
-            loadingVC.remove()
-            guard let strongSelf = self else {
-                return
-
+                strongSelf.networkService.loadPhoto(placeId: placeId, completion: { [weak self] result in
+                    guard let strongSelf = self else {
+                        return
+                    }
+                    if case .success(let image) = result {
+                        strongSelf.placeBackgroundImage = image
+                    }
+                    strongSelf.performSegue(withIdentifier: "toSearchDetailVCSegue", sender: nil)
+                })
+            case .failure(let error):
+                strongSelf.logErrorEvent(error)
             }
-            strongSelf.logErrorEvent(error)
         })
     }
 

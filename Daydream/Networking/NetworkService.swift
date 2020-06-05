@@ -11,11 +11,11 @@ import GooglePlaces
 import SwiftyJSON
 
 enum NetworkError: Error {
-    case badURL
     case malformedJSON
     case insufficientResults
     case malformedPhotoField
     case photoMetadataMissing
+    case APIKeysFetchFailure
     case unknown // e.g., 3rd party function returns nil data and nil error
 }
 
@@ -98,7 +98,7 @@ class NetworkService {
 
     func loadTopEateries(place: Placeable, completion: @escaping(Result<[Eatery], Error>) -> Void) {
         guard let yelpAPIKey = AppDelegate.getAPIKeys()?.yelpAPI else {
-            completion(.failure(NetworkError.badURL))
+            completion(.failure(NetworkError.APIKeysFetchFailure))
             return
         }
 
@@ -211,9 +211,9 @@ class NetworkService {
         }
     }
 
-    func getPlaceId(with placeName: String, success: @escaping(_ place: Place) -> Void, failure: @escaping(_ error: Error?) -> Void) {
+    func getPlaceId(placeName: String, completion: @escaping(Result<Place, Error>) -> Void) {
         guard let url = createUrlWithPlaceName(placeName) else {
-            failure(nil)
+            completion(.failure(NetworkError.APIKeysFetchFailure))
             return
         }
 
@@ -223,27 +223,27 @@ class NetworkService {
                 let json = JSON(value)
                 guard let result = json["results"].array?.first,
                     let placeId = result["place_id"].string else {
-                    failure(nil)
+                    completion(.failure(NetworkError.malformedJSON))
                     return
                 }
 
                 NetworkService().getPlace(id: placeId, completion: { result in
                     switch result {
                     case .success(let place):
-                        success(place)
+                        completion(.success(place))
                     case .failure(let error):
-                        failure(error)
+                        completion(.failure(error))
                     }
                 })
             case .failure(let error):
-                failure(error)
+                completion(.failure(error))
             }
         }
     }
 
     func getResultPlaceId(name: String, completion: @escaping(Result<Place, Error>) -> Void) {
         guard let url = createUrlWithPlaceName(name) else {
-            completion(.failure(NetworkError.badURL))
+            completion(.failure(NetworkError.APIKeysFetchFailure))
             return
         }
 
@@ -273,7 +273,7 @@ class NetworkService {
 
     func getPlace(id: String, completion: @escaping(Result<Place, Error>) -> Void) {
         guard let url = createUrlWithPlaceId(id) else {
-            completion(.failure(NetworkError.badURL))
+            completion(.failure(NetworkError.APIKeysFetchFailure))
             return
         }
 

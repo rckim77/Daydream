@@ -240,22 +240,21 @@ final class SearchDetailViewController: UIViewController {
         dataSource?.isLoading = true
         placeCardsTableView.reloadData()
 
-        networkService.getPlaceId(with: randomCity, success: { [weak self] place in
-            guard let strongSelf = self, let dataSource = strongSelf.dataSource else {
-                loadingVC.remove()
-                return
-            }
-            dataSource.place = place
-            strongSelf.loadDataSource(reloadMapCard: true, completion: {
-                loadingVC.remove()
-            })
-        }, failure: { [weak self] error in
+        networkService.getPlaceId(placeName: randomCity, completion: { [weak self] result in
             loadingVC.remove()
-            guard let strongSelf = self else {
+            guard let strongSelf = self, let dataSource = strongSelf.dataSource else {
                 return
-
             }
-            strongSelf.logErrorEvent(error)
+
+            switch result {
+            case .success(let place):
+                dataSource.place = place
+                strongSelf.loadDataSource(reloadMapCard: true, completion: {
+                    loadingVC.remove()
+                })
+            case .failure(let error):
+                strongSelf.logErrorEvent(error)
+            }
         })
     }
 }
