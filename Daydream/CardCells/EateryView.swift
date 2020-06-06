@@ -126,13 +126,9 @@ final class EateryView: UIView {
     func configureFallback(eatery: Placeable) {
         self.fallbackEatery = eatery
         self.eatery = nil
-        titleLabel.text = createDisplayText(eatery.placeableName ?? "")
+        titleLabel.text = createDisplayText(eatery.placeableName)
 
-        guard let placeId = eatery.placeableId else {
-            return
-        }
-
-        NetworkService().loadPhoto(placeId: placeId, completion: { [weak self] result in
+        NetworkService().loadPhoto(placeId: eatery.placeableId, completion: { [weak self] result in
             guard let strongSelf = self else {
                 return
             }

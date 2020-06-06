@@ -9,8 +9,8 @@
 import CoreLocation
 
 class Place: Placeable {
-    var placeableId: String?
-    var placeableName: String?
+    let placeableId: String
+    let placeableName: String
     var placeableFormattedAddress: String?
     var placeableFormattedPhoneNumber: String?
     var placeableRating: Float?
@@ -49,5 +49,27 @@ extension Place: Equatable {
     static func == (lhs: Place, rhs: Place) -> Bool {
         return lhs.placeableId == rhs.placeableId &&
             lhs.placeableName == rhs.placeableName
+    }
+}
+
+extension Place: Eatable {
+    var type: EateryType? {
+        .google
+    }
+
+    var name: String {
+        placeableName
+    }
+
+    var eatableImageUrl: String? {
+        nil
+    }
+
+    var eatableUrl: String? {
+        nil
+    }
+
+    var priceIndicator: String? {
+        nil
     }
 }

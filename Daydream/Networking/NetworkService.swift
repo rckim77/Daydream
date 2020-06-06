@@ -372,10 +372,10 @@ class NetworkService {
     private func createUrl(with place: Placeable, and type: UrlType) -> String {
         switch type {
         case .topSights:
-            guard let placeableName = place.placeableName, let keyParam = AppDelegate.getAPIKeys()?.googleAPI else {
+            guard let keyParam = AppDelegate.getAPIKeys()?.googleAPI else {
                 return ""
             }
-            let placeName = placeableName.split(separator: " ")
+            let placeName = place.placeableName.split(separator: " ")
             var queryParam = "tourist+spots+in"
             placeName.forEach { word in
                 queryParam += "+" + word
@@ -385,10 +385,10 @@ class NetworkService {
 
             return url
         case .googleRestaurants:
-            guard let placeableName = place.placeableName, let keyParam = AppDelegate.getAPIKeys()?.googleAPI else {
+            guard let keyParam = AppDelegate.getAPIKeys()?.googleAPI else {
                 return ""
             }
-            let placeName = placeableName.split(separator: " ")
+            let placeName = place.placeableName.split(separator: " ")
             var queryParam = "restaurants+in"
             placeName.forEach { word in
                 queryParam += "+" + word

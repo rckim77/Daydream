@@ -119,20 +119,18 @@ final class SightView: UIView {
         businessStatusButton.tintColor = businessStatus?.displayColor
         businessStatusButton.isHidden = businessStatus == .operational
 
-        if let placeId = sight.placeableId {
-            updateLayers()
-            NetworkService().loadPhoto(placeId: placeId, completion: { [weak self] result in
-                guard let strongSelf = self else {
-                    return
-                }
+        updateLayers()
+        NetworkService().loadPhoto(placeId: sight.placeableId, completion: { [weak self] result in
+            guard let strongSelf = self else {
+                return
+            }
 
-                if case .success(let image) = result {
-                    strongSelf.updateLayers()
-                    strongSelf.fadeInImage(image, forImageView: strongSelf.backgroundImageView)
-                    strongSelf.layoutIfNeeded()
-                }
-            })
-        }
+            if case .success(let image) = result {
+                strongSelf.updateLayers()
+                strongSelf.fadeInImage(image, forImageView: strongSelf.backgroundImageView)
+                strongSelf.layoutIfNeeded()
+            }
+        })
     }
 
     required init?(coder: NSCoder) {

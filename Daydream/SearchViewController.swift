@@ -62,10 +62,7 @@ final class SearchViewController: UIViewController {
             switch result {
             case .success(let place):
                 strongSelf.placeData = place
-                guard let placeId = place.placeableId else {
-                    return
-                }
-                strongSelf.networkService.loadPhoto(placeId: placeId, completion: { [weak self] result in
+                strongSelf.networkService.loadPhoto(placeId: place.placeableId, completion: { [weak self] result in
                     guard let strongSelf = self else {
                         return
                     }

@@ -283,8 +283,8 @@ extension SearchDetailViewController: UITableViewDelegate {
 
             if let mapUrl = dataSource.place.placeableMapUrl {
                 openUrl(mapUrl)
-            } else if let placeId = dataSource.place.placeableId {
-                networkService.getPlace(id: placeId, completion: { [weak self] result in
+            } else {
+                networkService.getPlace(id: dataSource.place.placeableId, completion: { [weak self] result in
                     guard let strongSelf = self else {
                         return
                     }
