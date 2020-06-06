@@ -33,7 +33,7 @@ final class EateryView: UIView {
 
     private var layoutType: LayoutType = .middle
     private weak var delegate: EateryViewDelegate?
-    private var eatery: Eatery?
+    private var eatery: Eatable?
     private var fallbackEatery: Placeable?
 
     convenience init(layoutType: LayoutType, delegate: EateryViewDelegate) {
@@ -97,12 +97,13 @@ final class EateryView: UIView {
         titleLabel.text = ""
     }
 
-    func configure(eatery: Eatery) {
+    func configure(eatery: Eatable) {
         self.eatery = eatery
         self.fallbackEatery = nil
-        titleLabel.text = createDisplayText(eatery.name, priceRating: eatery.price)
+        titleLabel.text = createDisplayText(eatery.name, priceRating: eatery.priceIndicator)
 
-        guard let imageUrl = URL(string: eatery.imageUrl) else {
+        guard let urlString = eatery.eatableUrl,
+            let imageUrl = URL(string: urlString) else {
             return
         }
 

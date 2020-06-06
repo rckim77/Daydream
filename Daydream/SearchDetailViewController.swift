@@ -387,9 +387,11 @@ extension SearchDetailViewController: SightsCardCellDelegate {
 }
 
 extension SearchDetailViewController: EateriesCardCellDelegate {
-    func eateriesCardCell(_ cell: EateriesCardCell, didSelectEatery eatery: Eatery) {
+    func eateriesCardCell(_ cell: EateriesCardCell, didSelectEatery eatery: Eatable) {
         logEvent(contentType: "select eatery", title)
-        openUrl(eatery.url)
+        if let url = eatery.eatableUrl {
+            openUrl(url)
+        }
     }
 
     func eateriesCardCell(_ cell: EateriesCardCell, didSelectFallbackEatery eatery: Placeable) {

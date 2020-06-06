@@ -12,7 +12,7 @@ import GooglePlaces
 import SnapKit
 
 protocol EateriesCardCellDelegate: AnyObject {
-    func eateriesCardCell(_ cell: EateriesCardCell, didSelectEatery eatery: Eatery)
+    func eateriesCardCell(_ cell: EateriesCardCell, didSelectEatery eatery: Eatable)
     func eateriesCardCell(_ cell: EateriesCardCell, didSelectFallbackEatery eatery: Placeable)
     func eateriesCardCellDidTapInfoButtonForEatery()
     func eateriesCardCellDidTapInfoButtonForFallbackEatery()
@@ -48,7 +48,7 @@ class EateriesCardCell: UITableViewCell {
     }()
 
     weak var delegate: EateriesCardCellDelegate?
-    private var eateries: [Eatery]?
+    private var eateries: [Eatable]?
     private var fallbackEateries: [Placeable]?
 
     override func awakeFromNib() {
@@ -112,9 +112,9 @@ class EateriesCardCell: UITableViewCell {
         eatery3View.configureLoading()
     }
 
-    func configure(_ eateries: [Eatery]) {
+    func configure(_ eateries: [Eatable]) {
         self.eateries = eateries
-        self.fallbackEateries = nil
+        self.fallbackEateries = nil // REMOVE
         layoutIfNeeded()
         eatery1View.configure(eatery: eateries[0])
         eatery2View.configure(eatery: eateries[1])
