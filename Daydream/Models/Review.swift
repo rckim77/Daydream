@@ -22,3 +22,11 @@ class Review: Reviewable {
     }
 
 }
+
+struct ReviewCodable: Codable {
+    let authorName: String
+    let rating: Int
+    let text: String?
+    let authorUrl: String?
+    let profilePhotoUrl: String?
+}
