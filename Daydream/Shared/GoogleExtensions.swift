@@ -48,7 +48,7 @@ extension GMSPlace: Placeable {
         return nil
     }
 
-    var placeableReviews: [Reviewable]? {
+    var placeableReviews: [Review]? {
         return nil
     }
 

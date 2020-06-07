@@ -287,21 +287,10 @@ class NetworkService {
                 let formattedPhoneNumber = result["international_phone_number"]?.string
                 let rating = result["rating"]?.float
                 let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+
                 var reviews: [Review]?
-                if let reviewsJSON = result["reviews"]?.array {
-                    reviews = reviewsJSON.compactMap { review -> Review? in
-                        guard let dict = review.dictionary,
-                            let author = dict["author_name"]?.string,
-                            let rating = dict["rating"]?.int else {
-                                return nil
-                        }
-
-                        let review = dict["text"]?.string
-                        let authorUrl = dict["author_url"]?.string
-                        let authorProfileUrl = dict["profile_photo_url"]?.string
-
-                        return Review(author, rating, review, authorUrl, authorProfileUrl)
-                    }
+                if let reviewsData = try? result["reviews"]?.rawData() {
+                    reviews = try? self.customDecoder.decode([Review].self, from: reviewsData)
                 }
 
                 let place = Place(placeID: placeID,

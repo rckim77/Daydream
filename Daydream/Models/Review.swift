@@ -6,24 +6,7 @@
 //  Copyright © 2018 Raymond Kim. All rights reserved.
 //
 
-class Review: Reviewable {
-    var author: String
-    var rating: Int
-    var review: String?
-    var authorUrl: String?
-    var authorProfileUrl: String?
-
-    init(_ author: String, _ rating: Int, _ review: String? = nil, _ authorUrl: String? = nil, _ authorProfileUrl: String? = nil) {
-        self.author = author.abbreviated
-        self.rating = rating
-        self.review = review
-        self.authorUrl = authorUrl
-        self.authorProfileUrl = authorProfileUrl
-    }
-
-}
-
-struct ReviewCodable: Codable {
+struct Review: Codable {
     let authorName: String
     let rating: Int
     let text: String?

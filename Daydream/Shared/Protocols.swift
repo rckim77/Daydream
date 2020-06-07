@@ -59,16 +59,8 @@ protocol Placeable: class {
     var placeableCoordinate: CLLocationCoordinate2D { get }
     var placeableViewport: Viewport? { get }
     var placeableMapUrl: String? { get }
-    var placeableReviews: [Reviewable]? { get }
+    var placeableReviews: [Review]? { get }
     var placeableBusinessStatus: PlaceBusinessStatus? { get }
-}
-
-protocol Reviewable: class {
-    var author: String { get }
-    var rating: Int { get }
-    var review: String? { get }
-    var authorUrl: String? { get }
-    var authorProfileUrl: String? { get }
 }
 
 protocol RandomCitySelectable {
