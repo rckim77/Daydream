@@ -13,9 +13,7 @@ import SnapKit
 
 protocol EateriesCardCellDelegate: AnyObject {
     func eateriesCardCell(_ cell: EateriesCardCell, didSelectEatery eatery: Eatable)
-    func eateriesCardCell(_ cell: EateriesCardCell, didSelectFallbackEatery eatery: Placeable)
-    func eateriesCardCellDidTapInfoButtonForEatery()
-    func eateriesCardCellDidTapInfoButtonForFallbackEatery()
+    func eateriesCardCellDidTapInfoButtonForEateryType(_ type: EateryType)
 }
 
 class EateriesCardCell: UITableViewCell {
@@ -114,31 +112,20 @@ class EateriesCardCell: UITableViewCell {
 
     func configure(_ eateries: [Eatable]) {
         self.eateries = eateries
-        self.fallbackEateries = nil // REMOVE
         layoutIfNeeded()
         eatery1View.configure(eatery: eateries[0])
         eatery2View.configure(eatery: eateries[1])
         eatery3View.configure(eatery: eateries[2])
     }
 
-    func configureWithFallbackEateries(_ eateries: [Placeable]) {
-        self.fallbackEateries = eateries
-        self.eateries = nil
-        layoutIfNeeded()
-        eatery1View.configureFallback(eatery: eateries[0])
-        eatery2View.configureFallback(eatery: eateries[1])
-        eatery3View.configureFallback(eatery: eateries[2])
-    }
-
     // MARK: - Button selector methods
 
     @objc
     private func infoButtonTapped() {
-        if eateries != nil {
-            delegate?.eateriesCardCellDidTapInfoButtonForEatery()
-        } else if fallbackEateries != nil {
-            delegate?.eateriesCardCellDidTapInfoButtonForFallbackEatery()
+        guard let type = eateries?[0].type else {
+            return
         }
+        delegate?.eateriesCardCellDidTapInfoButtonForEateryType(type)
     }
 }
 
@@ -148,13 +135,6 @@ extension EateriesCardCell: EateryViewDelegate {
             return
         }
         delegate?.eateriesCardCell(self, didSelectEatery: eatery)
-    }
-
-    func eateryViewDidTapFallbackEatery(layoutType: EateryView.LayoutType) {
-        guard let eatery = fallbackEateries?[layoutType.rawValue] else {
-            return
-        }
-        delegate?.eateriesCardCell(self, didSelectFallbackEatery: eatery)
     }
 }
 

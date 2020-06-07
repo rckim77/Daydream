@@ -53,8 +53,12 @@ extension Place: Equatable {
 }
 
 extension Place: Eatable {
-    var type: EateryType? {
+    var type: EateryType {
         .google
+    }
+
+    var id: String? {
+        placeableId
     }
 
     var name: String {

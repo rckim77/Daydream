@@ -389,24 +389,28 @@ extension SearchDetailViewController: SightsCardCellDelegate {
 extension SearchDetailViewController: EateriesCardCellDelegate {
     func eateriesCardCell(_ cell: EateriesCardCell, didSelectEatery eatery: Eatable) {
         logEvent(contentType: "select eatery", title)
-        if let url = eatery.eatableUrl {
-            openUrl(url)
+
+        switch eatery.type {
+        case .yelp:
+            if let url = eatery.eatableUrl {
+                openUrl(url)
+            }
+        case .google:
+            performSegue(withIdentifier: "genericMapSegue", sender: eatery)
         }
     }
 
-    func eateriesCardCell(_ cell: EateriesCardCell, didSelectFallbackEatery eatery: Placeable) {
-        logEvent(contentType: "select fallback eatery using Google", title)
-        performSegue(withIdentifier: "genericMapSegue", sender: eatery)
-    }
-
-    func eateriesCardCellDidTapInfoButtonForEatery() {
-        presentInfoAlertModal(title: "Top Eateries",
-                              message: "These results are powered by Yelp's Fusion API. Tapping on an eatery will open up Yelp.")
-    }
-
-    func eateriesCardCellDidTapInfoButtonForFallbackEatery() {
-        presentInfoAlertModal(title: "Top Eateries",
-                              message: "These results are powered by Google's Places API. Tapping on an eatery will open up a map view.")
+    func eateriesCardCellDidTapInfoButtonForEateryType(_ type: EateryType) {
+        let title = "Top Eateries"
+        let message: String
+        switch type {
+        case .yelp:
+            message = "These results are powered by Yelp's Fusion API. Tapping on an eatery will open up Yelp."
+        case .google:
+            message = "These results are powered by Google's Places API. Tapping on an eatery will open up a map view."
+        }
+        presentInfoAlertModal(title: title,
+                              message: message)
     }
 }
 

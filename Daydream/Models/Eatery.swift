@@ -18,8 +18,12 @@ struct Eatery: Codable, Equatable {
 }
 
 extension Eatery: Eatable {
-    var type: EateryType? {
+    var type: EateryType {
         .yelp
+    }
+
+    var id: String? {
+        nil
     }
 
     var eatableImageUrl: String? {

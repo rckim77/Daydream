@@ -11,7 +11,6 @@ import SnapKit
 
 protocol EateryViewDelegate: class {
     func eateryViewDidTapEatery(layoutType: EateryView.LayoutType)
-    func eateryViewDidTapFallbackEatery(layoutType: EateryView.LayoutType)
 }
 
 final class EateryView: UIView {
@@ -34,7 +33,6 @@ final class EateryView: UIView {
     private var layoutType: LayoutType = .middle
     private weak var delegate: EateryViewDelegate?
     private var eatery: Eatable?
-    private var fallbackEatery: Placeable?
 
     convenience init(layoutType: LayoutType, delegate: EateryViewDelegate) {
         self.init(frame: .zero)
@@ -99,46 +97,45 @@ final class EateryView: UIView {
 
     func configure(eatery: Eatable) {
         self.eatery = eatery
-        self.fallbackEatery = nil
         titleLabel.text = createDisplayText(eatery.name, priceRating: eatery.priceIndicator)
 
-        guard let urlString = eatery.eatableUrl,
-            let imageUrl = URL(string: urlString) else {
-            return
+        switch eatery.type {
+        case .yelp:
+            guard let urlString = eatery.eatableImageUrl,
+                let imageUrl = URL(string: urlString) else {
+                return
+            }
+
+            URLSession.shared.dataTask(with: imageUrl) { [weak self] data, _, _ in
+                guard let strongSelf = self, let data = data else {
+                    return
+                }
+
+                DispatchQueue.main.async {
+                   guard let image = UIImage(data: data) else {
+                       return
+                   }
+
+                   strongSelf.updateLayers()
+                   strongSelf.fadeInImage(image, forImageView: strongSelf.backgroundImageView)
+                   strongSelf.layoutIfNeeded()
+                }
+            }.resume()
+        case .google:
+            guard let id = eatery.id else {
+                return
+            }
+            NetworkService().loadPhoto(placeId: id, completion: { [weak self] result in
+                guard let strongSelf = self else {
+                    return
+                }
+
+                if case .success(let image) = result {
+                    strongSelf.updateLayers()
+                    strongSelf.fadeInImage(image, forImageView: strongSelf.backgroundImageView)
+                }
+            })
         }
-
-        URLSession.shared.dataTask(with: imageUrl) { [weak self] data, _, _ in
-            guard let strongSelf = self, let data = data else {
-                return
-            }
-
-            DispatchQueue.main.async {
-               guard let image = UIImage(data: data) else {
-                   return
-               }
-
-               strongSelf.updateLayers()
-               strongSelf.fadeInImage(image, forImageView: strongSelf.backgroundImageView)
-               strongSelf.layoutIfNeeded()
-            }
-        }.resume()
-    }
-
-    func configureFallback(eatery: Placeable) {
-        self.fallbackEatery = eatery
-        self.eatery = nil
-        titleLabel.text = createDisplayText(eatery.placeableName)
-
-        NetworkService().loadPhoto(placeId: eatery.placeableId, completion: { [weak self] result in
-            guard let strongSelf = self else {
-                return
-            }
-
-            if case .success(let image) = result {
-                strongSelf.updateLayers()
-                strongSelf.fadeInImage(image, forImageView: strongSelf.backgroundImageView)
-            }
-        })
     }
 
     private func createDisplayText(_ name: String, priceRating: String? = nil) -> String {
@@ -157,11 +154,7 @@ final class EateryView: UIView {
 
     @objc
     private func handleTapGesture() {
-        if eatery != nil {
-            delegate?.eateryViewDidTapEatery(layoutType: layoutType)
-        } else if fallbackEatery != nil {
-            delegate?.eateryViewDidTapFallbackEatery(layoutType: layoutType)
-        }
+        delegate?.eateryViewDidTapEatery(layoutType: layoutType)
     }
 }
 

@@ -124,7 +124,7 @@ class NetworkService {
         }
     }
 
-    func loadGoogleRestaurants(place: Placeable, completion: @escaping(Result<[Placeable], Error>) -> Void) {
+    func loadGoogleRestaurants(place: Placeable, completion: @escaping(Result<[Eatable], Error>) -> Void) {
         let url = createUrl(with: place, and: .googleRestaurants)
 
         AF.request(url).validate().responseJSON { response in

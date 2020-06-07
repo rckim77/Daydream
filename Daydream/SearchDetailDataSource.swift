@@ -12,10 +12,30 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
 
     var place: Placeable
     var pointsOfInterest: [Placeable]?
-    var eateries: [Eatery]?
-    private var prevEateries: [Eatery]?
-    var fallbackEateries: [Placeable]?
-    private var prevFallbackEateries: [Placeable]?
+    var eateries: [Eatable]?
+    private var prevEateries: [Eatable]?
+    private var eateriesIsEqualToPrevious: Bool {
+        var eateriesIsEqualToPrevious = false
+
+        guard let eateries = eateries,
+            let prevEateries = prevEateries,
+            eateries.count > 2 && prevEateries.count > 2,
+            eateries[0].type == prevEateries[0].type else {
+            return false
+        }
+
+        if let eateries = eateries as? [Eatery], let prevEateries = prevEateries as? [Eatery] {
+            eateries.enumerated().forEach { index, eatery in
+                eateriesIsEqualToPrevious = eatery == prevEateries[index]
+            }
+        } else if let eateries = eateries as? [Place], let prevEateries = prevEateries as? [Place] {
+            eateries.enumerated().forEach { index, eatery in
+                eateriesIsEqualToPrevious = eatery == prevEateries[index]
+            }
+        }
+
+        return eateriesIsEqualToPrevious
+    }
     weak var viewController: SearchDetailViewController?
     var isLoading = false
 
@@ -56,8 +76,6 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
                 if !eateries.isEmpty {
                     strongSelf.prevEateries = strongSelf.eateries
                     strongSelf.eateries = eateries
-                    strongSelf.fallbackEateries = nil
-                    strongSelf.prevFallbackEateries = nil
                     success([strongSelf.sightsCardCellIndexPath, strongSelf.eateriesCardCellIndexPath])
                 } else {
                     strongSelf.networkService.loadGoogleRestaurants(place: strongSelf.place, completion: { [weak self] result in
@@ -67,10 +85,8 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
                         }
                         switch result {
                         case .success(let restaurants):
-                            strongSelf.prevFallbackEateries = strongSelf.fallbackEateries
-                            strongSelf.fallbackEateries = restaurants
-                            strongSelf.eateries = nil
-                            strongSelf.prevEateries = nil
+                            strongSelf.prevEateries = strongSelf.eateries
+                            strongSelf.eateries = restaurants
                             success([strongSelf.sightsCardCellIndexPath, strongSelf.eateriesCardCellIndexPath])
                         case .failure(let error):
                             failure(error)
@@ -128,20 +144,12 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
 
             if isLoading {
                 eateriesCardCell.configureLoading()
-            } else if let prevEateries = prevEateries, let eateries = eateries, prevEateries == eateries {
+            } else if eateriesIsEqualToPrevious {
                 // this is for when the user is simply scrolling and hasn't reloaded
                 return eateriesCardCell
-            } else if let prevFallbackEateries = prevFallbackEateries as? [Place],
-                let fallbackEateries = fallbackEateries as? [Place],
-                    prevFallbackEateries == fallbackEateries {
-                // this is for when the user is simply scrolling and hasn't reloaded
-                return eateriesCardCell
-            } else if let eateries = eateries, eateries.count > 2, eateries != prevEateries {
+            } else if let eateries = eateries, eateries.count > 2, !eateriesIsEqualToPrevious {
                 eateriesCardCell.configure(eateries)
                 prevEateries = eateries
-            } else if let fallbackEateries = fallbackEateries, fallbackEateries.count > 2 {
-                eateriesCardCell.configureWithFallbackEateries(fallbackEateries)
-                prevFallbackEateries = fallbackEateries
             }
 
             return eateriesCardCell
