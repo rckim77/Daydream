@@ -90,12 +90,18 @@ final class EateryView: UIView {
     }
 
     func configureLoading() {
+        isHidden = false
         updateLayers()
         backgroundImageView.image = nil
         titleLabel.text = ""
     }
 
+    func configureError() {
+        isHidden = true
+    }
+
     func configure(eatery: Eatable) {
+        isHidden = false
         self.eatery = eatery
         titleLabel.text = createDisplayText(eatery.name, priceRating: eatery.priceIndicator)
 

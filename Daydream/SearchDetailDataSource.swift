@@ -10,6 +10,10 @@ import UIKit
 
 class SearchDetailDataSource: NSObject, UITableViewDataSource {
 
+    enum LoadingState {
+        case uninitiated, loading, results, error
+    }
+
     var place: Placeable
     var pointsOfInterest: [Placeable]?
     var eateries: [Eatable]?
@@ -37,12 +41,14 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
         return eateriesIsEqualToPrevious
     }
     weak var viewController: SearchDetailViewController?
-    var isLoading = false
+    var loadingState: LoadingState = .uninitiated
 
     private let networkService = NetworkService()
-    let mapCardCellHeight: CGFloat = 190
+    let mapCardCellHeight: CGFloat = 186
     let mapCardCellIndexPath = IndexPath(row: 0, section: 0)
-    let sightsCardCellHeight: CGFloat = 600
+    var sightsCardCellHeight: CGFloat {
+        return loadingState == .error ? SightsCardCell.errorHeight: SightsCardCell.defaultHeight
+    }
     let sightsCardCellIndexPath = IndexPath(row: 1, section: 0)
     let eateriesCardCellIndexPath = IndexPath(row: 2, section: 0)
 
@@ -71,7 +77,7 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
             switch result {
             case .success(let (sights, eateries)):
                 strongSelf.pointsOfInterest = sights
-                strongSelf.isLoading = false
+                strongSelf.loadingState = .results
 
                 if !eateries.isEmpty {
                     strongSelf.prevEateries = strongSelf.eateries
@@ -94,6 +100,7 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
                     })
                 }
             case .failure(let error):
+                strongSelf.loadingState = .error
                 failure(error)
             }
         })
@@ -128,10 +135,15 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
 
             sightsCardCell.delegate = viewController
 
-            if isLoading {
+            switch loadingState {
+            case .loading:
                 sightsCardCell.configureLoading()
-            } else {
+            case .results:
                 sightsCardCell.pointsOfInterest = pointsOfInterest
+            case .error:
+                sightsCardCell.configureError()
+            case .uninitiated:
+                return sightsCardCell
             }
 
             return sightsCardCell
@@ -142,7 +154,7 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
 
             eateriesCardCell.delegate = viewController
 
-            if isLoading {
+            if loadingState == .loading {
                 eateriesCardCell.configureLoading()
             } else if eateriesIsEqualToPrevious {
                 // this is for when the user is simply scrolling and hasn't reloaded
@@ -150,6 +162,8 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
             } else if let eateries = eateries, eateries.count > 2, !eateriesIsEqualToPrevious {
                 eateriesCardCell.configure(eateries)
                 prevEateries = eateries
+            } else if loadingState == .error {
+                eateriesCardCell.configureError()
             }
 
             return eateriesCardCell

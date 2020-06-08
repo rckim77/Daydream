@@ -110,6 +110,13 @@ class EateriesCardCell: UITableViewCell {
         eatery3View.configureLoading()
     }
 
+    func configureError() {
+        layoutIfNeeded()
+        eatery1View.configureError()
+        eatery2View.configureError()
+        eatery3View.configureError()
+    }
+
     func configure(_ eateries: [Eatable]) {
         self.eateries = eateries
         layoutIfNeeded()

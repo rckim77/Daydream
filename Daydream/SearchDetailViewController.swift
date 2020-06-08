@@ -85,7 +85,7 @@ final class SearchDetailViewController: UIViewController {
         placeImageView.contentMode = .scaleAspectFill
         placeImageView.addSubview(visualEffectView)
 
-        dataSource?.isLoading = true
+        dataSource?.loadingState = .loading
         placeCardsTableView.reloadData()
         loadDataSource(reloadMapCard: false, fetchBackground: false, completion: {})
     }
@@ -237,7 +237,7 @@ final class SearchDetailViewController: UIViewController {
         }
         let loadingVC = LoadingViewController()
         add(loadingVC)
-        dataSource?.isLoading = true
+        dataSource?.loadingState = .loading
         placeCardsTableView.reloadData()
 
         networkService.getPlaceId(placeName: randomCity, completion: { [weak self] result in
@@ -383,6 +383,10 @@ extension SearchDetailViewController: SightsCardCellDelegate {
         let alert = UIAlertController(title: "This place is \(businessStatus.displayValue).", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         present(alert, animated: true, completion: nil)
+    }
+
+    func sightsCardCellDidTapRetry() {
+        randomCityButtonTapped()
     }
 }
 

@@ -176,6 +176,16 @@ extension UIButton {
         layer.shadowRadius = 0.5
         layer.shadowOpacity = 1
     }
+
+    func configureForError() {
+        setTitle("Something went wrong. Try another city!", for: .normal)
+        let retryImage = UIImage(systemName: "arrow.clockwise")
+        tintColor = .white
+        backgroundColor = UIColor.black.withAlphaComponent(0.2)
+        setImage(retryImage, for: .normal)
+        imageEdgeInsets.right = 18
+        addRoundedCorners(radius: 8)
+    }
 }
 
 extension UISearchController {

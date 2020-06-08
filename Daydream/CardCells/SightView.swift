@@ -105,13 +105,19 @@ final class SightView: UIView {
     }
 
     func configureLoading() {
+        isHidden = false
         updateLayers()
         backgroundImageView.image = nil
         titleLabel.text = ""
         businessStatusButton.isHidden = true
     }
 
+    func configureError() {
+        isHidden = true
+    }
+
     func configure(sight: Placeable) {
+        isHidden = false
         self.sight = sight
         titleLabel.text = sight.placeableName
         let businessStatus = sight.placeableBusinessStatus
