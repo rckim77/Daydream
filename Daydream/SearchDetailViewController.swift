@@ -268,8 +268,12 @@ extension SearchDetailViewController: UITableViewDelegate {
         switch indexPath.row {
         case 0:
             return dataSource.mapCardCellHeight
-        default:
+        case 1:
             return dataSource.sightsCardCellHeight
+        case 2:
+            return dataSource.eateriesCardCellHeight
+        default:
+            return 0
         }
     }
 
@@ -415,6 +419,10 @@ extension SearchDetailViewController: EateriesCardCellDelegate {
         }
         presentInfoAlertModal(title: title,
                               message: message)
+    }
+
+    func eateriesCardCellDidTapRetry() {
+        randomCityButtonTapped()
     }
 }
 

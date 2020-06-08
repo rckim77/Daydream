@@ -20,7 +20,10 @@ protocol SightsCardCellDelegate: class {
 class SightsCardCell: UITableViewCell {
 
     static let defaultHeight: CGFloat = 600
-    static let errorHeight: CGFloat = 186
+    private let defaultSectionHeight: CGFloat = 515
+    static let errorHeight: CGFloat = 185
+    private let errorSectionHeight: CGFloat = 100
+
     private lazy var titleLabel = CardLabel(textStyle: .title1, text: "Top Sights")
     private lazy var sightsSectionView: UIView = {
         let view = UIView()
@@ -121,7 +124,7 @@ class SightsCardCell: UITableViewCell {
         errorButton.isHidden = true
         sendSubviewToBack(errorButton)
         sightsSectionView.snp.updateConstraints { make in
-            make.height.equalTo(515)
+            make.height.equalTo(defaultSectionHeight)
         }
         layoutIfNeeded()
         sight1View.configureLoading()
@@ -133,7 +136,7 @@ class SightsCardCell: UITableViewCell {
         errorButton.isHidden = false
         contentView.bringSubviewToFront(errorButton)
         sightsSectionView.snp.updateConstraints { make in
-            make.height.equalTo(100)
+            make.height.equalTo(errorSectionHeight)
         }
         layoutIfNeeded()
         sight1View.configureError()
@@ -145,7 +148,7 @@ class SightsCardCell: UITableViewCell {
         errorButton.isHidden = true
         sendSubviewToBack(errorButton)
         sightsSectionView.snp.updateConstraints { make in
-            make.height.equalTo(515)
+            make.height.equalTo(defaultSectionHeight)
         }
         layoutIfNeeded()
         sight1View.configure(sight: pointsOfInterest[0])

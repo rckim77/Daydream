@@ -14,9 +14,16 @@ import SnapKit
 protocol EateriesCardCellDelegate: AnyObject {
     func eateriesCardCell(_ cell: EateriesCardCell, didSelectEatery eatery: Eatable)
     func eateriesCardCellDidTapInfoButtonForEateryType(_ type: EateryType)
+    func eateriesCardCellDidTapRetry()
 }
 
 class EateriesCardCell: UITableViewCell {
+
+    static let defaultHeight: CGFloat = 600
+    private let defaultSectionHeight: CGFloat = 515
+    static let errorHeight: CGFloat = 185
+    private let errorSectionHeight: CGFloat = 100
+
     private lazy var titleLabel = CardLabel(textStyle: .title1, text: "Top Eateries")
     private lazy var infoButton: UIButton = {
         let button = UIButton(type: .system)
@@ -44,6 +51,15 @@ class EateriesCardCell: UITableViewCell {
         let view = EateryView(layoutType: .bottom, delegate: self)
         return view
     }()
+    private lazy var errorButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.configureForError()
+        button.addTarget(self, action: #selector(retryButtonTapped), for: .touchUpInside)
+        if #available(iOS 13.4, *) {
+            button.pointerStyleProvider = buttonProvider
+        }
+        return button
+    }()
 
     weak var delegate: EateriesCardCellDelegate?
     private var eateries: [Eatable]?
@@ -52,6 +68,7 @@ class EateriesCardCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
 
+        contentView.addSubview(errorButton)
         contentView.addSubview(titleLabel)
         contentView.addSubview(infoButton)
         contentView.addSubview(eateriesSectionView)
@@ -95,6 +112,12 @@ class EateriesCardCell: UITableViewCell {
             make.height.equalTo(eatery1View)
         }
 
+        errorButton.snp.makeConstraints { make in
+            make.top.equalTo(eatery1View.snp.top)
+            make.leading.trailing.equalToSuperview().inset(16)
+            make.bottom.equalTo(eatery3View.snp.bottom)
+        }
+
         // reset image (to prevent background images being reused due to dequeueing reusable cells)
         eatery1View.resetBackgroundImage()
         eatery2View.resetBackgroundImage()
@@ -104,6 +127,11 @@ class EateriesCardCell: UITableViewCell {
     // MARK: - Configuration methods
 
     func configureLoading() {
+        errorButton.isHidden = true
+        sendSubviewToBack(errorButton)
+        eateriesSectionView.snp.updateConstraints { make in
+            make.height.equalTo(defaultSectionHeight)
+        }
         layoutIfNeeded()
         eatery1View.configureLoading()
         eatery2View.configureLoading()
@@ -111,6 +139,11 @@ class EateriesCardCell: UITableViewCell {
     }
 
     func configureError() {
+        errorButton.isHidden = false
+        contentView.bringSubviewToFront(errorButton)
+        eateriesSectionView.snp.updateConstraints { make in
+            make.height.equalTo(errorSectionHeight)
+        }
         layoutIfNeeded()
         eatery1View.configureError()
         eatery2View.configureError()
@@ -118,7 +151,12 @@ class EateriesCardCell: UITableViewCell {
     }
 
     func configure(_ eateries: [Eatable]) {
+        errorButton.isHidden = true
+        sendSubviewToBack(errorButton)
         self.eateries = eateries
+        eateriesSectionView.snp.updateConstraints { make in
+            make.height.equalTo(defaultSectionHeight)
+        }
         layoutIfNeeded()
         eatery1View.configure(eatery: eateries[0])
         eatery2View.configure(eatery: eateries[1])
@@ -133,6 +171,11 @@ class EateriesCardCell: UITableViewCell {
             return
         }
         delegate?.eateriesCardCellDidTapInfoButtonForEateryType(type)
+    }
+
+    @objc
+    private func retryButtonTapped() {
+        delegate?.eateriesCardCellDidTapRetry()
     }
 }
 

@@ -49,6 +49,9 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
     var sightsCardCellHeight: CGFloat {
         return loadingState == .error ? SightsCardCell.errorHeight: SightsCardCell.defaultHeight
     }
+    var eateriesCardCellHeight: CGFloat {
+        return loadingState == .error ? EateriesCardCell.errorHeight: EateriesCardCell.defaultHeight
+    }
     let sightsCardCellIndexPath = IndexPath(row: 1, section: 0)
     let eateriesCardCellIndexPath = IndexPath(row: 2, section: 0)
 
@@ -95,6 +98,7 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
                             strongSelf.eateries = restaurants
                             success([strongSelf.sightsCardCellIndexPath, strongSelf.eateriesCardCellIndexPath])
                         case .failure(let error):
+                            strongSelf.loadingState = .error
                             failure(error)
                         }
                     })
@@ -156,14 +160,14 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
 
             if loadingState == .loading {
                 eateriesCardCell.configureLoading()
+            } else if loadingState == .error {
+                eateriesCardCell.configureError()
             } else if eateriesIsEqualToPrevious {
                 // this is for when the user is simply scrolling and hasn't reloaded
                 return eateriesCardCell
             } else if let eateries = eateries, eateries.count > 2, !eateriesIsEqualToPrevious {
                 eateriesCardCell.configure(eateries)
                 prevEateries = eateries
-            } else if loadingState == .error {
-                eateriesCardCell.configureError()
             }
 
             return eateriesCardCell
