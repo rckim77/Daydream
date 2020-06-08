@@ -12,13 +12,18 @@ import GooglePlaces
 import SnapKit
 
 protocol EateriesCardCellDelegate: AnyObject {
-    func eateriesCardCell(_ cell: EateriesCardCell, didSelectEatery eatery: Eatery)
-    func eateriesCardCell(_ cell: EateriesCardCell, didSelectFallbackEatery eatery: Placeable)
-    func eateriesCardCellDidTapInfoButtonForEatery()
-    func eateriesCardCellDidTapInfoButtonForFallbackEatery()
+    func eateriesCardCell(_ cell: EateriesCardCell, didSelectEatery eatery: Eatable)
+    func eateriesCardCellDidTapInfoButtonForEateryType(_ type: EateryType)
+    func eateriesCardCellDidTapRetry()
 }
 
 class EateriesCardCell: UITableViewCell {
+
+    static let defaultHeight: CGFloat = 600
+    private let defaultSectionHeight: CGFloat = 515
+    static let errorHeight: CGFloat = 185
+    private let errorSectionHeight: CGFloat = 100
+
     private lazy var titleLabel = CardLabel(textStyle: .title1, text: "Top Eateries")
     private lazy var infoButton: UIButton = {
         let button = UIButton(type: .system)
@@ -46,14 +51,24 @@ class EateriesCardCell: UITableViewCell {
         let view = EateryView(layoutType: .bottom, delegate: self)
         return view
     }()
+    private lazy var errorButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.configureForError()
+        button.addTarget(self, action: #selector(retryButtonTapped), for: .touchUpInside)
+        if #available(iOS 13.4, *) {
+            button.pointerStyleProvider = buttonProvider
+        }
+        return button
+    }()
 
     weak var delegate: EateriesCardCellDelegate?
-    private var eateries: [Eatery]?
+    private var eateries: [Eatable]?
     private var fallbackEateries: [Placeable]?
 
     override func awakeFromNib() {
         super.awakeFromNib()
 
+        contentView.addSubview(errorButton)
         contentView.addSubview(titleLabel)
         contentView.addSubview(infoButton)
         contentView.addSubview(eateriesSectionView)
@@ -97,6 +112,12 @@ class EateriesCardCell: UITableViewCell {
             make.height.equalTo(eatery1View)
         }
 
+        errorButton.snp.makeConstraints { make in
+            make.top.equalTo(eatery1View.snp.top)
+            make.leading.trailing.equalToSuperview().inset(16)
+            make.bottom.equalTo(eatery3View.snp.bottom)
+        }
+
         // reset image (to prevent background images being reused due to dequeueing reusable cells)
         eatery1View.resetBackgroundImage()
         eatery2View.resetBackgroundImage()
@@ -106,39 +127,55 @@ class EateriesCardCell: UITableViewCell {
     // MARK: - Configuration methods
 
     func configureLoading() {
+        errorButton.isHidden = true
+        sendSubviewToBack(errorButton)
+        eateriesSectionView.snp.updateConstraints { make in
+            make.height.equalTo(defaultSectionHeight)
+        }
         layoutIfNeeded()
         eatery1View.configureLoading()
         eatery2View.configureLoading()
         eatery3View.configureLoading()
     }
 
-    func configure(_ eateries: [Eatery]) {
+    func configureError() {
+        errorButton.isHidden = false
+        contentView.bringSubviewToFront(errorButton)
+        eateriesSectionView.snp.updateConstraints { make in
+            make.height.equalTo(errorSectionHeight)
+        }
+        layoutIfNeeded()
+        eatery1View.configureError()
+        eatery2View.configureError()
+        eatery3View.configureError()
+    }
+
+    func configure(_ eateries: [Eatable]) {
+        errorButton.isHidden = true
+        sendSubviewToBack(errorButton)
         self.eateries = eateries
-        self.fallbackEateries = nil
+        eateriesSectionView.snp.updateConstraints { make in
+            make.height.equalTo(defaultSectionHeight)
+        }
         layoutIfNeeded()
         eatery1View.configure(eatery: eateries[0])
         eatery2View.configure(eatery: eateries[1])
         eatery3View.configure(eatery: eateries[2])
     }
 
-    func configureWithFallbackEateries(_ eateries: [Placeable]) {
-        self.fallbackEateries = eateries
-        self.eateries = nil
-        layoutIfNeeded()
-        eatery1View.configureFallback(eatery: eateries[0])
-        eatery2View.configureFallback(eatery: eateries[1])
-        eatery3View.configureFallback(eatery: eateries[2])
-    }
-
     // MARK: - Button selector methods
 
     @objc
     private func infoButtonTapped() {
-        if eateries != nil {
-            delegate?.eateriesCardCellDidTapInfoButtonForEatery()
-        } else if fallbackEateries != nil {
-            delegate?.eateriesCardCellDidTapInfoButtonForFallbackEatery()
+        guard let type = eateries?[0].type else {
+            return
         }
+        delegate?.eateriesCardCellDidTapInfoButtonForEateryType(type)
+    }
+
+    @objc
+    private func retryButtonTapped() {
+        delegate?.eateriesCardCellDidTapRetry()
     }
 }
 
@@ -148,13 +185,6 @@ extension EateriesCardCell: EateryViewDelegate {
             return
         }
         delegate?.eateriesCardCell(self, didSelectEatery: eatery)
-    }
-
-    func eateryViewDidTapFallbackEatery(layoutType: EateryView.LayoutType) {
-        guard let eatery = fallbackEateries?[layoutType.rawValue] else {
-            return
-        }
-        delegate?.eateriesCardCell(self, didSelectFallbackEatery: eatery)
     }
 }
 

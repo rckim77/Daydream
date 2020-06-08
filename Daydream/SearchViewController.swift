@@ -53,35 +53,27 @@ final class SearchViewController: UIViewController {
         let loadingVC = LoadingViewController()
         add(loadingVC)
 
-        networkService.getPlaceId(with: randomCity, success: { [weak self] place in
+        networkService.getPlaceId(placeName: randomCity, completion: { [weak self] result in
             loadingVC.remove()
             guard let strongSelf = self else {
                 return
             }
 
-            strongSelf.placeData = place
-            guard let placeId = place.placeableId else {
-                return
+            switch result {
+            case .success(let place):
+                strongSelf.placeData = place
+                strongSelf.networkService.loadPhoto(placeId: place.placeableId, completion: { [weak self] result in
+                    guard let strongSelf = self else {
+                        return
+                    }
+                    if case .success(let image) = result {
+                        strongSelf.placeBackgroundImage = image
+                    }
+                    strongSelf.performSegue(withIdentifier: "toSearchDetailVCSegue", sender: nil)
+                })
+            case .failure(let error):
+                strongSelf.logErrorEvent(error)
             }
-            strongSelf.networkService.loadPhoto(with: placeId, success: { [weak self] image in
-                guard let strongSelf = self else {
-                    return
-                }
-                strongSelf.placeBackgroundImage = image
-                strongSelf.performSegue(withIdentifier: "toSearchDetailVCSegue", sender: nil)
-            }, failure: { [weak self] _ in
-                guard let strongSelf = self else {
-                    return
-                }
-                strongSelf.performSegue(withIdentifier: "toSearchDetailVCSegue", sender: nil)
-            })
-        }, failure: { [weak self] error in
-            loadingVC.remove()
-            guard let strongSelf = self else {
-                return
-
-            }
-            strongSelf.logErrorEvent(error)
         })
     }
 
@@ -198,17 +190,16 @@ extension SearchViewController: GMSAutocompleteResultsViewControllerDelegate {
             self.resetSearchUI()
             let loadingVC = LoadingViewController()
             self.add(loadingVC)
-            self.networkService.loadPhoto(with: placeId, success: { [weak self] image in
+            self.networkService.loadPhoto(placeId: placeId, completion: { [weak self] result in
                 loadingVC.remove()
                 guard let strongSelf = self else {
                     return
                 }
-                strongSelf.placeBackgroundImage = image
-                strongSelf.performSegue(withIdentifier: "toSearchDetailVCSegue", sender: nil)
-            }, failure: { [weak self] _ in
-                guard let strongSelf = self else {
-                    return
+
+                if case .success(let image) = result {
+                    strongSelf.placeBackgroundImage = image
                 }
+
                 strongSelf.performSegue(withIdentifier: "toSearchDetailVCSegue", sender: nil)
             })
         })

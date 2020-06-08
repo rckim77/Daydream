@@ -123,11 +123,11 @@ final class MapReviewCard: UIView {
         }
     }
 
-    func configure(_ review: Reviewable) {
-        authorLabel.text = review.author
-        reviewLabel.text = review.review
+    func configure(_ review: Review) {
+        authorLabel.text = review.authorName
+        reviewLabel.text = review.text
         updateStars(rating: review.rating)
-        if let profileUrl = review.authorProfileUrl {
+        if let profileUrl = review.profilePhotoUrl {
             NetworkService.loadImage(from: profileUrl, completion: { [weak self] image in
                 self?.authorImageView.image = image
             })

@@ -14,9 +14,15 @@ import SnapKit
 protocol SightsCardCellDelegate: class {
     func sightsCardCell(_ cell: SightsCardCell, didSelectPlace place: Placeable)
     func sightsCardCellDidTapBusinessStatusButton(_ businessStatus: PlaceBusinessStatus)
+    func sightsCardCellDidTapRetry()
 }
 
 class SightsCardCell: UITableViewCell {
+
+    static let defaultHeight: CGFloat = 600
+    private let defaultSectionHeight: CGFloat = 515
+    static let errorHeight: CGFloat = 185
+    private let errorSectionHeight: CGFloat = 100
 
     private lazy var titleLabel = CardLabel(textStyle: .title1, text: "Top Sights")
     private lazy var sightsSectionView: UIView = {
@@ -35,6 +41,15 @@ class SightsCardCell: UITableViewCell {
     private lazy var sight3View: SightView = {
         let view = SightView(layoutType: .bottom, delegate: self)
         return view
+    }()
+    private lazy var errorButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.configureForError()
+        button.addTarget(self, action: #selector(retryButtonTapped), for: .touchUpInside)
+        if #available(iOS 13.4, *) {
+            button.pointerStyleProvider = buttonProvider
+        }
+        return button
     }()
     
     weak var delegate: SightsCardCellDelegate?
@@ -56,6 +71,7 @@ class SightsCardCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
 
+        contentView.addSubview(errorButton)
         contentView.addSubview(titleLabel)
         contentView.addSubview(sightsSectionView)
         sightsSectionView.addSubview(sight1View)
@@ -90,6 +106,12 @@ class SightsCardCell: UITableViewCell {
             make.height.equalTo(sight1View)
         }
 
+        errorButton.snp.makeConstraints { make in
+            make.top.equalTo(sight1View.snp.top)
+            make.leading.trailing.equalToSuperview().inset(16)
+            make.bottom.equalTo(sight3View.snp.bottom)
+        }
+
         // reset image (to prevent background images being reused due to dequeueing reusable cells)
         sight1View.resetBackgroundImage()
         sight2View.resetBackgroundImage()
@@ -99,17 +121,46 @@ class SightsCardCell: UITableViewCell {
     // MARK: - Configuration methods
 
     func configureLoading() {
+        errorButton.isHidden = true
+        sendSubviewToBack(errorButton)
+        sightsSectionView.snp.updateConstraints { make in
+            make.height.equalTo(defaultSectionHeight)
+        }
         layoutIfNeeded()
         sight1View.configureLoading()
         sight2View.configureLoading()
         sight3View.configureLoading()
     }
 
+    func configureError() {
+        errorButton.isHidden = false
+        contentView.bringSubviewToFront(errorButton)
+        sightsSectionView.snp.updateConstraints { make in
+            make.height.equalTo(errorSectionHeight)
+        }
+        layoutIfNeeded()
+        sight1View.configureError()
+        sight2View.configureError()
+        sight3View.configureError()
+    }
+
     private func configure(_ pointsOfInterest: [Placeable]) {
+        errorButton.isHidden = true
+        sendSubviewToBack(errorButton)
+        sightsSectionView.snp.updateConstraints { make in
+            make.height.equalTo(defaultSectionHeight)
+        }
         layoutIfNeeded()
         sight1View.configure(sight: pointsOfInterest[0])
         sight2View.configure(sight: pointsOfInterest[1])
         sight3View.configure(sight: pointsOfInterest[2])
+    }
+
+    // MARK: - Button selector methods
+
+    @objc
+    private func retryButtonTapped() {
+        delegate?.sightsCardCellDidTapRetry()
     }
 }
 

@@ -10,6 +10,8 @@ import Alamofire
 import GooglePlaces
 import SwiftyJSON
 
+typealias SightsAndEateries = ([Placeable], [Eatery])
+
 // swiftlint:disable type_body_length
 class NetworkService {
 
@@ -17,40 +19,41 @@ class NetworkService {
         case topSights, googleRestaurants, topEateries
     }
 
+    private lazy var customDecoder: JSONDecoder = {
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        return decoder
+    }()
+
     /// The pointsOfInterest array is guaranteed to return at least three elements if the call succeeds. The eateries array
-    func loadSightsAndEateries(with place: Placeable,
-                               success: @escaping(_ pointsOfInterest: [Placeable], _ eateries: [Eatery]) -> Void,
-                               failure: @escaping(_ error: Error?) -> Void) {
-        var sights: [Placeable] = []
-
-        loadTopSights(with: place, success: { [weak self] pointsOfInterest in
-            guard let strongSelf = self else {
-                failure(nil)
-                return
+    func loadSightsAndEateries(place: Placeable, completion: @escaping(Result<SightsAndEateries, Error>) -> Void) {
+        loadTopSights(place: place, completion: { result in
+            switch result {
+            case .success(let places):
+                NetworkService().loadTopEateries(place: place, completion: { result in
+                    switch result {
+                    case .success(let eateries):
+                        completion(.success((places, eateries)))
+                    case .failure:
+                        completion(.success((places, [])))
+                    }
+                })
+            case .failure(let error):
+                completion(.failure(error))
             }
-
-            sights = pointsOfInterest
-
-            strongSelf.loadTopEateries(with: place, success: { eateries in
-                success(sights, eateries)
-            }, failure: { _ in
-                success(sights, [])
-            })
-        }, failure: { error in
-            failure(error)
         })
     }
 
-    func loadTopSights(with place: Placeable, success: @escaping(_ pointsOfInterest: [Placeable]) -> Void,
-                       failure: @escaping(_ error: Error?) -> Void) {
+    func loadTopSights(place: Placeable, completion: @escaping(Result<[Placeable], Error>) -> Void) {
         let url = createUrl(with: place, and: .topSights)
+
         AF.request(url).validate().responseJSON { response in
             switch response.result {
             case .success(let value):
                 let json = JSON(value)
                 // POSTLAUNCH: - refactor into a JSON init method
                 guard let results = json["results"].array, results.count > 2 else {
-                    failure(nil)
+                    completion(.failure(NetworkError.insufficientResults))
                     return
                 }
 
@@ -82,18 +85,17 @@ class NetworkService {
                                  businessStatus: businessStatus)
                 }
 
-                success(pointsOfInterest)
+                completion(.success(pointsOfInterest))
             case .failure(let error):
-                failure(error)
+                completion(.failure(error))
             }
 
         }
     }
 
-    func loadTopEateries(with place: Placeable, success: @escaping(_ eateries: [Eatery]) -> Void,
-                         failure: @escaping(_ error: Error?) -> Void) {
+    func loadTopEateries(place: Placeable, completion: @escaping(Result<[Eatery], Error>) -> Void) {
         guard let yelpAPIKey = AppDelegate.getAPIKeys()?.yelpAPI else {
-            failure(nil)
+            completion(.failure(NetworkError.APIKeysFetchFailure))
             return
         }
 
@@ -102,42 +104,36 @@ class NetworkService {
             "Authorization": "Bearer \(yelpAPIKey)"
         ]
 
-        AF.request(url, headers: headers).validate().responseJSON { response in
+        AF.request(url, headers: headers).responseData { response in
             switch response.result {
-            case .success(let value):
-                let json = JSON(value)
-                guard let results = json["businesses"].array, results.count > 2 else {
-                    failure(nil)
+            case .success(let data):
+                guard let eateryCollection = try? self.customDecoder.decode(EateryCollection.self, from: data) else {
+                    completion(.failure(NetworkError.jsonDecoding))
                     return
                 }
 
-                let eateries = results[0..<3].compactMap { result -> Eatery? in
-                    guard let name = result["name"].string,
-                        let imageUrl = result["image_url"].string,
-                        let url = result["url"].string,
-                        let price = result["price"].string else {
-                            return nil
-                    }
-
-                    return Eatery(name: name, imageUrl: imageUrl, url: url, price: price)
+                guard eateryCollection.hasSufficientEateries else {
+                    completion(.failure(NetworkError.insufficientResults))
+                    return
                 }
 
-                success(eateries)
+                completion(.success(eateryCollection.businesses))
             case .failure(let error):
-                failure(error)
+                completion(.failure(error))
             }
         }
     }
 
-    func loadGoogleRestaurants(place: Placeable, success: @escaping(_ restaurants: [Placeable]) -> Void, failure: @escaping(_ error: Error?) -> Void) {
+    func loadGoogleRestaurants(place: Placeable, completion: @escaping(Result<[Eatable], Error>) -> Void) {
         let url = createUrl(with: place, and: .googleRestaurants)
+
         AF.request(url).validate().responseJSON { response in
             switch response.result {
             case .success(let value):
                 let json = JSON(value)
                 // POSTLAUNCH: - refactor into a JSON init method
                 guard let results = json["results"].array, results.count > 2 else {
-                    failure(nil)
+                    completion(.failure(NetworkError.insufficientResults))
                     return
                 }
 
@@ -169,37 +165,45 @@ class NetworkService {
                                  businessStatus: businessStatus)
                 }
 
-                success(restaurants)
+                completion(.success(restaurants))
             case .failure(let error):
-                failure(error)
+                completion(.failure(error))
             }
 
         }
     }
 
-    func loadPhoto(with placeId: String, success: @escaping(_ photo: UIImage) -> Void,
-                   failure: @escaping(_ error: Error) -> Void) {
+    func loadPhoto(placeId: String, completion: @escaping(Result<UIImage, Error>) -> Void) {
         guard let photoField = GMSPlaceField(rawValue: UInt(GMSPlaceField.photos.rawValue)) else {
+            completion(.failure(NetworkError.malformedPhotoField))
             return
         }
         GMSPlacesClient.shared().fetchPlace(fromPlaceID: placeId, placeFields: photoField, sessionToken: nil) { place, error in
-            if let photoMetadata = place?.photos?.first {
-                GMSPlacesClient.shared().loadPlacePhoto(photoMetadata) { image, error in
-                    if let image = image {
-                        success(image)
-                    } else if let error = error {
-                        failure(error)
+            if let place = place {
+                if let photoMetadata = place.photos?.first {
+                    GMSPlacesClient.shared().loadPlacePhoto(photoMetadata) { image, error in
+                        if let image = image {
+                            completion(.success(image))
+                        } else if let error = error {
+                            completion(.failure(error))
+                        } else {
+                            completion(.failure(NetworkError.unknown))
+                        }
                     }
+                } else {
+                    completion(.failure(NetworkError.photoMetadataMissing))
                 }
             } else if let error = error {
-                failure(error)
+                completion(.failure(error))
+            } else {
+                completion(.failure(NetworkError.unknown))
             }
         }
     }
 
-    func getPlaceId(with placeName: String, success: @escaping(_ place: Place) -> Void, failure: @escaping(_ error: Error?) -> Void) {
+    func getPlaceId(placeName: String, completion: @escaping(Result<Place, Error>) -> Void) {
         guard let url = createUrlWithPlaceName(placeName) else {
-            failure(nil)
+            completion(.failure(NetworkError.APIKeysFetchFailure))
             return
         }
 
@@ -209,24 +213,57 @@ class NetworkService {
                 let json = JSON(value)
                 guard let result = json["results"].array?.first,
                     let placeId = result["place_id"].string else {
-                    failure(nil)
+                    completion(.failure(NetworkError.malformedJSON))
                     return
                 }
 
-                NetworkService().getPlace(with: placeId, success: { place in
-                    success(place)
-                }, failure: { error in
-                    failure(error)
+                NetworkService().getPlace(id: placeId, completion: { result in
+                    switch result {
+                    case .success(let place):
+                        completion(.success(place))
+                    case .failure(let error):
+                        completion(.failure(error))
+                    }
                 })
             case .failure(let error):
-                failure(error)
+                completion(.failure(error))
             }
         }
     }
 
-    func getPlace(with placeId: String, success: @escaping(_ place: Place) -> Void, failure: @escaping(_ error: Error?) -> Void) {
-        guard let url = createUrlWithPlaceId(placeId) else {
-            failure(nil)
+    func getResultPlaceId(name: String, completion: @escaping(Result<Place, Error>) -> Void) {
+        guard let url = createUrlWithPlaceName(name) else {
+            completion(.failure(NetworkError.APIKeysFetchFailure))
+            return
+        }
+
+        AF.request(url).validate().responseJSON { response in
+            switch response.result {
+            case .success(let value):
+                let json = JSON(value)
+                guard let result = json["results"].array?.first,
+                    let placeId = result["place_id"].string else {
+                        completion(.failure(NetworkError.malformedJSON))
+                    return
+                }
+
+                NetworkService().getPlace(id: placeId, completion: { result in
+                    switch result {
+                    case .success(let place):
+                        completion(.success(place))
+                    case .failure(let error):
+                        completion(.failure(error))
+                    }
+                })
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+
+    func getPlace(id: String, completion: @escaping(Result<Place, Error>) -> Void) {
+        guard let url = createUrlWithPlaceId(id) else {
+            completion(.failure(NetworkError.APIKeysFetchFailure))
             return
         }
 
@@ -241,7 +278,7 @@ class NetworkService {
                     let latitude = result["geometry"]?["location"]["lat"].double,
                     let longitude = result["geometry"]?["location"]["lng"].double,
                     let mapUrl = result["url"]?.string else {
-                    failure(nil)
+                    completion(.failure(NetworkError.malformedJSON))
                     return
                 }
 
@@ -250,19 +287,10 @@ class NetworkService {
                 let formattedPhoneNumber = result["international_phone_number"]?.string
                 let rating = result["rating"]?.float
                 let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+
                 var reviews: [Review]?
-                if let reviewsJSON = result["reviews"]?.array {
-                    reviews = reviewsJSON.compactMap { review -> Review? in
-                        guard let dict = review.dictionary,
-                            let author = dict["author_name"]?.string,
-                            let rating = dict["rating"]?.int else { return nil }
-
-                        let review = dict["text"]?.string
-                        let authorUrl = dict["author_url"]?.string
-                        let authorProfileUrl = dict["profile_photo_url"]?.string
-
-                        return Review(author, rating, review, authorUrl, authorProfileUrl)
-                    }
+                if let reviewsData = try? result["reviews"]?.rawData() {
+                    reviews = try? self.customDecoder.decode([Review].self, from: reviewsData)
                 }
 
                 let place = Place(placeID: placeID,
@@ -274,14 +302,14 @@ class NetworkService {
                                   mapUrl: mapUrl,
                                   reviews: reviews)
 
-                success(place)
+                completion(.success(place))
             case .failure(let error):
-                failure(error)
+                completion(.failure(error))
             }
         }
     }
 
-    func getSummaryFor(_ city: String, success: @escaping(_ summary: String) -> Void, failure: @escaping(_ error: Error?) -> Void) {
+    func getSummaryFor(_ city: String, completion: @escaping(Result<String, Error>) -> Void) {
         let cityWords = city.split(separator: " ")
         var cityParam = cityWords[0]
         for i in 1..<cityWords.count {
@@ -295,11 +323,12 @@ class NetworkService {
             case .success(let value):
                 let json = JSON(value)
                 guard let query = json["query"]["pages"].dictionary, let pageIdKey = query.keys.first,
-                    let extract = query[pageIdKey]?["extract"].string else { return }
-
-                success(extract)
+                    let extract = query[pageIdKey]?["extract"].string else {
+                    return
+                }
+                completion(.success(extract))
             case .failure(let error):
-                failure(error)
+                completion(.failure(error))
             }
         }
     }
@@ -320,15 +349,22 @@ class NetworkService {
         }.resume()
     }
 
+    /// Note: This returns a Data object because UIImage does not conform to Decodable. To use this, simply initialize a
+    /// UIImage at the callsite with the Data object. Returns on the main queue.
+//    static func loadCombineImage(urlString: String) -> AnyPublisher<Data, Error> {
+//        let url = URL(string: urlString)!
+//        return Agent().run(url)
+//    }
+
     // MARK: - Private helper methods
 
     private func createUrl(with place: Placeable, and type: UrlType) -> String {
         switch type {
         case .topSights:
-            guard let placeableName = place.placeableName, let keyParam = AppDelegate.getAPIKeys()?.googleAPI else {
+            guard let keyParam = AppDelegate.getAPIKeys()?.googleAPI else {
                 return ""
             }
-            let placeName = placeableName.split(separator: " ")
+            let placeName = place.placeableName.split(separator: " ")
             var queryParam = "tourist+spots+in"
             placeName.forEach { word in
                 queryParam += "+" + word
@@ -338,10 +374,10 @@ class NetworkService {
 
             return url
         case .googleRestaurants:
-            guard let placeableName = place.placeableName, let keyParam = AppDelegate.getAPIKeys()?.googleAPI else {
+            guard let keyParam = AppDelegate.getAPIKeys()?.googleAPI else {
                 return ""
             }
-            let placeName = placeableName.split(separator: " ")
+            let placeName = place.placeableName.split(separator: " ")
             var queryParam = "restaurants+in"
             placeName.forEach { word in
                 queryParam += "+" + word

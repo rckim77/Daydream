@@ -10,19 +10,48 @@ import UIKit
 
 class SearchDetailDataSource: NSObject, UITableViewDataSource {
 
+    enum LoadingState {
+        case uninitiated, loading, results, error
+    }
+
     var place: Placeable
     var pointsOfInterest: [Placeable]?
-    var eateries: [Eatery]?
-    private var prevEateries: [Eatery]?
-    var fallbackEateries: [Placeable]?
-    private var prevFallbackEateries: [Placeable]?
+    var eateries: [Eatable]?
+    private var prevEateries: [Eatable]?
+    private var eateriesIsEqualToPrevious: Bool {
+        var eateriesIsEqualToPrevious = false
+
+        guard let eateries = eateries,
+            let prevEateries = prevEateries,
+            eateries.count > 2 && prevEateries.count > 2,
+            eateries[0].type == prevEateries[0].type else {
+            return false
+        }
+
+        if let eateries = eateries as? [Eatery], let prevEateries = prevEateries as? [Eatery] {
+            eateries.enumerated().forEach { index, eatery in
+                eateriesIsEqualToPrevious = eatery == prevEateries[index]
+            }
+        } else if let eateries = eateries as? [Place], let prevEateries = prevEateries as? [Place] {
+            eateries.enumerated().forEach { index, eatery in
+                eateriesIsEqualToPrevious = eatery == prevEateries[index]
+            }
+        }
+
+        return eateriesIsEqualToPrevious
+    }
     weak var viewController: SearchDetailViewController?
-    var isLoading = false
+    var loadingState: LoadingState = .uninitiated
 
     private let networkService = NetworkService()
-    let mapCardCellHeight: CGFloat = 190
+    let mapCardCellHeight: CGFloat = 186
     let mapCardCellIndexPath = IndexPath(row: 0, section: 0)
-    let sightsCardCellHeight: CGFloat = 600
+    var sightsCardCellHeight: CGFloat {
+        return loadingState == .error ? SightsCardCell.errorHeight: SightsCardCell.defaultHeight
+    }
+    var eateriesCardCellHeight: CGFloat {
+        return loadingState == .error ? EateriesCardCell.errorHeight: EateriesCardCell.defaultHeight
+    }
     let sightsCardCellIndexPath = IndexPath(row: 1, section: 0)
     let eateriesCardCellIndexPath = IndexPath(row: 2, section: 0)
 
@@ -31,49 +60,53 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
     }
 
     func loadPhoto(success: @escaping(_ image: UIImage) -> Void, failure: @escaping(_ error: Error?) -> Void) {
-        guard let placeId = place.placeableId else {
-            return
-        }
-        networkService.loadPhoto(with: placeId, success: { photo in
-            success(photo)
-        }, failure: { error in
-            failure(error)
+        networkService.loadPhoto(placeId: place.placeableId, completion: { result in
+            switch result {
+            case .success(let image):
+                success(image)
+            case .failure(let error):
+                failure(error)
+            }
         })
     }
 
     func loadSightsAndEateries(success: @escaping(_ indexPaths: [IndexPath]) -> Void, failure: @escaping(_ error: Error?) -> Void) {
-        networkService.loadSightsAndEateries(with: place, success: { [weak self] sights, eateries in
+        networkService.loadSightsAndEateries(place: place, completion: { [weak self] result in
             guard let strongSelf = self else {
                 failure(nil)
                 return
             }
 
-            strongSelf.pointsOfInterest = sights
-            strongSelf.isLoading = false
+            switch result {
+            case .success(let (sights, eateries)):
+                strongSelf.pointsOfInterest = sights
+                strongSelf.loadingState = .results
 
-            if !eateries.isEmpty {
-                strongSelf.prevEateries = strongSelf.eateries
-                strongSelf.eateries = eateries
-                strongSelf.fallbackEateries = nil
-                strongSelf.prevFallbackEateries = nil
-                success([strongSelf.sightsCardCellIndexPath, strongSelf.eateriesCardCellIndexPath])
-            } else {
-                strongSelf.networkService.loadGoogleRestaurants(place: strongSelf.place, success: { [weak self] restaurants in
-                    guard let strongSelf = self else {
-                        failure(nil)
-                        return
-                    }
-                    strongSelf.prevFallbackEateries = strongSelf.fallbackEateries
-                    strongSelf.fallbackEateries = restaurants
-                    strongSelf.eateries = nil
-                    strongSelf.prevEateries = nil
+                if !eateries.isEmpty {
+                    strongSelf.prevEateries = strongSelf.eateries
+                    strongSelf.eateries = eateries
                     success([strongSelf.sightsCardCellIndexPath, strongSelf.eateriesCardCellIndexPath])
-                }, failure: { error in
-                    failure(error)
-                })
+                } else {
+                    strongSelf.networkService.loadGoogleRestaurants(place: strongSelf.place, completion: { [weak self] result in
+                        guard let strongSelf = self else {
+                            failure(nil)
+                            return
+                        }
+                        switch result {
+                        case .success(let restaurants):
+                            strongSelf.prevEateries = strongSelf.eateries
+                            strongSelf.eateries = restaurants
+                            success([strongSelf.sightsCardCellIndexPath, strongSelf.eateriesCardCellIndexPath])
+                        case .failure(let error):
+                            strongSelf.loadingState = .error
+                            failure(error)
+                        }
+                    })
+                }
+            case .failure(let error):
+                strongSelf.loadingState = .error
+                failure(error)
             }
-        }, failure: { error in
-            failure(error)
         })
     }
 
@@ -106,10 +139,15 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
 
             sightsCardCell.delegate = viewController
 
-            if isLoading {
+            switch loadingState {
+            case .loading:
                 sightsCardCell.configureLoading()
-            } else {
+            case .results:
                 sightsCardCell.pointsOfInterest = pointsOfInterest
+            case .error:
+                sightsCardCell.configureError()
+            case .uninitiated:
+                return sightsCardCell
             }
 
             return sightsCardCell
@@ -120,22 +158,16 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
 
             eateriesCardCell.delegate = viewController
 
-            if isLoading {
+            if loadingState == .loading {
                 eateriesCardCell.configureLoading()
-            } else if let prevEateries = prevEateries, let eateries = eateries, prevEateries == eateries {
+            } else if loadingState == .error {
+                eateriesCardCell.configureError()
+            } else if eateriesIsEqualToPrevious {
                 // this is for when the user is simply scrolling and hasn't reloaded
                 return eateriesCardCell
-            } else if let prevFallbackEateries = prevFallbackEateries as? [Place],
-                let fallbackEateries = fallbackEateries as? [Place],
-                    prevFallbackEateries == fallbackEateries {
-                // this is for when the user is simply scrolling and hasn't reloaded
-                return eateriesCardCell
-            } else if let eateries = eateries, eateries.count > 2, eateries != prevEateries {
+            } else if let eateries = eateries, eateries.count > 2, !eateriesIsEqualToPrevious {
                 eateriesCardCell.configure(eateries)
                 prevEateries = eateries
-            } else if let fallbackEateries = fallbackEateries, fallbackEateries.count > 2 {
-                eateriesCardCell.configureWithFallbackEateries(fallbackEateries)
-                prevFallbackEateries = fallbackEateries
             }
 
             return eateriesCardCell

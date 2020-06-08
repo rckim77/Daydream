@@ -105,13 +105,19 @@ final class SightView: UIView {
     }
 
     func configureLoading() {
+        isHidden = false
         updateLayers()
         backgroundImageView.image = nil
         titleLabel.text = ""
         businessStatusButton.isHidden = true
     }
 
+    func configureError() {
+        isHidden = true
+    }
+
     func configure(sight: Placeable) {
+        isHidden = false
         self.sight = sight
         titleLabel.text = sight.placeableName
         let businessStatus = sight.placeableBusinessStatus
@@ -119,17 +125,18 @@ final class SightView: UIView {
         businessStatusButton.tintColor = businessStatus?.displayColor
         businessStatusButton.isHidden = businessStatus == .operational
 
-        if let id = sight.placeableId {
-            updateLayers()
-            NetworkService().loadPhoto(with: id, success: { [weak self] image in
-                guard let strongSelf = self else {
-                    return
-                }
+        updateLayers()
+        NetworkService().loadPhoto(placeId: sight.placeableId, completion: { [weak self] result in
+            guard let strongSelf = self else {
+                return
+            }
+
+            if case .success(let image) = result {
                 strongSelf.updateLayers()
                 strongSelf.fadeInImage(image, forImageView: strongSelf.backgroundImageView)
                 strongSelf.layoutIfNeeded()
-            }, failure: { _ in })
-        }
+            }
+        })
     }
 
     required init?(coder: NSCoder) {

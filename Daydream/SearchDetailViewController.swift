@@ -85,7 +85,7 @@ final class SearchDetailViewController: UIViewController {
         placeImageView.contentMode = .scaleAspectFill
         placeImageView.addSubview(visualEffectView)
 
-        dataSource?.isLoading = true
+        dataSource?.loadingState = .loading
         placeCardsTableView.reloadData()
         loadDataSource(reloadMapCard: false, fetchBackground: false, completion: {})
     }
@@ -95,7 +95,7 @@ final class SearchDetailViewController: UIViewController {
     private func addProgrammaticComponents() {
         view.addSubview(titleLabel)
         view.addSubview(randomCityButton)
-        view.addSubview(homeButton)
+        view.insertSubview(homeButton, belowSubview: placeCardsTableView)
 
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(24)
@@ -237,25 +237,24 @@ final class SearchDetailViewController: UIViewController {
         }
         let loadingVC = LoadingViewController()
         add(loadingVC)
-        dataSource?.isLoading = true
+        dataSource?.loadingState = .loading
         placeCardsTableView.reloadData()
 
-        networkService.getPlaceId(with: randomCity, success: { [weak self] place in
-            guard let strongSelf = self, let dataSource = strongSelf.dataSource else {
-                loadingVC.remove()
-                return
-            }
-            dataSource.place = place
-            strongSelf.loadDataSource(reloadMapCard: true, completion: {
-                loadingVC.remove()
-            })
-        }, failure: { [weak self] error in
+        networkService.getPlaceId(placeName: randomCity, completion: { [weak self] result in
             loadingVC.remove()
-            guard let strongSelf = self else {
+            guard let strongSelf = self, let dataSource = strongSelf.dataSource else {
                 return
-
             }
-            strongSelf.logErrorEvent(error)
+
+            switch result {
+            case .success(let place):
+                dataSource.place = place
+                strongSelf.loadDataSource(reloadMapCard: true, completion: {
+                    loadingVC.remove()
+                })
+            case .failure(let error):
+                strongSelf.logErrorEvent(error)
+            }
         })
     }
 }
@@ -269,8 +268,12 @@ extension SearchDetailViewController: UITableViewDelegate {
         switch indexPath.row {
         case 0:
             return dataSource.mapCardCellHeight
-        default:
+        case 1:
             return dataSource.sightsCardCellHeight
+        case 2:
+            return dataSource.eateriesCardCellHeight
+        default:
+            return 0
         }
     }
 
@@ -284,17 +287,21 @@ extension SearchDetailViewController: UITableViewDelegate {
 
             if let mapUrl = dataSource.place.placeableMapUrl {
                 openUrl(mapUrl)
-            } else if let placeId = dataSource.place.placeableId {
-                networkService.getPlace(with: placeId, success: { [weak self] place in
-                    guard let strongSelf = self, let mapUrl = place.placeableMapUrl else {
-                        return
-                    }
-                    strongSelf.openUrl(mapUrl)
-                }, failure: { [weak self] error in
+            } else {
+                networkService.getPlace(id: dataSource.place.placeableId, completion: { [weak self] result in
                     guard let strongSelf = self else {
                         return
                     }
-                    strongSelf.logErrorEvent(error)
+                    switch result {
+                    case .success(let place):
+                        if let mapUrl = place.placeableMapUrl {
+                            strongSelf.openUrl(mapUrl)
+                        } else {
+                            return
+                        }
+                    case .failure(let error):
+                        strongSelf.logErrorEvent(error)
+                    }
                 })
             }
         }
@@ -381,27 +388,41 @@ extension SearchDetailViewController: SightsCardCellDelegate {
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         present(alert, animated: true, completion: nil)
     }
+
+    func sightsCardCellDidTapRetry() {
+        randomCityButtonTapped()
+    }
 }
 
 extension SearchDetailViewController: EateriesCardCellDelegate {
-    func eateriesCardCell(_ cell: EateriesCardCell, didSelectEatery eatery: Eatery) {
+    func eateriesCardCell(_ cell: EateriesCardCell, didSelectEatery eatery: Eatable) {
         logEvent(contentType: "select eatery", title)
-        openUrl(eatery.url)
+
+        switch eatery.type {
+        case .yelp:
+            if let url = eatery.eatableUrl {
+                openUrl(url)
+            }
+        case .google:
+            performSegue(withIdentifier: "genericMapSegue", sender: eatery)
+        }
     }
 
-    func eateriesCardCell(_ cell: EateriesCardCell, didSelectFallbackEatery eatery: Placeable) {
-        logEvent(contentType: "select fallback eatery using Google", title)
-        performSegue(withIdentifier: "genericMapSegue", sender: eatery)
+    func eateriesCardCellDidTapInfoButtonForEateryType(_ type: EateryType) {
+        let title = "Top Eateries"
+        let message: String
+        switch type {
+        case .yelp:
+            message = "These results are powered by Yelp's Fusion API. Tapping on an eatery will open up Yelp."
+        case .google:
+            message = "These results are powered by Google's Places API. Tapping on an eatery will open up a map view."
+        }
+        presentInfoAlertModal(title: title,
+                              message: message)
     }
 
-    func eateriesCardCellDidTapInfoButtonForEatery() {
-        presentInfoAlertModal(title: "Top Eateries",
-                              message: "These results are powered by Yelp's Fusion API. Tapping on an eatery will open up Yelp.")
-    }
-
-    func eateriesCardCellDidTapInfoButtonForFallbackEatery() {
-        presentInfoAlertModal(title: "Top Eateries",
-                              message: "These results are powered by Google's Places API. Tapping on an eatery will open up a map view.")
+    func eateriesCardCellDidTapRetry() {
+        randomCityButtonTapped()
     }
 }
 

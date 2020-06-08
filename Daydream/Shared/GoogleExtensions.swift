@@ -10,12 +10,12 @@ import GooglePlaces
 import GoogleMaps
 
 extension GMSPlace: Placeable {
-    var placeableId: String? {
-        return self.placeID
+    var placeableId: String {
+        return self.placeID ?? ""
     }
 
-    var placeableName: String? {
-        return self.name
+    var placeableName: String {
+        return self.name ?? ""
     }
 
     var placeableFormattedAddress: String? {
@@ -48,7 +48,7 @@ extension GMSPlace: Placeable {
         return nil
     }
 
-    var placeableReviews: [Reviewable]? {
+    var placeableReviews: [Review]? {
         return nil
     }
 

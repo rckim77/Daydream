@@ -17,7 +17,7 @@ final class MapViewController: UIViewController {
     var place: Placeable?
     var dynamicMapView: GMSMapView?
     var dynamicMarker: GMSMarker?
-    var currentReviews: [Reviewable]?
+    var currentReviews: [Review]?
     var currentReviewIndex = 0
 
     // Will automatically sync with system user interface style settings but can be overridden
@@ -204,21 +204,21 @@ final class MapViewController: UIViewController {
 
         dynamicMarker.tracksInfoWindowChanges = true
 
-        networkService.getPlace(with: placeId, success: { [weak self] place in
+        networkService.getPlace(id: placeId, completion: { [weak self] result in
             guard let strongSelf = self else {
                 return
             }
-            dynamicMarker.snippet = strongSelf.createSnippet(for: place)
-            dynamicMarker.tracksInfoWindowChanges = false
-            strongSelf.place = place
-            DispatchQueue.main.async {
-                strongSelf.displayReviews(place.placeableReviews, index: 0)
+            switch result {
+            case .success(let place):
+                dynamicMarker.snippet = strongSelf.createSnippet(for: place)
+                dynamicMarker.tracksInfoWindowChanges = false
+                strongSelf.place = place
+                DispatchQueue.main.async {
+                    strongSelf.displayReviews(place.placeableReviews, index: 0)
+                }
+            case .failure(let error):
+                strongSelf.logErrorEvent(error)
             }
-        }, failure: { [weak self] error in
-            guard let strongSelf = self else {
-                return
-            }
-            strongSelf.logErrorEvent(error)
         })
     }
 
@@ -240,7 +240,7 @@ final class MapViewController: UIViewController {
 
     // MARK: - Review-specific methods
 
-    private func displayReviews(_ reviews: [Reviewable]?, index: Int) {
+    private func displayReviews(_ reviews: [Review]?, index: Int) {
         guard let reviews = reviews, !reviews.isEmpty else {
             return
         }
@@ -257,7 +257,7 @@ final class MapViewController: UIViewController {
         }
     }
 
-    private func startDisplayingReviews(_ reviews: [Reviewable], index: Int) {
+    private func startDisplayingReviews(_ reviews: [Review], index: Int) {
         if index < reviews.count - 1 {
             UIView.animate(withDuration: 0.7, animations: {
                 self.reviewCard.alpha = 1
@@ -291,7 +291,7 @@ final class MapViewController: UIViewController {
         }
     }
 
-    private func displayReviewForUITest(_ reviews: [Reviewable]) {
+    private func displayReviewForUITest(_ reviews: [Review]) {
         guard let firstReview = reviews.first else {
             return
         }
@@ -316,7 +316,7 @@ final class MapViewController: UIViewController {
         reviewCard.isHidden = true
     }
 
-    private func loadReviewContent(_ review: Reviewable) {
+    private func loadReviewContent(_ review: Review) {
         reviewCard.configure(review)
     }
 
