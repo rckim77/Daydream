@@ -366,11 +366,11 @@ class NetworkService {
 
     // MARK: - Convenience methods
 
-    /// Note: This returns a Data object because UIImage does not conform to Decodable. To use this, simply initialize a
-    /// UIImage at the callsite with the Data object. Returns on the main queue.
-    static func loadImage(url: URL) -> AnyPublisher<Data, URLError> {
+    /// Note: Returns on the main queue.
+    static func loadImage(url: URL) -> AnyPublisher<UIImage?, Never> {
         return URLSession.shared.dataTaskPublisher(for: url)
-            .map { $0.data }
+            .map { UIImage(data: $0.data) }
+            .replaceError(with: UIImage())
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }

@@ -137,9 +137,7 @@ final class MapReviewCard: UIView {
         }
 
         profileImageCancellable = NetworkService.loadImage(url: url)
-            .sink(receiveCompletion: { _ in }, receiveValue: { data in
-                self.authorImageView.image = UIImage(data: data)
-            })
+            .assign(to: \.image, on: authorImageView)
     }
 
     private func updateStars(rating: Int) {
