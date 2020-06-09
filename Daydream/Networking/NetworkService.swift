@@ -9,6 +9,7 @@
 import Alamofire
 import GooglePlaces
 import SwiftyJSON
+import Combine
 
 typealias SightsAndEateries = ([Placeable], [Eatery])
 
@@ -122,6 +123,14 @@ class NetworkService {
                 completion(.failure(error))
             }
         }
+    }
+
+    func loadEateriesCombine(place: Placeable, urlRequest: URLRequest) -> AnyPublisher<[Eatery], Error> {
+        return URLSession.shared.dataTaskPublisher(for: urlRequest)
+            .map { $0.data }
+            .decode(type: EateryCollection.self, decoder: customDecoder)
+            .map { $0.businesses }
+            .eraseToAnyPublisher()
     }
 
     func loadGoogleRestaurants(place: Placeable, completion: @escaping(Result<[Eatable], Error>) -> Void) {
@@ -309,6 +318,7 @@ class NetworkService {
         }
     }
 
+    /// Gets city summary text from Wikivoyage (currently unused)
     func getSummaryFor(_ city: String, completion: @escaping(Result<String, Error>) -> Void) {
         let cityWords = city.split(separator: " ")
         var cityParam = cityWords[0]
@@ -333,6 +343,7 @@ class NetworkService {
         }
     }
 
+    /// Gets articles using the New York Times Article API (currently unused)
     func loadNewsFor(_ city: String, completion: @escaping(Result<[Article], Error>) -> Void) {
         guard let keyParam = AppDelegate.getAPIKeys()?.nyTimesAPI else {
             return
@@ -440,5 +451,23 @@ class NetworkService {
         let url = "https://maps.googleapis.com/maps/api/place/details/json?placeid=\(placeIdParam)&key=\(keyParam)"
 
         return url
+    }
+
+    func createUrlRequest(place: Placeable, type: UrlType) -> URLRequest? {
+        let urlString = createUrl(with: place, and: type)
+        guard let url = URL(string: urlString) else {
+            return nil
+        }
+
+        switch type {
+        case .topSights, .googleRestaurants:
+            return URLRequest(url: url)
+        case .topEateries:
+            guard let yelpAPIKey = AppDelegate.getAPIKeys()?.yelpAPI else {
+                return nil
+            }
+            let headers: HTTPHeaders = ["Authorization": "Bearer \(yelpAPIKey)"]
+            return try? URLRequest(url: url, method: .get, headers: headers)
+        }
     }
 }
