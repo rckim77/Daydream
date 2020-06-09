@@ -333,6 +333,26 @@ class NetworkService {
         }
     }
 
+    func loadNewsFor(_ city: String, completion: @escaping(Result<[Article], Error>) -> Void) {
+        guard let keyParam = AppDelegate.getAPIKeys()?.nyTimesAPI else {
+            return
+        }
+        let url = "https://api.nytimes.com/svc/search/v2/articlesearch.json?q=\(city)&page=1&api-key=\(keyParam)"
+
+        AF.request(url).responseData { response in
+            switch response.result {
+            case .success(let data):
+                if let articleResponse = try? self.customDecoder.decode(ArticleResponse.self, from: data) {
+                    completion(.success(articleResponse.response.docs))
+                } else {
+                    completion(.failure(NetworkError.jsonDecoding))
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+
     // MARK: - Convenience methods
 
     static func loadImage(from urlString: String, completion: @escaping(_ image: UIImage) -> Void) {
