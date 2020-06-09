@@ -8,6 +8,7 @@
 
 import UIKit
 import SnapKit
+import Combine
 
 final class MapReviewCard: UIView {
 
@@ -75,6 +76,8 @@ final class MapReviewCard: UIView {
         return imageView
     }()
 
+    private var profileImageCancellable: AnyCancellable?
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .clear
@@ -127,11 +130,16 @@ final class MapReviewCard: UIView {
         authorLabel.text = review.authorName
         reviewLabel.text = review.text
         updateStars(rating: review.rating)
-        if let profileUrl = review.profilePhotoUrl {
-            NetworkService.loadImage(from: profileUrl, completion: { [weak self] image in
-                self?.authorImageView.image = image
-            })
+        authorImageView.image = nil
+
+        guard let profileUrl = review.profilePhotoUrl, let url = URL(string: profileUrl) else {
+            return
         }
+
+        profileImageCancellable = NetworkService.loadImage(url: url)
+            .sink(receiveCompletion: { _ in }, receiveValue: { data in
+                self.authorImageView.image = UIImage(data: data)
+            })
     }
 
     private func updateStars(rating: Int) {

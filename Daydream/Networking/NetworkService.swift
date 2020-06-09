@@ -366,26 +366,14 @@ class NetworkService {
 
     // MARK: - Convenience methods
 
-    static func loadImage(from urlString: String, completion: @escaping(_ image: UIImage) -> Void) {
-        guard let url = URL(string: urlString) else {
-            return
-        }
-        URLSession.shared.dataTask(with: url) { data, _, _ in
-            guard let data = data, let image = UIImage(data: data) else {
-                return
-            }
-            DispatchQueue.main.async {
-                completion(image)
-            }
-        }.resume()
-    }
-
     /// Note: This returns a Data object because UIImage does not conform to Decodable. To use this, simply initialize a
     /// UIImage at the callsite with the Data object. Returns on the main queue.
-//    static func loadCombineImage(urlString: String) -> AnyPublisher<Data, Error> {
-//        let url = URL(string: urlString)!
-//        return Agent().run(url)
-//    }
+    static func loadImage(url: URL) -> AnyPublisher<Data, URLError> {
+        return URLSession.shared.dataTaskPublisher(for: url)
+            .map { $0.data }
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
+    }
 
     // MARK: - Private helper methods
 
