@@ -183,7 +183,7 @@ extension UIButton {
         tintColor = .white
         backgroundColor = UIColor.black.withAlphaComponent(0.2)
         setImage(retryImage, for: .normal)
-        imageEdgeInsets.right = 18
+        imageEdgeInsets.right = 12
         addRoundedCorners(radius: 8)
     }
 }
