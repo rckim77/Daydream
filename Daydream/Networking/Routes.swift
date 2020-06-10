@@ -35,7 +35,9 @@ struct GooglePlaceTextSearchRoute {
         guard let keyParam = AppDelegate.getAPIKeys()?.googleAPI else {
             return nil
         }
-        let placeWords = placeName.split(separator: " ")
+        // e.g., İstanbul -> Istanbul
+        let placeNameStripped = placeName.folding(options: .diacriticInsensitive, locale: .current)
+        let placeWords = placeNameStripped.split(separator: " ")
         var queryParam = ""
 
         switch queryType {
