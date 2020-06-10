@@ -15,5 +15,6 @@ target 'Daydream' do
   pod 'Firebase/Core'
   pod 'Firebase/Crashlytics'
   pod 'Firebase/Analytics'
+  pod 'Firebase/Performance'
   pod 'SnapKit'
 end
