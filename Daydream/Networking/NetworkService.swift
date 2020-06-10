@@ -16,17 +16,14 @@ typealias SightsAndEateries = ([Placeable], [Eatery])
 // swiftlint:disable type_body_length
 class NetworkService {
 
-    enum UrlType {
-        case topSights, googleRestaurants, topEateries
-    }
-
     private lazy var customDecoder: JSONDecoder = {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         return decoder
     }()
 
-    /// The pointsOfInterest array is guaranteed to return at least three elements if the call succeeds. The eateries array
+    /// The pointsOfInterest array is guaranteed to return at least three elements if the call succeeds. If loading eateries from Yelp
+    /// fails, fetch restaurants from Google.
     func loadSightsAndEateries(place: Placeable, completion: @escaping(Result<SightsAndEateries, Error>) -> Void) {
         loadTopSights(place: place, completion: { result in
             switch result {
@@ -55,7 +52,6 @@ class NetworkService {
             switch response.result {
             case .success(let value):
                 let json = JSON(value)
-                // POSTLAUNCH: - refactor into a JSON init method
                 guard let results = json["results"].array, results.count > 2 else {
                     completion(.failure(NetworkError.insufficientResults))
                     return
@@ -127,6 +123,7 @@ class NetworkService {
         }
     }
 
+    // Currently unused. Replaces loadTopEateries(place:completion:).
     func loadEateriesCombine(place: Placeable, urlRequest: URLRequest) -> AnyPublisher<[Eatery], Error> {
         return URLSession.shared.dataTaskPublisher(for: urlRequest)
             .map { $0.data }
@@ -135,6 +132,7 @@ class NetworkService {
             .eraseToAnyPublisher()
     }
 
+    /// Fallback results for restaurants using Google Place API.
     func loadGoogleRestaurants(place: Placeable, completion: @escaping(Result<[Eatable], Error>) -> Void) {
         guard let url = GooglePlaceTextSearchRoute(placeName: place.placeableName, queryType: .restaurants)?.url else {
             completion(.failure(NetworkError.routeError))
@@ -187,6 +185,7 @@ class NetworkService {
         }
     }
 
+    /// Load photo as UIImage using Google Places SDK.
     func loadPhoto(placeId: String, completion: @escaping(Result<UIImage, Error>) -> Void) {
         guard let photoField = GMSPlaceField(rawValue: UInt(GMSPlaceField.photos.rawValue)) else {
             completion(.failure(NetworkError.malformedPhotoField))
@@ -215,6 +214,7 @@ class NetworkService {
         }
     }
 
+    /// Returns a Place object from a name.
     func getPlaceId(placeName: String, completion: @escaping(Result<Place, Error>) -> Void) {
         guard let url = GooglePlaceTextSearchRoute(placeName: placeName, queryType: .placeByName)?.url else {
             completion(.failure(NetworkError.routeError))
@@ -245,6 +245,7 @@ class NetworkService {
         }
     }
 
+    /// Returns a Place object from a place id.
     func getPlace(id: String, completion: @escaping(Result<Place, Error>) -> Void) {
         guard let url = GooglePlaceDetailsRoute(placeId: id)?.url else {
             completion(.failure(NetworkError.routeError))
@@ -338,8 +339,6 @@ class NetworkService {
             }
         }
     }
-
-    // MARK: - Convenience methods
 
     /// Note: Returns on the main queue and with errors erased.
     static func loadImage(url: URL) -> AnyPublisher<UIImage?, Never> {
