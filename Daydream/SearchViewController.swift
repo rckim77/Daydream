@@ -19,7 +19,7 @@ final class SearchViewController: UIViewController {
     private var placeData: Placeable?
     private var placeBackgroundImage: UIImage?
     private var defaultSearchBarYOffset: CGFloat {
-        return  (view.bounds.height / 2) - (searchBarViewHeight / 2)
+        return  (view.bounds.height / 2) - (searchBarViewHeight / 2) - 50
     }
     private let networkService = NetworkService()
 
