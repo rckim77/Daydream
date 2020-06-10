@@ -9,6 +9,7 @@
 import UIKit
 import GooglePlaces
 import GoogleMaps
+import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -22,6 +23,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             GMSPlacesClient.provideAPIKey(keys.googleAPI)
             GMSServices.provideAPIKey(keys.googleAPI)
         }
+
+        FirebaseApp.configure()
+
         // If launchOptions contains the appropriate launch options key, a Home screen quick action
         // is responsible for launching the app. Store the action for processing once the app has
         // completed initialization.

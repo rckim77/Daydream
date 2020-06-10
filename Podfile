@@ -13,7 +13,7 @@ target 'Daydream' do
   pod 'SwiftyJSON', '~> 5.0.0'
   pod 'SVProgressHUD'
   pod 'Firebase/Core'
-  pod 'Fabric'
-  pod 'Crashlytics'
+  pod 'Firebase/Crashlytics'
+  pod 'Firebase/Analytics'
   pod 'SnapKit'
 end
