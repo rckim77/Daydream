@@ -32,6 +32,7 @@
 		94A9CCC22489F6C6008551B6 /* EateryCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A9CCC12489F6C6008551B6 /* EateryCollection.swift */; };
 		94A9CCC6248BE871008551B6 /* Eatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A9CCC5248BE871008551B6 /* Eatable.swift */; };
 		94A9CCCC248F50F7008551B6 /* Article.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A9CCCB248F50F7008551B6 /* Article.swift */; };
+		94A9CCCE24904636008551B6 /* Routes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A9CCCD24904636008551B6 /* Routes.swift */; };
 		94AE9B852094DAF500450399 /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94AE9B842094DAF500450399 /* LoadingViewController.swift */; };
 		94B7DB57205DEE980040D61C /* Viewport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B7DB56205DEE980040D61C /* Viewport.swift */; };
 		94B7DB59205E06080040D61C /* Eatery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B7DB58205E06080040D61C /* Eatery.swift */; };
@@ -93,6 +94,7 @@
 		94A9CCC12489F6C6008551B6 /* EateryCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EateryCollection.swift; sourceTree = "<group>"; };
 		94A9CCC5248BE871008551B6 /* Eatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Eatable.swift; sourceTree = "<group>"; };
 		94A9CCCB248F50F7008551B6 /* Article.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Article.swift; sourceTree = "<group>"; };
+		94A9CCCD24904636008551B6 /* Routes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Routes.swift; sourceTree = "<group>"; };
 		94AE9B842094DAF500450399 /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
 		94B7DB56205DEE980040D61C /* Viewport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Viewport.swift; sourceTree = "<group>"; };
 		94B7DB58205E06080040D61C /* Eatery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Eatery.swift; sourceTree = "<group>"; };
@@ -195,6 +197,7 @@
 			isa = PBXGroup;
 			children = (
 				94B7DB5C205EEBBB0040D61C /* NetworkService.swift */,
+				94A9CCCD24904636008551B6 /* Routes.swift */,
 				94A9CCBD2489C366008551B6 /* Agent.swift */,
 				94A9CCBF2489ED2D008551B6 /* NetworkError.swift */,
 			);
@@ -494,6 +497,7 @@
 				9434BA4C247998D4004294F0 /* MapReviewCard.swift in Sources */,
 				94E108712484AF5A0091D043 /* CellLoadingView.swift in Sources */,
 				94AE9B852094DAF500450399 /* LoadingViewController.swift in Sources */,
+				94A9CCCE24904636008551B6 /* Routes.swift in Sources */,
 				94B7DB57205DEE980040D61C /* Viewport.swift in Sources */,
 				94B7DB59205E06080040D61C /* Eatery.swift in Sources */,
 				94C9385022500D31005E0653 /* UIDevice+Helpers.swift in Sources */,

@@ -46,7 +46,10 @@ class NetworkService {
     }
 
     func loadTopSights(place: Placeable, completion: @escaping(Result<[Placeable], Error>) -> Void) {
-        let url = createUrl(with: place, and: .topSights)
+        guard let url = GooglePlaceTextSearchRoute(placeName: place.placeableName, queryType: .touristSpots)?.url else {
+            completion(.failure(NetworkError.routeError))
+            return
+        }
 
         AF.request(url).validate().responseJSON { response in
             switch response.result {
@@ -95,17 +98,16 @@ class NetworkService {
     }
 
     func loadTopEateries(place: Placeable, completion: @escaping(Result<[Eatery], Error>) -> Void) {
-        guard let yelpAPIKey = AppDelegate.getAPIKeys()?.yelpAPI else {
-            completion(.failure(NetworkError.APIKeysFetchFailure))
+        guard let route = YelpBusinessesRoute(place: place) else {
+            completion(.failure(NetworkError.routeError))
             return
         }
 
-        let url = createUrl(with: place, and: .topEateries)
         let headers: HTTPHeaders = [
-            "Authorization": "Bearer \(yelpAPIKey)"
+            "Authorization": "Bearer \(route.yelpAPIKey)"
         ]
 
-        AF.request(url, headers: headers).responseData { response in
+        AF.request(route.url, headers: headers).responseData { response in
             switch response.result {
             case .success(let data):
                 guard let eateryCollection = try? self.customDecoder.decode(EateryCollection.self, from: data) else {
@@ -134,7 +136,10 @@ class NetworkService {
     }
 
     func loadGoogleRestaurants(place: Placeable, completion: @escaping(Result<[Eatable], Error>) -> Void) {
-        let url = createUrl(with: place, and: .googleRestaurants)
+        guard let url = GooglePlaceTextSearchRoute(placeName: place.placeableName, queryType: .restaurants)?.url else {
+            completion(.failure(NetworkError.routeError))
+            return
+        }
 
         AF.request(url).validate().responseJSON { response in
             switch response.result {
@@ -211,8 +216,8 @@ class NetworkService {
     }
 
     func getPlaceId(placeName: String, completion: @escaping(Result<Place, Error>) -> Void) {
-        guard let url = createUrlWithPlaceName(placeName) else {
-            completion(.failure(NetworkError.APIKeysFetchFailure))
+        guard let url = GooglePlaceTextSearchRoute(placeName: placeName, queryType: .placeByName)?.url else {
+            completion(.failure(NetworkError.routeError))
             return
         }
 
@@ -240,39 +245,9 @@ class NetworkService {
         }
     }
 
-    func getResultPlaceId(name: String, completion: @escaping(Result<Place, Error>) -> Void) {
-        guard let url = createUrlWithPlaceName(name) else {
-            completion(.failure(NetworkError.APIKeysFetchFailure))
-            return
-        }
-
-        AF.request(url).validate().responseJSON { response in
-            switch response.result {
-            case .success(let value):
-                let json = JSON(value)
-                guard let result = json["results"].array?.first,
-                    let placeId = result["place_id"].string else {
-                        completion(.failure(NetworkError.malformedJSON))
-                    return
-                }
-
-                NetworkService().getPlace(id: placeId, completion: { result in
-                    switch result {
-                    case .success(let place):
-                        completion(.success(place))
-                    case .failure(let error):
-                        completion(.failure(error))
-                    }
-                })
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-    }
-
     func getPlace(id: String, completion: @escaping(Result<Place, Error>) -> Void) {
-        guard let url = createUrlWithPlaceId(id) else {
-            completion(.failure(NetworkError.APIKeysFetchFailure))
+        guard let url = GooglePlaceDetailsRoute(placeId: id)?.url else {
+            completion(.failure(NetworkError.routeError))
             return
         }
 
@@ -366,96 +341,12 @@ class NetworkService {
 
     // MARK: - Convenience methods
 
-    /// Note: Returns on the main queue.
+    /// Note: Returns on the main queue and with errors erased.
     static func loadImage(url: URL) -> AnyPublisher<UIImage?, Never> {
         return URLSession.shared.dataTaskPublisher(for: url)
             .map { UIImage(data: $0.data) }
             .replaceError(with: UIImage())
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
-    }
-
-    // MARK: - Private helper methods
-
-    private func createUrl(with place: Placeable, and type: UrlType) -> String {
-        switch type {
-        case .topSights:
-            guard let keyParam = AppDelegate.getAPIKeys()?.googleAPI else {
-                return ""
-            }
-            let placeName = place.placeableName.split(separator: " ")
-            var queryParam = "tourist+spots+in"
-            placeName.forEach { word in
-                queryParam += "+" + word
-            }
-
-            let url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=\(queryParam)&key=\(keyParam)"
-
-            return url
-        case .googleRestaurants:
-            guard let keyParam = AppDelegate.getAPIKeys()?.googleAPI else {
-                return ""
-            }
-            let placeName = place.placeableName.split(separator: " ")
-            var queryParam = "restaurants+in"
-            placeName.forEach { word in
-                queryParam += "+" + word
-            }
-
-            let url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=\(queryParam)&key=\(keyParam)"
-
-            return url
-        case .topEateries:
-            let latitude = place.placeableCoordinate.latitude
-            let longitude = place.placeableCoordinate.longitude
-            let url = "https://api.yelp.com/v3/businesses/search?latitude=\(latitude)&longitude=\(longitude)&categories=restaurants"
-
-            return url
-        }
-    }
-
-    private func createUrlWithPlaceName(_ placeName: String) -> String? {
-        guard let keyParam = AppDelegate.getAPIKeys()?.googleAPI else {
-            return nil
-        }
-
-        let placeWords = placeName.split(separator: " ")
-        var placeNameParam = placeWords[0]
-        for i in 1..<placeWords.count {
-            placeNameParam += "+" + placeWords[i]
-        }
-        
-        let url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=\(placeNameParam)&key=\(keyParam)"
-
-        return url
-    }
-
-    private func createUrlWithPlaceId(_ placeId: String) -> String? {
-        guard let keyParam = AppDelegate.getAPIKeys()?.googleAPI else {
-            return nil
-        }
-
-        let placeIdParam = placeId
-        let url = "https://maps.googleapis.com/maps/api/place/details/json?placeid=\(placeIdParam)&key=\(keyParam)"
-
-        return url
-    }
-
-    func createUrlRequest(place: Placeable, type: UrlType) -> URLRequest? {
-        let urlString = createUrl(with: place, and: type)
-        guard let url = URL(string: urlString) else {
-            return nil
-        }
-
-        switch type {
-        case .topSights, .googleRestaurants:
-            return URLRequest(url: url)
-        case .topEateries:
-            guard let yelpAPIKey = AppDelegate.getAPIKeys()?.yelpAPI else {
-                return nil
-            }
-            let headers: HTTPHeaders = ["Authorization": "Bearer \(yelpAPIKey)"]
-            return try? URLRequest(url: url, method: .get, headers: headers)
-        }
     }
 }
