@@ -14,7 +14,7 @@ import SnapKit
 // swiftlint:disable type_body_length
 final class MapViewController: UIViewController {
 
-    var place: Placeable?
+    var place: Place?
     var dynamicMapView: GMSMapView?
     var dynamicMarker: GMSMarker?
     var currentReviews: [Review]?
@@ -95,7 +95,7 @@ final class MapViewController: UIViewController {
                                                name: UIApplication.willEnterForegroundNotification,
                                                object: nil)
 
-        addOrUpdateMapView(for: place?.placeableId, name: place?.placeableName, location: place?.placeableCoordinate)
+        addOrUpdateMapView(for: place?.placeId, name: place?.name, location: place?.coordinate)
         addProgrammaticViews()
     }
 
@@ -214,7 +214,7 @@ final class MapViewController: UIViewController {
                 dynamicMarker.tracksInfoWindowChanges = false
                 strongSelf.place = place
                 DispatchQueue.main.async {
-                    strongSelf.displayReviews(place.placeableReviews, index: 0)
+                    strongSelf.displayReviews(place.reviews, index: 0)
                 }
             case .failure(let error):
                 strongSelf.logErrorEvent(error)
@@ -224,14 +224,10 @@ final class MapViewController: UIViewController {
 
     // MARK: - Marker-specific methods
 
-    private func createSnippet(for place: Placeable) -> String {
-        var snippet = ""
+    private func createSnippet(for place: Place) -> String {
+        var snippet = place.formattedAddress
 
-        if let formattedAddress = place.placeableFormattedAddress {
-            snippet += formattedAddress
-        }
-
-        if let phoneNumber = place.placeableFormattedPhoneNumber {
+        if let phoneNumber = place.internationalPhoneNumber {
             snippet += "\n\(phoneNumber)"
         }
 
@@ -366,7 +362,7 @@ extension MapViewController: GMSMapViewDelegate {
 
     func mapView(_ mapView: GMSMapView, didTapInfoWindowOf marker: GMSMarker) {
         logEvent(contentType: "info window on marker tapped", title)
-        if let mapUrl = place?.placeableMapUrl, let url = URL(string: mapUrl) {
+        if let mapUrl = place?.mapUrl, let url = URL(string: mapUrl) {
             UIApplication.shared.open(url, options: [:])
         }
     }

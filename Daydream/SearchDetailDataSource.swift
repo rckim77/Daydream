@@ -14,8 +14,8 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
         case uninitiated, loading, results, error
     }
 
-    var place: Placeable
-    var pointsOfInterest: [Placeable]?
+    var place: Place
+    var pointsOfInterest: [Place]?
     var eateries: [Eatable]?
     private var prevEateries: [Eatable]?
     private var eateriesIsEqualToPrevious: Bool {
@@ -55,12 +55,12 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
     let sightsCardCellIndexPath = IndexPath(row: 1, section: 0)
     let eateriesCardCellIndexPath = IndexPath(row: 2, section: 0)
 
-    init(place: Placeable) {
+    init(place: Place) {
         self.place = place
     }
 
     func loadPhoto(success: @escaping(_ image: UIImage) -> Void, failure: @escaping(_ error: Error?) -> Void) {
-        networkService.loadPhoto(placeId: place.placeableId, completion: { result in
+        networkService.loadPhoto(placeId: place.placeId, completion: { result in
             switch result {
             case .success(let image):
                 success(image)

@@ -11,57 +11,17 @@ import SwiftyJSON
 import CoreLocation
 import Firebase
 
-enum PlaceBusinessStatus: String {
-    case operational = "OPERATIONAL"
-    case closedTemporarily = "CLOSED_TEMPORARILY"
-    case closedPermanently = "CLOSED_PERMANENTLY"
-
-    var displayValue: String {
-        switch self {
-        case .operational:
-            return "operational"
-        case .closedTemporarily:
-            return "closed temporarily"
-        case .closedPermanently:
-            return "closed permanently"
-        }
-    }
-
-    var displayColor: UIColor {
-        switch self {
-        case .operational:
-            return .systemGreen
-        case .closedTemporarily:
-            return .systemOrange
-        case .closedPermanently:
-            return .systemRed
-        }
-    }
-
-    var imageName: String? {
-        switch self {
-        case .closedTemporarily:
-            return "exclamationmark.triangle.fill"
-        case .closedPermanently:
-            return "nosign"
-        case .operational:
-            return nil
-        }
-    }
-}
-
-protocol Placeable: class {
-    var placeableId: String { get }
-    var placeableName: String { get }
-    var placeableFormattedAddress: String? { get }
-    var placeableFormattedPhoneNumber: String? { get }
-    var placeableRating: Float? { get }
-    var placeableCoordinate: CLLocationCoordinate2D { get }
-    var placeableViewport: Viewport? { get }
-    var placeableMapUrl: String? { get }
-    var placeableReviews: [Review]? { get }
-    var placeableBusinessStatus: PlaceBusinessStatus? { get }
-}
+//protocol Placeable: class {
+//    var placeableId: String { get }
+//    var placeableName: String { get }
+//    var placeableFormattedAddress: String? { get }
+//    var placeableFormattedPhoneNumber: String? { get }
+//    var placeableRating: Float? { get }
+//    var placeableCoordinate: CLLocationCoordinate2D { get }
+//    var placeableMapUrl: String? { get }
+//    var placeableReviews: [Review]? { get }
+//    var placeableBusinessStatus: PlaceBusinessStatus? { get }
+//}
 
 protocol RandomCitySelectable {
     func getRandomCity() -> String?

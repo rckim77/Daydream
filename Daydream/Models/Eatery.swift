@@ -22,7 +22,7 @@ extension Eatery: Eatable {
         .yelp
     }
 
-    var id: String? {
+    var eatableId: String? {
         nil
     }
 

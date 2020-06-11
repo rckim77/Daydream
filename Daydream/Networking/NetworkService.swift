@@ -11,7 +11,7 @@ import GooglePlaces
 import SwiftyJSON
 import Combine
 
-typealias SightsAndEateries = ([Placeable], [Eatery])
+typealias SightsAndEateries = ([Place], [Eatery])
 
 // swiftlint:disable type_body_length
 class NetworkService {
@@ -24,7 +24,7 @@ class NetworkService {
 
     /// The pointsOfInterest array is guaranteed to return at least three elements if the call succeeds. If loading eateries from Yelp
     /// fails, fetch restaurants from Google.
-    func loadSightsAndEateries(place: Placeable, completion: @escaping(Result<SightsAndEateries, Error>) -> Void) {
+    func loadSightsAndEateries(place: Place, completion: @escaping(Result<SightsAndEateries, Error>) -> Void) {
         loadTopSights(place: place, completion: { result in
             switch result {
             case .success(let places):
@@ -42,59 +42,28 @@ class NetworkService {
         })
     }
 
-    func loadTopSights(place: Placeable, completion: @escaping(Result<[Placeable], Error>) -> Void) {
-        let route = GooglePlaceTextSearchRoute(name: place.placeableName, location: place.placeableCoordinate, queryType: .touristSpots)
+    func loadTopSights(place: Place, completion: @escaping(Result<[Place], Error>) -> Void) {
+        let route = GooglePlaceTextSearchRoute(name: place.name, location: place.coordinate, queryType: .touristSpots)
         guard let url = route?.url else {
             completion(.failure(NetworkError.routeError))
             return
         }
 
-        AF.request(url).validate().responseJSON { response in
+        AF.request(url).responseData { response in
             switch response.result {
-            case .success(let value):
-                let json = JSON(value)
-                guard let results = json["results"].array, results.count > 2 else {
-                    completion(.failure(NetworkError.insufficientResults))
+            case .success(let data):
+                guard let resultsCollection = try? self.customDecoder.decode(ResultsCollection.self, from: data) else {
+                    completion(.failure(NetworkError.jsonDecoding))
                     return
                 }
-
-                let pointsOfInterest = results[0..<3].compactMap { result -> Place? in
-                    guard let name = result["name"].string,
-                        let placeId = result["place_id"].string,
-                        let centerLat = result["geometry"]["location"]["lat"].double,
-                        let centerLng = result["geometry"]["location"]["lng"].double,
-                        let northeastLat = result["geometry"]["viewport"]["northeast"]["lat"].double,
-                        let northeastLng = result["geometry"]["viewport"]["northeast"]["lng"].double,
-                        let southwestLat = result["geometry"]["viewport"]["southwest"]["lat"].double,
-                        let southwestLng = result["geometry"]["viewport"]["southwest"]["lng"].double,
-                        let businessStatus = result["business_status"].string else {
-                        return nil
-                    }
-
-                    // NOTE: A text search request doesn't return data on address, phone number, nor rating.
-                    // Documentation: https://developers.google.com/places/web-service/search
-                    let coordinate = CLLocationCoordinate2D(latitude: centerLat, longitude: centerLng)
-                    let viewport = Viewport(northeastLat: northeastLat,
-                                            northeastLng: northeastLng,
-                                            southwestLat: southwestLat,
-                                            southwestLng: southwestLng)
-                    
-                    return Place(placeID: placeId,
-                                 name: name,
-                                 coordinate: coordinate,
-                                 viewport: viewport,
-                                 businessStatus: businessStatus)
-                }
-
-                completion(.success(pointsOfInterest))
+                completion(.success(resultsCollection.results))
             case .failure(let error):
                 completion(.failure(error))
             }
-
         }
     }
 
-    func loadTopEateries(place: Placeable, completion: @escaping(Result<[Eatery], Error>) -> Void) {
+    func loadTopEateries(place: Place, completion: @escaping(Result<[Eatery], Error>) -> Void) {
         guard let route = YelpBusinessesRoute(place: place) else {
             completion(.failure(NetworkError.routeError))
             return
@@ -125,7 +94,7 @@ class NetworkService {
     }
 
     // Currently unused. Replaces loadTopEateries(place:completion:).
-    func loadEateriesCombine(place: Placeable, urlRequest: URLRequest) -> AnyPublisher<[Eatery], Error> {
+    func loadEateriesCombine(place: Place, urlRequest: URLRequest) -> AnyPublisher<[Eatery], Error> {
         return URLSession.shared.dataTaskPublisher(for: urlRequest)
             .map { $0.data }
             .decode(type: EateryCollection.self, decoder: customDecoder)
@@ -134,56 +103,28 @@ class NetworkService {
     }
 
     /// Fallback results for restaurants using Google Place API.
-    func loadGoogleRestaurants(place: Placeable, completion: @escaping(Result<[Eatable], Error>) -> Void) {
-        let route = GooglePlaceTextSearchRoute(name: place.placeableName, location: place.placeableCoordinate, queryType: .restaurants)
+    func loadGoogleRestaurants(place: Place, completion: @escaping(Result<[Eatable], Error>) -> Void) {
+        let route = GooglePlaceTextSearchRoute(name: place.name, location: place.coordinate, queryType: .restaurants)
         guard let url = route?.url else {
             completion(.failure(NetworkError.routeError))
             return
         }
 
-        AF.request(url).validate().responseJSON { response in
+        AF.request(url).responseData { response in
             switch response.result {
-            case .success(let value):
-                let json = JSON(value)
-                // POSTLAUNCH: - refactor into a JSON init method
-                guard let results = json["results"].array, results.count > 2 else {
+            case .success(let data):
+                guard let restaurants = try? self.customDecoder.decode(ResultsCollection.self, from: data) else {
+                    completion(.failure(NetworkError.jsonDecoding))
+                    return
+                }
+                guard restaurants.results.count > 2 else {
                     completion(.failure(NetworkError.insufficientResults))
                     return
                 }
-
-                let restaurants = results[0..<3].compactMap { result -> Place? in
-                    guard let name = result["name"].string,
-                        let placeId = result["place_id"].string,
-                        let centerLat = result["geometry"]["location"]["lat"].double,
-                        let centerLng = result["geometry"]["location"]["lng"].double,
-                        let northeastLat = result["geometry"]["viewport"]["northeast"]["lat"].double,
-                        let northeastLng = result["geometry"]["viewport"]["northeast"]["lng"].double,
-                        let southwestLat = result["geometry"]["viewport"]["southwest"]["lat"].double,
-                        let southwestLng = result["geometry"]["viewport"]["southwest"]["lng"].double,
-                        let businessStatus = result["business_status"].string else {
-                        return nil
-                    }
-
-                    // NOTE: A text search request doesn't return data on address, phone number, nor rating.
-                    // Documentation: https://developers.google.com/places/web-service/search
-                    let coordinate = CLLocationCoordinate2D(latitude: centerLat, longitude: centerLng)
-                    let viewport = Viewport(northeastLat: northeastLat,
-                                            northeastLng: northeastLng,
-                                            southwestLat: southwestLat,
-                                            southwestLng: southwestLng)
-
-                    return Place(placeID: placeId,
-                                 name: name,
-                                 coordinate: coordinate,
-                                 viewport: viewport,
-                                 businessStatus: businessStatus)
-                }
-
-                completion(.success(restaurants))
+                completion(.success(restaurants.results))
             case .failure(let error):
                 completion(.failure(error))
             }
-
         }
     }
 
@@ -254,42 +195,14 @@ class NetworkService {
             return
         }
 
-        AF.request(url).validate().responseJSON { response in
+        AF.request(url).responseData { response in
             switch response.result {
-            case .success(let value):
-                let json = JSON(value)
-                guard let result = json["result"].dictionary,
-                    let placeID = result["place_id"]?.string,
-                    let name = result["name"]?.string,
-                    let formattedAddress = result["formatted_address"]?.string,
-                    let latitude = result["geometry"]?["location"]["lat"].double,
-                    let longitude = result["geometry"]?["location"]["lng"].double,
-                    let mapUrl = result["url"]?.string else {
-                    completion(.failure(NetworkError.malformedJSON))
+            case .success(let data):
+                guard let place = try? self.customDecoder.decode(PlaceCollection.self, from: data) else {
+                    completion(.failure(NetworkError.jsonDecoding))
                     return
                 }
-
-                // NOTE: Place Detail request optionally returns phone number, rating, reviews.
-                // Documentation: https://developers.google.com/places/web-service/details
-                let formattedPhoneNumber = result["international_phone_number"]?.string
-                let rating = result["rating"]?.float
-                let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-
-                var reviews: [Review]?
-                if let reviewsData = try? result["reviews"]?.rawData() {
-                    reviews = try? self.customDecoder.decode([Review].self, from: reviewsData)
-                }
-
-                let place = Place(placeID: placeID,
-                                  name: name,
-                                  formattedAddress: formattedAddress,
-                                  formattedPhoneNumber: formattedPhoneNumber,
-                                  rating: rating,
-                                  coordinate: coordinate,
-                                  mapUrl: mapUrl,
-                                  reviews: reviews)
-
-                completion(.success(place))
+                completion(.success(place.result))
             case .failure(let error):
                 completion(.failure(error))
             }

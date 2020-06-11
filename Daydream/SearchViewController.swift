@@ -16,7 +16,7 @@ final class SearchViewController: UIViewController {
     private var searchController: UISearchController?
     private var searchBarView: UIView!
     private let searchBarViewHeight: CGFloat = 45.0
-    private var placeData: Placeable?
+    private var placeData: Place?
     private var placeBackgroundImage: UIImage?
     private var defaultSearchBarYOffset: CGFloat {
         return  (view.bounds.height / 2) - (searchBarViewHeight / 2) - 50
@@ -156,7 +156,7 @@ final class SearchViewController: UIViewController {
             switch result {
             case .success(let place):
                 strongSelf.placeData = place
-                strongSelf.networkService.loadPhoto(placeId: place.placeableId, completion: { [weak self] result in
+                strongSelf.networkService.loadPhoto(placeId: place.placeId, completion: { [weak self] result in
                     guard let strongSelf = self else {
                         return
                     }
@@ -207,7 +207,13 @@ extension SearchViewController: GMSAutocompleteResultsViewControllerDelegate {
         let searchBarText = searchController?.searchBar.text ?? "Couldn't get search bar text"
         let placeId = place.placeID ?? "Couldn't get place ID"
         logSearchEvent(searchTerm: searchBarText, placeId: placeId)
-        placeData = place
+
+        guard let placeModel = Place(from: place) else {
+            dismiss(animated: true, completion: nil)
+            return
+        }
+
+        placeData = placeModel
 
         dismiss(animated: true, completion: {
             self.resetSearchUI()

@@ -19,9 +19,9 @@ class MapCardCell: UITableViewCell {
         }
     }
 
-    weak var place: Placeable? {
+    var place: Place? {
         didSet {
-            guard let place = place, place !== oldValue else {
+            guard let place = place, place != oldValue   else {
                 return
             }
 
@@ -33,9 +33,9 @@ class MapCardCell: UITableViewCell {
         }
     }
 
-    private func addMapView(with place: Placeable) {
-        let camera = GMSCameraPosition.camera(withLatitude: place.placeableCoordinate.latitude,
-                                              longitude: place.placeableCoordinate.longitude,
+    private func addMapView(with place: Place) {
+        let camera = GMSCameraPosition.camera(withLatitude: place.coordinate.latitude,
+                                              longitude: place.coordinate.longitude,
                                               zoom: 14.0)
         let frame = calculateFrame()
         let mapViewNew = GMSMapView.map(withFrame: frame, camera: camera)
@@ -49,9 +49,9 @@ class MapCardCell: UITableViewCell {
         mapView = mapViewNew
     }
     
-    private func update(_ mapView: GMSMapView, with place: Placeable) {
-        let camera = GMSCameraPosition.camera(withLatitude: place.placeableCoordinate.latitude,
-                                              longitude: place.placeableCoordinate.longitude,
+    private func update(_ mapView: GMSMapView, with place: Place) {
+        let camera = GMSCameraPosition.camera(withLatitude: place.coordinate.latitude,
+                                              longitude: place.coordinate.longitude,
                                               zoom: 14.0)
 
         createMarkerFor(mapView, with: place)
@@ -64,18 +64,17 @@ class MapCardCell: UITableViewCell {
         let rightMargin: CGFloat = 16
         let width = UIScreen.main.bounds.width - leftMargin - rightMargin
         let frame = CGRect(x: mainView.frame.minX, y: mainView.frame.minY, width: width, height: mainView.frame.height)
-
         return frame
     }
     
     // Creates a marker in center of map
-    private func createMarkerFor(_ mapView: GMSMapView, with place: Placeable) {
+    private func createMarkerFor(_ mapView: GMSMapView, with place: Place) {
         let marker = GMSMarker()
         
-        marker.position = CLLocationCoordinate2D(latitude: place.placeableCoordinate.latitude,
-                                                 longitude: place.placeableCoordinate.longitude)
-        marker.title = place.placeableName
-        marker.snippet = place.placeableFormattedAddress
+        marker.position = CLLocationCoordinate2D(latitude: place.coordinate.latitude,
+                                                 longitude: place.coordinate.longitude)
+        marker.title = place.name
+        marker.snippet = place.formattedAddress
         marker.map = mapView
     }
 

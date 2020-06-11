@@ -77,9 +77,9 @@ struct YelpBusinessesRoute {
     let urlRequest: URLRequest
     let yelpAPIKey: String
 
-    init?(place: Placeable) {
-        let latitude = place.placeableCoordinate.latitude
-        let longitude = place.placeableCoordinate.longitude
+    init?(place: Place) {
+        let latitude = place.coordinate.latitude
+        let longitude = place.coordinate.longitude
         let urlString = "https://api.yelp.com/v3/businesses/search?latitude=\(latitude)&longitude=\(longitude)&categories=restaurants"
 
         guard let yelpAPIKey = AppDelegate.getAPIKeys()?.yelpAPI,

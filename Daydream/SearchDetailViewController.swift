@@ -148,8 +148,8 @@ final class SearchDetailViewController: UIViewController {
             return
         }
 
-        titleLabel.text = dataSource.place.placeableName
-        floatingTitleLabel.text = dataSource.place.placeableName
+        titleLabel.text = dataSource.place.name
+        floatingTitleLabel.text = dataSource.place.name
 
         if fetchBackground {
             dataSource.loadPhoto(success: { [weak self] image in
@@ -213,7 +213,7 @@ final class SearchDetailViewController: UIViewController {
     // MARK: - Segue
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let destinationVC = segue.destination as? MapViewController, let sender = sender as? Placeable {
+        if let destinationVC = segue.destination as? MapViewController, let sender = sender as? Place {
             // segue from Top Sights cell
             if segue.identifier == "genericMapSegue" {
                 destinationVC.place = sender
@@ -285,16 +285,16 @@ extension SearchDetailViewController: UITableViewDelegate {
         if indexPath.row == 0 {
             logEvent(contentType: "select map card cell", title)
 
-            if let mapUrl = dataSource.place.placeableMapUrl {
+            if let mapUrl = dataSource.place.mapUrl {
                 openUrl(mapUrl)
             } else {
-                networkService.getPlace(id: dataSource.place.placeableId, completion: { [weak self] result in
+                networkService.getPlace(id: dataSource.place.placeId, completion: { [weak self] result in
                     guard let strongSelf = self else {
                         return
                     }
                     switch result {
                     case .success(let place):
-                        if let mapUrl = place.placeableMapUrl {
+                        if let mapUrl = place.mapUrl {
                             strongSelf.openUrl(mapUrl)
                         } else {
                             return
@@ -359,11 +359,16 @@ extension SearchDetailViewController: GMSAutocompleteResultsViewControllerDelega
         logSearchEvent(searchTerm: searchBarText, placeId: placeId)
         searchController?.searchBar.text = nil // reset to search bar text
 
+        guard let placeModel = Place(from: place) else {
+            dismiss(animated: true, completion: nil)
+            return
+        }
+
         dismiss(animated: true, completion: {
             guard let dataSource = self.dataSource else {
                 return
             }
-            dataSource.place = place
+            dataSource.place = placeModel
             let loadingVC = LoadingViewController()
             self.add(loadingVC)
             self.loadDataSource(reloadMapCard: true, completion: {
@@ -378,7 +383,7 @@ extension SearchDetailViewController: GMSAutocompleteResultsViewControllerDelega
 }
 
 extension SearchDetailViewController: SightsCardCellDelegate {
-    func sightsCardCell(_ cell: SightsCardCell, didSelectPlace place: Placeable) {
+    func sightsCardCell(_ cell: SightsCardCell, didSelectPlace place: Place) {
         logEvent(contentType: "select point of interest", title)
         performSegue(withIdentifier: "genericMapSegue", sender: place)
     }
