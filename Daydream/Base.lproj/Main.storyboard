@@ -18,14 +18,6 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sunriseJungle" translatesAutoresizingMaskIntoConstraints="NO" id="dpb-Nn-lH0">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Where do you want to go?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JHi-Ty-WLR">
-                                <rect key="frame" x="18" y="227" width="378" height="42"/>
-                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <nil key="highlightedColor"/>
-                                <color key="shadowColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <size key="shadowOffset" width="0.0" height="1"/>
-                            </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wyW-dr-4PC">
                                 <rect key="frame" x="152" y="518" width="110" height="40"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -49,9 +41,6 @@
                             <constraint firstItem="wyW-dr-4PC" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="6W1-q5-IYt"/>
                             <constraint firstItem="dpb-Nn-lH0" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="7WP-jS-fcN"/>
                             <constraint firstAttribute="bottom" secondItem="dpb-Nn-lH0" secondAttribute="bottom" id="P8W-jG-2t8"/>
-                            <constraint firstItem="JHi-Ty-WLR" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="18" id="TBw-zr-FEF"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="JHi-Ty-WLR" secondAttribute="trailing" constant="18" id="Uja-pT-Azc"/>
-                            <constraint firstItem="JHi-Ty-WLR" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="-200" id="g8E-WR-dEo"/>
                             <constraint firstItem="dpb-Nn-lH0" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="r9u-vR-P5E"/>
                             <constraint firstItem="dpb-Nn-lH0" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="tZf-8I-pK3"/>
                         </constraints>
@@ -59,7 +48,6 @@
                     </view>
                     <connections>
                         <outlet property="randomBtn" destination="wyW-dr-4PC" id="Na6-ko-ZcB"/>
-                        <outlet property="titleLabel" destination="JHi-Ty-WLR" id="ex4-nX-Bqc"/>
                         <segue destination="mAC-Ym-g6i" kind="presentation" identifier="toSearchDetailVCSegue" modalPresentationStyle="overFullScreen" modalTransitionStyle="crossDissolve" id="0Kk-Mo-0ud"/>
                     </connections>
                 </viewController>

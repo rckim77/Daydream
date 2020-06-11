@@ -23,6 +23,13 @@ final class SearchViewController: UIViewController {
     }
     private let networkService = NetworkService()
 
+    private lazy var titleLabel: CardLabel = {
+        let label = CardLabel(textStyle: .largeTitle, text: "Where do you want to go?")
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        return label
+    }()
+
     private lazy var feedbackButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Got feedback?", for: .normal)
@@ -34,7 +41,6 @@ final class SearchViewController: UIViewController {
         return button
     }()
 
-    @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var randomBtn: UIButton! {
         didSet {
             randomBtn.addRoundedCorners(radius: 16)
@@ -83,7 +89,7 @@ final class SearchViewController: UIViewController {
         resultsViewController = GMSAutocompleteResultsViewController()
         resultsViewController?.delegate = self
         addSearchController()
-        addFeedbackButton()
+        addProgrammaticComponents()
         fadeInTitleAndButton()
     }
 
@@ -132,8 +138,15 @@ final class SearchViewController: UIViewController {
         }, completion: nil)
     }
 
-    private func addFeedbackButton() {
+    private func addProgrammaticComponents() {
+        view.addSubview(titleLabel)
         view.addSubview(feedbackButton)
+
+        titleLabel.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(16)
+            make.center.equalToSuperview().offset(-200)
+        }
+
         feedbackButton.snp.makeConstraints { make in
             make.bottom.equalToSuperview().inset(30)
             make.centerX.equalToSuperview()
