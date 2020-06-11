@@ -43,7 +43,8 @@ class NetworkService {
     }
 
     func loadTopSights(place: Placeable, completion: @escaping(Result<[Placeable], Error>) -> Void) {
-        guard let url = GooglePlaceTextSearchRoute(placeName: place.placeableName, queryType: .touristSpots)?.url else {
+        let route = GooglePlaceTextSearchRoute(name: place.placeableName, location: place.placeableCoordinate, queryType: .touristSpots)
+        guard let url = route?.url else {
             completion(.failure(NetworkError.routeError))
             return
         }
@@ -134,7 +135,8 @@ class NetworkService {
 
     /// Fallback results for restaurants using Google Place API.
     func loadGoogleRestaurants(place: Placeable, completion: @escaping(Result<[Eatable], Error>) -> Void) {
-        guard let url = GooglePlaceTextSearchRoute(placeName: place.placeableName, queryType: .restaurants)?.url else {
+        let route = GooglePlaceTextSearchRoute(name: place.placeableName, location: place.placeableCoordinate, queryType: .restaurants)
+        guard let url = route?.url else {
             completion(.failure(NetworkError.routeError))
             return
         }
@@ -216,7 +218,7 @@ class NetworkService {
 
     /// Returns a Place object from a name.
     func getPlaceId(placeName: String, completion: @escaping(Result<Place, Error>) -> Void) {
-        guard let url = GooglePlaceTextSearchRoute(placeName: placeName, queryType: .placeByName)?.url else {
+        guard let url = GooglePlaceTextSearchRoute(name: placeName, queryType: .placeByName)?.url else {
             completion(.failure(NetworkError.routeError))
             return
         }

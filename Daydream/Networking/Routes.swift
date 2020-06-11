@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreLocation
 import Alamofire
 
 struct GooglePlaceDetailsRoute {
@@ -31,12 +32,12 @@ struct GooglePlaceTextSearchRoute {
 
     let url: URL
 
-    init?(placeName: String, queryType: QueryType) {
+    init?(name: String, location: CLLocationCoordinate2D? = nil, queryType: QueryType) {
         guard let keyParam = AppDelegate.getAPIKeys()?.googleAPI else {
             return nil
         }
         // e.g., İstanbul -> Istanbul
-        let placeNameStripped = placeName.folding(options: .diacriticInsensitive, locale: .current)
+        let placeNameStripped = name.folding(options: .diacriticInsensitive, locale: .current)
         let placeWords = placeNameStripped.split(separator: " ")
         var queryParam = ""
 
@@ -53,7 +54,17 @@ struct GooglePlaceTextSearchRoute {
             queryParam += "+" + word
         }
 
-        let urlString = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=\(queryParam)&key=\(keyParam)"
+        let urlString: String
+
+        if let location = location {
+            let locationParam = "\(location.latitude),\(location.longitude)"
+            let radiusParam = "10000"
+            // swiftlint:disable line_length
+            urlString = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=\(queryParam)&location=\(locationParam)&radius=\(radiusParam)&key=\(keyParam)"
+        } else {
+            urlString = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=\(queryParam)&key=\(keyParam)"
+        }
+
         guard let url = URL(string: urlString) else {
             return nil
         }

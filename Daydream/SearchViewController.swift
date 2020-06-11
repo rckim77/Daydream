@@ -23,6 +23,13 @@ final class SearchViewController: UIViewController {
     }
     private let networkService = NetworkService()
 
+    private lazy var titleLabel: CardLabel = {
+        let label = CardLabel(textStyle: .largeTitle, text: "Where do you want to go?")
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        return label
+    }()
+
     private lazy var feedbackButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Got feedback?", for: .normal)
@@ -34,18 +41,105 @@ final class SearchViewController: UIViewController {
         return button
     }()
 
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var randomBtn: UIButton! {
-        didSet {
-            randomBtn.addRoundedCorners(radius: 16)
-            randomBtn.addBorder()
-            if #available(iOS 13.4, *) {
-                randomBtn.pointerStyleProvider = buttonProvider
-            }
+    private lazy var randomButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.tintColor = .white
+        button.setTitle("Random", for: .normal)
+        button.addRoundedCorners(radius: 12)
+        button.addBorder(color: .white, width: 1)
+        button.titleLabel?.font = .preferredFont(forTextStyle: .title2)
+        button.addTarget(self, action: #selector(randomButtonTapped), for: .touchUpInside)
+        return button
+    }()
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        resultsViewController = GMSAutocompleteResultsViewController()
+        resultsViewController?.delegate = self
+        addSearchController()
+        addProgrammaticComponents()
+        fadeInTitleAndButton()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        fadeInTitleAndButton()
+        searchBarView.frame.origin.y = defaultSearchBarYOffset
+        searchController?.searchBar.text = ""
+    }
+
+    private func fadeInTitleAndButton() {
+        titleLabel.alpha = 0
+        randomButton.alpha = 0
+        UIView.animate(withDuration: 0.8, delay: 0.3, options: .curveEaseInOut, animations: {
+            self.titleLabel.alpha = 1
+        }, completion: nil)
+
+        UIView.animate(withDuration: 0.8, delay: 1.3, options: .curveEaseInOut, animations: {
+            self.randomButton.alpha = 1
+        }, completion: nil)
+    }
+
+    private func addSearchController() {
+        searchController = UISearchController(searchResultsController: resultsViewController)
+        searchController?.searchResultsUpdater = resultsViewController
+        searchController?.setStyle()
+        searchController?.delegate = self
+
+        resultsViewController?.setAutocompleteFilter(.city)
+        resultsViewController?.setStyle()
+
+        let frame = CGRect(x: 0, y: defaultSearchBarYOffset, width: view.bounds.width, height: searchBarViewHeight)
+        searchBarView = UIView(frame: frame)
+        searchBarView.alpha = 0
+        searchBarView.addSubview((searchController?.searchBar)!)
+        view.addSubview(searchBarView)
+        searchController?.searchBar.sizeToFit()
+
+        // When UISearchController presents the results view, present it in
+        // this view controller, not one further up the chain.
+        definesPresentationContext = true
+
+        UIView.animate(withDuration: 0.8, delay: 0.3, options: .curveEaseInOut, animations: {
+            self.searchBarView.alpha = 1
+        }, completion: nil)
+    }
+
+    private func addProgrammaticComponents() {
+        view.addSubview(titleLabel)
+        view.addSubview(randomButton)
+        view.addSubview(feedbackButton)
+
+        titleLabel.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(16)
+            make.centerY.equalToSuperview().offset(-200)
+        }
+
+        randomButton.snp.makeConstraints { make in
+            make.width.equalTo(110)
+            make.height.equalTo(40)
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview().offset(90)
+        }
+
+        feedbackButton.snp.makeConstraints { make in
+            make.bottom.equalToSuperview().inset(30)
+            make.centerX.equalToSuperview()
         }
     }
 
-    @IBAction func randomBtnTapped(_ sender: Any) {
+    private func resetSearchUI() {
+        searchController?.searchBar.text = nil
+        searchBarView.frame = CGRect(x: 0, y: defaultSearchBarYOffset, width: view.bounds.width, height: searchBarViewHeight)
+        titleLabel.alpha = 1
+    }
+
+    // MARK: - Button selector method
+
+    @objc
+    func randomButtonTapped() {
         logEvent(contentType: "random button tapped", title)
         guard let randomCity = getRandomCity() else {
             return
@@ -76,77 +170,6 @@ final class SearchViewController: UIViewController {
             }
         })
     }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        resultsViewController = GMSAutocompleteResultsViewController()
-        resultsViewController?.delegate = self
-        addSearchController()
-        addFeedbackButton()
-        fadeInTitleAndButton()
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        fadeInTitleAndButton()
-        searchBarView.frame.origin.y = defaultSearchBarYOffset
-        searchController?.searchBar.text = ""
-    }
-
-    private func fadeInTitleAndButton() {
-        titleLabel.alpha = 0
-        randomBtn.alpha = 0
-        UIView.animate(withDuration: 0.8, delay: 0.3, options: .curveEaseInOut, animations: {
-            self.titleLabel.alpha = 1
-        }, completion: nil)
-
-        UIView.animate(withDuration: 0.8, delay: 1.3, options: .curveEaseInOut, animations: {
-            self.randomBtn.alpha = 1
-        }, completion: nil)
-    }
-
-    private func addSearchController() {
-        searchController = UISearchController(searchResultsController: resultsViewController)
-        searchController?.searchResultsUpdater = resultsViewController
-        searchController?.setStyle()
-        searchController?.delegate = self
-
-        resultsViewController?.setAutocompleteFilter(.city)
-        resultsViewController?.setStyle()
-
-        let frame = CGRect(x: 0, y: defaultSearchBarYOffset, width: view.bounds.width, height: searchBarViewHeight)
-        searchBarView = UIView(frame: frame)
-        searchBarView.alpha = 0
-        searchBarView.addSubview((searchController?.searchBar)!)
-        view.addSubview(searchBarView)
-        searchController?.searchBar.sizeToFit()
-
-        // When UISearchController presents the results view, present it in
-        // this view controller, not one further up the chain.
-        definesPresentationContext = true
-
-        UIView.animate(withDuration: 0.8, delay: 0.3, options: .curveEaseInOut, animations: {
-            self.searchBarView.alpha = 1
-        }, completion: nil)
-    }
-
-    private func addFeedbackButton() {
-        view.addSubview(feedbackButton)
-        feedbackButton.snp.makeConstraints { make in
-            make.bottom.equalToSuperview().inset(30)
-            make.centerX.equalToSuperview()
-        }
-    }
-
-    private func resetSearchUI() {
-        searchController?.searchBar.text = nil
-        searchBarView.frame = CGRect(x: 0, y: defaultSearchBarYOffset, width: view.bounds.width, height: searchBarViewHeight)
-        titleLabel.alpha = 1
-    }
-
-    // MARK: - Button selector method
 
     @objc
     private func feedbackButtonTapped() {

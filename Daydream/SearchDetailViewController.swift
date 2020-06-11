@@ -33,7 +33,7 @@ final class SearchDetailViewController: UIViewController {
         return 142 + notchHeight
     }
     private var headerFadeInEndPoint: CGFloat {
-        return 85 + notchHeight
+        return 103 + notchHeight
     }
     private let headerFadeOutStartPoint: CGFloat = 100
     private let headerFadeOutEndPoint: CGFloat = 80
