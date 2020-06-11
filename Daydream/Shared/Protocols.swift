@@ -11,18 +11,6 @@ import SwiftyJSON
 import CoreLocation
 import Firebase
 
-//protocol Placeable: class {
-//    var placeableId: String { get }
-//    var placeableName: String { get }
-//    var placeableFormattedAddress: String? { get }
-//    var placeableFormattedPhoneNumber: String? { get }
-//    var placeableRating: Float? { get }
-//    var placeableCoordinate: CLLocationCoordinate2D { get }
-//    var placeableMapUrl: String? { get }
-//    var placeableReviews: [Review]? { get }
-//    var placeableBusinessStatus: PlaceBusinessStatus? { get }
-//}
-
 protocol RandomCitySelectable {
     func getRandomCity() -> String?
 }
