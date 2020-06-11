@@ -41,47 +41,16 @@ final class SearchViewController: UIViewController {
         return button
     }()
 
-    @IBOutlet weak var randomBtn: UIButton! {
-        didSet {
-            randomBtn.addRoundedCorners(radius: 16)
-            randomBtn.addBorder()
-            if #available(iOS 13.4, *) {
-                randomBtn.pointerStyleProvider = buttonProvider
-            }
-        }
-    }
-
-    @IBAction func randomBtnTapped(_ sender: Any) {
-        logEvent(contentType: "random button tapped", title)
-        guard let randomCity = getRandomCity() else {
-            return
-        }
-        let loadingVC = LoadingViewController()
-        add(loadingVC)
-
-        networkService.getPlaceId(placeName: randomCity, completion: { [weak self] result in
-            loadingVC.remove()
-            guard let strongSelf = self else {
-                return
-            }
-
-            switch result {
-            case .success(let place):
-                strongSelf.placeData = place
-                strongSelf.networkService.loadPhoto(placeId: place.placeableId, completion: { [weak self] result in
-                    guard let strongSelf = self else {
-                        return
-                    }
-                    if case .success(let image) = result {
-                        strongSelf.placeBackgroundImage = image
-                    }
-                    strongSelf.performSegue(withIdentifier: "toSearchDetailVCSegue", sender: nil)
-                })
-            case .failure(let error):
-                strongSelf.logErrorEvent(error)
-            }
-        })
-    }
+    private lazy var randomButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.tintColor = .white
+        button.setTitle("Random", for: .normal)
+        button.addRoundedCorners(radius: 12)
+        button.addBorder(color: .white, width: 1)
+        button.titleLabel?.font = .preferredFont(forTextStyle: .title2)
+        button.addTarget(self, action: #selector(randomButtonTapped), for: .touchUpInside)
+        return button
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -103,13 +72,13 @@ final class SearchViewController: UIViewController {
 
     private func fadeInTitleAndButton() {
         titleLabel.alpha = 0
-        randomBtn.alpha = 0
+        randomButton.alpha = 0
         UIView.animate(withDuration: 0.8, delay: 0.3, options: .curveEaseInOut, animations: {
             self.titleLabel.alpha = 1
         }, completion: nil)
 
         UIView.animate(withDuration: 0.8, delay: 1.3, options: .curveEaseInOut, animations: {
-            self.randomBtn.alpha = 1
+            self.randomButton.alpha = 1
         }, completion: nil)
     }
 
@@ -140,11 +109,19 @@ final class SearchViewController: UIViewController {
 
     private func addProgrammaticComponents() {
         view.addSubview(titleLabel)
+        view.addSubview(randomButton)
         view.addSubview(feedbackButton)
 
         titleLabel.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(16)
-            make.center.equalToSuperview().offset(-200)
+            make.centerY.equalToSuperview().offset(-200)
+        }
+
+        randomButton.snp.makeConstraints { make in
+            make.width.equalTo(110)
+            make.height.equalTo(40)
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview().offset(90)
         }
 
         feedbackButton.snp.makeConstraints { make in
@@ -160,6 +137,39 @@ final class SearchViewController: UIViewController {
     }
 
     // MARK: - Button selector method
+
+    @objc
+    func randomButtonTapped() {
+        logEvent(contentType: "random button tapped", title)
+        guard let randomCity = getRandomCity() else {
+            return
+        }
+        let loadingVC = LoadingViewController()
+        add(loadingVC)
+
+        networkService.getPlaceId(placeName: randomCity, completion: { [weak self] result in
+            loadingVC.remove()
+            guard let strongSelf = self else {
+                return
+            }
+
+            switch result {
+            case .success(let place):
+                strongSelf.placeData = place
+                strongSelf.networkService.loadPhoto(placeId: place.placeableId, completion: { [weak self] result in
+                    guard let strongSelf = self else {
+                        return
+                    }
+                    if case .success(let image) = result {
+                        strongSelf.placeBackgroundImage = image
+                    }
+                    strongSelf.performSegue(withIdentifier: "toSearchDetailVCSegue", sender: nil)
+                })
+            case .failure(let error):
+                strongSelf.logErrorEvent(error)
+            }
+        })
+    }
 
     @objc
     private func feedbackButtonTapped() {

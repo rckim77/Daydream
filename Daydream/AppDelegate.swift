@@ -47,7 +47,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 topVC = presentedVC
             }
             if let topVC = topVC as? SearchViewController {
-                topVC.randomBtnTapped(UIButton())
+                topVC.randomButtonTapped()
             } else if let topVC = topVC as? SearchDetailViewController {
                 topVC.randomCityButtonTapped()
             }
