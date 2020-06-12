@@ -164,16 +164,14 @@ class NetworkService {
             return
         }
 
-        AF.request(url).validate().responseJSON { response in
+        AF.request(url).responseData { response in
             switch response.result {
-            case .success(let value):
-                let json = JSON(value)
-                guard let result = json["results"].array?.first,
-                    let placeId = result["place_id"].string else {
-                    completion(.failure(NetworkError.malformedJSON))
+            case .success(let data):
+                guard let result = try? self.customDecoder.decode(ResultsCollection.self, from: data),
+                    let placeId = result.results.first?.placeId else {
+                    completion(.failure(NetworkError.jsonDecoding))
                     return
                 }
-
                 NetworkService().getPlace(id: placeId, completion: { result in
                     switch result {
                     case .success(let place):
