@@ -21,7 +21,7 @@ class MapCardCell: UITableViewCell {
 
     var place: Place? {
         didSet {
-            guard let place = place, place != oldValue   else {
+            guard let place = place, place != oldValue else {
                 return
             }
 
