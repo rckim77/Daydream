@@ -22,50 +22,9 @@ class NetworkService {
         return decoder
     }()
 
-    /// The pointsOfInterest array is guaranteed to return at least three elements if the call succeeds. If loading eateries from Yelp
-    /// fails, fetch restaurants from Google.
-    func loadSightsAndEateries(place: Place, completion: @escaping(Result<SightsAndEateries, Error>) -> Void) {
-        loadTopSights(place: place, completion: { result in
-            switch result {
-            case .success(let places):
-                NetworkService().loadTopEateries(place: place, completion: { result in
-                    switch result {
-                    case .success(let eateries):
-                        completion(.success((places, eateries)))
-                    case .failure:
-                        completion(.success((places, [])))
-                    }
-                })
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        })
-    }
-
-    func loadTopSights(place: Place, completion: @escaping(Result<[Place], Error>) -> Void) {
-        let route = GooglePlaceTextSearchRoute(name: place.name, location: place.coordinate, queryType: .touristSpots)
-        guard let url = route?.url else {
-            completion(.failure(NetworkError.routeError))
-            return
-        }
-
-        AF.request(url).responseData { response in
-            switch response.result {
-            case .success(let data):
-                guard let resultsCollection = try? self.customDecoder.decode(ResultsCollection.self, from: data) else {
-                    completion(.failure(NetworkError.jsonDecoding))
-                    return
-                }
-                completion(.success(resultsCollection.results))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-    }
-
     /// Can be used to return any set of Google Place objects (e.g., sights, fallback restaurants) filtered by the parameters
     /// set in the input url.
-    func loadPlacesCombine(place: Place, url: URL) -> AnyPublisher<[Place], Error> {
+    func loadPlaces(place: Place, url: URL) -> AnyPublisher<[Place], Error> {
         return URLSession.shared.dataTaskPublisher(for: url)
             .map { $0.data }
             .decode(type: ResultsCollection.self, decoder: customDecoder)
@@ -73,37 +32,7 @@ class NetworkService {
             .eraseToAnyPublisher()
     }
 
-    func loadTopEateries(place: Place, completion: @escaping(Result<[Eatery], Error>) -> Void) {
-        guard let route = YelpBusinessesRoute(place: place) else {
-            completion(.failure(NetworkError.routeError))
-            return
-        }
-
-        let headers: HTTPHeaders = [
-            "Authorization": "Bearer \(route.yelpAPIKey)"
-        ]
-
-        AF.request(route.url, headers: headers).responseData { response in
-            switch response.result {
-            case .success(let data):
-                guard let eateryCollection = try? self.customDecoder.decode(EateryCollection.self, from: data) else {
-                    completion(.failure(NetworkError.jsonDecoding))
-                    return
-                }
-
-                guard eateryCollection.hasSufficientEateries else {
-                    completion(.failure(NetworkError.insufficientResults))
-                    return
-                }
-
-                completion(.success(eateryCollection.businesses))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-    }
-
-    func loadEateriesCombine(place: Place, urlRequest: URLRequest) -> AnyPublisher<[Eatery], Error> {
+    func loadEateries(place: Place, urlRequest: URLRequest) -> AnyPublisher<[Eatery], Error> {
         return URLSession.shared.dataTaskPublisher(for: urlRequest)
             .mapError { urlError -> Error in
                 return urlError as Error

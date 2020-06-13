@@ -73,7 +73,7 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
     }
 
     func loadSights(url: URL) -> AnyPublisher<Void, Error> {
-        return networkService.loadPlacesCombine(place: place, url: url)
+        return networkService.loadPlaces(place: place, url: url)
             .mapError { [weak self] error -> Error in
                 self?.sightsLoadingState = .error
                 return error
@@ -87,7 +87,7 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
     }
 
     func loadEateries(request: URLRequest, fallbackUrl: URL) -> AnyPublisher<Void, Error> {
-        return networkService.loadEateriesCombine(place: place, urlRequest: request)
+        return networkService.loadEateries(place: place, urlRequest: request)
             .tryMap { [weak self] eateries -> Void in
                 if eateries.isEmpty {
                     throw NetworkError.insufficientResults
@@ -104,7 +104,7 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
                     throw error
                 }
 
-                return NetworkService().loadPlacesCombine(place: place, url: fallbackUrl)
+                return NetworkService().loadPlaces(place: place, url: fallbackUrl)
                     .map { [weak self] fallbackEateries in
                         self?.eateries = fallbackEateries
                         self?.eateriesLoadingState = .results
