@@ -42,15 +42,16 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
         return eateriesIsEqualToPrevious
     }
     weak var viewController: SearchDetailViewController?
-    var loadingState: LoadingState = .uninitiated
+    var sightsLoadingState: LoadingState = .uninitiated
+    var eateriesLoadingState: LoadingState = .uninitiated
 
     private let networkService = NetworkService()
     let mapCardCellHeight: CGFloat = 186
     var sightsCardCellHeight: CGFloat {
-        return loadingState == .error ? SightsCardCell.errorHeight: SightsCardCell.defaultHeight
+        return sightsLoadingState == .error ? SightsCardCell.errorHeight: SightsCardCell.defaultHeight
     }
     var eateriesCardCellHeight: CGFloat {
-        return loadingState == .error ? EateriesCardCell.errorHeight: EateriesCardCell.defaultHeight
+        return eateriesLoadingState == .error ? EateriesCardCell.errorHeight: EateriesCardCell.defaultHeight
     }
     static let mapIndexPath = IndexPath(row: 0, section: 0)
     static let sightsIndexPath = IndexPath(row: 1, section: 0)
@@ -71,69 +72,32 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
         })
     }
 
-    func loadSightsAndEateriesCombine(sightsUrl: URL, eateriesRequest: URLRequest) -> AnyPublisher<([Place], [Eatery]), Error> {
-        let sightsPublisher = networkService.loadPlacesCombine(place: place, url: sightsUrl)
-        let eateriesPublisher = networkService.loadEateriesCombine(place: place, urlRequest: eateriesRequest)
-
-        return Publishers.Zip(sightsPublisher, eateriesPublisher)
+    func loadSights(url: URL) -> AnyPublisher<Void, Error> {
+        return networkService.loadPlacesCombine(place: place, url: url)
             .mapError { [weak self] error -> Error in
-                self?.loadingState = .error
+                self?.sightsLoadingState = .error
                 return error
             }
-            .map { [weak self] (places, eateries) -> ([Place], [Eatery]) in
+            .map { [weak self] places -> Void in
                 self?.pointsOfInterest = places
-                self?.loadingState = .results
-
-                if !eateries.isEmpty {
-                    self?.prevEateries = self?.eateries
-                    self?.eateries = eateries
-                } else {
-                    self?.loadingState = .error
-                }
-
-                return (places, eateries)
+                self?.sightsLoadingState = .results
+                return
             }
             .eraseToAnyPublisher()
     }
 
-    func loadSightsAndEateries(success: @escaping(_ indexPaths: [IndexPath]) -> Void, failure: @escaping(_ error: Error?) -> Void) {
-        networkService.loadSightsAndEateries(place: place, completion: { [weak self] result in
-            guard let strongSelf = self else {
-                failure(nil)
+    func loadEateries(request: URLRequest) -> AnyPublisher<Void, Error> {
+        return networkService.loadEateriesCombine(place: place, urlRequest: request)
+            .mapError { [weak self] error -> Error in
+                self?.eateriesLoadingState = .error
+                return error
+            }
+            .map { [weak self] eateries -> Void in
+                self?.eateries = eateries
+                self?.eateriesLoadingState = .results
                 return
             }
-
-            switch result {
-            case .success(let (sights, eateries)):
-                strongSelf.pointsOfInterest = sights
-                strongSelf.loadingState = .results
-
-                if !eateries.isEmpty {
-                    strongSelf.prevEateries = strongSelf.eateries
-                    strongSelf.eateries = eateries
-                    success([SearchDetailDataSource.sightsIndexPath, SearchDetailDataSource.eateriesIndexPath])
-                } else {
-                    strongSelf.networkService.loadGoogleRestaurants(place: strongSelf.place, completion: { [weak self] result in
-                        guard let strongSelf = self else {
-                            failure(nil)
-                            return
-                        }
-                        switch result {
-                        case .success(let restaurants):
-                            strongSelf.prevEateries = strongSelf.eateries
-                            strongSelf.eateries = restaurants
-                            success([SearchDetailDataSource.sightsIndexPath, SearchDetailDataSource.eateriesIndexPath])
-                        case .failure(let error):
-                            strongSelf.loadingState = .error
-                            failure(error)
-                        }
-                    })
-                }
-            case .failure(let error):
-                strongSelf.loadingState = .error
-                failure(error)
-            }
-        })
+            .eraseToAnyPublisher()
     }
 
     // MARK: - UITableViewDataSource methods
@@ -165,7 +129,7 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
 
             sightsCardCell.delegate = viewController
 
-            switch loadingState {
+            switch sightsLoadingState {
             case .loading:
                 sightsCardCell.configureLoading()
             case .results:
@@ -184,16 +148,15 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
 
             eateriesCardCell.delegate = viewController
 
-            if loadingState == .loading {
+            switch eateriesLoadingState {
+            case .loading:
                 eateriesCardCell.configureLoading()
-            } else if loadingState == .error {
+            case .results:
+                eateriesCardCell.eateries = eateries
+            case .error:
                 eateriesCardCell.configureError()
-            } else if eateriesIsEqualToPrevious {
-                // this is for when the user is simply scrolling and hasn't reloaded
+            case .uninitiated:
                 return eateriesCardCell
-            } else if let eateries = eateries, eateries.count > 2, !eateriesIsEqualToPrevious {
-                eateriesCardCell.configure(eateries)
-                prevEateries = eateries
             }
 
             return eateriesCardCell

@@ -26,6 +26,11 @@ final class SearchDetailViewController: UIViewController {
     }()
     private let networkService = NetworkService()
 
+    // MARK: - Cancellable objects
+
+    private var sightsCancellable: AnyCancellable?
+    private var eateriesCancellable: AnyCancellable?
+
     // MARK: - Constants
 
     private let searchBarOffset: CGFloat = 12 + 45 // bottom offset + height (used as transition range)
@@ -36,7 +41,6 @@ final class SearchDetailViewController: UIViewController {
     private var headerFadeInEndPoint: CGFloat {
         return 103 + notchHeight
     }
-    private var cancellable: AnyCancellable?
     private let headerFadeOutStartPoint: CGFloat = 100
     private let headerFadeOutEndPoint: CGFloat = 80
     private let floatingTitleViewFadeInStartPoint: CGFloat = 85
@@ -87,7 +91,8 @@ final class SearchDetailViewController: UIViewController {
         placeImageView.contentMode = .scaleAspectFill
         placeImageView.addSubview(visualEffectView)
 
-        dataSource?.loadingState = .loading
+        dataSource?.sightsLoadingState = .loading
+        dataSource?.eateriesLoadingState = .loading
         placeCardsTableView.reloadData()
         loadDataSource(reloadMapCard: false, fetchBackground: false, completion: {})
     }
@@ -180,23 +185,30 @@ final class SearchDetailViewController: UIViewController {
             return
         }
 
-        cancellable = dataSource.loadSightsAndEateriesCombine(sightsUrl: sightsUrl, eateriesRequest: eateriesRequest)
+        sightsCancellable = dataSource.loadSights(url: sightsUrl)
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
             .sink(receiveCompletion: { [weak self] receiveCompletion in
                 if case let Subscribers.Completion.failure(error) = receiveCompletion {
                     self?.logErrorEvent(error)
                 }
-                self?.placeCardsTableView.reloadRows(at: [SearchDetailDataSource.sightsIndexPath,
-                                                          SearchDetailDataSource.eateriesIndexPath], with: .fade)
+                self?.placeCardsTableView.reloadRows(at: [SearchDetailDataSource.sightsIndexPath], with: .fade)
                 completion()
-            }, receiveValue: { [weak self] _ in
-                guard let strongSelf = self else {
-                    return
-                }
+                }, receiveValue: { [weak self] _ in
+                    self?.placeCardsTableView.reloadRows(at: [SearchDetailDataSource.sightsIndexPath], with: .fade)
+            })
 
-                strongSelf.placeCardsTableView.reloadRows(at: [SearchDetailDataSource.sightsIndexPath,
-                                                               SearchDetailDataSource.eateriesIndexPath], with: .fade)
+        eateriesCancellable = dataSource.loadEateries(request: eateriesRequest)
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
+            .sink(receiveCompletion: { [weak self] receiveCompletion in
+                if case let Subscribers.Completion.failure(error) = receiveCompletion {
+                    self?.logErrorEvent(error)
+                }
+                self?.placeCardsTableView.reloadRows(at: [SearchDetailDataSource.eateriesIndexPath], with: .fade)
+                completion()
+                }, receiveValue: { [weak self] _ in
+                    self?.placeCardsTableView.reloadRows(at: [SearchDetailDataSource.eateriesIndexPath], with: .fade)
             })
 
         if reloadMapCard {
@@ -243,7 +255,8 @@ final class SearchDetailViewController: UIViewController {
         }
         let loadingVC = LoadingViewController()
         add(loadingVC)
-        dataSource?.loadingState = .loading
+        dataSource?.sightsLoadingState = .loading
+        dataSource?.eateriesLoadingState = .loading
         placeCardsTableView.reloadData()
 
         networkService.getPlaceId(placeName: randomCity, completion: { [weak self] result in
