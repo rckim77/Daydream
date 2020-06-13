@@ -7,12 +7,11 @@
 //
 
 import UIKit
-import SwiftyJSON
 import GooglePlaces
 import SnapKit
 
 protocol SightsCardCellDelegate: class {
-    func sightsCardCell(_ cell: SightsCardCell, didSelectPlace place: Placeable)
+    func sightsCardCell(_ cell: SightsCardCell, didSelectPlace place: Place)
     func sightsCardCellDidTapBusinessStatusButton(_ businessStatus: PlaceBusinessStatus)
     func sightsCardCellDidTapRetry()
 }
@@ -53,13 +52,13 @@ class SightsCardCell: UITableViewCell {
     }()
     
     weak var delegate: SightsCardCellDelegate?
-    var pointsOfInterest: [Placeable]? {
+    var pointsOfInterest: [Place]? {
         didSet {
             if let pointsOfInterest = pointsOfInterest, pointsOfInterest.count >= 3 {
                 isHidden = false
                 // display content only if we've made another API call, otherwise do nothing
                 // POSTLAUNCH: - Update comparison with placeId
-                if oldValue?.count == 0 || pointsOfInterest[0].placeableId != oldValue?[0].placeableId {
+                if oldValue?.count == 0 || pointsOfInterest[0].placeId != oldValue?[0].placeId {
                     configure(pointsOfInterest)
                 }
             } else { // before response from API or error
@@ -144,7 +143,7 @@ class SightsCardCell: UITableViewCell {
         sight3View.configureError()
     }
 
-    private func configure(_ pointsOfInterest: [Placeable]) {
+    private func configure(_ pointsOfInterest: [Place]) {
         errorButton.isHidden = true
         sendSubviewToBack(errorButton)
         sightsSectionView.snp.updateConstraints { make in

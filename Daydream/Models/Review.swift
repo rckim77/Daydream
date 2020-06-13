@@ -6,7 +6,7 @@
 //  Copyright © 2018 Raymond Kim. All rights reserved.
 //
 
-struct Review: Codable {
+struct Review: Codable, Equatable {
     let authorName: String
     let rating: Int
     let text: String?

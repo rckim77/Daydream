@@ -50,6 +50,9 @@
 		94E392B02074B29E0073E8C9 /* style.json in Resources */ = {isa = PBXBuildFile; fileRef = 94E392AF2074B29E0073E8C9 /* style.json */; };
 		94E3D9582097EEC800384680 /* ExpiringCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E3D9572097EEC800384680 /* ExpiringCache.swift */; };
 		94E9C0402488538300103770 /* GoogleExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E9C03F2488538300103770 /* GoogleExtensions.swift */; };
+		94E9F3272492B86200B1D003 /* PlaceBusinessStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E9F3262492B86200B1D003 /* PlaceBusinessStatus.swift */; };
+		94E9F3292492BEF600B1D003 /* ResultsCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E9F3282492BEF600B1D003 /* ResultsCollection.swift */; };
+		94E9F32B2492E12900B1D003 /* PlaceCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E9F32A2492E12900B1D003 /* PlaceCollection.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -112,6 +115,9 @@
 		94E392AF2074B29E0073E8C9 /* style.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = style.json; sourceTree = "<group>"; };
 		94E3D9572097EEC800384680 /* ExpiringCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpiringCache.swift; sourceTree = "<group>"; };
 		94E9C03F2488538300103770 /* GoogleExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleExtensions.swift; sourceTree = "<group>"; };
+		94E9F3262492B86200B1D003 /* PlaceBusinessStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceBusinessStatus.swift; sourceTree = "<group>"; };
+		94E9F3282492BEF600B1D003 /* ResultsCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsCollection.swift; sourceTree = "<group>"; };
+		94E9F32A2492E12900B1D003 /* PlaceCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceCollection.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -207,12 +213,15 @@
 		94B7DB5A205E2C800040D61C /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				94E9F3262492B86200B1D003 /* PlaceBusinessStatus.swift */,
 				94B7DB56205DEE980040D61C /* Viewport.swift */,
 				9490BA17206CAA8300B880E7 /* Place.swift */,
 				94A7B7DA20780D39003E28A8 /* Review.swift */,
 				94B7DB58205E06080040D61C /* Eatery.swift */,
 				94A9CCC5248BE871008551B6 /* Eatable.swift */,
 				94A9CCC12489F6C6008551B6 /* EateryCollection.swift */,
+				94E9F32A2492E12900B1D003 /* PlaceCollection.swift */,
+				94E9F3282492BEF600B1D003 /* ResultsCollection.swift */,
 				94A9CCCB248F50F7008551B6 /* Article.swift */,
 			);
 			path = Models;
@@ -496,6 +505,7 @@
 				94A7B7DB20780D39003E28A8 /* Review.swift in Sources */,
 				94B8CEB3207DC31D00CA8101 /* SearchDetailDataSource.swift in Sources */,
 				94DB8FE7204B946200FA7CF7 /* EateriesCardCell.swift in Sources */,
+				94E9F3272492B86200B1D003 /* PlaceBusinessStatus.swift in Sources */,
 				94E108732486050A0091D043 /* SightView.swift in Sources */,
 				94E3D9582097EEC800384680 /* ExpiringCache.swift in Sources */,
 				949630BA203BCBBD007139CA /* SearchDetailViewController.swift in Sources */,
@@ -507,6 +517,7 @@
 				94E108712484AF5A0091D043 /* CellLoadingView.swift in Sources */,
 				94AE9B852094DAF500450399 /* LoadingViewController.swift in Sources */,
 				94A9CCCE24904636008551B6 /* Routes.swift in Sources */,
+				94E9F3292492BEF600B1D003 /* ResultsCollection.swift in Sources */,
 				94B7DB57205DEE980040D61C /* Viewport.swift in Sources */,
 				94B7DB59205E06080040D61C /* Eatery.swift in Sources */,
 				94C9385022500D31005E0653 /* UIDevice+Helpers.swift in Sources */,
@@ -518,6 +529,7 @@
 				94E108752486DB480091D043 /* EateryView.swift in Sources */,
 				947EC658204673BF004A911D /* ShadowView.swift in Sources */,
 				94673BAC225075AA00EC04FD /* DesignableView.swift in Sources */,
+				94E9F32B2492E12900B1D003 /* PlaceCollection.swift in Sources */,
 				9409090A205F4613002A65EF /* MapViewController.swift in Sources */,
 				94E9C0402488538300103770 /* GoogleExtensions.swift in Sources */,
 			);
@@ -623,7 +635,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -685,7 +697,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;

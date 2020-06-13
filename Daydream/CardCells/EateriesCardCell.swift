@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SwiftyJSON
 import GooglePlaces
 import SnapKit
 
@@ -63,7 +62,6 @@ class EateriesCardCell: UITableViewCell {
 
     weak var delegate: EateriesCardCellDelegate?
     private var eateries: [Eatable]?
-    private var fallbackEateries: [Placeable]?
 
     override func awakeFromNib() {
         super.awakeFromNib()

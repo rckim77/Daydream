@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreLocation
 
 extension UIView {
     func addRoundedCorners(radius: CGFloat) {
@@ -205,4 +206,10 @@ extension UISearchController {
         // style clear text icon
         searchBar.setImage(#imageLiteral(resourceName: "clearIcon"), for: .clear, state: .normal)
     }
+}
+
+extension CLLocationCoordinate2D: Equatable {}
+
+public func == (lhs: CLLocationCoordinate2D, rhs: CLLocationCoordinate2D) -> Bool {
+    return (lhs.latitude == rhs.latitude && lhs.longitude == rhs.longitude)
 }

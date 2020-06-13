@@ -128,7 +128,7 @@ final class EateryView: UIView {
                 }
             }.resume()
         case .google:
-            guard let id = eatery.id else {
+            guard let id = eatery.eatableId else {
                 return
             }
             NetworkService().loadPhoto(placeId: id, completion: { [weak self] result in

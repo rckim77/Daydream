@@ -42,7 +42,7 @@ final class SightView: UIView {
 
     private var layoutType: LayoutType = .middle
     private weak var delegate: SightViewDelegate?
-    private var sight: Placeable?
+    private var sight: Place?
 
     convenience init(layoutType: LayoutType, delegate: SightViewDelegate) {
         self.init(frame: .zero)
@@ -116,17 +116,17 @@ final class SightView: UIView {
         isHidden = true
     }
 
-    func configure(sight: Placeable) {
+    func configure(sight: Place) {
         isHidden = false
         self.sight = sight
-        titleLabel.text = sight.placeableName
-        let businessStatus = sight.placeableBusinessStatus
+        titleLabel.text = sight.name
+        let businessStatus = sight.businessStatus
         businessStatusButton.configureWithSystemIcon(businessStatus?.imageName ?? "")
         businessStatusButton.tintColor = businessStatus?.displayColor
         businessStatusButton.isHidden = businessStatus == .operational
 
         updateLayers()
-        NetworkService().loadPhoto(placeId: sight.placeableId, completion: { [weak self] result in
+        NetworkService().loadPhoto(placeId: sight.placeId, completion: { [weak self] result in
             guard let strongSelf = self else {
                 return
             }
@@ -152,7 +152,7 @@ final class SightView: UIView {
 
     @objc
     private func businessStatusButtonTapped() {
-        guard let businessStatus = sight?.placeableBusinessStatus else {
+        guard let businessStatus = sight?.businessStatus else {
             return
         }
         delegate?.sightViewDidTapBusinessStatus(status: businessStatus)

@@ -10,7 +10,7 @@ import Foundation
 
 protocol Eatable {
     var type: EateryType { get }
-    var id: String? { get }
+    var eatableId: String? { get }
     var name: String { get }
     var eatableImageUrl: String? { get }
     /// Redirect url (e.g., Yelp url redirects to browser)
