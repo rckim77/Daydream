@@ -87,29 +87,15 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
     }
 
     func loadEateries(request: URLRequest, fallbackUrl: URL) -> AnyPublisher<Void, Error> {
-        return networkService.loadEateries(place: place, urlRequest: request)
-            .tryMap { [weak self] eateries -> Void in
-                if eateries.isEmpty {
-                    throw NetworkError.insufficientResults
-                }
+        return networkService.loadEateries(place: place, urlRequest: request, fallbackUrl: fallbackUrl)
+            .mapError { [weak self] error -> Error in
+                self?.eateriesLoadingState = .error
+                return error
+            }
+            .map { [weak self] eateries -> Void in
                 self?.eateries = eateries
                 self?.eateriesLoadingState = .results
                 return
-            }
-            .tryCatch { [weak self] error -> AnyPublisher<Void, Error> in
-                guard let networkError = error as? NetworkError,
-                    let place = self?.place,
-                    networkError == .insufficientResults || networkError == .malformedJSON else {
-                        self?.eateriesLoadingState = .error
-                    throw error
-                }
-
-                return NetworkService().loadPlaces(place: place, url: fallbackUrl)
-                    .map { [weak self] fallbackEateries in
-                        self?.eateries = fallbackEateries
-                        self?.eateriesLoadingState = .results
-                    }
-                    .eraseToAnyPublisher()
             }
             .eraseToAnyPublisher()
     }

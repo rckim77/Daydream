@@ -32,16 +32,23 @@ class NetworkService {
             .eraseToAnyPublisher()
     }
 
-    func loadEateries(place: Place, urlRequest: URLRequest) -> AnyPublisher<[Eatery], Error> {
+    func loadEateries(place: Place, urlRequest: URLRequest, fallbackUrl: URL) -> AnyPublisher<[Eatable], Error> {
         return URLSession.shared.dataTaskPublisher(for: urlRequest)
-            .mapError { urlError -> Error in
-                return urlError as Error
-            }
-            .map { [weak self] response -> [Eatery] in
+            .tryMap { [weak self] response -> [Eatable] in
                 guard let eateries = try? self?.customDecoder.decode(EateryCollection.self, from: response.data) else {
-                    return []
+                    throw NetworkError.malformedJSON
                 }
-                return eateries.businesses
+                return eateries.businesses as [Eatable]
+            }
+            .tryCatch { [weak self] error -> AnyPublisher<[Eatable], Error> in
+                guard let networkError = error as? NetworkError,
+                    let strongSelf = self,
+                    networkError == .malformedJSON else {
+                    throw error
+                }
+                return strongSelf.loadPlaces(place: place, url: fallbackUrl)
+                    .map { $0 as [Eatable] }
+                    .eraseToAnyPublisher()
             }
             .eraseToAnyPublisher()
     }

@@ -178,39 +178,40 @@ final class SearchDetailViewController: UIViewController {
             })
         }
 
-        guard let sightsUrl = GooglePlaceTextSearchRoute(name: dataSource.place.name,
+        if let sightsUrl = GooglePlaceTextSearchRoute(name: dataSource.place.name,
                                                          location: dataSource.place.coordinate,
-                                                         queryType: .touristSpots)?.url,
-            let eateriesRequest = YelpBusinessesRoute(place: dataSource.place)?.urlRequest,
-            let fallbackEateriesUrl = GooglePlaceTextSearchRoute(name: dataSource.place.name, location: dataSource.place.coordinate, queryType: .restaurants)?.url else {
-            return
+                                                         queryType: .touristSpots)?.url {
+            sightsCancellable = dataSource.loadSights(url: sightsUrl)
+                .receive(on: DispatchQueue.main)
+                .eraseToAnyPublisher()
+                .sink(receiveCompletion: { [weak self] receiveCompletion in
+                    if case let Subscribers.Completion.failure(error) = receiveCompletion {
+                        self?.logErrorEvent(error)
+                    }
+                    self?.placeCardsTableView.reloadRows(at: [SearchDetailDataSource.sightsIndexPath], with: .fade)
+                    completion()
+                    }, receiveValue: { [weak self] _ in
+                        self?.placeCardsTableView.reloadRows(at: [SearchDetailDataSource.sightsIndexPath], with: .fade)
+                })
         }
 
-        sightsCancellable = dataSource.loadSights(url: sightsUrl)
-            .receive(on: DispatchQueue.main)
-            .eraseToAnyPublisher()
-            .sink(receiveCompletion: { [weak self] receiveCompletion in
-                if case let Subscribers.Completion.failure(error) = receiveCompletion {
-                    self?.logErrorEvent(error)
-                }
-                self?.placeCardsTableView.reloadRows(at: [SearchDetailDataSource.sightsIndexPath], with: .fade)
-                completion()
-                }, receiveValue: { [weak self] _ in
-                    self?.placeCardsTableView.reloadRows(at: [SearchDetailDataSource.sightsIndexPath], with: .fade)
-            })
-
-        eateriesCancellable = dataSource.loadEateries(request: eateriesRequest, fallbackUrl: fallbackEateriesUrl)
-            .receive(on: DispatchQueue.main)
-            .eraseToAnyPublisher()
-            .sink(receiveCompletion: { [weak self] receiveCompletion in
-                if case let Subscribers.Completion.failure(error) = receiveCompletion {
-                    self?.logErrorEvent(error)
-                }
-                self?.placeCardsTableView.reloadRows(at: [SearchDetailDataSource.eateriesIndexPath], with: .fade)
-                completion()
-                }, receiveValue: { [weak self] _ in
+        if let fallbackEateriesUrl = GooglePlaceTextSearchRoute(name: dataSource.place.name,
+                                                                location: dataSource.place.coordinate,
+                                                                queryType: .restaurants)?.url,
+            let eateriesRequest = YelpBusinessesRoute(place: dataSource.place)?.urlRequest {
+            eateriesCancellable = dataSource.loadEateries(request: eateriesRequest, fallbackUrl: fallbackEateriesUrl)
+                .receive(on: DispatchQueue.main)
+                .eraseToAnyPublisher()
+                .sink(receiveCompletion: { [weak self] receiveCompletion in
+                    if case let Subscribers.Completion.failure(error) = receiveCompletion {
+                        self?.logErrorEvent(error)
+                    }
                     self?.placeCardsTableView.reloadRows(at: [SearchDetailDataSource.eateriesIndexPath], with: .fade)
-            })
+                    completion()
+                    }, receiveValue: { [weak self] _ in
+                        self?.placeCardsTableView.reloadRows(at: [SearchDetailDataSource.eateriesIndexPath], with: .fade)
+                })
+        }
 
         if reloadMapCard {
             placeCardsTableView.reloadRows(at: [SearchDetailDataSource.mapIndexPath], with: .fade)
