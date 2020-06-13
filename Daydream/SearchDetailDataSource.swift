@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Combine
 
 class SearchDetailDataSource: NSObject, UITableViewDataSource {
 
@@ -45,15 +46,15 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
 
     private let networkService = NetworkService()
     let mapCardCellHeight: CGFloat = 186
-    let mapCardCellIndexPath = IndexPath(row: 0, section: 0)
     var sightsCardCellHeight: CGFloat {
         return loadingState == .error ? SightsCardCell.errorHeight: SightsCardCell.defaultHeight
     }
     var eateriesCardCellHeight: CGFloat {
         return loadingState == .error ? EateriesCardCell.errorHeight: EateriesCardCell.defaultHeight
     }
-    let sightsCardCellIndexPath = IndexPath(row: 1, section: 0)
-    let eateriesCardCellIndexPath = IndexPath(row: 2, section: 0)
+    static let mapIndexPath = IndexPath(row: 0, section: 0)
+    static let sightsIndexPath = IndexPath(row: 1, section: 0)
+    static let eateriesIndexPath = IndexPath(row: 2, section: 0)
 
     init(place: Place) {
         self.place = place
@@ -68,6 +69,31 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
                 failure(error)
             }
         })
+    }
+
+    func loadSightsAndEateriesCombine(sightsUrl: URL, eateriesRequest: URLRequest) -> AnyPublisher<([Place], [Eatery]), Error> {
+        let sightsPublisher = networkService.loadPlacesCombine(place: place, url: sightsUrl)
+        let eateriesPublisher = networkService.loadEateriesCombine(place: place, urlRequest: eateriesRequest)
+
+        return Publishers.Zip(sightsPublisher, eateriesPublisher)
+            .mapError { [weak self] error -> Error in
+                self?.loadingState = .error
+                return error
+            }
+            .map { [weak self] (places, eateries) -> ([Place], [Eatery]) in
+                self?.pointsOfInterest = places
+                self?.loadingState = .results
+
+                if !eateries.isEmpty {
+                    self?.prevEateries = self?.eateries
+                    self?.eateries = eateries
+                } else {
+                    self?.loadingState = .error
+                }
+
+                return (places, eateries)
+            }
+            .eraseToAnyPublisher()
     }
 
     func loadSightsAndEateries(success: @escaping(_ indexPaths: [IndexPath]) -> Void, failure: @escaping(_ error: Error?) -> Void) {
@@ -85,7 +111,7 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
                 if !eateries.isEmpty {
                     strongSelf.prevEateries = strongSelf.eateries
                     strongSelf.eateries = eateries
-                    success([strongSelf.sightsCardCellIndexPath, strongSelf.eateriesCardCellIndexPath])
+                    success([SearchDetailDataSource.sightsIndexPath, SearchDetailDataSource.eateriesIndexPath])
                 } else {
                     strongSelf.networkService.loadGoogleRestaurants(place: strongSelf.place, completion: { [weak self] result in
                         guard let strongSelf = self else {
@@ -96,7 +122,7 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
                         case .success(let restaurants):
                             strongSelf.prevEateries = strongSelf.eateries
                             strongSelf.eateries = restaurants
-                            success([strongSelf.sightsCardCellIndexPath, strongSelf.eateriesCardCellIndexPath])
+                            success([SearchDetailDataSource.sightsIndexPath, SearchDetailDataSource.eateriesIndexPath])
                         case .failure(let error):
                             strongSelf.loadingState = .error
                             failure(error)
@@ -122,7 +148,7 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
     // swiftlint:disable cyclomatic_complexity
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath {
-        case mapCardCellIndexPath:
+        case SearchDetailDataSource.mapIndexPath:
             let cell = tableView.dequeueReusableCell(withIdentifier: "mapCardCell", for: indexPath)
 
             guard let mapCardCell = cell as? MapCardCell else {
@@ -132,7 +158,7 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
             mapCardCell.place = place
 
             return mapCardCell
-        case sightsCardCellIndexPath:
+        case SearchDetailDataSource.sightsIndexPath:
             guard let sightsCardCell = tableView.dequeueReusableCell(withIdentifier: "sightsCardCell", for: indexPath) as? SightsCardCell else {
                 return UITableViewCell()
             }
@@ -151,7 +177,7 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
             }
 
             return sightsCardCell
-        case eateriesCardCellIndexPath:
+        case SearchDetailDataSource.eateriesIndexPath:
             guard let eateriesCardCell = tableView.dequeueReusableCell(withIdentifier: "eateriesCardCell", for: indexPath) as? EateriesCardCell else {
                 return UITableViewCell()
             }

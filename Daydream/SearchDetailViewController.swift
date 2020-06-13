@@ -10,6 +10,7 @@ import UIKit
 import GooglePlaces
 import GoogleMaps
 import SnapKit
+import Combine
 
 final class SearchDetailViewController: UIViewController {
 
@@ -35,6 +36,7 @@ final class SearchDetailViewController: UIViewController {
     private var headerFadeInEndPoint: CGFloat {
         return 103 + notchHeight
     }
+    private var cancellable: AnyCancellable?
     private let headerFadeOutStartPoint: CGFloat = 100
     private let headerFadeOutEndPoint: CGFloat = 80
     private let floatingTitleViewFadeInStartPoint: CGFloat = 85
@@ -171,30 +173,34 @@ final class SearchDetailViewController: UIViewController {
             })
         }
 
-        dataSource.loadSightsAndEateries(success: { [weak self] indexPaths in
-            completion()
-            guard let strongSelf = self else {
-                return
-            }
-            DispatchQueue.main.async {
-                strongSelf.placeCardsTableView.reloadRows(at: indexPaths, with: .fade)
-            }
-        }, failure: { [weak self] error in
-            completion()
-            guard let strongSelf = self else {
-                return
-            }
-            DispatchQueue.main.async {
-                if let sightsIndexPath = strongSelf.dataSource?.sightsCardCellIndexPath,
-                    let eateriesIndexPath = strongSelf.dataSource?.eateriesCardCellIndexPath {
-                    strongSelf.placeCardsTableView.reloadRows(at: [sightsIndexPath, eateriesIndexPath], with: .fade)
+        guard let sightsUrl = GooglePlaceTextSearchRoute(name: dataSource.place.name,
+                                                         location: dataSource.place.coordinate,
+                                                         queryType: .touristSpots)?.url,
+            let eateriesRequest = YelpBusinessesRoute(place: dataSource.place)?.urlRequest else {
+            return
+        }
+
+        cancellable = dataSource.loadSightsAndEateriesCombine(sightsUrl: sightsUrl, eateriesRequest: eateriesRequest)
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
+            .sink(receiveCompletion: { [weak self] receiveCompletion in
+                if case let Subscribers.Completion.failure(error) = receiveCompletion {
+                    self?.logErrorEvent(error)
                 }
-            }
-            strongSelf.logErrorEvent(error)
-        })
+                self?.placeCardsTableView.reloadRows(at: [SearchDetailDataSource.sightsIndexPath,
+                                                          SearchDetailDataSource.eateriesIndexPath], with: .fade)
+                completion()
+            }, receiveValue: { [weak self] _ in
+                guard let strongSelf = self else {
+                    return
+                }
+
+                strongSelf.placeCardsTableView.reloadRows(at: [SearchDetailDataSource.sightsIndexPath,
+                                                               SearchDetailDataSource.eateriesIndexPath], with: .fade)
+            })
 
         if reloadMapCard {
-            placeCardsTableView.reloadRows(at: [dataSource.mapCardCellIndexPath], with: .fade)
+            placeCardsTableView.reloadRows(at: [SearchDetailDataSource.mapIndexPath], with: .fade)
         }
     }
 

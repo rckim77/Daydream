@@ -63,6 +63,16 @@ class NetworkService {
         }
     }
 
+    /// Can be used to return any set of Google Place objects (e.g., sights, fallback restaurants) filtered by the parameters
+    /// set in the input url.
+    func loadPlacesCombine(place: Place, url: URL) -> AnyPublisher<[Place], Error> {
+        return URLSession.shared.dataTaskPublisher(for: url)
+            .map { $0.data }
+            .decode(type: ResultsCollection.self, decoder: customDecoder)
+            .map { $0.results }
+            .eraseToAnyPublisher()
+    }
+
     func loadTopEateries(place: Place, completion: @escaping(Result<[Eatery], Error>) -> Void) {
         guard let route = YelpBusinessesRoute(place: place) else {
             completion(.failure(NetworkError.routeError))
