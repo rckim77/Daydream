@@ -181,7 +181,8 @@ final class SearchDetailViewController: UIViewController {
         guard let sightsUrl = GooglePlaceTextSearchRoute(name: dataSource.place.name,
                                                          location: dataSource.place.coordinate,
                                                          queryType: .touristSpots)?.url,
-            let eateriesRequest = YelpBusinessesRoute(place: dataSource.place)?.urlRequest else {
+            let eateriesRequest = YelpBusinessesRoute(place: dataSource.place)?.urlRequest,
+            let fallbackEateriesUrl = GooglePlaceTextSearchRoute(name: dataSource.place.name, location: dataSource.place.coordinate, queryType: .restaurants)?.url else {
             return
         }
 
@@ -198,7 +199,7 @@ final class SearchDetailViewController: UIViewController {
                     self?.placeCardsTableView.reloadRows(at: [SearchDetailDataSource.sightsIndexPath], with: .fade)
             })
 
-        eateriesCancellable = dataSource.loadEateries(request: eateriesRequest)
+        eateriesCancellable = dataSource.loadEateries(request: eateriesRequest, fallbackUrl: fallbackEateriesUrl)
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
             .sink(receiveCompletion: { [weak self] receiveCompletion in

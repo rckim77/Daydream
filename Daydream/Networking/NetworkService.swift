@@ -103,39 +103,18 @@ class NetworkService {
         }
     }
 
-    // Currently unused. Replaces loadTopEateries(place:completion:).
     func loadEateriesCombine(place: Place, urlRequest: URLRequest) -> AnyPublisher<[Eatery], Error> {
         return URLSession.shared.dataTaskPublisher(for: urlRequest)
-            .map { $0.data }
-            .decode(type: EateryCollection.self, decoder: customDecoder)
-            .map { $0.businesses }
-            .eraseToAnyPublisher()
-    }
-
-    /// Fallback results for restaurants using Google Place API.
-    func loadGoogleRestaurants(place: Place, completion: @escaping(Result<[Eatable], Error>) -> Void) {
-        let route = GooglePlaceTextSearchRoute(name: place.name, location: place.coordinate, queryType: .restaurants)
-        guard let url = route?.url else {
-            completion(.failure(NetworkError.routeError))
-            return
-        }
-
-        AF.request(url).responseData { response in
-            switch response.result {
-            case .success(let data):
-                guard let restaurants = try? self.customDecoder.decode(ResultsCollection.self, from: data) else {
-                    completion(.failure(NetworkError.jsonDecoding))
-                    return
-                }
-                guard restaurants.results.count > 2 else {
-                    completion(.failure(NetworkError.insufficientResults))
-                    return
-                }
-                completion(.success(restaurants.results))
-            case .failure(let error):
-                completion(.failure(error))
+            .mapError { urlError -> Error in
+                return urlError as Error
             }
-        }
+            .map { [weak self] response -> [Eatery] in
+                guard let eateries = try? self?.customDecoder.decode(EateryCollection.self, from: response.data) else {
+                    return []
+                }
+                return eateries.businesses
+            }
+            .eraseToAnyPublisher()
     }
 
     /// Load photo as UIImage using Google Places SDK.
