@@ -52,14 +52,14 @@ class SightsCardCell: UITableViewCell {
     }()
     
     weak var delegate: SightsCardCellDelegate?
-    var pointsOfInterest: [Place]? {
+    var sights: [Place]? {
         didSet {
-            if let pointsOfInterest = pointsOfInterest, pointsOfInterest.count >= 3 {
+            if let sights = sights, sights.count >= 3 {
                 isHidden = false
                 // display content only if we've made another API call, otherwise do nothing
                 // POSTLAUNCH: - Update comparison with placeId
-                if oldValue?.count == 0 || pointsOfInterest[0].placeId != oldValue?[0].placeId {
-                    configure(pointsOfInterest)
+                if oldValue?.count == 0 || sights[0].placeId != oldValue?[0].placeId {
+                    configure(sights)
                 }
             } else { // before response from API or error
                 isHidden = true
@@ -143,16 +143,16 @@ class SightsCardCell: UITableViewCell {
         sight3View.configureError()
     }
 
-    private func configure(_ pointsOfInterest: [Place]) {
+    private func configure(_ eateries: [Place]) {
         errorButton.isHidden = true
         sendSubviewToBack(errorButton)
         sightsSectionView.snp.updateConstraints { make in
             make.height.equalTo(defaultSectionHeight)
         }
         layoutIfNeeded()
-        sight1View.configure(sight: pointsOfInterest[0])
-        sight2View.configure(sight: pointsOfInterest[1])
-        sight3View.configure(sight: pointsOfInterest[2])
+        sight1View.configure(sight: eateries[0])
+        sight2View.configure(sight: eateries[1])
+        sight3View.configure(sight: eateries[2])
     }
 
     // MARK: - Button selector methods
@@ -169,7 +169,7 @@ extension SightsCardCell: SightViewDelegate {
     }
 
     func sightViewDidTap(layoutType: SightView.LayoutType) {
-        guard let sight = pointsOfInterest?[layoutType.rawValue] else {
+        guard let sight = sights?[layoutType.rawValue] else {
             return
         }
         delegate?.sightsCardCell(self, didSelectPlace: sight)

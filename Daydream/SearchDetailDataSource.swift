@@ -16,7 +16,7 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
     }
 
     var place: Place
-    var pointsOfInterest: [Place]?
+    var sights: [Place]?
     var eateries: [Eatable]?
     private var prevEateries: [Eatable]?
     private var eateriesIsEqualToPrevious: Bool {
@@ -79,7 +79,7 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
                 return error
             }
             .map { [weak self] places -> Void in
-                self?.pointsOfInterest = places
+                self?.sights = places
                 self?.sightsLoadingState = .results
                 return
             }
@@ -133,7 +133,7 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
             case .loading:
                 sightsCardCell.configureLoading()
             case .results:
-                sightsCardCell.pointsOfInterest = pointsOfInterest
+                sightsCardCell.sights = sights
             case .error:
                 sightsCardCell.configureError()
             case .uninitiated:
