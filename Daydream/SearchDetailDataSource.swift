@@ -76,6 +76,7 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
                 self?.sightsLoadingState = .results
                 return
             }
+            .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
 
@@ -90,6 +91,7 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
                 self?.eateriesLoadingState = .results
                 return
             }
+            .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
 

@@ -169,8 +169,6 @@ final class SearchDetailViewController: UIViewController {
                                                          location: dataSource.place.coordinate,
                                                          queryType: .touristSpots)?.url {
             sightsCancellable = dataSource.loadSights(url: sightsUrl)
-                .receive(on: DispatchQueue.main)
-                .eraseToAnyPublisher()
                 .sink(receiveCompletion: { [weak self] receiveCompletion in
                     if case let Subscribers.Completion.failure(error) = receiveCompletion {
                         self?.logErrorEvent(error)
@@ -187,8 +185,6 @@ final class SearchDetailViewController: UIViewController {
                                                                 queryType: .restaurants)?.url,
             let eateriesRequest = YelpBusinessesRoute(place: dataSource.place)?.urlRequest {
             eateriesCancellable = dataSource.loadEateries(request: eateriesRequest, fallbackUrl: fallbackEateriesUrl)
-                .receive(on: DispatchQueue.main)
-                .eraseToAnyPublisher()
                 .sink(receiveCompletion: { [weak self] receiveCompletion in
                     if case let Subscribers.Completion.failure(error) = receiveCompletion {
                         self?.logErrorEvent(error)
