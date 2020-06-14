@@ -143,16 +143,16 @@ class SightsCardCell: UITableViewCell {
         sight3View.configureError()
     }
 
-    private func configure(_ eateries: [Place]) {
+    private func configure(_ sights: [Place]) {
         errorButton.isHidden = true
         sendSubviewToBack(errorButton)
         sightsSectionView.snp.updateConstraints { make in
             make.height.equalTo(defaultSectionHeight)
         }
         layoutIfNeeded()
-        sight1View.configure(sight: eateries[0])
-        sight2View.configure(sight: eateries[1])
-        sight3View.configure(sight: eateries[2])
+        sight1View.configure(sight: sights[0])
+        sight2View.configure(sight: sights[1])
+        sight3View.configure(sight: sights[2])
     }
 
     // MARK: - Button selector methods
