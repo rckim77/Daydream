@@ -144,34 +144,33 @@ final class SearchViewController: UIViewController {
     @objc
     func randomButtonTapped() {
         logEvent(contentType: "random button tapped", title)
-        guard let randomCity = getRandomCity() else {
+        guard let randomCity = getRandomCity(), let url = GooglePlaceTextSearchRoute(name: randomCity, queryType: .placeByName)?.url else {
             return
         }
         let loadingVC = LoadingViewController()
         add(loadingVC)
 
-        networkService.getPlaceId(placeName: randomCity, completion: { [weak self] result in
-            loadingVC.remove()
-            guard let strongSelf = self else {
-                return
-            }
-
-            switch result {
-            case .success(let place):
-                strongSelf.placeData = place
-                strongSelf.networkService.loadPhoto(placeId: place.placeId, completion: { [weak self] result in
-                    guard let strongSelf = self else {
-                        return
-                    }
-                    if case .success(let image) = result {
-                        strongSelf.placeBackgroundImage = image
-                    }
-                    strongSelf.performSegue(withIdentifier: "toSearchDetailVCSegue", sender: nil)
-                })
-            case .failure(let error):
-                strongSelf.logErrorEvent(error)
-            }
-        })
+        placeCancellable = networkService.loadPlaces(url: url)
+            .tryMap({ places -> Place in
+                guard let firstPlace = places.first else {
+                    throw NetworkError.insufficientResults
+                }
+                return firstPlace
+            })
+            .receive(on: DispatchQueue.main)
+            .flatMap({ [weak self] place -> Future<UIImage, Error> in
+                self?.placeData = place
+                return NetworkService().loadPhoto(placeId: place.placeId)
+            })
+            .sink(receiveCompletion: { [weak self] completion in
+                loadingVC.remove()
+                if case let Subscribers.Completion.failure(error) = completion {
+                    self?.logErrorEvent(error)
+                }
+            }, receiveValue: { [weak self] image in
+                self?.placeBackgroundImage = image
+                self?.performSegue(withIdentifier: "toSearchDetailVCSegue", sender: nil)
+            })
     }
 
     @objc

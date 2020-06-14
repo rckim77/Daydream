@@ -22,8 +22,8 @@ class NetworkService {
         return decoder
     }()
 
-    /// Can be used to return any set of Google Place objects (e.g., sights, fallback restaurants) filtered by the parameters
-    /// set in the input url.
+    /// Can be used to return one or more Google Place objects (e.g., sights, fallback restaurants) filtered by the parameters
+    /// set in the input url. If you only want it to return one, just grab the first place object in the array.
     func loadPlaces(url: URL) -> AnyPublisher<[Place], Error> {
         return URLSession.shared.dataTaskPublisher(for: url)
             .map { $0.data }
