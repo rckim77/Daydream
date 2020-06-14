@@ -30,6 +30,7 @@ final class SearchDetailViewController: UIViewController {
 
     private var sightsCancellable: AnyCancellable?
     private var eateriesCancellable: AnyCancellable?
+    private var loadPhotoCancellable: AnyCancellable?
 
     // MARK: - Constants
 
@@ -150,6 +151,8 @@ final class SearchDetailViewController: UIViewController {
         }
     }
 
+    // MARK: - Reload methods
+
     private func loadDataSource(reloadMapCard: Bool = false, fetchBackground: Bool = true, completion: @escaping(() -> Void)) {
         guard let dataSource = dataSource else {
             return
@@ -159,23 +162,7 @@ final class SearchDetailViewController: UIViewController {
         floatingTitleLabel.text = dataSource.place.name
 
         if fetchBackground {
-            dataSource.loadPhoto(success: { [weak self] image in
-                guard let strongSelf = self else {
-                    return
-                }
-
-                DispatchQueue.main.async {
-                    strongSelf.placeImageView.subviews.forEach { $0.removeFromSuperview() }
-                    strongSelf.placeImageView.image = image
-                    strongSelf.placeImageView.contentMode = .scaleAspectFill
-                    strongSelf.placeImageView.addSubview(strongSelf.visualEffectView)
-                }
-            }, failure: { [weak self] error in
-                guard let strongSelf = self else {
-                    return
-                }
-                strongSelf.logErrorEvent(error)
-            })
+            fetchBackgroundPhoto()
         }
 
         if let sightsUrl = GooglePlaceTextSearchRoute(name: dataSource.place.name,
@@ -217,6 +204,33 @@ final class SearchDetailViewController: UIViewController {
             placeCardsTableView.reloadRows(at: [SearchDetailDataSource.mapIndexPath], with: .fade)
         }
     }
+
+    private func fetchBackgroundPhoto() {
+        guard let dataSource = dataSource else {
+            return
+        }
+
+        loadPhotoCancellable = dataSource.loadPhoto()
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { [weak self] receiveCompletion in
+                guard let strongSelf = self else {
+                    return
+                }
+                if case let Subscribers.Completion.failure(error) = receiveCompletion {
+                    strongSelf.logErrorEvent(error)
+                }
+            }, receiveValue: { [weak self] image in
+                guard let strongSelf = self else {
+                    return
+                }
+                strongSelf.placeImageView.subviews.forEach { $0.removeFromSuperview() }
+                strongSelf.placeImageView.image = image
+                strongSelf.placeImageView.contentMode = .scaleAspectFill
+                strongSelf.placeImageView.addSubview(strongSelf.visualEffectView)
+            })
+    }
+
+    // MARK: - Configuration methods
 
     private func configureTableView() {
         placeCardsTableView.dataSource = dataSource

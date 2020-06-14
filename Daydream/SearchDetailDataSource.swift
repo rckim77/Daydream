@@ -61,19 +61,12 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
         self.place = place
     }
 
-    func loadPhoto(success: @escaping(_ image: UIImage) -> Void, failure: @escaping(_ error: Error?) -> Void) {
-        networkService.loadPhoto(placeId: place.placeId, completion: { result in
-            switch result {
-            case .success(let image):
-                success(image)
-            case .failure(let error):
-                failure(error)
-            }
-        })
+    func loadPhoto() -> Future<UIImage, Error> {
+        return networkService.loadPhoto(placeId: place.placeId)
     }
 
     func loadSights(url: URL) -> AnyPublisher<Void, Error> {
-        return networkService.loadPlaces(place: place, url: url)
+        return networkService.loadPlaces(url: url)
             .mapError { [weak self] error -> Error in
                 self?.sightsLoadingState = .error
                 return error

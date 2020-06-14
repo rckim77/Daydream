@@ -24,7 +24,7 @@ class NetworkService {
 
     /// Can be used to return any set of Google Place objects (e.g., sights, fallback restaurants) filtered by the parameters
     /// set in the input url.
-    func loadPlaces(place: Place, url: URL) -> AnyPublisher<[Place], Error> {
+    func loadPlaces(url: URL) -> AnyPublisher<[Place], Error> {
         return URLSession.shared.dataTaskPublisher(for: url)
             .map { $0.data }
             .decode(type: ResultsCollection.self, decoder: customDecoder)
@@ -46,11 +46,43 @@ class NetworkService {
                     networkError == .malformedJSON else {
                     throw error
                 }
-                return strongSelf.loadPlaces(place: place, url: fallbackUrl)
+                return strongSelf.loadPlaces(url: fallbackUrl)
                     .map { $0 as [Eatable] }
                     .eraseToAnyPublisher()
             }
             .eraseToAnyPublisher()
+    }
+
+    /// Load photo as UIImage using Google Places SDK
+    func loadPhoto(placeId: String) -> Future<UIImage, Error> {
+        return Future<UIImage, Error> { promise in
+            guard let photoField = GMSPlaceField(rawValue: UInt(GMSPlaceField.photos.rawValue)) else {
+                promise(.failure(NetworkError.malformedPhotoField))
+                return
+            }
+
+            GMSPlacesClient.shared().fetchPlace(fromPlaceID: placeId, placeFields: photoField, sessionToken: nil) { place, error in
+                if let place = place {
+                    if let photoMetadata = place.photos?.first {
+                        GMSPlacesClient.shared().loadPlacePhoto(photoMetadata) { image, error in
+                            if let image = image {
+                                promise(.success(image))
+                            } else if let error = error {
+                                promise(.failure(error))
+                            } else {
+                                promise(.failure(NetworkError.unknown))
+                            }
+                        }
+                    } else {
+                        promise(.failure(NetworkError.photoMetadataMissing))
+                    }
+                } else if let error = error {
+                    promise(.failure(error))
+                } else {
+                    promise(.failure(NetworkError.unknown))
+                }
+            }
+        }
     }
 
     /// Load photo as UIImage using Google Places SDK.

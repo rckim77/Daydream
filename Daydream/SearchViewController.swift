@@ -9,6 +9,7 @@
 import UIKit
 import GooglePlaces
 import SnapKit
+import Combine
 
 final class SearchViewController: UIViewController {
 
@@ -51,6 +52,8 @@ final class SearchViewController: UIViewController {
         button.addTarget(self, action: #selector(randomButtonTapped), for: .touchUpInside)
         return button
     }()
+
+    private var placeCancellable: AnyCancellable?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -219,18 +222,13 @@ extension SearchViewController: GMSAutocompleteResultsViewControllerDelegate {
             self.resetSearchUI()
             let loadingVC = LoadingViewController()
             self.add(loadingVC)
-            self.networkService.loadPhoto(placeId: placeId, completion: { [weak self] result in
-                loadingVC.remove()
-                guard let strongSelf = self else {
-                    return
-                }
-
-                if case .success(let image) = result {
-                    strongSelf.placeBackgroundImage = image
-                }
-
-                strongSelf.performSegue(withIdentifier: "toSearchDetailVCSegue", sender: nil)
-            })
+            self.placeCancellable = self.networkService.loadPhoto(placeId: placeId)
+                .sink(receiveCompletion: { _ in
+                    loadingVC.remove()
+                }, receiveValue: { [weak self] image in
+                    self?.placeBackgroundImage = image
+                    self?.performSegue(withIdentifier: "toSearchDetailVCSegue", sender: nil)
+                })
         })
     }
 

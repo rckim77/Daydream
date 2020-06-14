@@ -8,6 +8,7 @@
 
 import UIKit
 import SnapKit
+import Combine
 
 protocol EateryViewDelegate: class {
     func eateryViewDidTapEatery(layoutType: EateryView.LayoutType)
@@ -33,6 +34,7 @@ final class EateryView: UIView {
     private var layoutType: LayoutType = .middle
     private weak var delegate: EateryViewDelegate?
     private var eatery: Eatable?
+    private var cancellable: AnyCancellable?
 
     convenience init(layoutType: LayoutType, delegate: EateryViewDelegate) {
         self.init(frame: .zero)
@@ -131,15 +133,13 @@ final class EateryView: UIView {
             guard let id = eatery.eatableId else {
                 return
             }
-            NetworkService().loadPhoto(placeId: id, completion: { [weak self] result in
+            cancellable = NetworkService().loadPhoto(placeId: id)
+                .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] image in
                 guard let strongSelf = self else {
                     return
                 }
-
-                if case .success(let image) = result {
-                    strongSelf.updateLayers()
-                    strongSelf.fadeInImage(image, forImageView: strongSelf.backgroundImageView)
-                }
+                strongSelf.updateLayers()
+                strongSelf.fadeInImage(image, forImageView: strongSelf.backgroundImageView)
             })
         }
     }
