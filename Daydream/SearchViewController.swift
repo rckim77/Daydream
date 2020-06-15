@@ -150,14 +150,7 @@ final class SearchViewController: UIViewController {
         let loadingVC = LoadingViewController()
         add(loadingVC)
 
-        placeCancellable = networkService.loadPlaces(url: url)
-            .tryMap({ places -> Place in
-                guard let firstPlace = places.first else {
-                    throw NetworkError.insufficientResults
-                }
-                return firstPlace
-            })
-            .receive(on: DispatchQueue.main)
+        placeCancellable = networkService.loadPlace(url: url)
             .flatMap({ [weak self] place -> Future<UIImage, Error> in
                 self?.placeData = place
                 return NetworkService().loadPhoto(placeId: place.placeId)

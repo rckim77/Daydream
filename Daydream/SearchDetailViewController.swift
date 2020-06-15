@@ -274,14 +274,7 @@ final class SearchDetailViewController: UIViewController {
         dataSource?.eateriesLoadingState = .loading
         placeCardsTableView.reloadData()
 
-        loadPlaceByNameCancellable = networkService.loadPlaces(url: url)
-            .tryMap({ places -> Place in
-                guard let firstPlace = places.first else {
-                    throw NetworkError.insufficientResults
-                }
-                return firstPlace
-            })
-            .receive(on: DispatchQueue.main)
+        loadPlaceByNameCancellable = networkService.loadPlace(url: url)
             .sink(receiveCompletion: { [weak self] completion in
                 if case let Subscribers.Completion.failure(error) = completion {
                     loadingVC.remove()

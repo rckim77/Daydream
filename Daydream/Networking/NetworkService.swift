@@ -32,6 +32,23 @@ class NetworkService {
             .eraseToAnyPublisher()
     }
 
+    /// Convenience method to return one Google place. Uses loadPlaces(url:) and ensures the first element is returned.
+    func loadPlace(url: URL, receiveOnMainQueue: Bool = true) -> AnyPublisher<Place, Error> {
+        let publisher = loadPlaces(url: url)
+            .tryMap { places -> Place in
+                guard let firstPlace = places.first else {
+                    throw NetworkError.insufficientResults
+                }
+                return firstPlace
+            }
+
+        if receiveOnMainQueue {
+            return publisher.receive(on: DispatchQueue.main).eraseToAnyPublisher()
+        } else {
+            return publisher.eraseToAnyPublisher()
+        }
+    }
+
     func loadEateries(place: Place, urlRequest: URLRequest, fallbackUrl: URL) -> AnyPublisher<[Eatable], Error> {
         return URLSession.shared.dataTaskPublisher(for: urlRequest)
             .tryMap { [weak self] response -> [Eatable] in
