@@ -31,6 +31,7 @@ final class SearchDetailViewController: UIViewController {
     private var sightsCancellable: AnyCancellable?
     private var eateriesCancellable: AnyCancellable?
     private var loadPhotoCancellable: AnyCancellable?
+    private var loadPlaceByNameCancellable: AnyCancellable?
 
     // MARK: - Constants
 
@@ -262,31 +263,36 @@ final class SearchDetailViewController: UIViewController {
     @objc
     func randomCityButtonTapped() {
         logEvent(contentType: "random button tapped", title)
-        guard let randomCity = getRandomCity() else {
+        guard let randomCity = getRandomCity(),
+            let url = GooglePlaceTextSearchRoute(name: randomCity, queryType: .placeByName)?.url else {
             return
         }
+
         let loadingVC = LoadingViewController()
         add(loadingVC)
         dataSource?.sightsLoadingState = .loading
         dataSource?.eateriesLoadingState = .loading
         placeCardsTableView.reloadData()
 
-        networkService.getPlaceId(placeName: randomCity, completion: { [weak self] result in
-            loadingVC.remove()
-            guard let strongSelf = self, let dataSource = strongSelf.dataSource else {
-                return
-            }
-
-            switch result {
-            case .success(let place):
-                dataSource.place = place
-                strongSelf.loadDataSource(reloadMapCard: true, completion: {
+        loadPlaceByNameCancellable = networkService.loadPlaces(url: url)
+            .tryMap({ places -> Place in
+                guard let firstPlace = places.first else {
+                    throw NetworkError.insufficientResults
+                }
+                return firstPlace
+            })
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { [weak self] completion in
+                if case let Subscribers.Completion.failure(error) = completion {
+                    loadingVC.remove()
+                    self?.logErrorEvent(error)
+                }
+            }, receiveValue: { [weak self] place in
+                self?.dataSource?.place = place
+                self?.loadDataSource(reloadMapCard: true, completion: {
                     loadingVC.remove()
                 })
-            case .failure(let error):
-                strongSelf.logErrorEvent(error)
-            }
-        })
+            })
     }
 }
 
