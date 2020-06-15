@@ -71,7 +71,7 @@ class NetworkService {
     }
 
     /// Load photo as UIImage using Google Places SDK
-    func loadPhoto(placeId: String) -> Future<UIImage, Error> {
+    func loadGooglePhoto(placeId: String) -> Future<UIImage, Error> {
         return Future<UIImage, Error> { promise in
             guard let photoField = GMSPlaceField(rawValue: UInt(GMSPlaceField.photos.rawValue)) else {
                 promise(.failure(NetworkError.malformedPhotoField))

@@ -106,7 +106,8 @@ final class EateryView: UIView {
         isHidden = false
         self.eatery = eatery
         titleLabel.text = createDisplayText(eatery.name, priceRating: eatery.priceIndicator)
-
+        updateLayers()
+        
         switch eatery.type {
         case .yelp:
             guard let urlString = eatery.eatableImageUrl,
@@ -127,7 +128,7 @@ final class EateryView: UIView {
             guard let id = eatery.eatableId else {
                 return
             }
-            cancellable = NetworkService().loadPhoto(placeId: id)
+            cancellable = NetworkService().loadGooglePhoto(placeId: id)
                 .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] image in
                     guard let strongSelf = self else {
                         return

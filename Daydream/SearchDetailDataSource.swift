@@ -62,7 +62,7 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
     }
 
     func loadPhoto() -> Future<UIImage, Error> {
-        return networkService.loadPhoto(placeId: place.placeId)
+        return networkService.loadGooglePhoto(placeId: place.placeId)
     }
 
     func loadSights(url: URL) -> AnyPublisher<Void, Error> {
