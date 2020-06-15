@@ -23,6 +23,10 @@ final class SearchViewController: UIViewController {
         return  (view.bounds.height / 2) - (searchBarViewHeight / 2) - 50
     }
     private let networkService = NetworkService()
+    static let toSearchDetailVCSegue = "toSearchDetailVCSegue"
+    private var dataPreloaded: Bool {
+        placeData != nil && placeBackgroundImage != nil
+    }
 
     private lazy var titleLabel: CardLabel = {
         let label = CardLabel(textStyle: .largeTitle, text: "Where do you want to go?")
@@ -53,7 +57,11 @@ final class SearchViewController: UIViewController {
         return button
     }()
 
+    // MARK: - Cancellables
+
     private var placeCancellable: AnyCancellable?
+
+    // MARK: - View lifecycle methods
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,6 +71,7 @@ final class SearchViewController: UIViewController {
         addSearchController()
         addProgrammaticComponents()
         fadeInTitleAndButton()
+        preloadRandomPlace()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -139,22 +148,28 @@ final class SearchViewController: UIViewController {
         titleLabel.alpha = 1
     }
 
-    // MARK: - Button selector method
+    // MARK: - Button selector methods
 
     @objc
     func randomButtonTapped() {
         logEvent(contentType: "random button tapped", title)
-        guard let randomCity = getRandomCity(), let url = GooglePlaceTextSearchRoute(name: randomCity, queryType: .placeByName)?.url else {
+        if dataPreloaded {
+            performSegue(withIdentifier: SearchViewController.toSearchDetailVCSegue, sender: nil)
+            return
+        }
+
+        guard let randomCity = getRandomCity(),
+            let url = GooglePlaceTextSearchRoute(name: randomCity, queryType: .placeByName)?.url else {
             return
         }
         let loadingVC = LoadingViewController()
         add(loadingVC)
 
         placeCancellable = networkService.loadPlace(url: url)
-            .flatMap({ [weak self] place -> Future<UIImage, Error> in
+            .flatMap { [weak self] place -> Future<UIImage, Error> in
                 self?.placeData = place
                 return NetworkService().loadPhoto(placeId: place.placeId)
-            })
+            }
             .sink(receiveCompletion: { [weak self] completion in
                 loadingVC.remove()
                 if case let Subscribers.Completion.failure(error) = completion {
@@ -162,7 +177,7 @@ final class SearchViewController: UIViewController {
                 }
             }, receiveValue: { [weak self] image in
                 self?.placeBackgroundImage = image
-                self?.performSegue(withIdentifier: "toSearchDetailVCSegue", sender: nil)
+                self?.performSegue(withIdentifier: SearchViewController.toSearchDetailVCSegue, sender: nil)
             })
     }
 
@@ -193,6 +208,28 @@ final class SearchViewController: UIViewController {
 
         destinationVC.dataSource = SearchDetailDataSource(place: place)
         destinationVC.backgroundImage = backgroundImage
+        placeData = nil
+        placeBackgroundImage = nil
+    }
+
+    // MARK: - Networking
+
+    private func preloadRandomPlace() {
+        guard let randomCity = getRandomCity(),
+            let url = GooglePlaceTextSearchRoute(name: randomCity, queryType: .placeByName)?.url else {
+            return
+        }
+
+        placeCancellable = networkService.loadPlace(url: url)
+            .flatMap { [weak self] place -> Future<UIImage, Error> in
+                print("== set place data")
+                self?.placeData = place
+                return NetworkService().loadPhoto(placeId: place.placeId)
+            }
+            .sink(receiveCompletion: {_ in }, receiveValue: { [weak self] image in
+                print("== set place background image")
+                self?.placeBackgroundImage = image
+            })
     }
 }
 
