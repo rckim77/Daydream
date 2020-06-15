@@ -222,12 +222,10 @@ final class SearchViewController: UIViewController {
 
         placeCancellable = networkService.loadPlace(url: url)
             .flatMap { [weak self] place -> Future<UIImage, Error> in
-                print("== set place data")
                 self?.placeData = place
                 return NetworkService().loadPhoto(placeId: place.placeId)
             }
             .sink(receiveCompletion: {_ in }, receiveValue: { [weak self] image in
-                print("== set place background image")
                 self?.placeBackgroundImage = image
             })
     }

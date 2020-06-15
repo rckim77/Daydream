@@ -114,33 +114,27 @@ final class EateryView: UIView {
                 return
             }
 
-            URLSession.shared.dataTask(with: imageUrl) { [weak self] data, _, _ in
-                guard let strongSelf = self, let data = data else {
-                    return
-                }
+            cancellable = NetworkService.loadImage(url: imageUrl)
+                .sink(receiveValue: { [weak self] image in
+                    guard let strongSelf = self, let image = image else {
+                        return
+                    }
+                    strongSelf.updateLayers()
+                    strongSelf.fadeInImage(image, forImageView: strongSelf.backgroundImageView)
+                })
 
-                DispatchQueue.main.async {
-                   guard let image = UIImage(data: data) else {
-                       return
-                   }
-
-                   strongSelf.updateLayers()
-                   strongSelf.fadeInImage(image, forImageView: strongSelf.backgroundImageView)
-                   strongSelf.layoutIfNeeded()
-                }
-            }.resume()
         case .google:
             guard let id = eatery.eatableId else {
                 return
             }
             cancellable = NetworkService().loadPhoto(placeId: id)
                 .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] image in
-                guard let strongSelf = self else {
-                    return
-                }
-                strongSelf.updateLayers()
-                strongSelf.fadeInImage(image, forImageView: strongSelf.backgroundImageView)
-            })
+                    guard let strongSelf = self else {
+                        return
+                    }
+                    strongSelf.updateLayers()
+                    strongSelf.fadeInImage(image, forImageView: strongSelf.backgroundImageView)
+                })
         }
     }
 
