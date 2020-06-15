@@ -8,6 +8,7 @@
 
 import UIKit
 import SnapKit
+import Combine
 
 protocol EateryViewDelegate: class {
     func eateryViewDidTapEatery(layoutType: EateryView.LayoutType)
@@ -33,6 +34,7 @@ final class EateryView: UIView {
     private var layoutType: LayoutType = .middle
     private weak var delegate: EateryViewDelegate?
     private var eatery: Eatable?
+    private var cancellable: AnyCancellable?
 
     convenience init(layoutType: LayoutType, delegate: EateryViewDelegate) {
         self.init(frame: .zero)
@@ -104,7 +106,8 @@ final class EateryView: UIView {
         isHidden = false
         self.eatery = eatery
         titleLabel.text = createDisplayText(eatery.name, priceRating: eatery.priceIndicator)
-
+        updateLayers()
+        
         switch eatery.type {
         case .yelp:
             guard let urlString = eatery.eatableImageUrl,
@@ -112,35 +115,27 @@ final class EateryView: UIView {
                 return
             }
 
-            URLSession.shared.dataTask(with: imageUrl) { [weak self] data, _, _ in
-                guard let strongSelf = self, let data = data else {
-                    return
-                }
+            cancellable = NetworkService.loadImage(url: imageUrl)
+                .sink(receiveValue: { [weak self] image in
+                    guard let strongSelf = self, let image = image else {
+                        return
+                    }
+                    strongSelf.updateLayers()
+                    strongSelf.fadeInImage(image, forImageView: strongSelf.backgroundImageView)
+                })
 
-                DispatchQueue.main.async {
-                   guard let image = UIImage(data: data) else {
-                       return
-                   }
-
-                   strongSelf.updateLayers()
-                   strongSelf.fadeInImage(image, forImageView: strongSelf.backgroundImageView)
-                   strongSelf.layoutIfNeeded()
-                }
-            }.resume()
         case .google:
             guard let id = eatery.eatableId else {
                 return
             }
-            NetworkService().loadPhoto(placeId: id, completion: { [weak self] result in
-                guard let strongSelf = self else {
-                    return
-                }
-
-                if case .success(let image) = result {
+            cancellable = NetworkService().loadGooglePhoto(placeId: id)
+                .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] image in
+                    guard let strongSelf = self else {
+                        return
+                    }
                     strongSelf.updateLayers()
                     strongSelf.fadeInImage(image, forImageView: strongSelf.backgroundImageView)
-                }
-            })
+                })
         }
     }
 

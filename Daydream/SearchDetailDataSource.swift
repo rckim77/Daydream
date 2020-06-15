@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Combine
 
 class SearchDetailDataSource: NSObject, UITableViewDataSource {
 
@@ -15,7 +16,7 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
     }
 
     var place: Place
-    var pointsOfInterest: [Place]?
+    var sights: [Place]?
     var eateries: [Eatable]?
     private var prevEateries: [Eatable]?
     private var eateriesIsEqualToPrevious: Bool {
@@ -41,73 +42,57 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
         return eateriesIsEqualToPrevious
     }
     weak var viewController: SearchDetailViewController?
-    var loadingState: LoadingState = .uninitiated
+    var sightsLoadingState: LoadingState = .uninitiated
+    var eateriesLoadingState: LoadingState = .uninitiated
 
     private let networkService = NetworkService()
     let mapCardCellHeight: CGFloat = 186
-    let mapCardCellIndexPath = IndexPath(row: 0, section: 0)
     var sightsCardCellHeight: CGFloat {
-        return loadingState == .error ? SightsCardCell.errorHeight: SightsCardCell.defaultHeight
+        return sightsLoadingState == .error ? SightsCardCell.errorHeight: SightsCardCell.defaultHeight
     }
     var eateriesCardCellHeight: CGFloat {
-        return loadingState == .error ? EateriesCardCell.errorHeight: EateriesCardCell.defaultHeight
+        return eateriesLoadingState == .error ? EateriesCardCell.errorHeight: EateriesCardCell.defaultHeight
     }
-    let sightsCardCellIndexPath = IndexPath(row: 1, section: 0)
-    let eateriesCardCellIndexPath = IndexPath(row: 2, section: 0)
+    static let mapIndexPath = IndexPath(row: 0, section: 0)
+    static let sightsIndexPath = IndexPath(row: 1, section: 0)
+    static let eateriesIndexPath = IndexPath(row: 2, section: 0)
 
     init(place: Place) {
         self.place = place
     }
 
-    func loadPhoto(success: @escaping(_ image: UIImage) -> Void, failure: @escaping(_ error: Error?) -> Void) {
-        networkService.loadPhoto(placeId: place.placeId, completion: { result in
-            switch result {
-            case .success(let image):
-                success(image)
-            case .failure(let error):
-                failure(error)
-            }
-        })
+    func loadPhoto() -> Future<UIImage, Error> {
+        return networkService.loadGooglePhoto(placeId: place.placeId)
     }
 
-    func loadSightsAndEateries(success: @escaping(_ indexPaths: [IndexPath]) -> Void, failure: @escaping(_ error: Error?) -> Void) {
-        networkService.loadSightsAndEateries(place: place, completion: { [weak self] result in
-            guard let strongSelf = self else {
-                failure(nil)
+    func loadSights(url: URL) -> AnyPublisher<Void, Error> {
+        return networkService.loadPlaces(url: url)
+            .mapError { [weak self] error -> Error in
+                self?.sightsLoadingState = .error
+                return error
+            }
+            .map { [weak self] places -> Void in
+                self?.sights = places
+                self?.sightsLoadingState = .results
                 return
             }
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
+    }
 
-            switch result {
-            case .success(let (sights, eateries)):
-                strongSelf.pointsOfInterest = sights
-                strongSelf.loadingState = .results
-
-                if !eateries.isEmpty {
-                    strongSelf.prevEateries = strongSelf.eateries
-                    strongSelf.eateries = eateries
-                    success([strongSelf.sightsCardCellIndexPath, strongSelf.eateriesCardCellIndexPath])
-                } else {
-                    strongSelf.networkService.loadGoogleRestaurants(place: strongSelf.place, completion: { [weak self] result in
-                        guard let strongSelf = self else {
-                            failure(nil)
-                            return
-                        }
-                        switch result {
-                        case .success(let restaurants):
-                            strongSelf.prevEateries = strongSelf.eateries
-                            strongSelf.eateries = restaurants
-                            success([strongSelf.sightsCardCellIndexPath, strongSelf.eateriesCardCellIndexPath])
-                        case .failure(let error):
-                            strongSelf.loadingState = .error
-                            failure(error)
-                        }
-                    })
-                }
-            case .failure(let error):
-                strongSelf.loadingState = .error
-                failure(error)
+    func loadEateries(request: URLRequest, fallbackUrl: URL) -> AnyPublisher<Void, Error> {
+        return networkService.loadEateries(place: place, urlRequest: request, fallbackUrl: fallbackUrl)
+            .mapError { [weak self] error -> Error in
+                self?.eateriesLoadingState = .error
+                return error
             }
-        })
+            .map { [weak self] eateries -> Void in
+                self?.eateries = eateries
+                self?.eateriesLoadingState = .results
+                return
+            }
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
     }
 
     // MARK: - UITableViewDataSource methods
@@ -122,7 +107,7 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
     // swiftlint:disable cyclomatic_complexity
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath {
-        case mapCardCellIndexPath:
+        case SearchDetailDataSource.mapIndexPath:
             let cell = tableView.dequeueReusableCell(withIdentifier: "mapCardCell", for: indexPath)
 
             guard let mapCardCell = cell as? MapCardCell else {
@@ -132,18 +117,18 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
             mapCardCell.place = place
 
             return mapCardCell
-        case sightsCardCellIndexPath:
+        case SearchDetailDataSource.sightsIndexPath:
             guard let sightsCardCell = tableView.dequeueReusableCell(withIdentifier: "sightsCardCell", for: indexPath) as? SightsCardCell else {
                 return UITableViewCell()
             }
 
             sightsCardCell.delegate = viewController
 
-            switch loadingState {
+            switch sightsLoadingState {
             case .loading:
                 sightsCardCell.configureLoading()
             case .results:
-                sightsCardCell.pointsOfInterest = pointsOfInterest
+                sightsCardCell.sights = sights
             case .error:
                 sightsCardCell.configureError()
             case .uninitiated:
@@ -151,23 +136,22 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
             }
 
             return sightsCardCell
-        case eateriesCardCellIndexPath:
+        case SearchDetailDataSource.eateriesIndexPath:
             guard let eateriesCardCell = tableView.dequeueReusableCell(withIdentifier: "eateriesCardCell", for: indexPath) as? EateriesCardCell else {
                 return UITableViewCell()
             }
 
             eateriesCardCell.delegate = viewController
 
-            if loadingState == .loading {
+            switch eateriesLoadingState {
+            case .loading:
                 eateriesCardCell.configureLoading()
-            } else if loadingState == .error {
+            case .results:
+                eateriesCardCell.eateries = eateries
+            case .error:
                 eateriesCardCell.configureError()
-            } else if eateriesIsEqualToPrevious {
-                // this is for when the user is simply scrolling and hasn't reloaded
+            case .uninitiated:
                 return eateriesCardCell
-            } else if let eateries = eateries, eateries.count > 2, !eateriesIsEqualToPrevious {
-                eateriesCardCell.configure(eateries)
-                prevEateries = eateries
             }
 
             return eateriesCardCell

@@ -10,6 +10,7 @@ import UIKit
 import GooglePlaces
 import GoogleMaps
 import SnapKit
+import Combine
 
 final class SearchDetailViewController: UIViewController {
 
@@ -24,6 +25,13 @@ final class SearchDetailViewController: UIViewController {
         return visualEffectView
     }()
     private let networkService = NetworkService()
+
+    // MARK: - Cancellable objects
+
+    private var sightsCancellable: AnyCancellable?
+    private var eateriesCancellable: AnyCancellable?
+    private var loadPhotoCancellable: AnyCancellable?
+    private var loadPlaceByNameCancellable: AnyCancellable?
 
     // MARK: - Constants
 
@@ -85,7 +93,8 @@ final class SearchDetailViewController: UIViewController {
         placeImageView.contentMode = .scaleAspectFill
         placeImageView.addSubview(visualEffectView)
 
-        dataSource?.loadingState = .loading
+        dataSource?.sightsLoadingState = .loading
+        dataSource?.eateriesLoadingState = .loading
         placeCardsTableView.reloadData()
         loadDataSource(reloadMapCard: false, fetchBackground: false, completion: {})
     }
@@ -143,6 +152,8 @@ final class SearchDetailViewController: UIViewController {
         }
     }
 
+    // MARK: - Reload methods
+
     private func loadDataSource(reloadMapCard: Bool = false, fetchBackground: Bool = true, completion: @escaping(() -> Void)) {
         guard let dataSource = dataSource else {
             return
@@ -152,51 +163,71 @@ final class SearchDetailViewController: UIViewController {
         floatingTitleLabel.text = dataSource.place.name
 
         if fetchBackground {
-            dataSource.loadPhoto(success: { [weak self] image in
-                guard let strongSelf = self else {
-                    return
-                }
-
-                DispatchQueue.main.async {
-                    strongSelf.placeImageView.subviews.forEach { $0.removeFromSuperview() }
-                    strongSelf.placeImageView.image = image
-                    strongSelf.placeImageView.contentMode = .scaleAspectFill
-                    strongSelf.placeImageView.addSubview(strongSelf.visualEffectView)
-                }
-            }, failure: { [weak self] error in
-                guard let strongSelf = self else {
-                    return
-                }
-                strongSelf.logErrorEvent(error)
-            })
+            fetchBackgroundPhoto()
         }
 
-        dataSource.loadSightsAndEateries(success: { [weak self] indexPaths in
-            completion()
-            guard let strongSelf = self else {
-                return
-            }
-            DispatchQueue.main.async {
-                strongSelf.placeCardsTableView.reloadRows(at: indexPaths, with: .fade)
-            }
-        }, failure: { [weak self] error in
-            completion()
-            guard let strongSelf = self else {
-                return
-            }
-            DispatchQueue.main.async {
-                if let sightsIndexPath = strongSelf.dataSource?.sightsCardCellIndexPath,
-                    let eateriesIndexPath = strongSelf.dataSource?.eateriesCardCellIndexPath {
-                    strongSelf.placeCardsTableView.reloadRows(at: [sightsIndexPath, eateriesIndexPath], with: .fade)
-                }
-            }
-            strongSelf.logErrorEvent(error)
-        })
+        if let sightsUrl = GooglePlaceTextSearchRoute(name: dataSource.place.name,
+                                                         location: dataSource.place.coordinate,
+                                                         queryType: .touristSpots)?.url {
+            sightsCancellable = dataSource.loadSights(url: sightsUrl)
+                .sink(receiveCompletion: { [weak self] receiveCompletion in
+                    if case let Subscribers.Completion.failure(error) = receiveCompletion {
+                        self?.logErrorEvent(error)
+                    }
+                    self?.placeCardsTableView.reloadRows(at: [SearchDetailDataSource.sightsIndexPath], with: .fade)
+                    completion()
+                    }, receiveValue: { [weak self] _ in
+                        self?.placeCardsTableView.reloadRows(at: [SearchDetailDataSource.sightsIndexPath], with: .fade)
+                })
+        }
+
+        if let fallbackEateriesUrl = GooglePlaceTextSearchRoute(name: dataSource.place.name,
+                                                                location: dataSource.place.coordinate,
+                                                                queryType: .restaurants)?.url,
+            let eateriesRequest = YelpBusinessesRoute(place: dataSource.place)?.urlRequest {
+            eateriesCancellable = dataSource.loadEateries(request: eateriesRequest, fallbackUrl: fallbackEateriesUrl)
+                .sink(receiveCompletion: { [weak self] receiveCompletion in
+                    if case let Subscribers.Completion.failure(error) = receiveCompletion {
+                        self?.logErrorEvent(error)
+                    }
+                    self?.placeCardsTableView.reloadRows(at: [SearchDetailDataSource.eateriesIndexPath], with: .fade)
+                    completion()
+                    }, receiveValue: { [weak self] _ in
+                        self?.placeCardsTableView.reloadRows(at: [SearchDetailDataSource.eateriesIndexPath], with: .fade)
+                })
+        }
 
         if reloadMapCard {
-            placeCardsTableView.reloadRows(at: [dataSource.mapCardCellIndexPath], with: .fade)
+            placeCardsTableView.reloadRows(at: [SearchDetailDataSource.mapIndexPath], with: .fade)
         }
     }
+
+    private func fetchBackgroundPhoto() {
+        guard let dataSource = dataSource else {
+            return
+        }
+
+        loadPhotoCancellable = dataSource.loadPhoto()
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { [weak self] receiveCompletion in
+                guard let strongSelf = self else {
+                    return
+                }
+                if case let Subscribers.Completion.failure(error) = receiveCompletion {
+                    strongSelf.logErrorEvent(error)
+                }
+            }, receiveValue: { [weak self] image in
+                guard let strongSelf = self else {
+                    return
+                }
+                strongSelf.placeImageView.subviews.forEach { $0.removeFromSuperview() }
+                strongSelf.placeImageView.image = image
+                strongSelf.placeImageView.contentMode = .scaleAspectFill
+                strongSelf.placeImageView.addSubview(strongSelf.visualEffectView)
+            })
+    }
+
+    // MARK: - Configuration methods
 
     private func configureTableView() {
         placeCardsTableView.dataSource = dataSource
@@ -232,30 +263,29 @@ final class SearchDetailViewController: UIViewController {
     @objc
     func randomCityButtonTapped() {
         logEvent(contentType: "random button tapped", title)
-        guard let randomCity = getRandomCity() else {
+        guard let randomCity = getRandomCity(),
+            let url = GooglePlaceTextSearchRoute(name: randomCity, queryType: .placeByName)?.url else {
             return
         }
+
         let loadingVC = LoadingViewController()
         add(loadingVC)
-        dataSource?.loadingState = .loading
+        dataSource?.sightsLoadingState = .loading
+        dataSource?.eateriesLoadingState = .loading
         placeCardsTableView.reloadData()
 
-        networkService.getPlaceId(placeName: randomCity, completion: { [weak self] result in
-            loadingVC.remove()
-            guard let strongSelf = self, let dataSource = strongSelf.dataSource else {
-                return
-            }
-
-            switch result {
-            case .success(let place):
-                dataSource.place = place
-                strongSelf.loadDataSource(reloadMapCard: true, completion: {
+        loadPlaceByNameCancellable = networkService.loadPlace(url: url)
+            .sink(receiveCompletion: { [weak self] completion in
+                if case let Subscribers.Completion.failure(error) = completion {
+                    loadingVC.remove()
+                    self?.logErrorEvent(error)
+                }
+            }, receiveValue: { [weak self] place in
+                self?.dataSource?.place = place
+                self?.loadDataSource(reloadMapCard: true, completion: {
                     loadingVC.remove()
                 })
-            case .failure(let error):
-                strongSelf.logErrorEvent(error)
-            }
-        })
+            })
     }
 }
 

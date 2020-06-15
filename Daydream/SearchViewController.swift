@@ -9,6 +9,7 @@
 import UIKit
 import GooglePlaces
 import SnapKit
+import Combine
 
 final class SearchViewController: UIViewController {
 
@@ -22,6 +23,10 @@ final class SearchViewController: UIViewController {
         return  (view.bounds.height / 2) - (searchBarViewHeight / 2) - 50
     }
     private let networkService = NetworkService()
+    static let toSearchDetailVCSegue = "toSearchDetailVCSegue"
+    private var dataPreloaded: Bool {
+        placeData != nil && placeBackgroundImage != nil
+    }
 
     private lazy var titleLabel: CardLabel = {
         let label = CardLabel(textStyle: .largeTitle, text: "Where do you want to go?")
@@ -52,6 +57,12 @@ final class SearchViewController: UIViewController {
         return button
     }()
 
+    // MARK: - Cancellables
+
+    private var placeCancellable: AnyCancellable?
+
+    // MARK: - View lifecycle methods
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -60,6 +71,7 @@ final class SearchViewController: UIViewController {
         addSearchController()
         addProgrammaticComponents()
         fadeInTitleAndButton()
+        preloadRandomPlace()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -136,39 +148,37 @@ final class SearchViewController: UIViewController {
         titleLabel.alpha = 1
     }
 
-    // MARK: - Button selector method
+    // MARK: - Button selector methods
 
     @objc
     func randomButtonTapped() {
         logEvent(contentType: "random button tapped", title)
-        guard let randomCity = getRandomCity() else {
+        if dataPreloaded {
+            performSegue(withIdentifier: SearchViewController.toSearchDetailVCSegue, sender: nil)
+            return
+        }
+
+        guard let randomCity = getRandomCity(),
+            let url = GooglePlaceTextSearchRoute(name: randomCity, queryType: .placeByName)?.url else {
             return
         }
         let loadingVC = LoadingViewController()
         add(loadingVC)
 
-        networkService.getPlaceId(placeName: randomCity, completion: { [weak self] result in
-            loadingVC.remove()
-            guard let strongSelf = self else {
-                return
+        placeCancellable = networkService.loadPlace(url: url)
+            .flatMap { [weak self] place -> Future<UIImage, Error> in
+                self?.placeData = place
+                return NetworkService().loadGooglePhoto(placeId: place.placeId)
             }
-
-            switch result {
-            case .success(let place):
-                strongSelf.placeData = place
-                strongSelf.networkService.loadPhoto(placeId: place.placeId, completion: { [weak self] result in
-                    guard let strongSelf = self else {
-                        return
-                    }
-                    if case .success(let image) = result {
-                        strongSelf.placeBackgroundImage = image
-                    }
-                    strongSelf.performSegue(withIdentifier: "toSearchDetailVCSegue", sender: nil)
-                })
-            case .failure(let error):
-                strongSelf.logErrorEvent(error)
-            }
-        })
+            .sink(receiveCompletion: { [weak self] completion in
+                loadingVC.remove()
+                if case let Subscribers.Completion.failure(error) = completion {
+                    self?.logErrorEvent(error)
+                }
+            }, receiveValue: { [weak self] image in
+                self?.placeBackgroundImage = image
+                self?.performSegue(withIdentifier: SearchViewController.toSearchDetailVCSegue, sender: nil)
+            })
     }
 
     @objc
@@ -198,6 +208,26 @@ final class SearchViewController: UIViewController {
 
         destinationVC.dataSource = SearchDetailDataSource(place: place)
         destinationVC.backgroundImage = backgroundImage
+        placeData = nil
+        placeBackgroundImage = nil
+    }
+
+    // MARK: - Networking
+
+    private func preloadRandomPlace() {
+        guard let randomCity = getRandomCity(),
+            let url = GooglePlaceTextSearchRoute(name: randomCity, queryType: .placeByName)?.url else {
+            return
+        }
+
+        placeCancellable = networkService.loadPlace(url: url)
+            .flatMap { [weak self] place -> Future<UIImage, Error> in
+                self?.placeData = place
+                return NetworkService().loadGooglePhoto(placeId: place.placeId)
+            }
+            .sink(receiveCompletion: {_ in }, receiveValue: { [weak self] image in
+                self?.placeBackgroundImage = image
+            })
     }
 }
 
@@ -219,18 +249,13 @@ extension SearchViewController: GMSAutocompleteResultsViewControllerDelegate {
             self.resetSearchUI()
             let loadingVC = LoadingViewController()
             self.add(loadingVC)
-            self.networkService.loadPhoto(placeId: placeId, completion: { [weak self] result in
-                loadingVC.remove()
-                guard let strongSelf = self else {
-                    return
-                }
-
-                if case .success(let image) = result {
-                    strongSelf.placeBackgroundImage = image
-                }
-
-                strongSelf.performSegue(withIdentifier: "toSearchDetailVCSegue", sender: nil)
-            })
+            self.placeCancellable = self.networkService.loadGooglePhoto(placeId: placeId)
+                .sink(receiveCompletion: { _ in
+                    loadingVC.remove()
+                }, receiveValue: { [weak self] image in
+                    self?.placeBackgroundImage = image
+                    self?.performSegue(withIdentifier: "toSearchDetailVCSegue", sender: nil)
+                })
         })
     }
 

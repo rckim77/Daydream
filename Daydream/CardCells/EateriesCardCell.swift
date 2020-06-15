@@ -61,7 +61,20 @@ class EateriesCardCell: UITableViewCell {
     }()
 
     weak var delegate: EateriesCardCellDelegate?
-    private var eateries: [Eatable]?
+    var eateries: [Eatable]? {
+        didSet {
+            if let eateries = eateries, eateries.count >= 3 {
+                isHidden = false
+                // display content only if we've made another API call, otherwise do nothing
+                // POSTLAUNCH: - Update comparison with placeId
+                if oldValue?.count == 0 || eateries[0].name != oldValue?[0].name {
+                    configure(eateries)
+                }
+            } else { // before response from API or error
+                isHidden = true
+            }
+        }
+    }
 
     override func awakeFromNib() {
         super.awakeFromNib()

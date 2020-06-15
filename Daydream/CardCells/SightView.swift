@@ -8,6 +8,7 @@
 
 import UIKit
 import SnapKit
+import Combine
 
 protocol SightViewDelegate: class {
     func sightViewDidTap(layoutType: SightView.LayoutType)
@@ -43,6 +44,7 @@ final class SightView: UIView {
     private var layoutType: LayoutType = .middle
     private weak var delegate: SightViewDelegate?
     private var sight: Place?
+    private var cancellable: AnyCancellable?
 
     convenience init(layoutType: LayoutType, delegate: SightViewDelegate) {
         self.init(frame: .zero)
@@ -126,17 +128,15 @@ final class SightView: UIView {
         businessStatusButton.isHidden = businessStatus == .operational
 
         updateLayers()
-        NetworkService().loadPhoto(placeId: sight.placeId, completion: { [weak self] result in
-            guard let strongSelf = self else {
-                return
-            }
-
-            if case .success(let image) = result {
+        cancellable = NetworkService().loadGooglePhoto(placeId: sight.placeId)
+            .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] image in
+                guard let strongSelf = self else {
+                    return
+                }
                 strongSelf.updateLayers()
                 strongSelf.fadeInImage(image, forImageView: strongSelf.backgroundImageView)
                 strongSelf.layoutIfNeeded()
-            }
-        })
+            })
     }
 
     required init?(coder: NSCoder) {
