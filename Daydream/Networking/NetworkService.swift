@@ -8,7 +8,6 @@
 
 import Alamofire
 import GooglePlaces
-import SwiftyJSON
 import Combine
 
 typealias SightsAndEateries = ([Place], [Eatery])
@@ -17,7 +16,7 @@ typealias SightsAndEateries = ([Place], [Eatery])
 class NetworkService {
 
     private let customDecoder = JSONCustomDecoder()
-    
+
     /// Can be used to return one or more Google Place objects (e.g., sights, fallback restaurants) filtered by the parameters
     /// set in the input url. Must pass in a URL created from a GooglePlaceTextSearchRoute.
     func loadPlaces(url: URL) -> AnyPublisher<[Place], Error> {
@@ -126,31 +125,6 @@ class NetworkService {
             }
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
-    }
-
-    /// Gets city summary text from Wikivoyage (currently unused)
-    func getSummaryFor(_ city: String, completion: @escaping(Result<String, Error>) -> Void) {
-        let cityWords = city.split(separator: " ")
-        var cityParam = cityWords[0]
-        for i in 1..<cityWords.count {
-            cityParam += "+" + cityWords[i]
-        }
-
-        let url = "https://en.wikivoyage.org/w/api.php?action=query&prop=extracts&explaintext&format=json&titles=\(cityParam)"
-
-        AF.request(url).validate().responseJSON { response in
-            switch response.result {
-            case .success(let value):
-                let json = JSON(value)
-                guard let query = json["query"]["pages"].dictionary, let pageIdKey = query.keys.first,
-                    let extract = query[pageIdKey]?["extract"].string else {
-                    return
-                }
-                completion(.success(extract))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
     }
 
     /// Gets articles using the New York Times Article API (currently unused)
