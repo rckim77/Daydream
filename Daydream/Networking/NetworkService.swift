@@ -16,12 +16,8 @@ typealias SightsAndEateries = ([Place], [Eatery])
 // swiftlint:disable type_body_length
 class NetworkService {
 
-    private lazy var customDecoder: JSONDecoder = {
-        let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
-        return decoder
-    }()
-
+    private let customDecoder = JSONCustomDecoder()
+    
     /// Can be used to return one or more Google Place objects (e.g., sights, fallback restaurants) filtered by the parameters
     /// set in the input url. Must pass in a URL created from a GooglePlaceTextSearchRoute.
     func loadPlaces(url: URL) -> AnyPublisher<[Place], Error> {

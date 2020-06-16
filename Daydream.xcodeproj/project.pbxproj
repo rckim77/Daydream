@@ -17,6 +17,7 @@
 		94380ACD203BAE1D00684863 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 94380ACB203BAE1D00684863 /* Main.storyboard */; };
 		94380ACF203BAE1D00684863 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 94380ACE203BAE1D00684863 /* Assets.xcassets */; };
 		94380AD2203BAE1D00684863 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 94380AD0203BAE1D00684863 /* LaunchScreen.storyboard */; };
+		94600FBA24987B8300E605FD /* JSONCustomDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94600FB924987B8300E605FD /* JSONCustomDecoder.swift */; };
 		94673BAC225075AA00EC04FD /* DesignableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94673BAB225075AA00EC04FD /* DesignableView.swift */; };
 		947EC6522043F28F004A911D /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 947EC6512043F28F004A911D /* Extensions.swift */; };
 		947EC656204667EB004A911D /* MapCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 947EC655204667EB004A911D /* MapCardCell.swift */; };
@@ -82,6 +83,7 @@
 		94380ACE203BAE1D00684863 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		94380AD1203BAE1D00684863 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		94380AD3203BAE1D00684863 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		94600FB924987B8300E605FD /* JSONCustomDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONCustomDecoder.swift; sourceTree = "<group>"; };
 		94673BAB225075AA00EC04FD /* DesignableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignableView.swift; sourceTree = "<group>"; };
 		947EC6512043F28F004A911D /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		947EC655204667EB004A911D /* MapCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCardCell.swift; sourceTree = "<group>"; };
@@ -205,6 +207,7 @@
 				94B7DB5C205EEBBB0040D61C /* NetworkService.swift */,
 				94A9CCCD24904636008551B6 /* Routes.swift */,
 				94A9CCBD2489C366008551B6 /* Agent.swift */,
+				94600FB924987B8300E605FD /* JSONCustomDecoder.swift */,
 				94A9CCBF2489ED2D008551B6 /* NetworkError.swift */,
 			);
 			path = Networking;
@@ -513,6 +516,7 @@
 				9481EC5A204B358C00863A5A /* SightsCardCell.swift in Sources */,
 				94380AC8203BAE1D00684863 /* AppDelegate.swift in Sources */,
 				947EC656204667EB004A911D /* MapCardCell.swift in Sources */,
+				94600FBA24987B8300E605FD /* JSONCustomDecoder.swift in Sources */,
 				9434BA4C247998D4004294F0 /* MapReviewCard.swift in Sources */,
 				94E108712484AF5A0091D043 /* CellLoadingView.swift in Sources */,
 				94AE9B852094DAF500450399 /* LoadingViewController.swift in Sources */,
