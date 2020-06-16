@@ -1,5 +1,4 @@
 PODS:
-  - Alamofire (5.2.1)
   - Firebase/Analytics (6.26.0):
     - Firebase/Core
   - Firebase/Core (6.26.0):
@@ -125,7 +124,6 @@ PODS:
   - SwiftLint (0.39.2)
 
 DEPENDENCIES:
-  - Alamofire (~> 5.2)
   - Firebase/Analytics
   - Firebase/Core
   - Firebase/Crashlytics
@@ -138,7 +136,6 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
-    - Alamofire
     - Firebase
     - FirebaseABTesting
     - FirebaseAnalytics
@@ -166,7 +163,6 @@ SPEC REPOS:
     - SwiftLint
 
 SPEC CHECKSUMS:
-  Alamofire: e911732990610fe89af59ac0077f923d72dc3dfd
   Firebase: 7cf5f9c67f03cb3b606d1d6535286e1080e57eb6
   FirebaseABTesting: 821a3a3e4a145987e80fee3657c4de1cb9adf693
   FirebaseAnalytics: 96634d356482d4f3af8fe459a0ebf19a99c71b75
@@ -193,6 +189,6 @@ SPEC CHECKSUMS:
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   SwiftLint: 22ccbbe3b8008684be5955693bab135e0ed6a447
 
-PODFILE CHECKSUM: 9ba45bdc8d944f583664e0bb2b2dddfb912f86ca
+PODFILE CHECKSUM: 9de28eefdc25b4dcf97a5e8a633097d03c55be90
 
 COCOAPODS: 1.8.4
