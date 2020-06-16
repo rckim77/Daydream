@@ -10,6 +10,7 @@ import UIKit
 import GoogleMaps
 import GooglePlaces
 import SnapKit
+import Combine
 
 // swiftlint:disable type_body_length
 final class MapViewController: UIViewController {
@@ -31,6 +32,7 @@ final class MapViewController: UIViewController {
     }
 
     private let networkService = NetworkService()
+    private var loadPlaceCancellable: AnyCancellable?
 
     // contains close and dark mode buttons (and creates frame for gradient)
     private lazy var containerView: UIView = {
@@ -204,34 +206,24 @@ final class MapViewController: UIViewController {
 
         dynamicMarker.tracksInfoWindowChanges = true
 
-        networkService.getPlace(id: placeId, completion: { [weak self] result in
-            guard let strongSelf = self else {
-                return
-            }
-            switch result {
-            case .success(let place):
-                dynamicMarker.snippet = strongSelf.createSnippet(for: place)
-                dynamicMarker.tracksInfoWindowChanges = false
-                strongSelf.place = place
-                DispatchQueue.main.async {
-                    strongSelf.displayReviews(place.reviews, index: 0)
-                }
-            case .failure(let error):
-                strongSelf.logErrorEvent(error)
-            }
-        })
-    }
-
-    // MARK: - Marker-specific methods
-
-    private func createSnippet(for place: Place) -> String {
-        var snippet = place.formattedAddress
-
-        if let phoneNumber = place.internationalPhoneNumber {
-            snippet += "\n\(phoneNumber)"
+        guard let url = GooglePlaceDetailsRoute(placeId: placeId)?.url else {
+            return
         }
 
-        return snippet
+        loadPlaceCancellable = networkService.loadPlaceWithReviews(placeDetailsUrl: url)
+            .sink(receiveCompletion: { [weak self] completion in
+                if case let Subscribers.Completion.failure(error) = completion {
+                    self?.logErrorEvent(error)
+                }
+            }, receiveValue: { [weak self] place in
+                guard let strongSelf = self else {
+                    return
+                }
+                dynamicMarker.snippet = place.formattedAddress
+                dynamicMarker.tracksInfoWindowChanges = false
+                strongSelf.place = place
+                strongSelf.displayReviews(place.reviews, index: 0)
+            })
     }
 
     // MARK: - Review-specific methods

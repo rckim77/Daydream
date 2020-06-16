@@ -23,7 +23,7 @@ class NetworkService {
     }()
 
     /// Can be used to return one or more Google Place objects (e.g., sights, fallback restaurants) filtered by the parameters
-    /// set in the input url. If you only want it to return one, just grab the first place object in the array.
+    /// set in the input url. Must pass in a URL created from a GooglePlaceTextSearchRoute.
     func loadPlaces(url: URL) -> AnyPublisher<[Place], Error> {
         return URLSession.shared.dataTaskPublisher(for: url)
             .map { $0.data }
@@ -102,6 +102,7 @@ class NetworkService {
         }
     }
 
+    /// Expects a GooglePlaceDetailsRoute url and returns a url to a Google maps view.
     func getMapUrlForPlace(url: URL) -> AnyPublisher<URL, Error> {
         return URLSession.shared.dataTaskPublisher(for: url)
             .map { $0.data }
@@ -116,25 +117,19 @@ class NetworkService {
             .eraseToAnyPublisher()
     }
 
-    /// Returns a Place object from a place id.
-    func getPlace(id: String, completion: @escaping(Result<Place, Error>) -> Void) {
-        guard let url = GooglePlaceDetailsRoute(placeId: id)?.url else {
-            completion(.failure(NetworkError.routeError))
-            return
-        }
-
-        AF.request(url).responseData { response in
-            switch response.result {
-            case .success(let data):
-                guard let place = try? self.customDecoder.decode(PlaceCollection.self, from: data) else {
-                    completion(.failure(NetworkError.jsonDecoding))
-                    return
+    /// Returns a Place object with at least one review.
+    func loadPlaceWithReviews(placeDetailsUrl: URL) -> AnyPublisher<Place, Error> {
+        return URLSession.shared.dataTaskPublisher(for: placeDetailsUrl)
+            .map { $0.data }
+            .decode(type: PlaceCollection.self, decoder: customDecoder)
+            .tryMap { collection -> Place in
+                guard !collection.result.reviews.isEmpty else {
+                    throw NetworkError.insufficientResults
                 }
-                completion(.success(place.result))
-            case .failure(let error):
-                completion(.failure(error))
+                return collection.result
             }
-        }
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
     }
 
     /// Gets city summary text from Wikivoyage (currently unused)
