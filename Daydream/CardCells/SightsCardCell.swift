@@ -23,7 +23,7 @@ class SightsCardCell: UITableViewCell {
     static let errorHeight: CGFloat = 185
     private let errorSectionHeight: CGFloat = 100
 
-    private lazy var titleLabel = CardLabel(textStyle: .title1, text: "Top Sights")
+    private let titleLabel = CardLabel(textStyle: .title1, text: "Top Sights")
     private lazy var sightsSectionView: UIView = {
         let view = UIView()
         view.addRoundedCorners(radius: 8)
