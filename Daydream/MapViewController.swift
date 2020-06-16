@@ -260,11 +260,11 @@ final class MapViewController: UIViewController {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 6) {
                         UIView.animate(withDuration: 0.7, animations: {
                             self.reviewCard.alpha = 0
-                        }, completion: { finished in
-                            if finished {
-                                self.currentReviewIndex = index
-                                self.loadReviewContent(reviews[index])
-                                self.startDisplayingReviews(reviews, index: index + 1)
+                        }, completion: { [weak self] finished in
+                            if let strongSelf = self, finished {
+                                strongSelf.currentReviewIndex = index
+                                strongSelf.loadReviewContent(reviews[index])
+                                strongSelf.startDisplayingReviews(reviews, index: index + 1)
                             }
                         })
                     }
@@ -273,8 +273,8 @@ final class MapViewController: UIViewController {
         } else {
             UIView.animate(withDuration: 0.8, animations: {
                 self.reviewCard.alpha = 0
-            }, completion: { _ in
-                self.reviewCard.isHidden = true
+            }, completion: { [weak self] _ in
+                self?.reviewCard.isHidden = true
             })
         }
     }
