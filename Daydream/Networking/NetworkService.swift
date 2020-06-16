@@ -6,7 +6,6 @@
 //  Copyright © 2018 Raymond Kim. All rights reserved.
 //
 
-import Alamofire
 import GooglePlaces
 import Combine
 
@@ -127,25 +126,12 @@ class NetworkService {
             .eraseToAnyPublisher()
     }
 
-    /// Gets articles using the New York Times Article API (currently unused)
-    func loadNewsFor(_ city: String, completion: @escaping(Result<[Article], Error>) -> Void) {
-        guard let keyParam = AppDelegate.getAPIKeys()?.nyTimesAPI else {
-            return
-        }
-        let url = "https://api.nytimes.com/svc/search/v2/articlesearch.json?q=\(city)&page=1&api-key=\(keyParam)"
-
-        AF.request(url).responseData { response in
-            switch response.result {
-            case .success(let data):
-                if let articleResponse = try? self.customDecoder.decode(ArticleResponse.self, from: data) {
-                    completion(.success(articleResponse.response.docs))
-                } else {
-                    completion(.failure(NetworkError.jsonDecoding))
-                }
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
+    func loadArticles(url: URL) -> AnyPublisher<[Article], Error> {
+        return URLSession.shared.dataTaskPublisher(for: url)
+            .map { $0.data }
+            .decode(type: ArticleResponse.self, decoder: customDecoder)
+            .map { $0.response.docs }
+            .eraseToAnyPublisher()
     }
 
     /// Note: Returns on the main queue and with errors erased.
