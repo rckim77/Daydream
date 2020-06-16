@@ -10,7 +10,6 @@ target 'Daydream' do
   pod 'GoogleMaps', '~> 3.9'
   pod 'SwiftLint', '~> 0.39'
   pod 'Alamofire', '~> 5.2'
-  pod 'SwiftyJSON', '~> 5.0.0'
   pod 'SVProgressHUD'
   pod 'Firebase/Core'
   pod 'Firebase/Crashlytics'
