@@ -15,5 +15,6 @@ enum NetworkError: Error {
     case malformedPhotoField
     case photoMetadataMissing
     case routeError
+    case noMapUrl
     case unknown // e.g., 3rd party function returns nil data and nil error
 }

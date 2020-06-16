@@ -32,6 +32,7 @@ final class SearchDetailViewController: UIViewController {
     private var eateriesCancellable: AnyCancellable?
     private var loadPhotoCancellable: AnyCancellable?
     private var loadPlaceByNameCancellable: AnyCancellable?
+    private var loadMapUrlCancellable: AnyCancellable?
 
     // MARK: - Constants
 
@@ -308,32 +309,23 @@ extension SearchDetailViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let dataSource = dataSource else {
+        guard let dataSource = dataSource, indexPath.row == 0 else {
             return
         }
 
-        if indexPath.row == 0 {
-            logEvent(contentType: "select map card cell", title)
+        logEvent(contentType: "select map card cell", title)
 
-            if let mapUrl = dataSource.place.mapUrl {
-                openUrl(mapUrl)
-            } else {
-                networkService.getPlace(id: dataSource.place.placeId, completion: { [weak self] result in
-                    guard let strongSelf = self else {
-                        return
+        if let mapUrl = dataSource.place.mapUrl {
+            openUrl(mapUrl)
+        } else if let googlePlacesUrl = GooglePlaceDetailsRoute(placeId: dataSource.place.placeId)?.url {
+            loadMapUrlCancellable = networkService.getMapUrlForPlace(url: googlePlacesUrl)
+                .sink(receiveCompletion: { [weak self] completion in
+                    if case let Subscribers.Completion.failure(error) = completion {
+                        self?.logErrorEvent(error)
                     }
-                    switch result {
-                    case .success(let place):
-                        if let mapUrl = place.mapUrl {
-                            strongSelf.openUrl(mapUrl)
-                        } else {
-                            return
-                        }
-                    case .failure(let error):
-                        strongSelf.logErrorEvent(error)
-                    }
+                }, receiveValue: { url in
+                    UIApplication.shared.open(url, options: [:])
                 })
-            }
         }
     }
 

@@ -102,33 +102,18 @@ class NetworkService {
         }
     }
 
-    /// Returns a Place object from a name.
-    func getPlaceId(placeName: String, completion: @escaping(Result<Place, Error>) -> Void) {
-        guard let url = GooglePlaceTextSearchRoute(name: placeName, queryType: .placeByName)?.url else {
-            completion(.failure(NetworkError.routeError))
-            return
-        }
-
-        AF.request(url).responseData { response in
-            switch response.result {
-            case .success(let data):
-                guard let result = try? self.customDecoder.decode(ResultsCollection.self, from: data),
-                    let placeId = result.results.first?.placeId else {
-                    completion(.failure(NetworkError.jsonDecoding))
-                    return
+    func getMapUrlForPlace(url: URL) -> AnyPublisher<URL, Error> {
+        return URLSession.shared.dataTaskPublisher(for: url)
+            .map { $0.data }
+            .decode(type: PlaceCollection.self, decoder: customDecoder)
+            .tryMap { collection -> URL in
+                guard let mapUrlString = collection.result.mapUrl, let url = URL(string: mapUrlString) else {
+                    throw NetworkError.noMapUrl
                 }
-                NetworkService().getPlace(id: placeId, completion: { result in
-                    switch result {
-                    case .success(let place):
-                        completion(.success(place))
-                    case .failure(let error):
-                        completion(.failure(error))
-                    }
-                })
-            case .failure(let error):
-                completion(.failure(error))
+                return url
             }
-        }
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
     }
 
     /// Returns a Place object from a place id.
