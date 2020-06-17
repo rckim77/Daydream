@@ -9,21 +9,6 @@
 import Foundation
 import CoreLocation
 
-struct GooglePlaceDetailsRoute {
-    let url: URL
-
-    init?(placeId: String) {
-        guard let keyParam = AppDelegate.getAPIKeys()?.googleAPI else {
-            return nil
-        }
-        let urlString = "https://maps.googleapis.com/maps/api/place/details/json?placeid=\(placeId)&key=\(keyParam)"
-        guard let url = URL(string: urlString) else {
-            return nil
-        }
-        self.url = url
-    }
-}
-
 struct GooglePlaceTextSearchRoute {
     enum QueryType {
         case touristSpots, restaurants, placeByName

@@ -95,5 +95,23 @@ extension API {
                 }
             }
         }
+
+        /// Returns a map url that opens a Google Maps view.
+        static func getMapUrl(placeId: String) -> AnyPublisher<URL, Error>? {
+            guard let url = PlaceDetailsRoute(placeId: placeId)?.url else {
+                return nil
+            }
+            return URLSession.shared.dataTaskPublisher(for: url)
+                .map { $0.data }
+                .decode(type: PlaceCollection.self, decoder: JSONCustomDecoder())
+                .tryMap { collection -> URL in
+                    guard let mapUrlString = collection.result.mapUrl, let url = URL(string: mapUrlString) else {
+                        throw NetworkError.noMapUrl
+                    }
+                    return url
+                }
+                .receive(on: DispatchQueue.main)
+                .eraseToAnyPublisher()
+        }
     }
 }

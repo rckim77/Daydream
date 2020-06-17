@@ -47,21 +47,6 @@ class NetworkService {
             .eraseToAnyPublisher()
     }
 
-    /// Expects a GooglePlaceDetailsRoute url and returns a url to a Google maps view.
-    func getMapUrlForPlace(url: URL) -> AnyPublisher<URL, Error> {
-        return URLSession.shared.dataTaskPublisher(for: url)
-            .map { $0.data }
-            .decode(type: PlaceCollection.self, decoder: customDecoder)
-            .tryMap { collection -> URL in
-                guard let mapUrlString = collection.result.mapUrl, let url = URL(string: mapUrlString) else {
-                    throw NetworkError.noMapUrl
-                }
-                return url
-            }
-            .receive(on: DispatchQueue.main)
-            .eraseToAnyPublisher()
-    }
-
     func loadArticles(url: URL) -> AnyPublisher<[Article], Error> {
         return URLSession.shared.dataTaskPublisher(for: url)
             .map { $0.data }

@@ -312,8 +312,8 @@ extension SearchDetailViewController: UITableViewDelegate {
 
         if let mapUrl = dataSource.place.mapUrl {
             openUrl(mapUrl)
-        } else if let googlePlacesUrl = GooglePlaceDetailsRoute(placeId: dataSource.place.placeId)?.url {
-            loadMapUrlCancellable = networkService.getMapUrlForPlace(url: googlePlacesUrl)
+        } else {
+            loadMapUrlCancellable = API.PlaceSearch.getMapUrl(placeId: dataSource.place.placeId)?
                 .sink(receiveCompletion: { [weak self] completion in
                     if case let Subscribers.Completion.failure(error) = completion {
                         self?.logErrorEvent(error)
