@@ -158,14 +158,13 @@ final class SearchViewController: UIViewController {
             return
         }
 
-        guard let randomCity = getRandomCity(),
-            let url = GooglePlaceTextSearchRoute(name: randomCity, queryType: .placeByName)?.url else {
+        guard let randomCity = getRandomCity() else {
             return
         }
         let loadingVC = LoadingViewController()
         add(loadingVC)
 
-        placeCancellable = networkService.loadPlace(url: url)
+        placeCancellable = API.PlaceSearch.loadPlace(name: randomCity, queryType: .placeByName)?
             .flatMap { [weak self] place -> Future<UIImage, Error> in
                 self?.placeData = place
                 return NetworkService().loadGooglePhoto(placeId: place.placeId)
@@ -215,12 +214,11 @@ final class SearchViewController: UIViewController {
     // MARK: - Networking
 
     private func preloadRandomPlace() {
-        guard let randomCity = getRandomCity(),
-            let url = GooglePlaceTextSearchRoute(name: randomCity, queryType: .placeByName)?.url else {
+        guard let randomCity = getRandomCity() else {
             return
         }
 
-        placeCancellable = networkService.loadPlace(url: url)
+        placeCancellable = API.PlaceSearch.loadPlace(name: randomCity, queryType: .placeByName)?
             .flatMap { [weak self] place -> Future<UIImage, Error> in
                 self?.placeData = place
                 return NetworkService().loadGooglePhoto(placeId: place.placeId)

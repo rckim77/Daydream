@@ -72,5 +72,25 @@ extension API {
                 .map { $0.results }
                 .eraseToAnyPublisher()
         }
+
+        /// Convenience method to return one Google place. Uses loadPlaces(name:location:queryType:) and ensures the first element is returned.
+        static func loadPlace(name: String,
+                              location: CLLocationCoordinate2D? = nil,
+                              queryType: TextSearch.QueryType,
+                              receiveOnMainQueue: Bool = true) -> AnyPublisher<Place, Error>? {
+            let publisher = PlaceSearch.loadPlaces(name: name, location: location, queryType: queryType)?
+                .tryMap { places -> Place in
+                    guard let firstPlace = places.first else {
+                        throw NetworkError.insufficientResults
+                    }
+                    return firstPlace
+                }
+
+            if receiveOnMainQueue {
+                return publisher?.receive(on: DispatchQueue.main).eraseToAnyPublisher()
+            } else {
+                return publisher?.eraseToAnyPublisher()
+            }
+        }
     }
 }

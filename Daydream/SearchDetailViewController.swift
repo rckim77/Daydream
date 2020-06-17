@@ -260,8 +260,7 @@ final class SearchDetailViewController: UIViewController {
     @objc
     func randomCityButtonTapped() {
         logEvent(contentType: "random button tapped", title)
-        guard let randomCity = getRandomCity(),
-            let url = GooglePlaceTextSearchRoute(name: randomCity, queryType: .placeByName)?.url else {
+        guard let randomCity = getRandomCity() else {
             return
         }
 
@@ -271,7 +270,7 @@ final class SearchDetailViewController: UIViewController {
         dataSource?.eateriesLoadingState = .loading
         placeCardsTableView.reloadData()
 
-        loadPlaceByNameCancellable = networkService.loadPlace(url: url)
+        loadPlaceByNameCancellable = API.PlaceSearch.loadPlace(name: randomCity, queryType: .placeByName)?
             .sink(receiveCompletion: { [weak self] completion in
                 if case let Subscribers.Completion.failure(error) = completion {
                     loadingVC.remove()
