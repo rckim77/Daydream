@@ -1,5 +1,5 @@
 //
-//  API+Place.swift
+//  API+PlaceSearch.swift
 //  Daydream
 //
 //  Created by Raymond Kim on 6/17/20.
