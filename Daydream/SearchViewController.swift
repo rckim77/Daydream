@@ -15,7 +15,6 @@ final class SearchViewController: UIViewController {
 
     private var resultsViewController: GMSAutocompleteResultsViewController?
     private var searchController: UISearchController?
-    private var searchBarView: UIView!
     private let searchBarViewHeight: CGFloat = 45.0
     private var placeData: Place?
     private var placeBackgroundImage: UIImage?
@@ -26,6 +25,11 @@ final class SearchViewController: UIViewController {
     private var dataPreloaded: Bool {
         placeData != nil && placeBackgroundImage != nil
     }
+
+    private lazy var searchBarContainerView: UIView = {
+        let view = UIView()
+        return view
+    }()
 
     private lazy var titleLabel: CardLabel = {
         let label = CardLabel(textStyle: .largeTitle, text: "Where do you want to go?")
@@ -65,10 +69,7 @@ final class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        resultsViewController = GMSAutocompleteResultsViewController()
-        resultsViewController?.delegate = self
-        addSearchController()
-        addProgrammaticComponents()
+        addViews()
         fadeInTitleAndButton()
         preloadRandomPlace()
     }
@@ -77,7 +78,7 @@ final class SearchViewController: UIViewController {
         super.viewWillAppear(animated)
 
         fadeInTitleAndButton()
-        searchBarView.frame.origin.y = defaultSearchBarYOffset
+        searchBarContainerView.frame.origin.y = defaultSearchBarYOffset
         searchController?.searchBar.text = ""
     }
 
@@ -92,33 +93,7 @@ final class SearchViewController: UIViewController {
             self.randomButton.alpha = 1
         }, completion: nil)
     }
-
-    private func addSearchController() {
-        searchController = UISearchController(searchResultsController: resultsViewController)
-        searchController?.searchResultsUpdater = resultsViewController
-        searchController?.setStyle()
-        searchController?.delegate = self
-
-        resultsViewController?.setAutocompleteFilter(.city)
-        resultsViewController?.setStyle()
-
-        let frame = CGRect(x: 0, y: defaultSearchBarYOffset, width: view.bounds.width, height: searchBarViewHeight)
-        searchBarView = UIView(frame: frame)
-        searchBarView.alpha = 0
-        searchBarView.addSubview((searchController?.searchBar)!)
-        view.addSubview(searchBarView)
-        searchController?.searchBar.sizeToFit()
-
-        // When UISearchController presents the results view, present it in
-        // this view controller, not one further up the chain.
-        definesPresentationContext = true
-
-        UIView.animate(withDuration: 0.8, delay: 0.3, options: .curveEaseInOut, animations: {
-            self.searchBarView.alpha = 1
-        }, completion: nil)
-    }
-
-    private func addProgrammaticComponents() {
+    private func addViews() {
         view.addSubview(titleLabel)
         view.addSubview(randomButton)
         view.addSubview(feedbackButton)
@@ -139,11 +114,45 @@ final class SearchViewController: UIViewController {
             make.bottom.equalToSuperview().inset(30)
             make.centerX.equalToSuperview()
         }
+
+        resultsViewController = GMSAutocompleteResultsViewController()
+        resultsViewController?.delegate = self
+        resultsViewController?.setAutocompleteFilter(.city)
+        resultsViewController?.setStyle()
+
+        searchController = UISearchController(searchResultsController: resultsViewController)
+        searchController?.searchResultsUpdater = resultsViewController
+        searchController?.setStyle()
+        searchController?.delegate = self
+
+        if let searchBar = searchController?.searchBar {
+            let frame = CGRect(x: 0, y: defaultSearchBarYOffset, width: view.bounds.width, height: searchBarViewHeight)
+            searchBarContainerView = UIView(frame: frame)
+            searchBarContainerView.alpha = 0
+            searchBarContainerView.addSubview(searchBar)
+            view.addSubview(searchBarContainerView)
+
+            searchBarContainerView.snp.makeConstraints { make in
+                make.centerY.equalToSuperview().offset(-60)
+                make.leading.trailing.equalToSuperview()
+                make.height.equalTo(searchBarViewHeight)
+            }
+
+            searchBar.sizeToFit()
+
+            // When UISearchController presents the results view, present it in
+            // this view controller, not one further up the chain.
+            definesPresentationContext = true
+
+            UIView.animate(withDuration: 0.8, delay: 0.3, options: .curveEaseInOut, animations: {
+                self.searchBarContainerView.alpha = 1
+            }, completion: nil)
+        }
     }
 
     private func resetSearchUI() {
         searchController?.searchBar.text = nil
-        searchBarView.frame = CGRect(x: 0, y: defaultSearchBarYOffset, width: view.bounds.width, height: searchBarViewHeight)
+        searchBarContainerView.frame = CGRect(x: 0, y: defaultSearchBarYOffset, width: view.bounds.width, height: searchBarViewHeight)
         titleLabel.alpha = 1
     }
 
@@ -267,7 +276,7 @@ extension SearchViewController: UISearchControllerDelegate {
 
     func willPresentSearchController(_ searchController: UISearchController) {
         UIView.animate(withDuration: 0.3, animations: {
-            self.searchBarView.frame.origin.y = 65.0
+            self.searchBarContainerView.frame.origin.y = 65.0
             self.titleLabel.alpha = 0
         })
     }
