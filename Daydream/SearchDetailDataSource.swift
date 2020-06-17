@@ -81,8 +81,8 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
             .eraseToAnyPublisher()
     }
 
-    func loadEateries(request: URLRequest, fallbackUrl: URL) -> AnyPublisher<Void, Error> {
-        return networkService.loadEateries(place: place, urlRequest: request, fallbackUrl: fallbackUrl)
+    func loadEateries() -> AnyPublisher<Void, Error>? {
+        return API.EaterySearch.loadEateries(place: place)?
             .mapError { [weak self] error -> Error in
                 self?.eateriesLoadingState = .error
                 return error

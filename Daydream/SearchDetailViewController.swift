@@ -178,21 +178,16 @@ final class SearchDetailViewController: UIViewController {
                     self?.placeCardsTableView.reloadRows(at: [SearchDetailDataSource.sightsIndexPath], with: .fade)
             })
 
-        if let fallbackEateriesUrl = GooglePlaceTextSearchRoute(name: dataSource.place.name,
-                                                                location: dataSource.place.coordinate,
-                                                                queryType: .restaurants)?.url,
-            let eateriesRequest = YelpBusinessesRoute(place: dataSource.place)?.urlRequest {
-            eateriesCancellable = dataSource.loadEateries(request: eateriesRequest, fallbackUrl: fallbackEateriesUrl)
-                .sink(receiveCompletion: { [weak self] receiveCompletion in
-                    if case let Subscribers.Completion.failure(error) = receiveCompletion {
-                        self?.logErrorEvent(error)
-                    }
+        eateriesCancellable = dataSource.loadEateries()?
+            .sink(receiveCompletion: { [weak self] receiveCompletion in
+                if case let Subscribers.Completion.failure(error) = receiveCompletion {
+                    self?.logErrorEvent(error)
+                }
+                self?.placeCardsTableView.reloadRows(at: [SearchDetailDataSource.eateriesIndexPath], with: .fade)
+                completion()
+                }, receiveValue: { [weak self] _ in
                     self?.placeCardsTableView.reloadRows(at: [SearchDetailDataSource.eateriesIndexPath], with: .fade)
-                    completion()
-                    }, receiveValue: { [weak self] _ in
-                        self?.placeCardsTableView.reloadRows(at: [SearchDetailDataSource.eateriesIndexPath], with: .fade)
-                })
-        }
+            })
 
         if reloadMapCard {
             placeCardsTableView.reloadRows(at: [SearchDetailDataSource.mapIndexPath], with: .fade)
