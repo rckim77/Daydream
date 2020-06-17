@@ -213,17 +213,41 @@
 			path = Daydream;
 			sourceTree = "<group>";
 		};
+		94600FD3249AAF8400E605FD /* PlaceSearch */ = {
+			isa = PBXGroup;
+			children = (
+				94600FC9249AA17900E605FD /* PlaceSearchRoutes.swift */,
+				94600FC7249A9B8000E605FD /* API+PlaceSearch.swift */,
+			);
+			path = PlaceSearch;
+			sourceTree = "<group>";
+		};
+		94600FD4249AAF9500E605FD /* EaterySearch */ = {
+			isa = PBXGroup;
+			children = (
+				94600FCD249AA8C400E605FD /* API+EaterySearch.swift */,
+				94600FCF249AAA6B00E605FD /* EaterySearchRoutes.swift */,
+			);
+			path = EaterySearch;
+			sourceTree = "<group>";
+		};
+		94600FD5249AAFA000E605FD /* ArticleSearch */ = {
+			isa = PBXGroup;
+			children = (
+				94600FD1249AACD400E605FD /* API+ArticleSearch.swift */,
+				94A9CCCD24904636008551B6 /* ArticleSearchRoutes.swift */,
+			);
+			path = ArticleSearch;
+			sourceTree = "<group>";
+		};
 		94A9CCBC2489C312008551B6 /* Networking */ = {
 			isa = PBXGroup;
 			children = (
 				94600FC5249A986600E605FD /* API.swift */,
-				94600FC7249A9B8000E605FD /* API+PlaceSearch.swift */,
-				94600FCD249AA8C400E605FD /* API+EaterySearch.swift */,
+				94600FD3249AAF8400E605FD /* PlaceSearch */,
+				94600FD4249AAF9500E605FD /* EaterySearch */,
+				94600FD5249AAFA000E605FD /* ArticleSearch */,
 				94600FCB249AA81D00E605FD /* API+UIImage.swift */,
-				94600FD1249AACD400E605FD /* API+ArticleSearch.swift */,
-				94600FC9249AA17900E605FD /* PlaceSearchRoutes.swift */,
-				94600FCF249AAA6B00E605FD /* EaterySearchRoutes.swift */,
-				94A9CCCD24904636008551B6 /* ArticleSearchRoutes.swift */,
 				94A9CCBD2489C366008551B6 /* Agent.swift */,
 				94600FB924987B8300E605FD /* JSONCustomDecoder.swift */,
 				94A9CCBF2489ED2D008551B6 /* NetworkError.swift */,
