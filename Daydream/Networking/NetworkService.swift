@@ -54,13 +54,4 @@ class NetworkService {
             .map { $0.response.docs }
             .eraseToAnyPublisher()
     }
-
-    /// Note: Returns on the main queue and with errors erased.
-    static func loadImage(url: URL) -> AnyPublisher<UIImage?, Never> {
-        return URLSession.shared.dataTaskPublisher(for: url)
-            .map { UIImage(data: $0.data) }
-            .replaceError(with: UIImage())
-            .receive(on: DispatchQueue.main)
-            .eraseToAnyPublisher()
-    }
 }

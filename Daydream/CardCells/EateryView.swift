@@ -116,7 +116,7 @@ final class EateryView: UIView {
                 return
             }
 
-            cancellable = NetworkService.loadImage(url: imageUrl)
+            cancellable = API.Image.loadImage(url: imageUrl)
                 .sink(receiveValue: { [weak self] image in
                     guard let strongSelf = self, let image = image else {
                         return
