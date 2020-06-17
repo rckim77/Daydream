@@ -183,8 +183,9 @@ final class SearchViewController: UIViewController {
     private func feedbackButtonTapped() {
         var message: String?
 
-        if let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
-            message = "The current app version is \(appVersion)"
+        if let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String,
+            let bundleVersion = Bundle.main.infoDictionary?["CFBundleVersion"] as? String {
+            message = "The current app version is \(appVersion) (\(bundleVersion))."
         }
 
         let alert = UIAlertController(title: "Got feedback? Email me!", message: message, preferredStyle: .alert)
