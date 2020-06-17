@@ -24,7 +24,6 @@ final class SearchDetailViewController: UIViewController {
         visualEffectView.frame = view.bounds
         return visualEffectView
     }()
-    private let networkService = NetworkService()
 
     // MARK: - Cancellable objects
 

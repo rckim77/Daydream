@@ -22,7 +22,6 @@ final class SearchViewController: UIViewController {
     private var defaultSearchBarYOffset: CGFloat {
         return  (view.bounds.height / 2) - (searchBarViewHeight / 2) - 50
     }
-    private let networkService = NetworkService()
     static let toSearchDetailVCSegue = "toSearchDetailVCSegue"
     private var dataPreloaded: Bool {
         placeData != nil && placeBackgroundImage != nil

@@ -46,7 +46,6 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
     var sightsLoadingState: LoadingState = .uninitiated
     var eateriesLoadingState: LoadingState = .uninitiated
 
-    private let networkService = NetworkService()
     let mapCardCellHeight: CGFloat = 186
     var sightsCardCellHeight: CGFloat {
         return sightsLoadingState == .error ? SightsCardCell.errorHeight: SightsCardCell.defaultHeight

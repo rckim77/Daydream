@@ -30,7 +30,6 @@ final class EateryView: UIView {
     }()
     private let gradientView = GradientView()
     private let titleLabel = CardLabel()
-    private let networkService = NetworkService()
 
     private var layoutType: LayoutType = .middle
     private weak var delegate: EateryViewDelegate?

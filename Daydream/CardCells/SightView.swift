@@ -24,7 +24,6 @@ final class SightView: UIView {
     }
 
     private let loadingView = CellLoadingView()
-    private let networkService = NetworkService()
     private lazy var backgroundImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill

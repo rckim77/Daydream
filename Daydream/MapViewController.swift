@@ -31,7 +31,6 @@ final class MapViewController: UIViewController {
         }
     }
 
-    private let networkService = NetworkService()
     private var loadPlaceCancellable: AnyCancellable?
 
     // contains close and dark mode buttons (and creates frame for gradient)
