@@ -62,21 +62,6 @@ class NetworkService {
             .eraseToAnyPublisher()
     }
 
-    /// Returns a Place object with at least one review.
-    func loadPlaceWithReviews(placeDetailsUrl: URL) -> AnyPublisher<Place, Error> {
-        return URLSession.shared.dataTaskPublisher(for: placeDetailsUrl)
-            .map { $0.data }
-            .decode(type: PlaceCollection.self, decoder: customDecoder)
-            .tryMap { collection -> Place in
-                guard !collection.result.reviews.isEmpty else {
-                    throw NetworkError.insufficientResults
-                }
-                return collection.result
-            }
-            .receive(on: DispatchQueue.main)
-            .eraseToAnyPublisher()
-    }
-
     func loadArticles(url: URL) -> AnyPublisher<[Article], Error> {
         return URLSession.shared.dataTaskPublisher(for: url)
             .map { $0.data }

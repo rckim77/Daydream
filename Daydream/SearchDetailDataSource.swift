@@ -66,7 +66,7 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
         return API.PlaceSearch.loadGooglePhoto(placeId: place.placeId)
     }
 
-    func loadSights(name: String, location: CLLocationCoordinate2D, queryType: API.PlaceSearch.TextSearch.QueryType) -> AnyPublisher<Void, Error>? {
+    func loadSights(name: String, location: CLLocationCoordinate2D, queryType: API.PlaceSearch.TextSearchRoute.QueryType) -> AnyPublisher<Void, Error>? {
         return API.PlaceSearch.loadPlaces(name: name, location: location, queryType: queryType)?
             .mapError { [weak self] error -> Error in
                 self?.sightsLoadingState = .error
