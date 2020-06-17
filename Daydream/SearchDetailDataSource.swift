@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreLocation
 import Combine
 
 class SearchDetailDataSource: NSObject, UITableViewDataSource {
@@ -65,8 +66,8 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
         return networkService.loadGooglePhoto(placeId: place.placeId)
     }
 
-    func loadSights(url: URL) -> AnyPublisher<Void, Error> {
-        return networkService.loadPlaces(url: url)
+    func loadSights(name: String, location: CLLocationCoordinate2D, queryType: API.PlaceSearch.TextSearch.QueryType) -> AnyPublisher<Void, Error>? {
+        return API.PlaceSearch.loadPlaces(name: name, location: location, queryType: queryType)?
             .mapError { [weak self] error -> Error in
                 self?.sightsLoadingState = .error
                 return error

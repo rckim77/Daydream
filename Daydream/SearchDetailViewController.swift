@@ -167,20 +167,16 @@ final class SearchDetailViewController: UIViewController {
             fetchBackgroundPhoto()
         }
 
-        if let sightsUrl = GooglePlaceTextSearchRoute(name: dataSource.place.name,
-                                                         location: dataSource.place.coordinate,
-                                                         queryType: .touristSpots)?.url {
-            sightsCancellable = dataSource.loadSights(url: sightsUrl)
-                .sink(receiveCompletion: { [weak self] receiveCompletion in
-                    if case let Subscribers.Completion.failure(error) = receiveCompletion {
-                        self?.logErrorEvent(error)
-                    }
+        sightsCancellable = dataSource.loadSights(name: dataSource.place.name, location: dataSource.place.coordinate, queryType: .touristSpots)?
+            .sink(receiveCompletion: { [weak self] receiveCompletion in
+                if case let Subscribers.Completion.failure(error) = receiveCompletion {
+                    self?.logErrorEvent(error)
+                }
+                self?.placeCardsTableView.reloadRows(at: [SearchDetailDataSource.sightsIndexPath], with: .fade)
+                completion()
+                }, receiveValue: { [weak self] _ in
                     self?.placeCardsTableView.reloadRows(at: [SearchDetailDataSource.sightsIndexPath], with: .fade)
-                    completion()
-                    }, receiveValue: { [weak self] _ in
-                        self?.placeCardsTableView.reloadRows(at: [SearchDetailDataSource.sightsIndexPath], with: .fade)
-                })
-        }
+            })
 
         if let fallbackEateriesUrl = GooglePlaceTextSearchRoute(name: dataSource.place.name,
                                                                 location: dataSource.place.coordinate,
