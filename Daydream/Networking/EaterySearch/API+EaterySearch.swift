@@ -11,6 +11,7 @@ import Combine
 
 extension API {
     enum EaterySearch {
+        /// Returns eateries either from Yelp or, if none available, from Google Places.
         static func loadEateries(place: Place) -> AnyPublisher<[Eatable], Error>? {
             guard let urlRequest = YelpBusinessesRoute(place: place)?.urlRequest else {
                 return nil
