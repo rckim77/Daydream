@@ -15,20 +15,27 @@ final class SearchViewController: UIViewController {
 
     private var resultsViewController: GMSAutocompleteResultsViewController?
     private var searchController: UISearchController?
-    private let searchBarViewHeight: CGFloat = 45.0
     private var placeData: Place?
     private var placeBackgroundImage: UIImage?
     private var defaultSearchBarYOffset: CGFloat {
         return  (view.bounds.height / 2) - (searchBarViewHeight / 2) - 50
     }
-    static let toSearchDetailVCSegue = "toSearchDetailVCSegue"
     private var dataPreloaded: Bool {
         placeData != nil && placeBackgroundImage != nil
     }
 
+    static let toSearchDetailVCSegue = "toSearchDetailVCSegue"
+    private let searchBarViewHeight: CGFloat = 45.0
+
     private lazy var searchBarContainerView: UIView = {
         let view = UIView()
         return view
+    }()
+
+    private lazy var backgroundImageView: UIImageView = {
+        let image = UIImage(named: "sunriseJungle")
+        let imageView = UIImageView(image: image)
+        return imageView
     }()
 
     private lazy var titleLabel: CardLabel = {
@@ -93,10 +100,16 @@ final class SearchViewController: UIViewController {
             self.randomButton.alpha = 1
         }, completion: nil)
     }
+
     private func addViews() {
+        view.addSubview(backgroundImageView)
         view.addSubview(titleLabel)
         view.addSubview(randomButton)
         view.addSubview(feedbackButton)
+
+        backgroundImageView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
 
         titleLabel.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(16)
