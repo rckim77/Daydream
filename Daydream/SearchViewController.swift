@@ -35,7 +35,15 @@ final class SearchViewController: UIViewController {
     private lazy var backgroundImageView: UIImageView = {
         let image = UIImage(named: "sunriseJungle")
         let imageView = UIImageView(image: image)
+        imageView.contentMode = .scaleAspectFill
         return imageView
+    }()
+
+    // Note: when the user does not have Dark Mode on, this does nothing
+    private lazy var overlayView: UIView = {
+        let view = UIView()
+        view.backgroundColor = traitCollection.userInterfaceStyle == .dark ? UIColor.black.withAlphaComponent(0.4) : .clear
+        return view
     }()
 
     private lazy var titleLabel: CardLabel = {
@@ -103,11 +111,16 @@ final class SearchViewController: UIViewController {
 
     private func addViews() {
         view.addSubview(backgroundImageView)
+        view.addSubview(overlayView)
         view.addSubview(titleLabel)
         view.addSubview(randomButton)
         view.addSubview(feedbackButton)
 
         backgroundImageView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+
+        overlayView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
 
@@ -248,6 +261,22 @@ final class SearchViewController: UIViewController {
             .sink(receiveCompletion: {_ in }, receiveValue: { [weak self] image in
                 self?.placeBackgroundImage = image
             })
+    }
+
+    // MARK: - TraitCollection
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        guard let previousTraitCollection = previousTraitCollection else {
+            return
+        }
+        if traitCollection.userInterfaceStyle != previousTraitCollection.userInterfaceStyle {
+            if traitCollection.userInterfaceStyle == .dark {
+                overlayView.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+            } else {
+                overlayView.backgroundColor = .clear
+            }
+        }
     }
 }
 
