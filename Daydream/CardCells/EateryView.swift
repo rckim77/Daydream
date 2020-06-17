@@ -30,6 +30,7 @@ final class EateryView: UIView {
     }()
     private let gradientView = GradientView()
     private let titleLabel = CardLabel()
+    private let networkService = NetworkService()
 
     private var layoutType: LayoutType = .middle
     private weak var delegate: EateryViewDelegate?
@@ -128,7 +129,7 @@ final class EateryView: UIView {
             guard let id = eatery.eatableId else {
                 return
             }
-            cancellable = NetworkService().loadGooglePhoto(placeId: id)
+            cancellable = networkService.loadGooglePhoto(placeId: id)
                 .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] image in
                     guard let strongSelf = self else {
                         return

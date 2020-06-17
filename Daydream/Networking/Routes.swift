@@ -8,7 +8,6 @@
 
 import Foundation
 import CoreLocation
-import Alamofire
 
 struct GooglePlaceDetailsRoute {
     let url: URL
@@ -89,11 +88,25 @@ struct YelpBusinessesRoute {
         self.yelpAPIKey = yelpAPIKey
         self.url = url
 
-        let headers: HTTPHeaders = ["Authorization": "Bearer \(yelpAPIKey)"]
+        var urlRequest = URLRequest(url: url)
+        urlRequest.addValue("Bearer \(yelpAPIKey)", forHTTPHeaderField: "Authorization")
+        self.urlRequest = urlRequest
+    }
+}
 
-        guard let urlRequest = try? URLRequest(url: url, method: .get, headers: headers) else {
+struct NYTimesRoute {
+    let url: URL
+    let apiKey: String
+
+    init?(city: String) {
+        guard let apiKey = AppDelegate.getAPIKeys()?.nyTimesAPI else {
             return nil
         }
-        self.urlRequest = urlRequest
+        let urlString = "https://api.nytimes.com/svc/search/v2/articlesearch.json?q=\(city)&page=1&api-key=\(apiKey)"
+        guard let url = URL(string: urlString) else {
+            return nil
+        }
+        self.url = url
+        self.apiKey = apiKey
     }
 }

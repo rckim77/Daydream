@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SwiftyJSON
 import CoreLocation
 import Firebase
 
@@ -24,10 +23,9 @@ extension RandomCitySelectable {
         do {
             let url = URL(fileURLWithPath: path)
             let data = try Data(contentsOf: url, options: .mappedIfSafe)
-            let json = JSON(data).arrayValue
-            let randomInt = Int(arc4random_uniform(UInt32(json.count)))
-            let city = json[randomInt]["city"].stringValue
-
+            let randomCities = try JSONCustomDecoder().decode([RandomCity].self, from: data)
+            let randomIndex = Int(arc4random_uniform(UInt32(randomCities.count)))
+            let city = randomCities[randomIndex].city
             return city
         } catch {
             return nil

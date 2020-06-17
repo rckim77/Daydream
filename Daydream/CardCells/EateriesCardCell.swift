@@ -23,7 +23,7 @@ class EateriesCardCell: UITableViewCell {
     static let errorHeight: CGFloat = 185
     private let errorSectionHeight: CGFloat = 100
 
-    private lazy var titleLabel = CardLabel(textStyle: .title1, text: "Top Eateries")
+    private let titleLabel = CardLabel(textStyle: .title1, text: "Top Eateries")
     private lazy var infoButton: UIButton = {
         let button = UIButton(type: .system)
         button.configureWithSystemIcon("info.circle.fill")

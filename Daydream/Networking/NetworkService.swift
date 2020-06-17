@@ -6,9 +6,7 @@
 //  Copyright © 2018 Raymond Kim. All rights reserved.
 //
 
-import Alamofire
 import GooglePlaces
-import SwiftyJSON
 import Combine
 
 typealias SightsAndEateries = ([Place], [Eatery])
@@ -16,14 +14,10 @@ typealias SightsAndEateries = ([Place], [Eatery])
 // swiftlint:disable type_body_length
 class NetworkService {
 
-    private lazy var customDecoder: JSONDecoder = {
-        let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
-        return decoder
-    }()
+    private let customDecoder = JSONCustomDecoder()
 
     /// Can be used to return one or more Google Place objects (e.g., sights, fallback restaurants) filtered by the parameters
-    /// set in the input url. If you only want it to return one, just grab the first place object in the array.
+    /// set in the input url. Must pass in a URL created from a GooglePlaceTextSearchRoute.
     func loadPlaces(url: URL) -> AnyPublisher<[Place], Error> {
         return URLSession.shared.dataTaskPublisher(for: url)
             .map { $0.data }
@@ -102,100 +96,42 @@ class NetworkService {
         }
     }
 
-    /// Returns a Place object from a name.
-    func getPlaceId(placeName: String, completion: @escaping(Result<Place, Error>) -> Void) {
-        guard let url = GooglePlaceTextSearchRoute(name: placeName, queryType: .placeByName)?.url else {
-            completion(.failure(NetworkError.routeError))
-            return
-        }
-
-        AF.request(url).responseData { response in
-            switch response.result {
-            case .success(let data):
-                guard let result = try? self.customDecoder.decode(ResultsCollection.self, from: data),
-                    let placeId = result.results.first?.placeId else {
-                    completion(.failure(NetworkError.jsonDecoding))
-                    return
+    /// Expects a GooglePlaceDetailsRoute url and returns a url to a Google maps view.
+    func getMapUrlForPlace(url: URL) -> AnyPublisher<URL, Error> {
+        return URLSession.shared.dataTaskPublisher(for: url)
+            .map { $0.data }
+            .decode(type: PlaceCollection.self, decoder: customDecoder)
+            .tryMap { collection -> URL in
+                guard let mapUrlString = collection.result.mapUrl, let url = URL(string: mapUrlString) else {
+                    throw NetworkError.noMapUrl
                 }
-                NetworkService().getPlace(id: placeId, completion: { result in
-                    switch result {
-                    case .success(let place):
-                        completion(.success(place))
-                    case .failure(let error):
-                        completion(.failure(error))
-                    }
-                })
-            case .failure(let error):
-                completion(.failure(error))
+                return url
             }
-        }
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
     }
 
-    /// Returns a Place object from a place id.
-    func getPlace(id: String, completion: @escaping(Result<Place, Error>) -> Void) {
-        guard let url = GooglePlaceDetailsRoute(placeId: id)?.url else {
-            completion(.failure(NetworkError.routeError))
-            return
-        }
-
-        AF.request(url).responseData { response in
-            switch response.result {
-            case .success(let data):
-                guard let place = try? self.customDecoder.decode(PlaceCollection.self, from: data) else {
-                    completion(.failure(NetworkError.jsonDecoding))
-                    return
+    /// Returns a Place object with at least one review.
+    func loadPlaceWithReviews(placeDetailsUrl: URL) -> AnyPublisher<Place, Error> {
+        return URLSession.shared.dataTaskPublisher(for: placeDetailsUrl)
+            .map { $0.data }
+            .decode(type: PlaceCollection.self, decoder: customDecoder)
+            .tryMap { collection -> Place in
+                guard !collection.result.reviews.isEmpty else {
+                    throw NetworkError.insufficientResults
                 }
-                completion(.success(place.result))
-            case .failure(let error):
-                completion(.failure(error))
+                return collection.result
             }
-        }
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
     }
 
-    /// Gets city summary text from Wikivoyage (currently unused)
-    func getSummaryFor(_ city: String, completion: @escaping(Result<String, Error>) -> Void) {
-        let cityWords = city.split(separator: " ")
-        var cityParam = cityWords[0]
-        for i in 1..<cityWords.count {
-            cityParam += "+" + cityWords[i]
-        }
-
-        let url = "https://en.wikivoyage.org/w/api.php?action=query&prop=extracts&explaintext&format=json&titles=\(cityParam)"
-
-        AF.request(url).validate().responseJSON { response in
-            switch response.result {
-            case .success(let value):
-                let json = JSON(value)
-                guard let query = json["query"]["pages"].dictionary, let pageIdKey = query.keys.first,
-                    let extract = query[pageIdKey]?["extract"].string else {
-                    return
-                }
-                completion(.success(extract))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-    }
-
-    /// Gets articles using the New York Times Article API (currently unused)
-    func loadNewsFor(_ city: String, completion: @escaping(Result<[Article], Error>) -> Void) {
-        guard let keyParam = AppDelegate.getAPIKeys()?.nyTimesAPI else {
-            return
-        }
-        let url = "https://api.nytimes.com/svc/search/v2/articlesearch.json?q=\(city)&page=1&api-key=\(keyParam)"
-
-        AF.request(url).responseData { response in
-            switch response.result {
-            case .success(let data):
-                if let articleResponse = try? self.customDecoder.decode(ArticleResponse.self, from: data) {
-                    completion(.success(articleResponse.response.docs))
-                } else {
-                    completion(.failure(NetworkError.jsonDecoding))
-                }
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
+    func loadArticles(url: URL) -> AnyPublisher<[Article], Error> {
+        return URLSession.shared.dataTaskPublisher(for: url)
+            .map { $0.data }
+            .decode(type: ArticleResponse.self, decoder: customDecoder)
+            .map { $0.response.docs }
+            .eraseToAnyPublisher()
     }
 
     /// Note: Returns on the main queue and with errors erased.
