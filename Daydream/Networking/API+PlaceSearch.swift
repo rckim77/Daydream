@@ -6,9 +6,10 @@
 //  Copyright © 2020 Raymond Kim. All rights reserved.
 //
 
-import Foundation
+import UIKit
 import CoreLocation
 import Combine
+import GooglePlaces
 
 extension API {
     enum PlaceSearch {
@@ -90,6 +91,38 @@ extension API {
                 return publisher?.receive(on: DispatchQueue.main).eraseToAnyPublisher()
             } else {
                 return publisher?.eraseToAnyPublisher()
+            }
+        }
+
+        /// Load photo as UIImage using Google Places SDK
+        static func loadGooglePhoto(placeId: String) -> Future<UIImage, Error> {
+            return Future<UIImage, Error> { promise in
+                guard let photoField = GMSPlaceField(rawValue: UInt(GMSPlaceField.photos.rawValue)) else {
+                    promise(.failure(NetworkError.malformedPhotoField))
+                    return
+                }
+
+                GMSPlacesClient.shared().fetchPlace(fromPlaceID: placeId, placeFields: photoField, sessionToken: nil) { place, error in
+                    if let place = place {
+                        if let photoMetadata = place.photos?.first {
+                            GMSPlacesClient.shared().loadPlacePhoto(photoMetadata) { image, error in
+                                if let image = image {
+                                    promise(.success(image))
+                                } else if let error = error {
+                                    promise(.failure(error))
+                                } else {
+                                    promise(.failure(NetworkError.unknown))
+                                }
+                            }
+                        } else {
+                            promise(.failure(NetworkError.photoMetadataMissing))
+                        }
+                    } else if let error = error {
+                        promise(.failure(error))
+                    } else {
+                        promise(.failure(NetworkError.unknown))
+                    }
+                }
             }
         }
     }

@@ -129,7 +129,7 @@ final class EateryView: UIView {
             guard let id = eatery.eatableId else {
                 return
             }
-            cancellable = networkService.loadGooglePhoto(placeId: id)
+            cancellable = API.PlaceSearch.loadGooglePhoto(placeId: id)
                 .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] image in
                     guard let strongSelf = self else {
                         return

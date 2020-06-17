@@ -129,7 +129,7 @@ final class SightView: UIView {
         businessStatusButton.isHidden = businessStatus == .operational
 
         updateLayers()
-        cancellable = networkService.loadGooglePhoto(placeId: sight.placeId)
+        cancellable = API.PlaceSearch.loadGooglePhoto(placeId: sight.placeId)
             .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] image in
                 guard let strongSelf = self else {
                     return

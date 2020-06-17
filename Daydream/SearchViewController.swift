@@ -167,7 +167,7 @@ final class SearchViewController: UIViewController {
         placeCancellable = API.PlaceSearch.loadPlace(name: randomCity, queryType: .placeByName)?
             .flatMap { [weak self] place -> Future<UIImage, Error> in
                 self?.placeData = place
-                return NetworkService().loadGooglePhoto(placeId: place.placeId)
+                return API.PlaceSearch.loadGooglePhoto(placeId: place.placeId)
             }
             .sink(receiveCompletion: { [weak self] completion in
                 loadingVC.remove()
@@ -221,7 +221,7 @@ final class SearchViewController: UIViewController {
         placeCancellable = API.PlaceSearch.loadPlace(name: randomCity, queryType: .placeByName)?
             .flatMap { [weak self] place -> Future<UIImage, Error> in
                 self?.placeData = place
-                return NetworkService().loadGooglePhoto(placeId: place.placeId)
+                return API.PlaceSearch.loadGooglePhoto(placeId: place.placeId)
             }
             .sink(receiveCompletion: {_ in }, receiveValue: { [weak self] image in
                 self?.placeBackgroundImage = image
@@ -247,7 +247,7 @@ extension SearchViewController: GMSAutocompleteResultsViewControllerDelegate {
             self.resetSearchUI()
             let loadingVC = LoadingViewController()
             self.add(loadingVC)
-            self.placeCancellable = self.networkService.loadGooglePhoto(placeId: placeId)
+            self.placeCancellable = API.PlaceSearch.loadGooglePhoto(placeId: placeId)
                 .sink(receiveCompletion: { _ in
                     loadingVC.remove()
                 }, receiveValue: { [weak self] image in

@@ -47,38 +47,6 @@ class NetworkService {
             .eraseToAnyPublisher()
     }
 
-    /// Load photo as UIImage using Google Places SDK
-    func loadGooglePhoto(placeId: String) -> Future<UIImage, Error> {
-        return Future<UIImage, Error> { promise in
-            guard let photoField = GMSPlaceField(rawValue: UInt(GMSPlaceField.photos.rawValue)) else {
-                promise(.failure(NetworkError.malformedPhotoField))
-                return
-            }
-
-            GMSPlacesClient.shared().fetchPlace(fromPlaceID: placeId, placeFields: photoField, sessionToken: nil) { place, error in
-                if let place = place {
-                    if let photoMetadata = place.photos?.first {
-                        GMSPlacesClient.shared().loadPlacePhoto(photoMetadata) { image, error in
-                            if let image = image {
-                                promise(.success(image))
-                            } else if let error = error {
-                                promise(.failure(error))
-                            } else {
-                                promise(.failure(NetworkError.unknown))
-                            }
-                        }
-                    } else {
-                        promise(.failure(NetworkError.photoMetadataMissing))
-                    }
-                } else if let error = error {
-                    promise(.failure(error))
-                } else {
-                    promise(.failure(NetworkError.unknown))
-                }
-            }
-        }
-    }
-
     /// Expects a GooglePlaceDetailsRoute url and returns a url to a Google maps view.
     func getMapUrlForPlace(url: URL) -> AnyPublisher<URL, Error> {
         return URLSession.shared.dataTaskPublisher(for: url)
