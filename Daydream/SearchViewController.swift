@@ -39,7 +39,7 @@ final class SearchViewController: UIViewController {
         return imageView
     }()
 
-    // Note: when the user does not have Dark Mode on, this does nothing
+    // Note: When the user does not have Dark Mode on, this does nothing.
     private lazy var overlayView: UIView = {
         let view = UIView()
         view.backgroundColor = traitCollection.userInterfaceStyle == .dark ? UIColor.black.withAlphaComponent(0.4) : .clear
