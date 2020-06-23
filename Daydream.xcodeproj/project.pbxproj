@@ -60,6 +60,7 @@
 		94E9F3272492B86200B1D003 /* PlaceBusinessStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E9F3262492B86200B1D003 /* PlaceBusinessStatus.swift */; };
 		94E9F3292492BEF600B1D003 /* ResultsCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E9F3282492BEF600B1D003 /* ResultsCollection.swift */; };
 		94E9F32B2492E12900B1D003 /* PlaceCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E9F32A2492E12900B1D003 /* PlaceCollection.swift */; };
+		EC34ADDA24A1A1D200916FE2 /* apiKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = EC34ADD924A1A1D200916FE2 /* apiKeys.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -132,6 +133,7 @@
 		94E9F3262492B86200B1D003 /* PlaceBusinessStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceBusinessStatus.swift; sourceTree = "<group>"; };
 		94E9F3282492BEF600B1D003 /* ResultsCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsCollection.swift; sourceTree = "<group>"; };
 		94E9F32A2492E12900B1D003 /* PlaceCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceCollection.swift; sourceTree = "<group>"; };
+		EC34ADD924A1A1D200916FE2 /* apiKeys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = apiKeys.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -287,6 +289,7 @@
 				9490BA01206AF6F700B880E7 /* randomCitiesJSON.json */,
 				94E392AF2074B29E0073E8C9 /* style.json */,
 				947EC657204673BF004A911D /* ShadowView.swift */,
+				EC34ADD924A1A1D200916FE2 /* apiKeys.plist */,
 				94E1086C24836F660091D043 /* GradientView.swift */,
 				94E3D9572097EEC800384680 /* ExpiringCache.swift */,
 			);
@@ -411,6 +414,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				94380AD2203BAE1D00684863 /* LaunchScreen.storyboard in Resources */,
+				EC34ADDA24A1A1D200916FE2 /* apiKeys.plist in Resources */,
 				9490BA02206AF6F700B880E7 /* randomCitiesJSON.json in Resources */,
 				94E392AD2070B4300073E8C9 /* GoogleService-Info.plist in Resources */,
 				94E392B02074B29E0073E8C9 /* style.json in Resources */,
