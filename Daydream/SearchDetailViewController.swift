@@ -35,14 +35,7 @@ final class SearchDetailViewController: UIViewController {
 
     // MARK: - Constants
 
-    private let searchBarOffset: CGFloat = 12 + 45 // bottom offset + height (used as transition range)
-    private let headerContentInset: CGFloat = 142
-    private var headerFadeInStartPoint: CGFloat {
-        return 142 + notchHeight
-    }
-    private var headerFadeInEndPoint: CGFloat {
-        return 103 + notchHeight
-    }
+    private let headerContentInset: CGFloat = 138
     private let headerFadeOutStartPoint: CGFloat = 100
     private let headerFadeOutEndPoint: CGFloat = 80
     private let floatingTitleViewFadeInStartPoint: CGFloat = 85
@@ -139,7 +132,7 @@ final class SearchDetailViewController: UIViewController {
             view.addSubview(containerView)
 
             containerView.snp.makeConstraints { make in
-                make.top.equalTo(titleLabel.snp.bottom).offset(12)
+                make.top.equalTo(titleLabel.snp.bottom).offset(10)
                 make.leading.trailing.equalToSuperview()
                 make.height.equalTo(45)
             }
@@ -328,8 +321,13 @@ extension SearchDetailViewController: UITableViewDelegate {
     }
 
     private func transitionSearchBar(_ yOffset: CGFloat) {
-        if yOffset > -headerFadeInStartPoint {
-            let calculatedAlpha = (-yOffset - headerFadeInEndPoint) / searchBarOffset
+        let padding: CGFloat = 12
+        let statusBarOffset = view.window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
+        let notchOffset = statusBarOffset - padding
+        let fadeOutStartPoint = -headerContentInset - padding - notchOffset
+        let fadeOutEndPoint = -headerContentInset - notchOffset
+        if yOffset > fadeOutStartPoint {
+            let calculatedAlpha = (-yOffset + fadeOutEndPoint) / padding
             searchController?.searchBar.alpha = max(calculatedAlpha, 0)
             view.insertSubview(floatingTitleView, aboveSubview: placeCardsTableView)
         } else {
