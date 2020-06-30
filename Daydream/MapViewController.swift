@@ -31,7 +31,6 @@ final class MapViewController: UIViewController {
         }
     }
 
-    private let networkService = NetworkService()
     private var loadPlaceCancellable: AnyCancellable?
 
     // contains close and dark mode buttons (and creates frame for gradient)
@@ -206,11 +205,7 @@ final class MapViewController: UIViewController {
 
         dynamicMarker.tracksInfoWindowChanges = true
 
-        guard let url = GooglePlaceDetailsRoute(placeId: placeId)?.url else {
-            return
-        }
-
-        loadPlaceCancellable = networkService.loadPlaceWithReviews(placeDetailsUrl: url)
+        loadPlaceCancellable = API.PlaceSearch.loadPlaceWithReviews(placeId: placeId)?
             .sink(receiveCompletion: { [weak self] completion in
                 if case let Subscribers.Completion.failure(error) = completion {
                     self?.logErrorEvent(error)

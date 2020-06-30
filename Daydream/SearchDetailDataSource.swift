@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreLocation
 import Combine
 
 class SearchDetailDataSource: NSObject, UITableViewDataSource {
@@ -45,7 +46,6 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
     var sightsLoadingState: LoadingState = .uninitiated
     var eateriesLoadingState: LoadingState = .uninitiated
 
-    private let networkService = NetworkService()
     let mapCardCellHeight: CGFloat = 186
     var sightsCardCellHeight: CGFloat {
         return sightsLoadingState == .error ? SightsCardCell.errorHeight: SightsCardCell.defaultHeight
@@ -62,11 +62,11 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
     }
 
     func loadPhoto() -> Future<UIImage, Error> {
-        return networkService.loadGooglePhoto(placeId: place.placeId)
+        return API.PlaceSearch.loadGooglePhoto(placeId: place.placeId)
     }
 
-    func loadSights(url: URL) -> AnyPublisher<Void, Error> {
-        return networkService.loadPlaces(url: url)
+    func loadSights(name: String, location: CLLocationCoordinate2D, queryType: API.PlaceSearch.TextSearchRoute.QueryType) -> AnyPublisher<Void, Error>? {
+        return API.PlaceSearch.loadPlaces(name: name, location: location, queryType: queryType)?
             .mapError { [weak self] error -> Error in
                 self?.sightsLoadingState = .error
                 return error
@@ -80,8 +80,8 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
             .eraseToAnyPublisher()
     }
 
-    func loadEateries(request: URLRequest, fallbackUrl: URL) -> AnyPublisher<Void, Error> {
-        return networkService.loadEateries(place: place, urlRequest: request, fallbackUrl: fallbackUrl)
+    func loadEateries() -> AnyPublisher<Void, Error>? {
+        return API.EaterySearch.loadEateries(place: place)?
             .mapError { [weak self] error -> Error in
                 self?.eateriesLoadingState = .error
                 return error

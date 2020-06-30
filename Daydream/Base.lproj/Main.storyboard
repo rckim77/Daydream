@@ -14,18 +14,7 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sunriseJungle" translatesAutoresizingMaskIntoConstraints="NO" id="dpb-Nn-lH0">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                            </imageView>
-                        </subviews>
                         <color key="backgroundColor" red="0.72549019609999998" green="0.88235294119999996" blue="0.86274509799999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstItem="dpb-Nn-lH0" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="7WP-jS-fcN"/>
-                            <constraint firstAttribute="bottom" secondItem="dpb-Nn-lH0" secondAttribute="bottom" id="P8W-jG-2t8"/>
-                            <constraint firstItem="dpb-Nn-lH0" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="r9u-vR-P5E"/>
-                            <constraint firstItem="dpb-Nn-lH0" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="tZf-8I-pK3"/>
-                        </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>

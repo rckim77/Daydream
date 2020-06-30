@@ -24,7 +24,6 @@ final class SearchDetailViewController: UIViewController {
         visualEffectView.frame = view.bounds
         return visualEffectView
     }()
-    private let networkService = NetworkService()
 
     // MARK: - Cancellable objects
 
@@ -36,14 +35,7 @@ final class SearchDetailViewController: UIViewController {
 
     // MARK: - Constants
 
-    private let searchBarOffset: CGFloat = 12 + 45 // bottom offset + height (used as transition range)
-    private let headerContentInset: CGFloat = 142
-    private var headerFadeInStartPoint: CGFloat {
-        return 142 + notchHeight
-    }
-    private var headerFadeInEndPoint: CGFloat {
-        return 103 + notchHeight
-    }
+    private let headerContentInset: CGFloat = 138
     private let headerFadeOutStartPoint: CGFloat = 100
     private let headerFadeOutEndPoint: CGFloat = 80
     private let floatingTitleViewFadeInStartPoint: CGFloat = 85
@@ -140,7 +132,7 @@ final class SearchDetailViewController: UIViewController {
             view.addSubview(containerView)
 
             containerView.snp.makeConstraints { make in
-                make.top.equalTo(titleLabel.snp.bottom).offset(12)
+                make.top.equalTo(titleLabel.snp.bottom).offset(10)
                 make.leading.trailing.equalToSuperview()
                 make.height.equalTo(45)
             }
@@ -167,36 +159,27 @@ final class SearchDetailViewController: UIViewController {
             fetchBackgroundPhoto()
         }
 
-        if let sightsUrl = GooglePlaceTextSearchRoute(name: dataSource.place.name,
-                                                         location: dataSource.place.coordinate,
-                                                         queryType: .touristSpots)?.url {
-            sightsCancellable = dataSource.loadSights(url: sightsUrl)
-                .sink(receiveCompletion: { [weak self] receiveCompletion in
-                    if case let Subscribers.Completion.failure(error) = receiveCompletion {
-                        self?.logErrorEvent(error)
-                    }
+        sightsCancellable = dataSource.loadSights(name: dataSource.place.name, location: dataSource.place.coordinate, queryType: .touristSpots)?
+            .sink(receiveCompletion: { [weak self] receiveCompletion in
+                if case let Subscribers.Completion.failure(error) = receiveCompletion {
+                    self?.logErrorEvent(error)
+                }
+                self?.placeCardsTableView.reloadRows(at: [SearchDetailDataSource.sightsIndexPath], with: .fade)
+                completion()
+                }, receiveValue: { [weak self] _ in
                     self?.placeCardsTableView.reloadRows(at: [SearchDetailDataSource.sightsIndexPath], with: .fade)
-                    completion()
-                    }, receiveValue: { [weak self] _ in
-                        self?.placeCardsTableView.reloadRows(at: [SearchDetailDataSource.sightsIndexPath], with: .fade)
-                })
-        }
+            })
 
-        if let fallbackEateriesUrl = GooglePlaceTextSearchRoute(name: dataSource.place.name,
-                                                                location: dataSource.place.coordinate,
-                                                                queryType: .restaurants)?.url,
-            let eateriesRequest = YelpBusinessesRoute(place: dataSource.place)?.urlRequest {
-            eateriesCancellable = dataSource.loadEateries(request: eateriesRequest, fallbackUrl: fallbackEateriesUrl)
-                .sink(receiveCompletion: { [weak self] receiveCompletion in
-                    if case let Subscribers.Completion.failure(error) = receiveCompletion {
-                        self?.logErrorEvent(error)
-                    }
+        eateriesCancellable = dataSource.loadEateries()?
+            .sink(receiveCompletion: { [weak self] receiveCompletion in
+                if case let Subscribers.Completion.failure(error) = receiveCompletion {
+                    self?.logErrorEvent(error)
+                }
+                self?.placeCardsTableView.reloadRows(at: [SearchDetailDataSource.eateriesIndexPath], with: .fade)
+                completion()
+                }, receiveValue: { [weak self] _ in
                     self?.placeCardsTableView.reloadRows(at: [SearchDetailDataSource.eateriesIndexPath], with: .fade)
-                    completion()
-                    }, receiveValue: { [weak self] _ in
-                        self?.placeCardsTableView.reloadRows(at: [SearchDetailDataSource.eateriesIndexPath], with: .fade)
-                })
-        }
+            })
 
         if reloadMapCard {
             placeCardsTableView.reloadRows(at: [SearchDetailDataSource.mapIndexPath], with: .fade)
@@ -264,8 +247,7 @@ final class SearchDetailViewController: UIViewController {
     @objc
     func randomCityButtonTapped() {
         logEvent(contentType: "random button tapped", title)
-        guard let randomCity = getRandomCity(),
-            let url = GooglePlaceTextSearchRoute(name: randomCity, queryType: .placeByName)?.url else {
+        guard let randomCity = getRandomCity() else {
             return
         }
 
@@ -275,7 +257,7 @@ final class SearchDetailViewController: UIViewController {
         dataSource?.eateriesLoadingState = .loading
         placeCardsTableView.reloadData()
 
-        loadPlaceByNameCancellable = networkService.loadPlace(url: url)
+        loadPlaceByNameCancellable = API.PlaceSearch.loadPlace(name: randomCity, queryType: .placeByName)?
             .sink(receiveCompletion: { [weak self] completion in
                 if case let Subscribers.Completion.failure(error) = completion {
                     loadingVC.remove()
@@ -317,8 +299,8 @@ extension SearchDetailViewController: UITableViewDelegate {
 
         if let mapUrl = dataSource.place.mapUrl {
             openUrl(mapUrl)
-        } else if let googlePlacesUrl = GooglePlaceDetailsRoute(placeId: dataSource.place.placeId)?.url {
-            loadMapUrlCancellable = networkService.getMapUrlForPlace(url: googlePlacesUrl)
+        } else {
+            loadMapUrlCancellable = API.PlaceSearch.getMapUrl(placeId: dataSource.place.placeId)?
                 .sink(receiveCompletion: { [weak self] completion in
                     if case let Subscribers.Completion.failure(error) = completion {
                         self?.logErrorEvent(error)
@@ -339,8 +321,13 @@ extension SearchDetailViewController: UITableViewDelegate {
     }
 
     private func transitionSearchBar(_ yOffset: CGFloat) {
-        if yOffset > -headerFadeInStartPoint {
-            let calculatedAlpha = (-yOffset - headerFadeInEndPoint) / searchBarOffset
+        let padding: CGFloat = 12
+        let statusBarOffset = view.window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
+        let notchOffset = statusBarOffset - padding
+        let fadeOutStartPoint = -headerContentInset - padding - notchOffset
+        let fadeOutEndPoint = -headerContentInset - notchOffset
+        if yOffset > fadeOutStartPoint {
+            let calculatedAlpha = (-yOffset + fadeOutEndPoint) / padding
             searchController?.searchBar.alpha = max(calculatedAlpha, 0)
             view.insertSubview(floatingTitleView, aboveSubview: placeCardsTableView)
         } else {

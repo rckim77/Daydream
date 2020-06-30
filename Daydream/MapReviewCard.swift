@@ -136,7 +136,7 @@ final class MapReviewCard: UIView {
             return
         }
 
-        profileImageCancellable = NetworkService.loadImage(url: url)
+        profileImageCancellable = API.Image.loadImage(url: url)
             .assign(to: \.image, on: authorImageView)
     }
 
