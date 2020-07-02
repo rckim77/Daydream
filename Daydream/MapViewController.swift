@@ -16,10 +16,10 @@ import Combine
 final class MapViewController: UIViewController {
 
     private var place: Place
-    var dynamicMapView: GMSMapView?
-    var dynamicMarker: GMSMarker?
-    var currentReviews: [Review]?
-    var currentReviewIndex = 0
+    private var dynamicMapView: GMSMapView?
+    private var dynamicMarker: GMSMarker?
+    private var currentReviews: [Review]?
+    private var currentReviewIndex = 0
 
     // Will automatically sync with system user interface style settings but can be overridden
     // when the user taps the dark mode button. Note this must be called once dynamicMapView is set.
@@ -90,15 +90,7 @@ final class MapViewController: UIViewController {
         }
         self.place = place
         super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
+        
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(stopDisplayingReviews),
                                                name: UIApplication.didEnterBackgroundNotification,
@@ -107,6 +99,14 @@ final class MapViewController: UIViewController {
                                                selector: #selector(restartDisplayingCurrentReviews),
                                                name: UIApplication.willEnterForegroundNotification,
                                                object: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
 
         addOrUpdateMapView(for: place.placeId, name: place.name, location: place.coordinate)
         addProgrammaticViews()
@@ -165,11 +165,7 @@ final class MapViewController: UIViewController {
         reviewCard.isHidden = true
     }
 
-    private func addOrUpdateMapView(for placeId: String?, name: String?, location: CLLocationCoordinate2D?) {
-        guard let placeId = placeId, let name = name, let location = location else {
-            return
-        }
-
+    private func addOrUpdateMapView(for placeId: String, name: String, location: CLLocationCoordinate2D) {
         let camera = GMSCameraPosition.camera(withLatitude: location.latitude,
                                               longitude: location.longitude,
                                               zoom: 16.0)
@@ -217,7 +213,7 @@ final class MapViewController: UIViewController {
 
         dynamicMarker.tracksInfoWindowChanges = true
 
-        loadPlaceCancellable = API.PlaceSearch.loadPlaceWithReviews(placeId: placeId)?
+        loadPlaceCancellable = API.PlaceSearch.loadPlaceWithReviews(placeId: place.placeId)?
             .sink(receiveCompletion: { [weak self] completion in
                 if case let Subscribers.Completion.failure(error) = completion {
                     self?.logErrorEvent(error)
