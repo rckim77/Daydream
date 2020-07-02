@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
@@ -160,28 +160,11 @@
                         <outlet property="floatingTitleView" destination="6KP-bC-1sz" id="hGq-XA-Ap4"/>
                         <outlet property="placeCardsTableView" destination="Lg2-04-32b" id="rem-0K-EVa"/>
                         <outlet property="placeImageView" destination="NX7-bA-oV6" id="dS6-Yy-Ut3"/>
-                        <segue destination="CGg-aC-4y8" kind="presentation" identifier="genericMapSegue" id="G8s-9F-si3"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hOa-Hv-SgJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1085.5999999999999" y="30.295566502463057"/>
-        </scene>
-        <!--Map View Controller-->
-        <scene sceneID="Wgs-uz-Bis">
-            <objects>
-                <viewController id="CGg-aC-4y8" customClass="MapViewController" customModule="Daydream" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="HRt-hV-c7A">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <viewLayoutGuide key="safeArea" id="Yii-Ue-V4b"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="1lm-RG-AHt" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="FCW-7U-jyB"/>
-            </objects>
-            <point key="canvasLocation" x="1909.5999999999999" y="30.295566502463057"/>
         </scene>
     </scenes>
     <resources>

@@ -15,7 +15,7 @@ import Combine
 // swiftlint:disable type_body_length
 final class MapViewController: UIViewController {
 
-    var place: Place?
+    private var place: Place
     var dynamicMapView: GMSMapView?
     var dynamicMarker: GMSMarker?
     var currentReviews: [Review]?
@@ -83,7 +83,19 @@ final class MapViewController: UIViewController {
         card.addGestureRecognizer(tapGesture)
         return card
     }()
-
+    
+    init?(place: Place?) {
+        guard let place = place else {
+            return nil
+        }
+        self.place = place
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -96,7 +108,7 @@ final class MapViewController: UIViewController {
                                                name: UIApplication.willEnterForegroundNotification,
                                                object: nil)
 
-        addOrUpdateMapView(for: place?.placeId, name: place?.name, location: place?.coordinate)
+        addOrUpdateMapView(for: place.placeId, name: place.name, location: place.coordinate)
         addProgrammaticViews()
     }
 
@@ -349,7 +361,7 @@ extension MapViewController: GMSMapViewDelegate {
 
     func mapView(_ mapView: GMSMapView, didTapInfoWindowOf marker: GMSMarker) {
         logEvent(contentType: "info window on marker tapped", title)
-        if let mapUrl = place?.mapUrl, let url = URL(string: mapUrl) {
+        if let mapUrl = place.mapUrl, let url = URL(string: mapUrl) {
             UIApplication.shared.open(url, options: [:])
         }
     }
