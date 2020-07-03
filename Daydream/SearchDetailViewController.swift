@@ -383,7 +383,7 @@ extension SearchDetailViewController: GMSAutocompleteResultsViewControllerDelega
 extension SearchDetailViewController: SightsCardCellDelegate {
     func sightsCardCell(_ cell: SightsCardCell, didSelectPlace place: Place) {
         logEvent(contentType: "select point of interest", title)
-        guard let mapVC = MapViewController(place: dataSource?.place) else {
+        guard let mapVC = MapViewController(place: place) else {
             return
         }
         present(mapVC, animated: true)
@@ -410,7 +410,7 @@ extension SearchDetailViewController: EateriesCardCellDelegate {
                 openUrl(url)
             }
         case .google:
-            guard let mapVC = MapViewController(place: dataSource?.place) else {
+            guard let mapVC = MapViewController(place: eatery as? Place) else {
                 return
             }
             present(mapVC, animated: true)

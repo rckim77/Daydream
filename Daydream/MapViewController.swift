@@ -213,7 +213,7 @@ final class MapViewController: UIViewController {
 
         dynamicMarker.tracksInfoWindowChanges = true
 
-        loadPlaceCancellable = API.PlaceSearch.loadPlaceWithReviews(placeId: place.placeId)?
+        loadPlaceCancellable = API.PlaceSearch.loadPlaceWithReviews(placeId: placeId)?
             .sink(receiveCompletion: { [weak self] completion in
                 if case let Subscribers.Completion.failure(error) = completion {
                     self?.logErrorEvent(error)
