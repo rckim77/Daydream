@@ -15,11 +15,11 @@ import Combine
 // swiftlint:disable type_body_length
 final class MapViewController: UIViewController {
 
-    var place: Place?
-    var dynamicMapView: GMSMapView?
-    var dynamicMarker: GMSMarker?
-    var currentReviews: [Review]?
-    var currentReviewIndex = 0
+    private var place: Place
+    private var dynamicMapView: GMSMapView?
+    private var dynamicMarker: GMSMarker?
+    private var currentReviews: [Review]?
+    private var currentReviewIndex = 0
 
     // Will automatically sync with system user interface style settings but can be overridden
     // when the user taps the dark mode button. Note this must be called once dynamicMapView is set.
@@ -83,10 +83,14 @@ final class MapViewController: UIViewController {
         card.addGestureRecognizer(tapGesture)
         return card
     }()
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
+    
+    init?(place: Place?) {
+        guard let place = place else {
+            return nil
+        }
+        self.place = place
+        super.init(nibName: nil, bundle: nil)
+        
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(stopDisplayingReviews),
                                                name: UIApplication.didEnterBackgroundNotification,
@@ -95,8 +99,16 @@ final class MapViewController: UIViewController {
                                                selector: #selector(restartDisplayingCurrentReviews),
                                                name: UIApplication.willEnterForegroundNotification,
                                                object: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
 
-        addOrUpdateMapView(for: place?.placeId, name: place?.name, location: place?.coordinate)
+        addOrUpdateMapView(for: place.placeId, name: place.name, location: place.coordinate)
         addProgrammaticViews()
     }
 
@@ -153,11 +165,7 @@ final class MapViewController: UIViewController {
         reviewCard.isHidden = true
     }
 
-    private func addOrUpdateMapView(for placeId: String?, name: String?, location: CLLocationCoordinate2D?) {
-        guard let placeId = placeId, let name = name, let location = location else {
-            return
-        }
-
+    private func addOrUpdateMapView(for placeId: String, name: String, location: CLLocationCoordinate2D) {
         let camera = GMSCameraPosition.camera(withLatitude: location.latitude,
                                               longitude: location.longitude,
                                               zoom: 16.0)
@@ -349,7 +357,7 @@ extension MapViewController: GMSMapViewDelegate {
 
     func mapView(_ mapView: GMSMapView, didTapInfoWindowOf marker: GMSMarker) {
         logEvent(contentType: "info window on marker tapped", title)
-        if let mapUrl = place?.mapUrl, let url = URL(string: mapUrl) {
+        if let mapUrl = place.mapUrl, let url = URL(string: mapUrl) {
             UIApplication.shared.open(url, options: [:])
         }
     }

@@ -225,17 +225,6 @@ final class SearchDetailViewController: UIViewController {
         floatingTitleView.alpha = 0
     }
 
-    // MARK: - Segue
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let destinationVC = segue.destination as? MapViewController, let sender = sender as? Place {
-            // segue from Top Sights cell
-            if segue.identifier == "genericMapSegue" {
-                destinationVC.place = sender
-            }
-        }
-    }
-
     // MARK: - Button selector methods
 
     @objc
@@ -394,7 +383,10 @@ extension SearchDetailViewController: GMSAutocompleteResultsViewControllerDelega
 extension SearchDetailViewController: SightsCardCellDelegate {
     func sightsCardCell(_ cell: SightsCardCell, didSelectPlace place: Place) {
         logEvent(contentType: "select point of interest", title)
-        performSegue(withIdentifier: "genericMapSegue", sender: place)
+        guard let mapVC = MapViewController(place: place) else {
+            return
+        }
+        present(mapVC, animated: true)
     }
 
     func sightsCardCellDidTapBusinessStatusButton(_ businessStatus: PlaceBusinessStatus) {
@@ -418,7 +410,10 @@ extension SearchDetailViewController: EateriesCardCellDelegate {
                 openUrl(url)
             }
         case .google:
-            performSegue(withIdentifier: "genericMapSegue", sender: eatery)
+            guard let mapVC = MapViewController(place: eatery as? Place) else {
+                return
+            }
+            present(mapVC, animated: true)
         }
     }
 
