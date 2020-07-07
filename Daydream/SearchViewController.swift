@@ -86,7 +86,12 @@ final class SearchViewController: UIViewController {
 
         addViews()
         fadeInTitleAndButton()
-        preloadRandomPlace()
+        if let city = getRandomCity() {
+            placeCancellable = fetchCityAndBackgroundPhoto(cityName: city)?
+                .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] image in
+                    self?.placeBackgroundImage = image
+                })
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -197,12 +202,8 @@ final class SearchViewController: UIViewController {
         }
         let loadingVC = LoadingViewController()
         add(loadingVC)
-
-        placeCancellable = API.PlaceSearch.loadPlace(name: randomCity, queryType: .placeByName)?
-            .flatMap { [weak self] place -> Future<UIImage, Error> in
-                self?.placeData = place
-                return API.PlaceSearch.loadGooglePhoto(placeId: place.placeId)
-            }
+        
+        placeCancellable = fetchCityAndBackgroundPhoto(cityName: randomCity)?
             .sink(receiveCompletion: { [weak self] completion in
                 loadingVC.remove()
                 if case let Subscribers.Completion.failure(error) = completion {
@@ -247,25 +248,19 @@ final class SearchViewController: UIViewController {
     }
 
     // MARK: - Networking
-
-    private func preloadRandomPlace() {
-        guard let randomCity = getRandomCity() else {
-            return
-        }
-
-        placeCancellable = API.PlaceSearch.loadPlace(name: randomCity, queryType: .placeByName)?
+    
+    private func fetchCityAndBackgroundPhoto(cityName: String) -> AnyPublisher<UIImage, Error>? {
+        (API.PlaceSearch.loadPlace(name: cityName, queryType: .placeByName)?
             .tryMap { [weak self] place -> String in
                 guard let strongSelf = self, let photoRef = place.photos?.first?.photoReference else {
                     throw NetworkError.noImage
                 }
                 strongSelf.placeData = place
                 return photoRef
-            }
+        }
             .compactMap { API.PlaceSearch.loadGooglePhotoAPI(photoRef: $0, maxHeight: Int(UIScreen.main.bounds.height)) } // strips nil
             .flatMap { $0 } // converts into correct publisher so sink works
-            .sink(receiveCompletion: {_ in }, receiveValue: { [weak self] image in
-                self?.placeBackgroundImage = image
-            })
+            .eraseToAnyPublisher())
     }
 
     // MARK: - TraitCollection
