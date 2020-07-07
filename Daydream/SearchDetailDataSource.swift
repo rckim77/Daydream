@@ -62,7 +62,7 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
     }
 
     func loadPhoto() -> AnyPublisher<UIImage, Error>? {
-        API.PlaceSearch.loadGooglePhotoAPI(photoRef: place.photoRef, maxHeight: Int(UIScreen.main.bounds.height))
+        API.PlaceSearch.loadGooglePhoto(photoRef: place.photoRef, maxHeight: Int(UIScreen.main.bounds.height))
     }
 
     func loadSights(name: String, location: CLLocationCoordinate2D, queryType: API.PlaceSearch.TextSearchRoute.QueryType) -> AnyPublisher<Void, Error>? {

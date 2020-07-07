@@ -37,4 +37,8 @@ extension Eatery: Eatable {
     var priceIndicator: String? {
         price
     }
+    
+    var photoRef: String? {
+        nil
+    }
 }

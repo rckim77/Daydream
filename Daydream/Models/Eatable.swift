@@ -12,6 +12,7 @@ protocol Eatable {
     var type: EateryType { get }
     var eatableId: String? { get }
     var name: String { get }
+    var photoRef: String? { get }
     var eatableImageUrl: String? { get }
     /// Redirect url (e.g., Yelp url redirects to browser)
     var eatableUrl: String? { get }

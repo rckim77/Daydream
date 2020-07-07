@@ -132,7 +132,7 @@ final class SightView: UIView {
 
         updateLayers()
 
-        cancellable = API.PlaceSearch.loadGooglePhotoAPI(photoRef: sight.photoRef, maxHeight: maxHeight)?
+        cancellable = API.PlaceSearch.loadGooglePhoto(photoRef: sight.photoRef, maxHeight: maxHeight)?
             .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] image in
                 guard let strongSelf = self else {
                     return

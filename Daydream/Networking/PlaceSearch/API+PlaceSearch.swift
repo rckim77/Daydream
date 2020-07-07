@@ -65,7 +65,7 @@ extension API {
         }
         
         /// Load photo based on photo reference provided by place request. Doesn't use Google Places SDK.
-        static func loadGooglePhotoAPI(photoRef: String?, maxHeight: Int) -> AnyPublisher<UIImage, Error>? {
+        static func loadGooglePhoto(photoRef: String?, maxHeight: Int) -> AnyPublisher<UIImage, Error>? {
             guard let photoRef = photoRef, let url = PlacePhotosRoute(photoRef: photoRef, maxHeight: maxHeight)?.url else {
                 return nil
             }
@@ -81,8 +81,8 @@ extension API {
                     .eraseToAnyPublisher()
         }
 
-        /// Load photo as UIImage using Google Places SDK
-        static func loadGooglePhoto(placeId: String) -> Future<UIImage, Error> {
+        /// DEPRECATED DO NOT USE. Load photo as UIImage using Google Places SDK.
+        static func loadGooglePhotoSDK(placeId: String) -> Future<UIImage, Error> {
             return Future<UIImage, Error> { promise in
                 guard let photoField = GMSPlaceField(rawValue: UInt(GMSPlaceField.photos.rawValue)) else {
                     promise(.failure(NetworkError.malformedPhotoField))

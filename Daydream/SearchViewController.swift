@@ -258,7 +258,7 @@ final class SearchViewController: UIViewController {
                 strongSelf.placeData = place
                 return photoRef
             }
-            .compactMap { API.PlaceSearch.loadGooglePhotoAPI(photoRef: $0, maxHeight: Int(UIScreen.main.bounds.height)) } // strips nil
+            .compactMap { API.PlaceSearch.loadGooglePhoto(photoRef: $0, maxHeight: Int(UIScreen.main.bounds.height)) } // strips nil
             .flatMap { $0 } // converts into correct publisher so sink works
             .eraseToAnyPublisher()
     }
@@ -298,7 +298,7 @@ extension SearchViewController: GMSAutocompleteResultsViewControllerDelegate {
             self.resetSearchUI()
             let loadingVC = LoadingViewController()
             self.add(loadingVC)
-            self.placeCancellable = API.PlaceSearch.loadGooglePhoto(placeId: placeId)
+            self.placeCancellable = API.PlaceSearch.loadGooglePhotoSDK(placeId: placeId)
                 .sink(receiveCompletion: { _ in
                     loadingVC.remove()
                 }, receiveValue: { [weak self] image in
