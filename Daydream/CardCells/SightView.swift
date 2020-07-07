@@ -45,6 +45,9 @@ final class SightView: UIView {
     private weak var delegate: SightViewDelegate?
     private var sight: Place?
     private var cancellable: AnyCancellable?
+    private var maxHeight: Int {
+        Int(UIScreen.main.bounds.height)
+    }
 
     convenience init(layoutType: LayoutType, delegate: SightViewDelegate) {
         self.init(frame: .zero)
@@ -128,7 +131,8 @@ final class SightView: UIView {
         businessStatusButton.isHidden = businessStatus == .operational
 
         updateLayers()
-        cancellable = API.PlaceSearch.loadGooglePhoto(placeId: sight.placeId)
+
+        cancellable = API.PlaceSearch.loadGooglePhotoAPI(photoRef: sight.photoRef, maxHeight: maxHeight)?
             .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] image in
                 guard let strongSelf = self else {
                     return
