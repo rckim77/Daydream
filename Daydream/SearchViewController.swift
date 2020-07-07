@@ -250,17 +250,17 @@ final class SearchViewController: UIViewController {
     // MARK: - Networking
     
     private func fetchCityAndBackgroundPhoto(cityName: String) -> AnyPublisher<UIImage, Error>? {
-        (API.PlaceSearch.loadPlace(name: cityName, queryType: .placeByName)?
+        API.PlaceSearch.loadPlace(name: cityName, queryType: .placeByName)?
             .tryMap { [weak self] place -> String in
-                guard let strongSelf = self, let photoRef = place.photos?.first?.photoReference else {
+                guard let strongSelf = self, let photoRef = place.photoRef else {
                     throw NetworkError.noImage
                 }
                 strongSelf.placeData = place
                 return photoRef
-        }
+            }
             .compactMap { API.PlaceSearch.loadGooglePhotoAPI(photoRef: $0, maxHeight: Int(UIScreen.main.bounds.height)) } // strips nil
             .flatMap { $0 } // converts into correct publisher so sink works
-            .eraseToAnyPublisher())
+            .eraseToAnyPublisher()
     }
 
     // MARK: - TraitCollection

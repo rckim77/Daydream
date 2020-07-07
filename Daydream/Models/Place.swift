@@ -23,6 +23,12 @@ struct Place: Equatable {
     let rating: Float?
     let reviews: [Review]
     let businessStatus: PlaceBusinessStatus?
+    
+    // MARK: - Convenience vars
+    
+    var photoRef: String? {
+        photos?.first?.photoReference
+    }
 }
 
 extension Place: Decodable {

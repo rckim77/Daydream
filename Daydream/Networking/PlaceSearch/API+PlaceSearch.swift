@@ -64,6 +64,7 @@ extension API {
                 .eraseToAnyPublisher()
         }
         
+        /// Load photo based on photo reference provided by place request. Doesn't use Google Places SDK.
         static func loadGooglePhotoAPI(photoRef: String?, maxHeight: Int) -> AnyPublisher<UIImage, Error>? {
             guard let photoRef = photoRef, let url = PlacePhotosRoute(photoRef: photoRef, maxHeight: maxHeight)?.url else {
                 return nil
