@@ -12,59 +12,39 @@ import GoogleMaps
 
 class MapCardCell: UITableViewCell {
 
-    @IBOutlet weak var mainView: DesignableView!
-    weak var mapView: GMSMapView? {
-        didSet {
-             mapView?.configureMapStyle(isDark: traitCollection.userInterfaceStyle == .dark)
-        }
-    }
+    private lazy var mapView: GMSMapView = {
+        let defaultCamera = GMSCameraPosition.camera(withLatitude: 0, longitude: 0, zoom: 0)
+        let mapView = GMSMapView(frame: .zero, camera: defaultCamera)
+        mapView.addRoundedCorners(radius: 10)
+        mapView.configureMapStyle(isDark: traitCollection.userInterfaceStyle == .dark)
+        return mapView
+    }()
 
     var place: Place? {
         didSet {
             guard let place = place, place != oldValue else {
                 return
             }
+            updateMapView(place: place)
+        }
+    }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
 
-            if let mapView = mapView {
-                update(mapView, with: place)
-            } else {
-                addMapView(with: place)
-            }
+        contentView.addSubview(mapView)
+        mapView.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview()
+            make.left.right.equalToSuperview().inset(16)
         }
     }
 
-    private func addMapView(with place: Place) {
+    private func updateMapView(place: Place) {
         let camera = GMSCameraPosition.camera(withLatitude: place.coordinate.latitude,
                                               longitude: place.coordinate.longitude,
                                               zoom: 14.0)
-        let frame = calculateFrame()
-        let mapViewNew = GMSMapView.map(withFrame: frame, camera: camera)
-
-        mapViewNew.addRoundedCorners(radius: 10)
-
-        createMarkerFor(mapViewNew, with: place)
-
-        mainView.addSubview(mapViewNew)
-
-        mapView = mapViewNew
-    }
-    
-    private func update(_ mapView: GMSMapView, with place: Place) {
-        let camera = GMSCameraPosition.camera(withLatitude: place.coordinate.latitude,
-                                              longitude: place.coordinate.longitude,
-                                              zoom: 14.0)
-
-        createMarkerFor(mapView, with: place)
-
         mapView.animate(to: camera)
-    }
-
-    private func calculateFrame() -> CGRect {
-        let leftMargin: CGFloat = 16
-        let rightMargin: CGFloat = 16
-        let width = UIScreen.main.bounds.width - leftMargin - rightMargin
-        let frame = CGRect(x: mainView.frame.minX, y: mainView.frame.minY, width: width, height: mainView.frame.height)
-        return frame
+        createMarkerFor(mapView, with: place)
     }
     
     // Creates a marker in center of map
@@ -84,7 +64,7 @@ class MapCardCell: UITableViewCell {
             return
         }
         if traitCollection.userInterfaceStyle != previousTraitCollection.userInterfaceStyle {
-            mapView?.configureMapStyle(isDark: traitCollection.userInterfaceStyle == .dark)
+            mapView.configureMapStyle(isDark: traitCollection.userInterfaceStyle == .dark)
         }
     }
 }

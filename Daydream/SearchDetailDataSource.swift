@@ -108,10 +108,8 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath {
         case SearchDetailDataSource.mapIndexPath:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "mapCardCell", for: indexPath)
-
-            guard let mapCardCell = cell as? MapCardCell else {
-                return cell
+            guard let mapCardCell = tableView.dequeueReusableCell(withIdentifier: "mapCardCell", for: indexPath) as? MapCardCell else {
+                return UITableViewCell()
             }
 
             mapCardCell.place = place
