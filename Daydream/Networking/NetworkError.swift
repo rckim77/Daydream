@@ -18,5 +18,6 @@ enum NetworkError: Error {
     case noMapUrl
     case invalidPlaceFields
     case loadPlacesReturnedNil
+    case noImage
     case unknown // e.g., 3rd party function returns nil data and nil error
 }

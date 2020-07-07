@@ -254,10 +254,15 @@ final class SearchViewController: UIViewController {
         }
 
         placeCancellable = API.PlaceSearch.loadPlace(name: randomCity, queryType: .placeByName)?
-            .flatMap { [weak self] place -> Future<UIImage, Error> in
-                self?.placeData = place
-                return API.PlaceSearch.loadGooglePhoto(placeId: place.placeId)
+            .tryMap { [weak self] place -> String in
+                guard let strongSelf = self, let photoRef = place.photos?.first?.photoReference else {
+                    throw NetworkError.noImage
+                }
+                strongSelf.placeData = place
+                return photoRef
             }
+            .compactMap { API.PlaceSearch.loadGooglePhotoAPI(photoRef: $0, maxHeight: Int(UIScreen.main.bounds.height)) } // strips nil
+            .flatMap { $0 } // converts into correct publisher so sink works
             .sink(receiveCompletion: {_ in }, receiveValue: { [weak self] image in
                 self?.placeBackgroundImage = image
             })

@@ -15,6 +15,7 @@ struct Place: Equatable {
     let formattedAddress: String
     let mapUrl: String?
     let coordinate: CLLocationCoordinate2D
+    let photos: [PhotoReference]?
 
     // NOTE: Place Detail request optionally returns phone number, rating, reviews.
     // Documentation: https://developers.google.com/places/web-service/details
@@ -31,6 +32,7 @@ extension Place: Decodable {
         case formattedAddress
         case mapUrl = "url"
         case geometry
+        case photos
         case internationalPhoneNumber
         case rating
         case reviews
@@ -59,7 +61,6 @@ extension Place: Decodable {
         let lat = try location.decode(Double.self, forKey: .lat)
         let lng = try location.decode(Double.self, forKey: .lng)
         coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lng)
-        rating = try? values.decode(Float.self, forKey: .rating)
 
         if let reviews = try? values.decode([Review].self, forKey: .reviews) {
             self.reviews = reviews
@@ -67,6 +68,8 @@ extension Place: Decodable {
             self.reviews = []
         }
 
+        photos = try? values.decode([PhotoReference].self, forKey: .photos)
+        rating = try? values.decode(Float.self, forKey: .rating)
         businessStatus = try? values.decode(PlaceBusinessStatus.self, forKey: .businessStatus)
     }
 
@@ -82,6 +85,7 @@ extension Place: Decodable {
         internationalPhoneNumber = gmsPlace.phoneNumber
         mapUrl = nil
         coordinate = gmsPlace.coordinate
+        photos = nil
         rating = gmsPlace.rating
         reviews = []
         businessStatus = PlaceBusinessStatus(gmsBusinessStatus: gmsPlace.businessStatus)
