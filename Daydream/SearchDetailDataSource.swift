@@ -61,8 +61,8 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
         self.place = place
     }
 
-    func loadPhoto() -> Future<UIImage, Error> {
-        return API.PlaceSearch.loadGooglePhoto(placeId: place.placeId)
+    func loadPhoto() -> AnyPublisher<UIImage, Error>? {
+        API.PlaceSearch.loadGooglePhoto(photoRef: place.photoRef, maxHeight: Int(UIScreen.main.bounds.height))
     }
 
     func loadSights(name: String, location: CLLocationCoordinate2D, queryType: API.PlaceSearch.TextSearchRoute.QueryType) -> AnyPublisher<Void, Error>? {
@@ -108,10 +108,8 @@ class SearchDetailDataSource: NSObject, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath {
         case SearchDetailDataSource.mapIndexPath:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "mapCardCell", for: indexPath)
-
-            guard let mapCardCell = cell as? MapCardCell else {
-                return cell
+            guard let mapCardCell = tableView.dequeueReusableCell(withIdentifier: "mapCardCell", for: indexPath) as? MapCardCell else {
+                return UITableViewCell()
             }
 
             mapCardCell.place = place

@@ -187,11 +187,7 @@ final class SearchDetailViewController: UIViewController {
     }
 
     private func fetchBackgroundPhoto() {
-        guard let dataSource = dataSource else {
-            return
-        }
-
-        loadPhotoCancellable = dataSource.loadPhoto()
+        loadPhotoCancellable = dataSource?.loadPhoto()?
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { [weak self] receiveCompletion in
                 guard let strongSelf = self else {

@@ -35,6 +35,9 @@ final class EateryView: UIView {
     private weak var delegate: EateryViewDelegate?
     private var eatery: Eatable?
     private var cancellable: AnyCancellable?
+    private var maxHeight: Int {
+        Int(UIScreen.main.bounds.height)
+    }
 
     convenience init(layoutType: LayoutType, delegate: EateryViewDelegate) {
         self.init(frame: .zero)
@@ -125,10 +128,7 @@ final class EateryView: UIView {
                 })
 
         case .google:
-            guard let id = eatery.eatableId else {
-                return
-            }
-            cancellable = API.PlaceSearch.loadGooglePhoto(placeId: id)
+            cancellable = API.PlaceSearch.loadGooglePhoto(photoRef: eatery.photoRef, maxHeight: maxHeight)?
                 .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] image in
                     guard let strongSelf = self else {
                         return
