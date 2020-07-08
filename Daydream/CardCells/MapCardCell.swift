@@ -17,6 +17,7 @@ class MapCardCell: UITableViewCell {
         let mapView = GMSMapView(frame: .zero, camera: defaultCamera)
         mapView.addRoundedCorners(radius: 10)
         mapView.configureMapStyle(isDark: traitCollection.userInterfaceStyle == .dark)
+        mapView.isUserInteractionEnabled = false
         return mapView
     }()
 
