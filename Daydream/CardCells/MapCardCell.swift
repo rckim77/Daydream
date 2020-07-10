@@ -33,7 +33,9 @@ final class MapCardCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
+        backgroundColor = .clear
         contentView.addSubview(mapView)
+        
         mapView.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
             make.left.right.equalToSuperview().inset(16)

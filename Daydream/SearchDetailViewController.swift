@@ -85,6 +85,7 @@ final class SearchDetailViewController: UIViewController {
         tableView.delegate = self
         tableView.tableFooterView = UIView()
         tableView.backgroundColor = .clear
+        tableView.separatorStyle = .none
         tableView.contentInset = UIEdgeInsets(top: headerContentInset, left: 0, bottom: 0, right: 0)
         dataSource.viewController = self
         return tableView
