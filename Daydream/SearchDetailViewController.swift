@@ -14,8 +14,8 @@ import Combine
 
 final class SearchDetailViewController: UIViewController {
 
-    var dataSource: SearchDetailDataSource?
-    var backgroundImage: UIImage?
+    private var dataSource: SearchDetailDataSource
+    private var backgroundImage: UIImage
     private var resultsViewController: GMSAutocompleteResultsViewController?
     private var searchController: UISearchController?
     private var mapView: GMSMapView?
@@ -79,6 +79,16 @@ final class SearchDetailViewController: UIViewController {
     @IBOutlet weak var placeCardsTableView: UITableView!
     @IBOutlet weak var floatingTitleView: DesignableView!
     @IBOutlet weak var floatingTitleLabel: UILabel!
+    
+    init(backgroundImage: UIImage, place: Place) {
+        self.backgroundImage = backgroundImage
+        self.dataSource = SearchDetailDataSource(place: place)
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -87,8 +97,8 @@ final class SearchDetailViewController: UIViewController {
         addProgrammaticComponents()
         configureFloatingTitleLabel()
 
-        dataSource?.sightsLoadingState = .loading
-        dataSource?.eateriesLoadingState = .loading
+        dataSource.sightsLoadingState = .loading
+        dataSource.eateriesLoadingState = .loading
         placeCardsTableView.reloadData()
         loadDataSource(reloadMapCard: false, fetchBackground: false, completion: {})
     }
@@ -157,10 +167,6 @@ final class SearchDetailViewController: UIViewController {
     // MARK: - Reload methods
 
     private func loadDataSource(reloadMapCard: Bool = false, fetchBackground: Bool = true, completion: @escaping(() -> Void)) {
-        guard let dataSource = dataSource else {
-            return
-        }
-
         titleLabel.text = dataSource.place.name
         floatingTitleLabel.text = dataSource.place.name
 
@@ -196,7 +202,7 @@ final class SearchDetailViewController: UIViewController {
     }
 
     private func fetchBackgroundPhoto() {
-        loadPhotoCancellable = dataSource?.loadPhoto()?
+        loadPhotoCancellable = dataSource.loadPhoto()?
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { [weak self] receiveCompletion in
                 guard let strongSelf = self else {
@@ -222,7 +228,7 @@ final class SearchDetailViewController: UIViewController {
         placeCardsTableView.delegate = self
         placeCardsTableView.tableFooterView = UIView()
         placeCardsTableView.contentInset = UIEdgeInsets(top: headerContentInset, left: 0, bottom: 0, right: 0)
-        dataSource?.viewController = self
+        dataSource.viewController = self
     }
 
     private func configureFloatingTitleLabel() {
@@ -246,8 +252,8 @@ final class SearchDetailViewController: UIViewController {
 
         let loadingVC = LoadingViewController()
         add(loadingVC)
-        dataSource?.sightsLoadingState = .loading
-        dataSource?.eateriesLoadingState = .loading
+        dataSource.sightsLoadingState = .loading
+        dataSource.eateriesLoadingState = .loading
         placeCardsTableView.reloadData()
 
         loadPlaceByNameCancellable = API.PlaceSearch.loadPlace(name: randomCity, queryType: .placeByName)?
@@ -257,7 +263,7 @@ final class SearchDetailViewController: UIViewController {
                     self?.logErrorEvent(error)
                 }
             }, receiveValue: { [weak self] place in
-                self?.dataSource?.place = place
+                self?.dataSource.place = place
                 self?.loadDataSource(reloadMapCard: true, completion: {
                     loadingVC.remove()
                 })
@@ -267,10 +273,6 @@ final class SearchDetailViewController: UIViewController {
 
 extension SearchDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        guard let dataSource = dataSource else {
-            return 0
-        }
-
         switch indexPath.row {
         case 0:
             return dataSource.mapCardCellHeight
@@ -284,7 +286,7 @@ extension SearchDetailViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let dataSource = dataSource, indexPath.row == 0 else {
+        guard indexPath.row == 0 else {
             return
         }
 
@@ -367,10 +369,7 @@ extension SearchDetailViewController: GMSAutocompleteResultsViewControllerDelega
         }
 
         dismiss(animated: true, completion: {
-            guard let dataSource = self.dataSource else {
-                return
-            }
-            dataSource.place = placeModel
+            self.dataSource.place = placeModel
             let loadingVC = LoadingViewController()
             self.add(loadingVC)
             self.loadDataSource(reloadMapCard: true, completion: {

@@ -17,9 +17,6 @@
                         <color key="backgroundColor" red="0.72549019609999998" green="0.88235294119999996" blue="0.86274509799999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
-                    <connections>
-                        <segue destination="mAC-Ym-g6i" kind="presentation" identifier="toSearchDetailVCSegue" modalPresentationStyle="overFullScreen" modalTransitionStyle="crossDissolve" id="0Kk-Mo-0ud"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
