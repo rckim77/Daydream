@@ -69,8 +69,13 @@ final class SearchDetailViewController: UIViewController {
         }
         return button
     }()
+    
+    private lazy var backgroundImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        return imageView
+    }()
 
-    @IBOutlet weak var placeImageView: UIImageView!
     @IBOutlet weak var placeCardsTableView: UITableView!
     @IBOutlet weak var floatingTitleView: DesignableView!
     @IBOutlet weak var floatingTitleLabel: UILabel!
@@ -82,10 +87,6 @@ final class SearchDetailViewController: UIViewController {
         addProgrammaticComponents()
         configureFloatingTitleLabel()
 
-        placeImageView.image = backgroundImage
-        placeImageView.contentMode = .scaleAspectFill
-        placeImageView.addSubview(visualEffectView)
-
         dataSource?.sightsLoadingState = .loading
         dataSource?.eateriesLoadingState = .loading
         placeCardsTableView.reloadData()
@@ -95,9 +96,17 @@ final class SearchDetailViewController: UIViewController {
     // MARK: - Search
 
     private func addProgrammaticComponents() {
+        view.addSubview(backgroundImageView)
+        backgroundImageView.image = backgroundImage
+        backgroundImageView.addSubview(visualEffectView)
+
         view.addSubview(titleLabel)
         view.addSubview(randomCityButton)
-        view.insertSubview(homeButton, belowSubview: placeCardsTableView)
+        view.addSubview(homeButton)
+        
+        backgroundImageView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
 
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(24)
@@ -200,10 +209,9 @@ final class SearchDetailViewController: UIViewController {
                 guard let strongSelf = self else {
                     return
                 }
-                strongSelf.placeImageView.subviews.forEach { $0.removeFromSuperview() }
-                strongSelf.placeImageView.image = image
-                strongSelf.placeImageView.contentMode = .scaleAspectFill
-                strongSelf.placeImageView.addSubview(strongSelf.visualEffectView)
+                strongSelf.backgroundImageView.subviews.forEach { $0.removeFromSuperview() }
+                strongSelf.backgroundImageView.image = image
+                strongSelf.backgroundImageView.addSubview(strongSelf.visualEffectView)
             })
     }
 
@@ -323,12 +331,12 @@ extension SearchDetailViewController: UITableViewDelegate {
     private func transitionHeader(_ yOffset: CGFloat) {
         if yOffset >= -headerFadeOutStartPoint {
             let calculatedHeaderAlpha = (-yOffset - headerFadeOutEndPoint) / (headerFadeOutStartPoint - headerFadeOutEndPoint)
-            view.insertSubview(placeCardsTableView, aboveSubview: randomCityButton)
+            view.insertSubview(placeCardsTableView, aboveSubview: homeButton)
             titleLabel.alpha = min(calculatedHeaderAlpha, 1)
             randomCityButton.alpha = min(calculatedHeaderAlpha, 1)
             homeButton.alpha = min(calculatedHeaderAlpha, 1)
         } else {
-            view.insertSubview(placeCardsTableView, aboveSubview: placeImageView)
+            view.insertSubview(placeCardsTableView, aboveSubview: backgroundImageView)
             titleLabel.alpha = 1
             randomCityButton.alpha = 1
             homeButton.alpha = 1

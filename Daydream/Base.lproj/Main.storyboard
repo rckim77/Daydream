@@ -33,9 +33,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sunriseJungle" translatesAutoresizingMaskIntoConstraints="NO" id="NX7-bA-oV6">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                            </imageView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Lg2-04-32b">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -107,16 +104,12 @@
                         </subviews>
                         <color key="backgroundColor" red="0.72549019609999998" green="0.88235294119999996" blue="0.86274509799999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="NX7-bA-oV6" secondAttribute="bottom" id="D6x-Xs-oES"/>
                             <constraint firstItem="1tM-WJ-sOR" firstAttribute="trailing" secondItem="Lg2-04-32b" secondAttribute="trailing" id="KOp-bY-Tge"/>
                             <constraint firstItem="Lg2-04-32b" firstAttribute="top" secondItem="ngt-Nd-jYB" secondAttribute="top" id="NWD-le-PEq"/>
                             <constraint firstItem="Lg2-04-32b" firstAttribute="leading" secondItem="1tM-WJ-sOR" secondAttribute="leading" id="ZYX-sD-0s6"/>
-                            <constraint firstItem="NX7-bA-oV6" firstAttribute="top" secondItem="ngt-Nd-jYB" secondAttribute="top" id="aTE-cH-bvu"/>
                             <constraint firstAttribute="bottom" secondItem="Lg2-04-32b" secondAttribute="bottom" id="biJ-nG-UC7"/>
-                            <constraint firstItem="NX7-bA-oV6" firstAttribute="leading" secondItem="1tM-WJ-sOR" secondAttribute="leading" id="gBp-HF-jUV"/>
                             <constraint firstItem="1tM-WJ-sOR" firstAttribute="top" secondItem="6KP-bC-1sz" secondAttribute="bottom" constant="-36" id="igL-wy-kYm"/>
                             <constraint firstItem="6KP-bC-1sz" firstAttribute="centerX" secondItem="ngt-Nd-jYB" secondAttribute="centerX" id="loG-1j-Cb5"/>
-                            <constraint firstItem="1tM-WJ-sOR" firstAttribute="trailing" secondItem="NX7-bA-oV6" secondAttribute="trailing" id="rk6-js-o7d"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="1tM-WJ-sOR"/>
                     </view>
@@ -124,7 +117,6 @@
                         <outlet property="floatingTitleLabel" destination="5da-ff-ebA" id="eY5-Fi-7ff"/>
                         <outlet property="floatingTitleView" destination="6KP-bC-1sz" id="hGq-XA-Ap4"/>
                         <outlet property="placeCardsTableView" destination="Lg2-04-32b" id="rem-0K-EVa"/>
-                        <outlet property="placeImageView" destination="NX7-bA-oV6" id="dS6-Yy-Ut3"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hOa-Hv-SgJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -132,7 +124,4 @@
             <point key="canvasLocation" x="1085.5999999999999" y="30.295566502463057"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="sunriseJungle" width="2246" height="3644"/>
-    </resources>
 </document>
