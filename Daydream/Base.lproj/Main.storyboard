@@ -110,11 +110,6 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="1tM-WJ-sOR"/>
                     </view>
-                    <connections>
-                        <outlet property="floatingTitleLabel" destination="5da-ff-ebA" id="eY5-Fi-7ff"/>
-                        <outlet property="floatingTitleView" destination="6KP-bC-1sz" id="hGq-XA-Ap4"/>
-                        <outlet property="placeCardsTableView" destination="Lg2-04-32b" id="rem-0K-EVa"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hOa-Hv-SgJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

@@ -191,6 +191,8 @@ final class SearchViewController: UIViewController {
         placeBackgroundImage = nil
         placeData = nil
         let searchDetailVC = SearchDetailViewController(backgroundImage: backgroundImage, place: place)
+        searchDetailVC.modalPresentationStyle = .fullScreen
+        searchDetailVC.modalTransitionStyle = .crossDissolve
         present(searchDetailVC, animated: true, completion: nil)
     }
 

@@ -16,7 +16,7 @@ protocol SightsCardCellDelegate: class {
     func sightsCardCellDidTapRetry()
 }
 
-class SightsCardCell: UITableViewCell {
+final class SightsCardCell: UITableViewCell {
 
     static let defaultHeight: CGFloat = 600
     private let defaultSectionHeight: CGFloat = 515
@@ -67,8 +67,8 @@ class SightsCardCell: UITableViewCell {
         }
     }
 
-    override func awakeFromNib() {
-        super.awakeFromNib()
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
 
         contentView.addSubview(errorButton)
         contentView.addSubview(titleLabel)
@@ -116,7 +116,11 @@ class SightsCardCell: UITableViewCell {
         sight2View.resetBackgroundImage()
         sight3View.resetBackgroundImage()
     }
-
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: - Configuration methods
 
     func configureLoading() {

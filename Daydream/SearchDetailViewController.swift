@@ -76,9 +76,32 @@ final class SearchDetailViewController: UIViewController {
         return imageView
     }()
 
-    @IBOutlet weak var placeCardsTableView: UITableView!
-    @IBOutlet weak var floatingTitleView: DesignableView!
-    @IBOutlet weak var floatingTitleLabel: UILabel!
+    private lazy var cardsTableView: UITableView = {
+        let tableView = UITableView()
+        tableView.dataSource = dataSource
+        tableView.register(MapCardCell.self, forCellReuseIdentifier: "mapCardCell")
+        tableView.register(SightsCardCell.self, forCellReuseIdentifier: "sightsCardCell")
+        tableView.register(EateriesCardCell.self, forCellReuseIdentifier: "eateriesCardCell")
+        tableView.delegate = self
+        tableView.tableFooterView = UIView()
+        tableView.backgroundColor = .clear
+        tableView.contentInset = UIEdgeInsets(top: headerContentInset, left: 0, bottom: 0, right: 0)
+        dataSource.viewController = self
+        return tableView
+    }()
+    
+    private lazy var floatingTitleView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.addShadow()
+        return view
+    }()
+    
+    private lazy var floatingTitleLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .darkGray
+        return label
+    }()
     
     init(backgroundImage: UIImage, place: Place) {
         self.backgroundImage = backgroundImage
@@ -93,13 +116,12 @@ final class SearchDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        configureTableView()
         addProgrammaticComponents()
         configureFloatingTitleLabel()
 
         dataSource.sightsLoadingState = .loading
         dataSource.eateriesLoadingState = .loading
-        placeCardsTableView.reloadData()
+        cardsTableView.reloadData()
         loadDataSource(reloadMapCard: false, fetchBackground: false, completion: {})
     }
 
@@ -113,6 +135,9 @@ final class SearchDetailViewController: UIViewController {
         view.addSubview(titleLabel)
         view.addSubview(randomCityButton)
         view.addSubview(homeButton)
+        view.addSubview(cardsTableView)
+        view.addSubview(floatingTitleView)
+        floatingTitleView.addSubview(floatingTitleLabel)
         
         backgroundImageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -134,6 +159,20 @@ final class SearchDetailViewController: UIViewController {
             make.size.equalTo(40)
             make.leading.equalTo(randomCityButton.snp.trailing)
             make.trailing.equalToSuperview().inset(8)
+        }
+        
+        cardsTableView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        floatingTitleView.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(8)
+            make.centerX.equalToSuperview()
+        }
+        
+        floatingTitleLabel.snp.makeConstraints { make in
+            make.left.right.equalToSuperview().inset(8)
+            make.top.bottom.equalToSuperview()
         }
 
         resultsViewController = GMSAutocompleteResultsViewController()
@@ -179,10 +218,10 @@ final class SearchDetailViewController: UIViewController {
                 if case let Subscribers.Completion.failure(error) = receiveCompletion {
                     self?.logErrorEvent(error)
                 }
-                self?.placeCardsTableView.reloadRows(at: [SearchDetailDataSource.sightsIndexPath], with: .fade)
+                self?.cardsTableView.reloadRows(at: [SearchDetailDataSource.sightsIndexPath], with: .fade)
                 completion()
                 }, receiveValue: { [weak self] _ in
-                    self?.placeCardsTableView.reloadRows(at: [SearchDetailDataSource.sightsIndexPath], with: .fade)
+                    self?.cardsTableView.reloadRows(at: [SearchDetailDataSource.sightsIndexPath], with: .fade)
             })
 
         eateriesCancellable = dataSource.loadEateries()?
@@ -190,14 +229,14 @@ final class SearchDetailViewController: UIViewController {
                 if case let Subscribers.Completion.failure(error) = receiveCompletion {
                     self?.logErrorEvent(error)
                 }
-                self?.placeCardsTableView.reloadRows(at: [SearchDetailDataSource.eateriesIndexPath], with: .fade)
+                self?.cardsTableView.reloadRows(at: [SearchDetailDataSource.eateriesIndexPath], with: .fade)
                 completion()
                 }, receiveValue: { [weak self] _ in
-                    self?.placeCardsTableView.reloadRows(at: [SearchDetailDataSource.eateriesIndexPath], with: .fade)
+                    self?.cardsTableView.reloadRows(at: [SearchDetailDataSource.eateriesIndexPath], with: .fade)
             })
 
         if reloadMapCard {
-            placeCardsTableView.reloadRows(at: [SearchDetailDataSource.mapIndexPath], with: .fade)
+            cardsTableView.reloadRows(at: [SearchDetailDataSource.mapIndexPath], with: .fade)
         }
     }
 
@@ -219,16 +258,6 @@ final class SearchDetailViewController: UIViewController {
                 strongSelf.backgroundImageView.image = image
                 strongSelf.backgroundImageView.addSubview(strongSelf.visualEffectView)
             })
-    }
-
-    // MARK: - Configuration methods
-
-    private func configureTableView() {
-        placeCardsTableView.dataSource = dataSource
-        placeCardsTableView.delegate = self
-        placeCardsTableView.tableFooterView = UIView()
-        placeCardsTableView.contentInset = UIEdgeInsets(top: headerContentInset, left: 0, bottom: 0, right: 0)
-        dataSource.viewController = self
     }
 
     private func configureFloatingTitleLabel() {
@@ -254,7 +283,7 @@ final class SearchDetailViewController: UIViewController {
         add(loadingVC)
         dataSource.sightsLoadingState = .loading
         dataSource.eateriesLoadingState = .loading
-        placeCardsTableView.reloadData()
+        cardsTableView.reloadData()
 
         loadPlaceByNameCancellable = API.PlaceSearch.loadPlace(name: randomCity, queryType: .placeByName)?
             .sink(receiveCompletion: { [weak self] completion in
@@ -324,7 +353,7 @@ extension SearchDetailViewController: UITableViewDelegate {
         if yOffset > fadeOutStartPoint {
             let calculatedAlpha = (-yOffset + fadeOutEndPoint) / padding
             searchController?.searchBar.alpha = max(calculatedAlpha, 0)
-            view.insertSubview(floatingTitleView, aboveSubview: placeCardsTableView)
+            view.insertSubview(floatingTitleView, aboveSubview: cardsTableView)
         } else {
             searchController?.searchBar.alpha = 1
         }
@@ -333,12 +362,12 @@ extension SearchDetailViewController: UITableViewDelegate {
     private func transitionHeader(_ yOffset: CGFloat) {
         if yOffset >= -headerFadeOutStartPoint {
             let calculatedHeaderAlpha = (-yOffset - headerFadeOutEndPoint) / (headerFadeOutStartPoint - headerFadeOutEndPoint)
-            view.insertSubview(placeCardsTableView, aboveSubview: homeButton)
+            view.insertSubview(cardsTableView, aboveSubview: homeButton)
             titleLabel.alpha = min(calculatedHeaderAlpha, 1)
             randomCityButton.alpha = min(calculatedHeaderAlpha, 1)
             homeButton.alpha = min(calculatedHeaderAlpha, 1)
         } else {
-            view.insertSubview(placeCardsTableView, aboveSubview: backgroundImageView)
+            view.insertSubview(cardsTableView, aboveSubview: backgroundImageView)
             titleLabel.alpha = 1
             randomCityButton.alpha = 1
             homeButton.alpha = 1
