@@ -91,17 +91,9 @@ final class SearchDetailViewController: UIViewController {
         return tableView
     }()
     
-    private lazy var floatingTitleView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .white
-        view.addShadow()
+    private lazy var floatingView: FloatingView = {
+        let view = FloatingView()
         return view
-    }()
-    
-    private lazy var floatingTitleLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .darkGray
-        return label
     }()
     
     init(backgroundImage: UIImage, place: Place) {
@@ -137,8 +129,7 @@ final class SearchDetailViewController: UIViewController {
         view.addSubview(randomCityButton)
         view.addSubview(homeButton)
         view.addSubview(cardsTableView)
-        view.addSubview(floatingTitleView)
-        floatingTitleView.addSubview(floatingTitleLabel)
+        view.addSubview(floatingView)
         
         backgroundImageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -166,14 +157,9 @@ final class SearchDetailViewController: UIViewController {
             make.edges.equalToSuperview()
         }
         
-        floatingTitleView.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(8)
+        floatingView.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(24)
             make.centerX.equalToSuperview()
-        }
-        
-        floatingTitleLabel.snp.makeConstraints { make in
-            make.left.right.equalToSuperview().inset(8)
-            make.top.bottom.equalToSuperview()
         }
 
         resultsViewController = GMSAutocompleteResultsViewController()
@@ -208,7 +194,7 @@ final class SearchDetailViewController: UIViewController {
 
     private func loadDataSource(reloadMapCard: Bool = false, fetchBackground: Bool = true, completion: @escaping(() -> Void)) {
         titleLabel.text = dataSource.place.name
-        floatingTitleLabel.text = dataSource.place.name
+        floatingView.setTitle(dataSource.place.name)
 
         if fetchBackground {
             fetchBackgroundPhoto()
@@ -262,7 +248,7 @@ final class SearchDetailViewController: UIViewController {
     }
 
     private func configureFloatingTitleLabel() {
-        floatingTitleView.alpha = 0
+        floatingView.alpha = 0
     }
 
     // MARK: - Button selector methods
@@ -354,7 +340,7 @@ extension SearchDetailViewController: UITableViewDelegate {
         if yOffset > fadeOutStartPoint {
             let calculatedAlpha = (-yOffset + fadeOutEndPoint) / padding
             searchController?.searchBar.alpha = max(calculatedAlpha, 0)
-            view.insertSubview(floatingTitleView, aboveSubview: cardsTableView)
+            view.insertSubview(floatingView, aboveSubview: cardsTableView)
         } else {
             searchController?.searchBar.alpha = 1
         }
@@ -379,9 +365,9 @@ extension SearchDetailViewController: UITableViewDelegate {
         if yOffset >= -floatingTitleViewFadeInStartPoint {
             let range = floatingTitleViewFadeInStartPoint - floatingTitleViewFadeInEndPoint
             let calculatedAlpha = 1 - ((-yOffset - floatingTitleViewFadeInEndPoint) / range)
-            floatingTitleView.alpha = min(calculatedAlpha, 1)
+            floatingView.alpha = min(calculatedAlpha, 1)
         } else {
-            floatingTitleView.alpha = 0
+            floatingView.alpha = 0
         }
     }
 }

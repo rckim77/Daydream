@@ -61,6 +61,7 @@
 		94E9F3292492BEF600B1D003 /* ResultsCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E9F3282492BEF600B1D003 /* ResultsCollection.swift */; };
 		94E9F32B2492E12900B1D003 /* PlaceCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E9F32A2492E12900B1D003 /* PlaceCollection.swift */; };
 		EC14499724B4F63500CA47B1 /* PhotoReference.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC14499624B4F63500CA47B1 /* PhotoReference.swift */; };
+		EC14499924BA20B600CA47B1 /* FloatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC14499824BA20B600CA47B1 /* FloatingView.swift */; };
 		EC34ADDA24A1A1D200916FE2 /* apiKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = EC34ADD924A1A1D200916FE2 /* apiKeys.plist */; };
 /* End PBXBuildFile section */
 
@@ -135,6 +136,7 @@
 		94E9F3282492BEF600B1D003 /* ResultsCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsCollection.swift; sourceTree = "<group>"; };
 		94E9F32A2492E12900B1D003 /* PlaceCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceCollection.swift; sourceTree = "<group>"; };
 		EC14499624B4F63500CA47B1 /* PhotoReference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoReference.swift; sourceTree = "<group>"; };
+		EC14499824BA20B600CA47B1 /* FloatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingView.swift; sourceTree = "<group>"; };
 		EC34ADD924A1A1D200916FE2 /* apiKeys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = apiKeys.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -291,6 +293,7 @@
 				9490BA03206B03B300B880E7 /* Protocols.swift */,
 				9490BA01206AF6F700B880E7 /* randomCitiesJSON.json */,
 				94E392AF2074B29E0073E8C9 /* style.json */,
+				EC14499824BA20B600CA47B1 /* FloatingView.swift */,
 				947EC657204673BF004A911D /* ShadowView.swift */,
 				EC34ADD924A1A1D200916FE2 /* apiKeys.plist */,
 				94E1086C24836F660091D043 /* GradientView.swift */,
@@ -567,6 +570,7 @@
 				94380AC8203BAE1D00684863 /* AppDelegate.swift in Sources */,
 				947EC656204667EB004A911D /* MapCardCell.swift in Sources */,
 				94600FBA24987B8300E605FD /* JSONCustomDecoder.swift in Sources */,
+				EC14499924BA20B600CA47B1 /* FloatingView.swift in Sources */,
 				94600FC6249A986600E605FD /* API.swift in Sources */,
 				9434BA4C247998D4004294F0 /* MapReviewCard.swift in Sources */,
 				94E108712484AF5A0091D043 /* CellLoadingView.swift in Sources */,

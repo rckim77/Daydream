@@ -9,6 +9,8 @@
 import UIKit
 
 class ShadowView: UIView {
+    
+    private let cornerRadius: CGFloat
 
     override var bounds: CGRect {
         didSet {
@@ -16,8 +18,17 @@ class ShadowView: UIView {
         }
     }
     
+    init(cornerRadius: CGFloat = 8) {
+        self.cornerRadius = cornerRadius
+        super.init(frame: .zero)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     private func setupShadow() {
-        layer.cornerRadius = 8
+        layer.cornerRadius = cornerRadius
         layer.shadowOffset = CGSize(width: 0, height: 3)
         layer.shadowRadius = 4
         layer.shadowOpacity = 0.5
