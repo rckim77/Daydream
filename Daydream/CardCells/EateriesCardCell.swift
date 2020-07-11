@@ -80,6 +80,7 @@ final class EateriesCardCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
         backgroundColor = .clear
+        selectionStyle = .none
         contentView.addSubview(errorButton)
         contentView.addSubview(titleLabel)
         contentView.addSubview(infoButton)

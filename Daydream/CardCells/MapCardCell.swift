@@ -34,6 +34,7 @@ final class MapCardCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
         backgroundColor = .clear
+        selectionStyle = .none
         contentView.addSubview(mapView)
         
         mapView.snp.makeConstraints { make in
