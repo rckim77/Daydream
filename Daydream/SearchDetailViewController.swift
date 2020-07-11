@@ -35,7 +35,7 @@ final class SearchDetailViewController: UIViewController {
 
     // MARK: - Constants
 
-    private let headerContentInset: CGFloat = 138
+    private let headerContentInset: CGFloat = 144
     private let headerFadeOutStartPoint: CGFloat = 100
     private let headerFadeOutEndPoint: CGFloat = 80
     private let floatingTitleViewFadeInStartPoint: CGFloat = 85
@@ -158,7 +158,7 @@ final class SearchDetailViewController: UIViewController {
         }
         
         floatingView.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(24)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).inset(8)
             make.centerX.equalToSuperview()
         }
 
