@@ -203,6 +203,7 @@ final class SearchViewController: UIViewController {
         logEvent(contentType: "random button tapped", title)
         if placeBackgroundImage != nil && placeData != nil {
             resetAndPresentDetailViewController()
+            return
         }
 
         guard let randomCity = getRandomCity() else {
