@@ -299,7 +299,7 @@ extension SearchViewController: GMSAutocompleteResultsViewControllerDelegate {
                     loadingVC.remove()
                 }, receiveValue: { [weak self] image in
                     self?.placeBackgroundImage = image
-                    self?.performSegue(withIdentifier: "toSearchDetailVCSegue", sender: nil)
+                    self?.resetAndPresentDetailViewController()
                 })
         })
     }
