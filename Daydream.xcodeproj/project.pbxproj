@@ -201,8 +201,7 @@
 			isa = PBXGroup;
 			children = (
 				94380AC7203BAE1D00684863 /* AppDelegate.swift */,
-				94380AC9203BAE1D00684863 /* SearchViewController.swift */,
-				EC14499A24BD07D900CA47B1 /* CuratedCityCollectionViewCell.swift */,
+				EC14499C24BD0B9D00CA47B1 /* Search */,
 				949630B9203BCBBD007139CA /* SearchDetailViewController.swift */,
 				94B8CEB2207DC31D00CA8101 /* SearchDetailDataSource.swift */,
 				94090909205F4613002A65EF /* MapViewController.swift */,
@@ -321,6 +320,15 @@
 				275E3DD2282C7EA762CA98E6 /* Pods-Daydream.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		EC14499C24BD0B9D00CA47B1 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				94380AC9203BAE1D00684863 /* SearchViewController.swift */,
+				EC14499A24BD07D900CA47B1 /* CuratedCityCollectionViewCell.swift */,
+			);
+			path = Search;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
