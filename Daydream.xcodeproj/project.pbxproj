@@ -14,7 +14,6 @@
 		9434BA4C247998D4004294F0 /* MapReviewCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9434BA4B247998D4004294F0 /* MapReviewCard.swift */; };
 		94380AC8203BAE1D00684863 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94380AC7203BAE1D00684863 /* AppDelegate.swift */; };
 		94380ACA203BAE1D00684863 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94380AC9203BAE1D00684863 /* SearchViewController.swift */; };
-		94380ACD203BAE1D00684863 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 94380ACB203BAE1D00684863 /* Main.storyboard */; };
 		94380ACF203BAE1D00684863 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 94380ACE203BAE1D00684863 /* Assets.xcassets */; };
 		94380AD2203BAE1D00684863 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 94380AD0203BAE1D00684863 /* LaunchScreen.storyboard */; };
 		94600FBA24987B8300E605FD /* JSONCustomDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94600FB924987B8300E605FD /* JSONCustomDecoder.swift */; };
@@ -88,7 +87,6 @@
 		94380AC4203BAE1D00684863 /* Daydream.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Daydream.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94380AC7203BAE1D00684863 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		94380AC9203BAE1D00684863 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
-		94380ACC203BAE1D00684863 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		94380ACE203BAE1D00684863 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		94380AD1203BAE1D00684863 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		94380AD3203BAE1D00684863 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -210,7 +208,6 @@
 				94B7DB5A205E2C800040D61C /* Models */,
 				94A9CCBC2489C312008551B6 /* Networking */,
 				94B7DB5B205E2C920040D61C /* Shared */,
-				94380ACB203BAE1D00684863 /* Main.storyboard */,
 				94380ACE203BAE1D00684863 /* Assets.xcassets */,
 				94380AD0203BAE1D00684863 /* LaunchScreen.storyboard */,
 				94380AD3203BAE1D00684863 /* Info.plist */,
@@ -425,7 +422,6 @@
 				94E392AD2070B4300073E8C9 /* GoogleService-Info.plist in Resources */,
 				94E392B02074B29E0073E8C9 /* style.json in Resources */,
 				94380ACF203BAE1D00684863 /* Assets.xcassets in Resources */,
-				94380ACD203BAE1D00684863 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -606,14 +602,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		94380ACB203BAE1D00684863 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				94380ACC203BAE1D00684863 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		94380AD0203BAE1D00684863 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
