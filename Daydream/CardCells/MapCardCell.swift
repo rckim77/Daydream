@@ -10,7 +10,7 @@ import UIKit
 import GooglePlaces
 import GoogleMaps
 
-class MapCardCell: UITableViewCell {
+final class MapCardCell: UITableViewCell {
 
     private lazy var mapView: GMSMapView = {
         let defaultCamera = GMSCameraPosition.camera(withLatitude: 0, longitude: 0, zoom: 0)
@@ -30,14 +30,21 @@ class MapCardCell: UITableViewCell {
         }
     }
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
 
+        backgroundColor = .clear
+        selectionStyle = .none
         contentView.addSubview(mapView)
+        
         mapView.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
             make.left.right.equalToSuperview().inset(16)
         }
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     private func updateMapView(place: Place) {

@@ -20,9 +20,6 @@ final class SearchViewController: UIViewController {
     private var defaultSearchBarYOffset: CGFloat {
         return  (view.bounds.height / 2) - (searchBarViewHeight / 2) - 50
     }
-    private var dataPreloaded: Bool {
-        placeData != nil && placeBackgroundImage != nil
-    }
 
     static let toSearchDetailVCSegue = "toSearchDetailVCSegue"
     private let searchBarViewHeight: CGFloat = 45.0
@@ -186,14 +183,26 @@ final class SearchViewController: UIViewController {
         searchBarContainerView.frame = CGRect(x: 0, y: defaultSearchBarYOffset, width: view.bounds.width, height: searchBarViewHeight)
         titleLabel.alpha = 1
     }
+    
+    private func resetAndPresentDetailViewController() {
+        guard let backgroundImage = placeBackgroundImage, let place = placeData else {
+            return
+        }
+        placeBackgroundImage = nil
+        placeData = nil
+        let searchDetailVC = SearchDetailViewController(backgroundImage: backgroundImage, place: place)
+        searchDetailVC.modalPresentationStyle = .fullScreen
+        searchDetailVC.modalTransitionStyle = .crossDissolve
+        present(searchDetailVC, animated: true, completion: nil)
+    }
 
     // MARK: - Button selector methods
 
     @objc
     func randomButtonTapped() {
         logEvent(contentType: "random button tapped", title)
-        if dataPreloaded {
-            performSegue(withIdentifier: SearchViewController.toSearchDetailVCSegue, sender: nil)
+        if placeBackgroundImage != nil && placeData != nil {
+            resetAndPresentDetailViewController()
             return
         }
 
@@ -210,8 +219,11 @@ final class SearchViewController: UIViewController {
                     self?.logErrorEvent(error)
                 }
             }, receiveValue: { [weak self] image in
-                self?.placeBackgroundImage = image
-                self?.performSegue(withIdentifier: SearchViewController.toSearchDetailVCSegue, sender: nil)
+                guard let strongSelf = self else {
+                    return
+                }
+                strongSelf.placeBackgroundImage = image
+                strongSelf.resetAndPresentDetailViewController()
             })
     }
 
@@ -230,21 +242,6 @@ final class SearchViewController: UIViewController {
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         present(alert, animated: true, completion: nil)
-    }
-
-    // MARK: - Segue method
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let destinationVC = segue.destination as? SearchDetailViewController,
-            let place = placeData,
-            let backgroundImage = placeBackgroundImage else {
-            return
-        }
-
-        destinationVC.dataSource = SearchDetailDataSource(place: place)
-        destinationVC.backgroundImage = backgroundImage
-        placeData = nil
-        placeBackgroundImage = nil
     }
 
     // MARK: - Networking
@@ -303,7 +300,7 @@ extension SearchViewController: GMSAutocompleteResultsViewControllerDelegate {
                     loadingVC.remove()
                 }, receiveValue: { [weak self] image in
                     self?.placeBackgroundImage = image
-                    self?.performSegue(withIdentifier: "toSearchDetailVCSegue", sender: nil)
+                    self?.resetAndPresentDetailViewController()
                 })
         })
     }

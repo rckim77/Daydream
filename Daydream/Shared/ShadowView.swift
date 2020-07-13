@@ -9,6 +9,8 @@
 import UIKit
 
 class ShadowView: UIView {
+    
+    private let cornerRadius: CGFloat
 
     override var bounds: CGRect {
         didSet {
@@ -16,14 +18,24 @@ class ShadowView: UIView {
         }
     }
     
+    init(cornerRadius: CGFloat = 8) {
+        self.cornerRadius = cornerRadius
+        super.init(frame: .zero)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     private func setupShadow() {
-        layer.cornerRadius = 8
-        layer.shadowOffset = CGSize(width: 0, height: 3)
+        layer.cornerRadius = cornerRadius
+        layer.shadowOffset = CGSize(width: 0, height: 2)
         layer.shadowRadius = 4
-        layer.shadowOpacity = 0.5
+        layer.shadowOpacity = 0.4
+        let size = CGSize(width: cornerRadius, height: cornerRadius)
         layer.shadowPath = UIBezierPath(roundedRect: bounds,
                                         byRoundingCorners: .allCorners,
-                                        cornerRadii: CGSize(width: 8, height: 8)).cgPath
+                                        cornerRadii: size).cgPath
         layer.shouldRasterize = true
         layer.rasterizationScale = UIScreen.main.scale
     }

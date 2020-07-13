@@ -16,7 +16,7 @@ protocol EateriesCardCellDelegate: AnyObject {
     func eateriesCardCellDidTapRetry()
 }
 
-class EateriesCardCell: UITableViewCell {
+final class EateriesCardCell: UITableViewCell {
 
     static let defaultHeight: CGFloat = 600
     private let defaultSectionHeight: CGFloat = 515
@@ -76,9 +76,11 @@ class EateriesCardCell: UITableViewCell {
         }
     }
 
-    override func awakeFromNib() {
-        super.awakeFromNib()
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
 
+        backgroundColor = .clear
+        selectionStyle = .none
         contentView.addSubview(errorButton)
         contentView.addSubview(titleLabel)
         contentView.addSubview(infoButton)
@@ -134,7 +136,11 @@ class EateriesCardCell: UITableViewCell {
         eatery2View.resetBackgroundImage()
         eatery3View.resetBackgroundImage()
     }
-
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: - Configuration methods
 
     func configureLoading() {
