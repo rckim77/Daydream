@@ -71,6 +71,20 @@ final class SearchViewController: UIViewController {
         button.addTarget(self, action: #selector(randomButtonTapped), for: .touchUpInside)
         return button
     }()
+    
+    private lazy var curatedCitiesCollectionView: UICollectionView = {
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.itemSize = CGSize(width: 120, height: 120)
+        flowLayout.scrollDirection = .horizontal
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        collectionView.register(CuratedCityCollectionViewCell.self, forCellWithReuseIdentifier: "curatedCityCollectionViewCell")
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.backgroundColor = .clear
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: 12, bottom: 36, right: 12)
+        collectionView.showsHorizontalScrollIndicator = false
+        return collectionView
+    }()
 
     // MARK: - Cancellables
 
@@ -116,6 +130,7 @@ final class SearchViewController: UIViewController {
         view.addSubview(overlayView)
         view.addSubview(titleLabel)
         view.addSubview(randomButton)
+        view.addSubview(curatedCitiesCollectionView)
         view.addSubview(feedbackButton)
 
         backgroundImageView.snp.makeConstraints { make in
@@ -141,6 +156,12 @@ final class SearchViewController: UIViewController {
         feedbackButton.snp.makeConstraints { make in
             make.bottom.equalToSuperview().inset(30)
             make.centerX.equalToSuperview()
+        }
+        
+        curatedCitiesCollectionView.snp.makeConstraints { make in
+            make.height.equalTo(180)
+            make.bottom.equalTo(feedbackButton.snp.top)
+            make.leading.trailing.equalToSuperview()
         }
 
         resultsViewController = GMSAutocompleteResultsViewController()
@@ -326,6 +347,23 @@ extension SearchViewController: UISearchControllerDelegate {
         UIView.animate(withDuration: 0.3, animations: {
             self.resetSearchUI()
         })
+    }
+}
+
+extension SearchViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 5
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "curatedCityCollectionViewCell", for: indexPath) as? CuratedCityCollectionViewCell
+        return cell ?? UICollectionViewCell()
+    }
+}
+
+extension SearchViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("selected item")
     }
 }
 

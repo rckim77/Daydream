@@ -61,6 +61,7 @@
 		94E9F32B2492E12900B1D003 /* PlaceCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E9F32A2492E12900B1D003 /* PlaceCollection.swift */; };
 		EC14499724B4F63500CA47B1 /* PhotoReference.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC14499624B4F63500CA47B1 /* PhotoReference.swift */; };
 		EC14499924BA20B600CA47B1 /* FloatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC14499824BA20B600CA47B1 /* FloatingView.swift */; };
+		EC14499B24BD07D900CA47B1 /* CuratedCityCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC14499A24BD07D900CA47B1 /* CuratedCityCollectionViewCell.swift */; };
 		EC34ADDA24A1A1D200916FE2 /* apiKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = EC34ADD924A1A1D200916FE2 /* apiKeys.plist */; };
 /* End PBXBuildFile section */
 
@@ -135,6 +136,7 @@
 		94E9F32A2492E12900B1D003 /* PlaceCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceCollection.swift; sourceTree = "<group>"; };
 		EC14499624B4F63500CA47B1 /* PhotoReference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoReference.swift; sourceTree = "<group>"; };
 		EC14499824BA20B600CA47B1 /* FloatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingView.swift; sourceTree = "<group>"; };
+		EC14499A24BD07D900CA47B1 /* CuratedCityCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CuratedCityCollectionViewCell.swift; sourceTree = "<group>"; };
 		EC34ADD924A1A1D200916FE2 /* apiKeys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = apiKeys.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -200,6 +202,7 @@
 			children = (
 				94380AC7203BAE1D00684863 /* AppDelegate.swift */,
 				94380AC9203BAE1D00684863 /* SearchViewController.swift */,
+				EC14499A24BD07D900CA47B1 /* CuratedCityCollectionViewCell.swift */,
 				949630B9203BCBBD007139CA /* SearchDetailViewController.swift */,
 				94B8CEB2207DC31D00CA8101 /* SearchDetailDataSource.swift */,
 				94090909205F4613002A65EF /* MapViewController.swift */,
@@ -568,6 +571,7 @@
 				94600FBA24987B8300E605FD /* JSONCustomDecoder.swift in Sources */,
 				EC14499924BA20B600CA47B1 /* FloatingView.swift in Sources */,
 				94600FC6249A986600E605FD /* API.swift in Sources */,
+				EC14499B24BD07D900CA47B1 /* CuratedCityCollectionViewCell.swift in Sources */,
 				9434BA4C247998D4004294F0 /* MapReviewCard.swift in Sources */,
 				94E108712484AF5A0091D043 /* CellLoadingView.swift in Sources */,
 				94AE9B852094DAF500450399 /* LoadingViewController.swift in Sources */,
