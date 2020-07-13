@@ -77,7 +77,7 @@ final class SearchViewController: UIViewController {
         flowLayout.itemSize = CGSize(width: 120, height: 120)
         flowLayout.scrollDirection = .horizontal
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        collectionView.register(CuratedCityCollectionViewCell.self, forCellWithReuseIdentifier: "curatedCityCollectionViewCell")
+        collectionView.register(CuratedCityCollectionViewCell.self, forCellWithReuseIdentifier: CuratedCityCollectionViewCell.reuseIdentifier)
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.backgroundColor = .clear
@@ -150,7 +150,7 @@ final class SearchViewController: UIViewController {
             make.width.equalTo(110)
             make.height.equalTo(40)
             make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview().offset(90)
+            make.centerY.equalToSuperview().offset(80)
         }
 
         feedbackButton.snp.makeConstraints { make in
@@ -356,7 +356,8 @@ extension SearchViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "curatedCityCollectionViewCell", for: indexPath) as? CuratedCityCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CuratedCityCollectionViewCell.reuseIdentifier, for: indexPath) as? CuratedCityCollectionViewCell
+        cell?.configure()
         return cell ?? UICollectionViewCell()
     }
 }
