@@ -82,17 +82,21 @@ final class SearchViewController: UIViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.backgroundColor = .clear
-        collectionView.contentInset = UIEdgeInsets(top: 0, left: 12, bottom: 36, right: 12)
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: 12, bottom: collectionViewContentInsetBottom, right: 12)
         collectionView.showsHorizontalScrollIndicator = false
         return collectionView
     }()
     
+    private var collectionViewContentInsetBottom: CGFloat {
+        deviceSize == .iPhone8 || deviceSize == .iPhoneSE ? 36 : 50
+    }
+    
     private var collectionViewCellHeight: CGFloat {
-        return deviceSize == .iPhone8 || deviceSize == .iPhoneSE ? 120 : 180
+        deviceSize == .iPhone8 || deviceSize == .iPhoneSE ? 120 : 200
     }
     
     private var collectionViewHeight: CGFloat {
-        return curatedCitiesCollectionView.contentInset.bottom + collectionViewCellHeight
+        curatedCitiesCollectionView.contentInset.bottom + collectionViewCellHeight
     }
 
     // MARK: - Cancellables
@@ -127,12 +131,10 @@ final class SearchViewController: UIViewController {
     private func fadeInTitleAndButton() {
         titleLabel.alpha = 0
         randomButton.alpha = 0
-        UIView.animate(withDuration: 0.8, delay: 0.3, options: .curveEaseInOut, animations: {
-            self.titleLabel.alpha = 1
-        }, completion: nil)
 
-        UIView.animate(withDuration: 0.8, delay: 1.3, options: .curveEaseInOut, animations: {
+        UIView.animate(withDuration: 0.4, delay: 0.4, options: .curveEaseInOut, animations: {
             self.randomButton.alpha = 1
+            self.titleLabel.alpha = 1
         }, completion: nil)
     }
 
@@ -154,14 +156,14 @@ final class SearchViewController: UIViewController {
 
         titleLabel.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(16)
-            make.centerY.equalToSuperview().offset(-200)
+            make.centerY.equalToSuperview().offset(-212)
         }
 
         randomButton.snp.makeConstraints { make in
             make.width.equalTo(110)
             make.height.equalTo(40)
             make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview().offset(64)
+            make.centerY.equalToSuperview().offset(48)
         }
 
         feedbackButton.snp.makeConstraints { make in
@@ -193,7 +195,7 @@ final class SearchViewController: UIViewController {
             view.addSubview(searchBarContainerView)
 
             searchBarContainerView.snp.makeConstraints { make in
-                make.centerY.equalToSuperview().offset(-60)
+                make.centerY.equalToSuperview().offset(-72)
                 make.leading.trailing.equalToSuperview()
                 make.height.equalTo(searchBarViewHeight)
             }
@@ -382,7 +384,15 @@ extension SearchViewController: UICollectionViewDataSource {
 
 extension SearchViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("selected item")
+        guard let cell = collectionView.cellForItem(at: indexPath) as? CuratedCityCollectionViewCell,
+            let place = cell.place,
+            let image = cell.placeImage else {
+            return
+        }
+        let searchDetailVC = SearchDetailViewController(backgroundImage: image, place: place)
+        searchDetailVC.modalPresentationStyle = .fullScreen
+        searchDetailVC.modalTransitionStyle = .crossDissolve
+        present(searchDetailVC, animated: true, completion: nil)
     }
 }
 

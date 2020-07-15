@@ -31,12 +31,15 @@ final class CuratedCityCollectionViewCell: UICollectionViewCell {
     
     private var cancellable: AnyCancellable?
     private var imageSet = false
+
+    var place: Place?
+    var placeImage: UIImage?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         contentView.addRoundedCorners(radius: 8)
-        contentView.backgroundColor = .lightGray
+        contentView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.75)
         contentView.addSubview(imageView)
         contentView.addSubview(gradientView)
         contentView.addSubview(titleLabel)
@@ -47,7 +50,7 @@ final class CuratedCityCollectionViewCell: UICollectionViewCell {
         
         gradientView.snp.makeConstraints { make in
             make.leading.bottom.trailing.equalToSuperview()
-            make.height.equalTo(30)
+            make.height.equalTo(36)
         }
         
         titleLabel.snp.makeConstraints { make in
@@ -61,6 +64,7 @@ final class CuratedCityCollectionViewCell: UICollectionViewCell {
     
     func configure(name: String) {
         titleLabel.text = name
+        gradientView.updateFrame()
         
         // prevent cancellable being set unnecessarily
         guard !imageSet else {
@@ -69,10 +73,11 @@ final class CuratedCityCollectionViewCell: UICollectionViewCell {
         imageSet = true
         
         cancellable = API.PlaceSearch.loadPlace(name: name, queryType: .placeByName)?
-            .tryMap { place -> String in
+            .tryMap { [weak self] place -> String in
                 guard let photoRef = place.photoRef else {
                     throw NetworkError.noImage
                 }
+                self?.place = place
                 return photoRef
             }
             .compactMap { photoRef -> AnyPublisher<UIImage, Error>? in
@@ -84,9 +89,11 @@ final class CuratedCityCollectionViewCell: UICollectionViewCell {
                 guard let strongSelf = self else {
                     return
                 }
-                strongSelf.imageView.image = image
-                strongSelf.gradientView.updateFrame()
+                strongSelf.placeImage = image
+                strongSelf.fadeInImage(image, forImageView: strongSelf.imageView)
             })
         
     }
 }
+
+extension CuratedCityCollectionViewCell: ImageViewFadeable {}
