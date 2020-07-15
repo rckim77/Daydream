@@ -17,13 +17,13 @@ final class SearchViewController: UIViewController {
     private var searchController: UISearchController?
     private var placeData: Place?
     private var placeBackgroundImage: UIImage?
+    private let curatedCitiesDataSource: CuratedCityCollectionViewDataSource
     private var defaultSearchBarYOffset: CGFloat {
         return  (view.bounds.height / 2) - (searchBarViewHeight / 2) - 50
     }
 
     static let toSearchDetailVCSegue = "toSearchDetailVCSegue"
     private let searchBarViewHeight: CGFloat = 45.0
-    private var curatedCityNames: [String] = []
 
     private lazy var searchBarContainerView: UIView = {
         let view = UIView()
@@ -80,7 +80,7 @@ final class SearchViewController: UIViewController {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         collectionView.register(CuratedCityCollectionViewCell.self, forCellWithReuseIdentifier: CuratedCityCollectionViewCell.reuseIdentifier)
         collectionView.delegate = self
-        collectionView.dataSource = self
+        collectionView.dataSource = curatedCitiesDataSource
         collectionView.backgroundColor = .clear
         collectionView.contentInset = UIEdgeInsets(top: 0, left: 12, bottom: collectionViewContentInsetBottom, right: 12)
         collectionView.showsHorizontalScrollIndicator = false
@@ -103,7 +103,18 @@ final class SearchViewController: UIViewController {
 
     private var placeCancellable: AnyCancellable?
     private var curatedCitiesCancellable: AnyCancellable?
-
+    
+    // MARK: Init
+    
+    init() {
+        curatedCitiesDataSource = CuratedCityCollectionViewDataSource(cityCount: 5)
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: - View lifecycle methods
 
     override func viewDidLoad() {
@@ -117,7 +128,6 @@ final class SearchViewController: UIViewController {
                     self?.placeBackgroundImage = image
                 })
         }
-        loadCuratedCities()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -293,13 +303,6 @@ final class SearchViewController: UIViewController {
             .flatMap { $0 } // converts into correct publisher so sink works
             .eraseToAnyPublisher()
     }
-    
-    private func loadCuratedCities() {
-        curatedCityNames = Array(repeating: "", count: 5).map {
-            return getRandomCity() ?? $0
-        }
-        curatedCitiesCollectionView.reloadData()
-    }
 
     // MARK: - TraitCollection
 
@@ -367,18 +370,6 @@ extension SearchViewController: UISearchControllerDelegate {
         UIView.animate(withDuration: 0.3, animations: {
             self.resetSearchUI()
         })
-    }
-}
-
-extension SearchViewController: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return curatedCityNames.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CuratedCityCollectionViewCell.reuseIdentifier, for: indexPath) as? CuratedCityCollectionViewCell
-        cell?.configure(name: curatedCityNames[indexPath.row])
-        return cell ?? UICollectionViewCell()
     }
 }
 

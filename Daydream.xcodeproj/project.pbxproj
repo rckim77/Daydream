@@ -62,6 +62,7 @@
 		EC14499724B4F63500CA47B1 /* PhotoReference.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC14499624B4F63500CA47B1 /* PhotoReference.swift */; };
 		EC14499924BA20B600CA47B1 /* FloatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC14499824BA20B600CA47B1 /* FloatingView.swift */; };
 		EC14499B24BD07D900CA47B1 /* CuratedCityCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC14499A24BD07D900CA47B1 /* CuratedCityCollectionViewCell.swift */; };
+		EC14499E24BFBA1100CA47B1 /* CuratedCityCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC14499D24BFBA1100CA47B1 /* CuratedCityCollectionViewDataSource.swift */; };
 		EC34ADDA24A1A1D200916FE2 /* apiKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = EC34ADD924A1A1D200916FE2 /* apiKeys.plist */; };
 /* End PBXBuildFile section */
 
@@ -137,6 +138,7 @@
 		EC14499624B4F63500CA47B1 /* PhotoReference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoReference.swift; sourceTree = "<group>"; };
 		EC14499824BA20B600CA47B1 /* FloatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingView.swift; sourceTree = "<group>"; };
 		EC14499A24BD07D900CA47B1 /* CuratedCityCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CuratedCityCollectionViewCell.swift; sourceTree = "<group>"; };
+		EC14499D24BFBA1100CA47B1 /* CuratedCityCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CuratedCityCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		EC34ADD924A1A1D200916FE2 /* apiKeys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = apiKeys.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -327,6 +329,7 @@
 			children = (
 				94380AC9203BAE1D00684863 /* SearchViewController.swift */,
 				EC14499A24BD07D900CA47B1 /* CuratedCityCollectionViewCell.swift */,
+				EC14499D24BFBA1100CA47B1 /* CuratedCityCollectionViewDataSource.swift */,
 			);
 			path = Search;
 			sourceTree = "<group>";
@@ -560,6 +563,7 @@
 				94E1086D24836F660091D043 /* GradientView.swift in Sources */,
 				94600FCC249AA81D00E605FD /* API+UIImage.swift in Sources */,
 				94380ACA203BAE1D00684863 /* SearchViewController.swift in Sources */,
+				EC14499E24BFBA1100CA47B1 /* CuratedCityCollectionViewDataSource.swift in Sources */,
 				94600FCE249AA8C500E605FD /* API+EaterySearch.swift in Sources */,
 				94600FCA249AA17900E605FD /* PlaceSearchRoutes.swift in Sources */,
 				94E1086B248228790091D043 /* CardLabel.swift in Sources */,

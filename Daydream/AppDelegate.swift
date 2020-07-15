@@ -33,7 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             shortcutItemToProcess = shortcutItem
         }
         
-        window?.rootViewController = SearchViewController(nibName: nil, bundle: nil)
+        window?.rootViewController = SearchViewController()
         return true
     }
 
