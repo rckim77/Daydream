@@ -16,6 +16,7 @@ final class CuratedCityCollectionViewCell: UICollectionViewCell {
         let label = UILabel()
         label.font = .preferredFont(forTextStyle: .body)
         label.textColor = .white
+        label.numberOfLines = 0
         return label
     }()
     
