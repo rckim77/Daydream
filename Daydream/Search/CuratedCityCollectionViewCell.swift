@@ -25,6 +25,8 @@ final class CuratedCityCollectionViewCell: UICollectionViewCell {
         return imageView
     }()
     
+    private let gradientView = GradientView()
+    
     static let reuseIdentifier = "curatedCitiesCollectionViewCell"
     
     private var cancellable: AnyCancellable?
@@ -36,10 +38,16 @@ final class CuratedCityCollectionViewCell: UICollectionViewCell {
         contentView.addRoundedCorners(radius: 8)
         contentView.backgroundColor = .lightGray
         contentView.addSubview(imageView)
+        contentView.addSubview(gradientView)
         contentView.addSubview(titleLabel)
         
         imageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
+        }
+        
+        gradientView.snp.makeConstraints { make in
+            make.leading.bottom.trailing.equalToSuperview()
+            make.height.equalTo(30)
         }
         
         titleLabel.snp.makeConstraints { make in
@@ -67,13 +75,17 @@ final class CuratedCityCollectionViewCell: UICollectionViewCell {
                 }
                 return photoRef
             }
-            .compactMap { // strips nil
-                API.PlaceSearch.loadGooglePhoto(photoRef: $0, maxHeight: Int(UIScreen.main.bounds.height))
+            .compactMap { photoRef -> AnyPublisher<UIImage, Error>? in
+                let imageMaxHeight = Int(UIScreen.main.bounds.height) / 4
+                return API.PlaceSearch.loadGooglePhoto(photoRef: photoRef, maxHeight: imageMaxHeight)
             }
             .flatMap { $0 } // converts into correct publisher so sink works
             .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] image in
-                print("== received value")
-                self?.imageView.image = image
+                guard let strongSelf = self else {
+                    return
+                }
+                strongSelf.imageView.image = image
+                strongSelf.gradientView.updateFrame()
             })
         
     }
