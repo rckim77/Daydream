@@ -23,6 +23,7 @@ final class SearchViewController: UIViewController {
 
     static let toSearchDetailVCSegue = "toSearchDetailVCSegue"
     private let searchBarViewHeight: CGFloat = 45.0
+    private var curatedCityNames: [String] = []
 
     private lazy var searchBarContainerView: UIView = {
         let view = UIView()
@@ -97,6 +98,7 @@ final class SearchViewController: UIViewController {
     // MARK: - Cancellables
 
     private var placeCancellable: AnyCancellable?
+    private var curatedCitiesCancellable: AnyCancellable?
 
     // MARK: - View lifecycle methods
 
@@ -111,6 +113,7 @@ final class SearchViewController: UIViewController {
                     self?.placeBackgroundImage = image
                 })
         }
+        loadCuratedCities()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -158,7 +161,7 @@ final class SearchViewController: UIViewController {
             make.width.equalTo(110)
             make.height.equalTo(40)
             make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview().offset(80)
+            make.centerY.equalToSuperview().offset(64)
         }
 
         feedbackButton.snp.makeConstraints { make in
@@ -288,6 +291,13 @@ final class SearchViewController: UIViewController {
             .flatMap { $0 } // converts into correct publisher so sink works
             .eraseToAnyPublisher()
     }
+    
+    private func loadCuratedCities() {
+        curatedCityNames = Array(repeating: "", count: 5).map {
+            return getRandomCity() ?? $0
+        }
+        curatedCitiesCollectionView.reloadData()
+    }
 
     // MARK: - TraitCollection
 
@@ -360,12 +370,12 @@ extension SearchViewController: UISearchControllerDelegate {
 
 extension SearchViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return curatedCityNames.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CuratedCityCollectionViewCell.reuseIdentifier, for: indexPath) as? CuratedCityCollectionViewCell
-        cell?.configure()
+        cell?.configure(name: curatedCityNames[indexPath.row])
         return cell ?? UICollectionViewCell()
     }
 }
