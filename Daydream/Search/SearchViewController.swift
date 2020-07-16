@@ -22,7 +22,10 @@ final class SearchViewController: UIViewController {
 
     private let curatedCitiesDataSource: CuratedCityCollectionViewDataSource
     private var defaultSearchBarYOffset: CGFloat {
-        return  (view.bounds.height / 2) - (searchBarViewHeight / 2) - 50
+        (view.bounds.height / 2) - (searchBarViewHeight / 2) - 50
+    }
+    private var titleLabelCenterYOffset: CGFloat {
+        deviceSize == .iPhone8 || deviceSize == .iPhoneSE ? -212 : -260
     }
 
     private lazy var searchBarContainerView: UIView = {
@@ -147,7 +150,7 @@ final class SearchViewController: UIViewController {
 
         titleLabel.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(16)
-            make.centerY.equalToSuperview().offset(-212)
+            make.centerY.equalToSuperview().offset(titleLabelCenterYOffset)
         }
 
         randomButton.snp.makeConstraints { make in
