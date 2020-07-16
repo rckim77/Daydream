@@ -10,7 +10,7 @@ import UIKit
 
 extension UIDevice {
     enum DeviceSize {
-        case iPhoneSE, iPhone8, iPhone8Plus, iPhoneXS, iPhoneXR, iPhoneXSMax, unknown
+        case iPhoneSE, iPhone8, iPhone8Plus, iPhone11Pro, iPhone11, iPhone11ProMax, unknown
     }
 
     func getVersionCode() -> String {
@@ -34,12 +34,13 @@ extension UIDevice {
         case 736:
             return .iPhone8Plus // 5.5"
         case 812:
-            return .iPhoneXS // 5.8"
+            return .iPhone11Pro // 5.8"
         case 896:
-            if getVersionCode() == "iPhone11,8" {
-                return .iPhoneXR // 6.1"
+            let versionCode = getVersionCode()
+            if versionCode == "iPhone11,8" || versionCode == "iPhone12,1" { // XR or 11
+                return .iPhone11 // 6.1"
             } 
-            return .iPhoneXSMax // 6.5"
+            return .iPhone11ProMax // 6.5"
         default:
             return .unknown
         }
