@@ -65,7 +65,6 @@ final class CuratedCityCollectionViewCell: UICollectionViewCell {
     
     func configure(name: String) {
         titleLabel.text = name
-        gradientView.updateFrame()
         
         // prevent cancellable being set unnecessarily
         guard !imageSet else {
@@ -90,6 +89,7 @@ final class CuratedCityCollectionViewCell: UICollectionViewCell {
                 guard let strongSelf = self else {
                     return
                 }
+                strongSelf.gradientView.updateFrame()
                 strongSelf.placeImage = image
                 strongSelf.fadeInImage(image, forImageView: strongSelf.imageView)
             })
