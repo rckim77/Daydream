@@ -11,27 +11,24 @@ import UIKit
 final class CuratedCityCollectionView: UICollectionView {
     
     private let isSmallDevice: Bool
-    private let cellHeight: CGFloat
+    private let itemSize: CGSize
 
-    private var contentInsetBottom: CGFloat {
-        isSmallDevice ? 36 : 58
-    }
     var height: CGFloat {
-        contentInset.bottom + cellHeight
+        contentInset.bottom + itemSize.height
     }
     
     init(isSmallDevice: Bool) {
         self.isSmallDevice = isSmallDevice
-        self.cellHeight = isSmallDevice ? 130 : 212
+        self.itemSize = CGSize(width: 120, height: isSmallDevice ? 130 : 212)
         
         let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.itemSize = CGSize(width: 120, height: cellHeight)
+        flowLayout.itemSize = itemSize
         flowLayout.scrollDirection = .horizontal
         super.init(frame: .zero, collectionViewLayout: flowLayout)
         
         register(CuratedCityCollectionViewCell.self, forCellWithReuseIdentifier: CuratedCityCollectionViewCell.reuseIdentifier)
         backgroundColor = .clear
-        contentInset = UIEdgeInsets(top: 0, left: 12, bottom: contentInsetBottom, right: 12)
+        contentInset = UIEdgeInsets(top: 0, left: 12, bottom: isSmallDevice ? 36 : 58, right: 12)
         showsHorizontalScrollIndicator = false
     }
     
