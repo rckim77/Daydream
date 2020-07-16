@@ -9,26 +9,34 @@
 import UIKit
 
 final class CuratedCityCollectionView: UICollectionView {
-    
-    private let isSmallDevice: Bool
-    private let itemSize: CGSize
+
+    private var itemSize: CGSize
+    private let isIpad: Bool
+    private let flowLayout = UICollectionViewFlowLayout()
+    private let defaultHeight: CGFloat
+    private let defaultContentInsetBottom: CGFloat
 
     var height: CGFloat {
         contentInset.bottom + itemSize.height
     }
     
-    init(isSmallDevice: Bool) {
-        self.isSmallDevice = isSmallDevice
-        self.itemSize = CGSize(width: 120, height: isSmallDevice ? 130 : 212)
+    init(deviceSize: UIDevice.DeviceSize, isIpad: Bool) {
+        self.isIpad = isIpad
+        let isSmallDevice = deviceSize == .iPhoneSE || deviceSize == .iPhone8
+        let width: CGFloat = isIpad ? 180 : 120
+        self.defaultHeight = isIpad ? 280 : isSmallDevice ? 130 : 212
+        self.itemSize = CGSize(width: width, height: defaultHeight)
+        self.defaultContentInsetBottom = isIpad ? 80 : isSmallDevice ? 36 : 58
         
-        let flowLayout = UICollectionViewFlowLayout()
         flowLayout.itemSize = itemSize
         flowLayout.scrollDirection = .horizontal
+        flowLayout.minimumLineSpacing = isIpad ? 18 : 10
         super.init(frame: .zero, collectionViewLayout: flowLayout)
         
         register(CuratedCityCollectionViewCell.self, forCellWithReuseIdentifier: CuratedCityCollectionViewCell.reuseIdentifier)
         backgroundColor = .clear
-        contentInset = UIEdgeInsets(top: 0, left: 12, bottom: isSmallDevice ? 36 : 58, right: 12)
+        let contentInsetHorizontal: CGFloat = isIpad ? 18 : 12
+        contentInset = UIEdgeInsets(top: 0, left: contentInsetHorizontal, bottom: defaultContentInsetBottom, right: contentInsetHorizontal)
         showsHorizontalScrollIndicator = false
     }
     
@@ -36,4 +44,9 @@ final class CuratedCityCollectionView: UICollectionView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func updateItemSizeForOrientationChange() {
+        let isLandscapeIpad = UIDevice.current.orientation == .landscapeRight || UIDevice.current.orientation == .landscapeLeft && isIpad
+        flowLayout.itemSize.height = isLandscapeIpad ? 220 : defaultHeight
+        contentInset.bottom = isLandscapeIpad ? 24 : defaultContentInsetBottom
+    }
 }

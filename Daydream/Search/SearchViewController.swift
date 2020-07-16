@@ -83,7 +83,7 @@ final class SearchViewController: UIViewController {
     }()
     
     private lazy var curatedCitiesCollectionView: CuratedCityCollectionView = {
-        let collectionView = CuratedCityCollectionView(isSmallDevice: isSmallDevice)
+        let collectionView = CuratedCityCollectionView(deviceSize: deviceSize, isIpad: UIDevice.current.userInterfaceIdiom == .pad)
         collectionView.delegate = self
         collectionView.dataSource = curatedCitiesDataSource
         return collectionView
@@ -307,6 +307,20 @@ final class SearchViewController: UIViewController {
                 overlayView.backgroundColor = .clear
             }
         }
+    }
+    
+    // MARK: - Device Orientation Change
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        coordinator.animate(alongsideTransition: { _ in
+            self.curatedCitiesCollectionView.collectionViewLayout.invalidateLayout()
+        }, completion: nil)
+    }
+    
+    override func viewWillLayoutSubviews() {
+        curatedCitiesCollectionView.updateItemSizeForOrientationChange()
+        super.viewWillLayoutSubviews()
     }
 }
 
