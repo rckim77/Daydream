@@ -15,15 +15,15 @@ final class SearchViewController: UIViewController {
 
     private var resultsViewController: GMSAutocompleteResultsViewController?
     private var searchController: UISearchController?
+    private let searchBarViewHeight: CGFloat = 45.0
+
     private var placeData: Place?
     private var placeBackgroundImage: UIImage?
+
     private let curatedCitiesDataSource: CuratedCityCollectionViewDataSource
     private var defaultSearchBarYOffset: CGFloat {
         return  (view.bounds.height / 2) - (searchBarViewHeight / 2) - 50
     }
-
-    static let toSearchDetailVCSegue = "toSearchDetailVCSegue"
-    private let searchBarViewHeight: CGFloat = 45.0
 
     private lazy var searchBarContainerView: UIView = {
         let view = UIView()
@@ -37,7 +37,7 @@ final class SearchViewController: UIViewController {
         return imageView
     }()
 
-    // Note: When the user does not have Dark Mode on, this does nothing.
+    /// Note: When the user does not have Dark Mode on, this does nothing.
     private lazy var overlayView: UIView = {
         let view = UIView()
         view.backgroundColor = traitCollection.userInterfaceStyle == .dark ? UIColor.black.withAlphaComponent(0.4) : .clear
