@@ -63,6 +63,7 @@
 		EC14499924BA20B600CA47B1 /* FloatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC14499824BA20B600CA47B1 /* FloatingView.swift */; };
 		EC14499B24BD07D900CA47B1 /* CuratedCityCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC14499A24BD07D900CA47B1 /* CuratedCityCollectionViewCell.swift */; };
 		EC14499E24BFBA1100CA47B1 /* CuratedCityCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC14499D24BFBA1100CA47B1 /* CuratedCityCollectionViewDataSource.swift */; };
+		EC1449A224C005D700CA47B1 /* CuratedCityCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC1449A124C005D700CA47B1 /* CuratedCityCollectionView.swift */; };
 		EC34ADDA24A1A1D200916FE2 /* apiKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = EC34ADD924A1A1D200916FE2 /* apiKeys.plist */; };
 /* End PBXBuildFile section */
 
@@ -139,6 +140,7 @@
 		EC14499824BA20B600CA47B1 /* FloatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingView.swift; sourceTree = "<group>"; };
 		EC14499A24BD07D900CA47B1 /* CuratedCityCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CuratedCityCollectionViewCell.swift; sourceTree = "<group>"; };
 		EC14499D24BFBA1100CA47B1 /* CuratedCityCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CuratedCityCollectionViewDataSource.swift; sourceTree = "<group>"; };
+		EC1449A124C005D700CA47B1 /* CuratedCityCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CuratedCityCollectionView.swift; sourceTree = "<group>"; };
 		EC34ADD924A1A1D200916FE2 /* apiKeys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = apiKeys.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -328,6 +330,7 @@
 			isa = PBXGroup;
 			children = (
 				94380AC9203BAE1D00684863 /* SearchViewController.swift */,
+				EC1449A124C005D700CA47B1 /* CuratedCityCollectionView.swift */,
 				EC14499A24BD07D900CA47B1 /* CuratedCityCollectionViewCell.swift */,
 				EC14499D24BFBA1100CA47B1 /* CuratedCityCollectionViewDataSource.swift */,
 			);
@@ -581,6 +584,7 @@
 				94380AC8203BAE1D00684863 /* AppDelegate.swift in Sources */,
 				947EC656204667EB004A911D /* MapCardCell.swift in Sources */,
 				94600FBA24987B8300E605FD /* JSONCustomDecoder.swift in Sources */,
+				EC1449A224C005D700CA47B1 /* CuratedCityCollectionView.swift in Sources */,
 				EC14499924BA20B600CA47B1 /* FloatingView.swift in Sources */,
 				94600FC6249A986600E605FD /* API.swift in Sources */,
 				EC14499B24BD07D900CA47B1 /* CuratedCityCollectionViewCell.swift in Sources */,

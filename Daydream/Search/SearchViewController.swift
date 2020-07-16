@@ -73,31 +73,12 @@ final class SearchViewController: UIViewController {
         return button
     }()
     
-    private lazy var curatedCitiesCollectionView: UICollectionView = {
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.itemSize = CGSize(width: 120, height: collectionViewCellHeight)
-        flowLayout.scrollDirection = .horizontal
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        collectionView.register(CuratedCityCollectionViewCell.self, forCellWithReuseIdentifier: CuratedCityCollectionViewCell.reuseIdentifier)
+    private lazy var curatedCitiesCollectionView: CuratedCityCollectionView = {
+        let collectionView = CuratedCityCollectionView(deviceSize: deviceSize)
         collectionView.delegate = self
         collectionView.dataSource = curatedCitiesDataSource
-        collectionView.backgroundColor = .clear
-        collectionView.contentInset = UIEdgeInsets(top: 0, left: 12, bottom: collectionViewContentInsetBottom, right: 12)
-        collectionView.showsHorizontalScrollIndicator = false
         return collectionView
     }()
-    
-    private var collectionViewContentInsetBottom: CGFloat {
-        deviceSize == .iPhone8 || deviceSize == .iPhoneSE ? 36 : 50
-    }
-    
-    private var collectionViewCellHeight: CGFloat {
-        deviceSize == .iPhone8 || deviceSize == .iPhoneSE ? 120 : 200
-    }
-    
-    private var collectionViewHeight: CGFloat {
-        curatedCitiesCollectionView.contentInset.bottom + collectionViewCellHeight
-    }
 
     // MARK: - Cancellables
 
@@ -182,7 +163,7 @@ final class SearchViewController: UIViewController {
         }
         
         curatedCitiesCollectionView.snp.makeConstraints { make in
-            make.height.equalTo(collectionViewHeight)
+            make.height.equalTo(curatedCitiesCollectionView.height)
             make.bottom.equalTo(feedbackButton.snp.top)
             make.leading.trailing.equalToSuperview()
         }
