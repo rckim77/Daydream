@@ -65,6 +65,11 @@ extension UIViewController {
         // swiftlint:disable discouraged_direct_init
         UIDevice().deviceSize
     }
+    
+    var isSmallDevice: Bool {
+        // swiftlint:disable discouraged_direct_init
+        UIDevice().isSmallDevice
+    }
 
     var notchHeight: CGFloat {
         // swiftlint:disable discouraged_direct_init

@@ -10,19 +10,19 @@ import UIKit
 
 final class CuratedCityCollectionView: UICollectionView {
     
-    private let deviceSize: UIDevice.DeviceSize
+    private let isSmallDevice: Bool
     private let cellHeight: CGFloat
 
     private var contentInsetBottom: CGFloat {
-        deviceSize == .iPhone8 || deviceSize == .iPhoneSE ? 36 : 50
+        isSmallDevice ? 36 : 50
     }
     var height: CGFloat {
         contentInset.bottom + cellHeight
     }
     
-    init(deviceSize: UIDevice.DeviceSize) {
-        self.deviceSize = deviceSize
-        self.cellHeight = deviceSize == .iPhone8 || deviceSize == .iPhoneSE ? 120 : 200
+    init(isSmallDevice: Bool) {
+        self.isSmallDevice = isSmallDevice
+        self.cellHeight = isSmallDevice ? 120 : 200
         
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.itemSize = CGSize(width: 120, height: cellHeight)

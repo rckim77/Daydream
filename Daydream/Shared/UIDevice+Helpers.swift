@@ -45,11 +45,16 @@ extension UIDevice {
             return .unknown
         }
     }
+    
+    /// Returns whether device is iPhone SE (1st generation) or iPhone 8 size.
+    var isSmallDevice: Bool {
+        deviceSize == .iPhoneSE || deviceSize == .iPhone8
+    }
 
     var notchHeight: CGFloat {
-        if deviceSize == .iPhoneSE || deviceSize == .iPhone8 || deviceSize == .iPhone8Plus { // no notch devices
+        if deviceSize == .iPhoneSE || deviceSize == .iPhone8 || deviceSize == .iPhone8Plus { // no notch
             return 24
-        } else { // notch devices
+        } else { // notch
             return 44
         }
     }

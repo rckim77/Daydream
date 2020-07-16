@@ -25,7 +25,7 @@ final class SearchViewController: UIViewController {
         (view.bounds.height / 2) - (searchBarViewHeight / 2) - 50
     }
     private var titleLabelCenterYOffset: CGFloat {
-        deviceSize == .iPhone8 || deviceSize == .iPhoneSE ? -212 : -260
+        isSmallDevice ? -212 : -260
     }
 
     private lazy var searchBarContainerView: UIView = {
@@ -77,7 +77,7 @@ final class SearchViewController: UIViewController {
     }()
     
     private lazy var curatedCitiesCollectionView: CuratedCityCollectionView = {
-        let collectionView = CuratedCityCollectionView(deviceSize: deviceSize)
+        let collectionView = CuratedCityCollectionView(isSmallDevice: isSmallDevice)
         collectionView.delegate = self
         collectionView.dataSource = curatedCitiesDataSource
         return collectionView
