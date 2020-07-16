@@ -14,7 +14,7 @@ final class CuratedCityCollectionView: UICollectionView {
     private let cellHeight: CGFloat
 
     private var contentInsetBottom: CGFloat {
-        isSmallDevice ? 36 : 50
+        isSmallDevice ? 36 : 58
     }
     var height: CGFloat {
         contentInset.bottom + cellHeight
@@ -22,7 +22,7 @@ final class CuratedCityCollectionView: UICollectionView {
     
     init(isSmallDevice: Bool) {
         self.isSmallDevice = isSmallDevice
-        self.cellHeight = isSmallDevice ? 120 : 200
+        self.cellHeight = isSmallDevice ? 130 : 212
         
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.itemSize = CGSize(width: 120, height: cellHeight)

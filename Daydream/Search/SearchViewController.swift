@@ -21,11 +21,17 @@ final class SearchViewController: UIViewController {
     private var placeBackgroundImage: UIImage?
 
     private let curatedCitiesDataSource: CuratedCityCollectionViewDataSource
+    private var deviceYOffset: CGFloat {
+        isSmallDevice ? 0 : 48
+    }
     private var defaultSearchBarYOffset: CGFloat {
-        (view.bounds.height / 2) - (searchBarViewHeight / 2) - 50
+        -72 - deviceYOffset
     }
     private var titleLabelCenterYOffset: CGFloat {
-        isSmallDevice ? -212 : -260
+        -212 - deviceYOffset
+    }
+    private var randomButtonYOffset: CGFloat {
+        30 - deviceYOffset
     }
 
     private lazy var searchBarContainerView: UIView = {
@@ -157,7 +163,7 @@ final class SearchViewController: UIViewController {
             make.width.equalTo(110)
             make.height.equalTo(40)
             make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview().offset(48)
+            make.centerY.equalToSuperview().offset(randomButtonYOffset)
         }
 
         feedbackButton.snp.makeConstraints { make in
@@ -182,14 +188,12 @@ final class SearchViewController: UIViewController {
         searchController?.delegate = self
 
         if let searchBar = searchController?.searchBar {
-            let frame = CGRect(x: 0, y: defaultSearchBarYOffset, width: view.bounds.width, height: searchBarViewHeight)
-            searchBarContainerView = UIView(frame: frame)
             searchBarContainerView.alpha = 0
             searchBarContainerView.addSubview(searchBar)
             view.addSubview(searchBarContainerView)
 
             searchBarContainerView.snp.makeConstraints { make in
-                make.centerY.equalToSuperview().offset(-72)
+                make.centerY.equalToSuperview().offset(defaultSearchBarYOffset)
                 make.leading.trailing.equalToSuperview()
                 make.height.equalTo(searchBarViewHeight)
             }
