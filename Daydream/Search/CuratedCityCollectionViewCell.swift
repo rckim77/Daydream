@@ -14,7 +14,8 @@ final class CuratedCityCollectionViewCell: UICollectionViewCell {
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = .preferredFont(forTextStyle: .body)
+        let textStyle: UIFont.TextStyle = UIDevice.current.userInterfaceIdiom == .pad ? .title2 : .body
+        label.font = .preferredFont(forTextStyle: textStyle)
         label.textColor = .white
         label.numberOfLines = 0
         return label
@@ -32,6 +33,9 @@ final class CuratedCityCollectionViewCell: UICollectionViewCell {
     
     private var cancellable: AnyCancellable?
     private var imageSet = false
+    private var titleLabelPadding: CGFloat {
+        UIDevice.current.userInterfaceIdiom == .pad ? 12 : 8
+    }
 
     var place: Place?
     var placeImage: UIImage?
@@ -55,7 +59,7 @@ final class CuratedCityCollectionViewCell: UICollectionViewCell {
         }
         
         titleLabel.snp.makeConstraints { make in
-            make.leading.bottom.trailing.equalToSuperview().inset(8)
+            make.leading.bottom.trailing.equalToSuperview().inset(titleLabelPadding)
         }
     }
     
