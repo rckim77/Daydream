@@ -97,7 +97,7 @@ final class SearchViewController: UIViewController {
     // MARK: Init
     
     init() {
-        let cityCount = UIDevice.current.userInterfaceIdiom == .pad ? 10 : 5
+        let cityCount = UIDevice.current.userInterfaceIdiom == .pad ? 8 : 5
         curatedCitiesDataSource = CuratedCityCollectionViewDataSource(cityCount: cityCount)
         super.init(nibName: nil, bundle: nil)
     }

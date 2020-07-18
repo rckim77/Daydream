@@ -15,7 +15,7 @@ final class CuratedCityCollectionViewDataSource: NSObject, UICollectionViewDataS
     init(cityCount: Int) {
         super.init()
         var nameSet = Set<String>()
-        while nameSet.count != 5 {
+        while nameSet.count != cityCount {
             if let city = getRandomCity(), !nameSet.contains(city) {
                 nameSet.insert(city)
             }
