@@ -39,7 +39,7 @@ class DaydreamUITests: XCTestCase {
 
         snapshot("03SearchDetailVC")
 
-        app.tables.otherElements["poi1Card"].tap()
+        app.cells["sightsCell"].staticTexts.element(boundBy: 0).tap()
 
         sleep(4)
 
@@ -47,7 +47,7 @@ class DaydreamUITests: XCTestCase {
 
         app.buttons["map-close-button"].tap()
 
-        app.tables.otherElements["poi2Card"].tap()
+        app.cells["sightsCell"].staticTexts.element(boundBy: 1).tap()
 
         sleep(2)
 

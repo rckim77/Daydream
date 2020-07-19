@@ -62,7 +62,7 @@ final class EateryView: UIView {
         case .bottom:
             addBottomRoundedCorners()
         }
-        gradientView.gradientLayer.frame = gradientView.bounds
+        gradientView.updateFrame()
     }
 
     private func addViews() {
