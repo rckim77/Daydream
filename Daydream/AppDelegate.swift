@@ -32,8 +32,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if let shortcutItem = launchOptions?[UIApplication.LaunchOptionsKey.shortcutItem] as? UIApplicationShortcutItem {
             shortcutItemToProcess = shortcutItem
         }
-        
-        window?.rootViewController = SearchViewController()
         return true
     }
 

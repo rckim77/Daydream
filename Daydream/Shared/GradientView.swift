@@ -8,11 +8,12 @@
 
 import UIKit
 
-/// In order for the gradient layer to display properly, make sure to call updateFrame() after gradient view
-/// has been added to its superview and constraints have been set.
+/// In order for the gradient layer to display properly, make sure to manually set the gradient layer's
+/// frame to the gradient view's bounds (e.g., in a configure() method after gradient view has been added
+/// to its superview and constraints have been set).
 final class GradientView: UIView {
 
-    private lazy var gradientLayer: CAGradientLayer = {
+    lazy var gradientLayer: CAGradientLayer = {
         let layer = CAGradientLayer()
         layer.colors = [UIColor.clear.cgColor, UIColor.black.withAlphaComponent(0.45).cgColor]
         return layer
@@ -25,9 +26,5 @@ final class GradientView: UIView {
 
     required init?(coder: NSCoder) {
         fatalError("Error")
-    }
-    
-    func updateFrame() {
-        gradientLayer.frame = bounds
     }
 }

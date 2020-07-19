@@ -15,24 +15,14 @@ final class SearchViewController: UIViewController {
 
     private var resultsViewController: GMSAutocompleteResultsViewController?
     private var searchController: UISearchController?
-    private let searchBarViewHeight: CGFloat = 45.0
-
     private var placeData: Place?
     private var placeBackgroundImage: UIImage?
-
-    private let curatedCitiesDataSource: CuratedCityCollectionViewDataSource
-    private var deviceYOffset: CGFloat {
-        isSmallDevice ? 0 : 48
-    }
     private var defaultSearchBarYOffset: CGFloat {
-        -72 - deviceYOffset
+        return  (view.bounds.height / 2) - (searchBarViewHeight / 2) - 50
     }
-    private var titleLabelCenterYOffset: CGFloat {
-        -212 - deviceYOffset
-    }
-    private var randomButtonYOffset: CGFloat {
-        30 - deviceYOffset
-    }
+
+    static let toSearchDetailVCSegue = "toSearchDetailVCSegue"
+    private let searchBarViewHeight: CGFloat = 45.0
 
     private lazy var searchBarContainerView: UIView = {
         let view = UIView()
@@ -46,7 +36,7 @@ final class SearchViewController: UIViewController {
         return imageView
     }()
 
-    /// Note: When the user does not have Dark Mode on, this does nothing.
+    // Note: When the user does not have Dark Mode on, this does nothing.
     private lazy var overlayView: UIView = {
         let view = UIView()
         view.backgroundColor = traitCollection.userInterfaceStyle == .dark ? UIColor.black.withAlphaComponent(0.4) : .clear
@@ -81,31 +71,11 @@ final class SearchViewController: UIViewController {
         button.addTarget(self, action: #selector(randomButtonTapped), for: .touchUpInside)
         return button
     }()
-    
-    private lazy var curatedCitiesCollectionView: CuratedCityCollectionView = {
-        let collectionView = CuratedCityCollectionView(deviceSize: deviceSize, isIpad: UIDevice.current.userInterfaceIdiom == .pad)
-        collectionView.delegate = self
-        collectionView.dataSource = curatedCitiesDataSource
-        return collectionView
-    }()
 
     // MARK: - Cancellables
 
     private var placeCancellable: AnyCancellable?
-    private var curatedCitiesCancellable: AnyCancellable?
-    
-    // MARK: Init
-    
-    init() {
-        let cityCount = UIDevice.current.userInterfaceIdiom == .pad ? 8 : 5
-        curatedCitiesDataSource = CuratedCityCollectionViewDataSource(cityCount: cityCount)
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
+
     // MARK: - View lifecycle methods
 
     override func viewDidLoad() {
@@ -132,10 +102,12 @@ final class SearchViewController: UIViewController {
     private func fadeInTitleAndButton() {
         titleLabel.alpha = 0
         randomButton.alpha = 0
-
-        UIView.animate(withDuration: 0.4, delay: 0.4, options: .curveEaseInOut, animations: {
-            self.randomButton.alpha = 1
+        UIView.animate(withDuration: 0.8, delay: 0.3, options: .curveEaseInOut, animations: {
             self.titleLabel.alpha = 1
+        }, completion: nil)
+
+        UIView.animate(withDuration: 0.8, delay: 1.3, options: .curveEaseInOut, animations: {
+            self.randomButton.alpha = 1
         }, completion: nil)
     }
 
@@ -144,7 +116,6 @@ final class SearchViewController: UIViewController {
         view.addSubview(overlayView)
         view.addSubview(titleLabel)
         view.addSubview(randomButton)
-        view.addSubview(curatedCitiesCollectionView)
         view.addSubview(feedbackButton)
 
         backgroundImageView.snp.makeConstraints { make in
@@ -157,25 +128,19 @@ final class SearchViewController: UIViewController {
 
         titleLabel.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(16)
-            make.centerY.equalToSuperview().offset(titleLabelCenterYOffset)
+            make.centerY.equalToSuperview().offset(-200)
         }
 
         randomButton.snp.makeConstraints { make in
             make.width.equalTo(110)
             make.height.equalTo(40)
             make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview().offset(randomButtonYOffset)
+            make.centerY.equalToSuperview().offset(90)
         }
 
         feedbackButton.snp.makeConstraints { make in
             make.bottom.equalToSuperview().inset(30)
             make.centerX.equalToSuperview()
-        }
-        
-        curatedCitiesCollectionView.snp.makeConstraints { make in
-            make.height.equalTo(curatedCitiesCollectionView.height)
-            make.bottom.equalTo(feedbackButton.snp.top)
-            make.leading.trailing.equalToSuperview()
         }
 
         resultsViewController = GMSAutocompleteResultsViewController()
@@ -189,12 +154,14 @@ final class SearchViewController: UIViewController {
         searchController?.delegate = self
 
         if let searchBar = searchController?.searchBar {
+            let frame = CGRect(x: 0, y: defaultSearchBarYOffset, width: view.bounds.width, height: searchBarViewHeight)
+            searchBarContainerView = UIView(frame: frame)
             searchBarContainerView.alpha = 0
             searchBarContainerView.addSubview(searchBar)
             view.addSubview(searchBarContainerView)
 
             searchBarContainerView.snp.makeConstraints { make in
-                make.centerY.equalToSuperview().offset(defaultSearchBarYOffset)
+                make.centerY.equalToSuperview().offset(-60)
                 make.leading.trailing.equalToSuperview()
                 make.height.equalTo(searchBarViewHeight)
             }
@@ -308,20 +275,6 @@ final class SearchViewController: UIViewController {
             }
         }
     }
-    
-    // MARK: - Device Orientation Change
-    
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
-        coordinator.animate(alongsideTransition: { _ in
-            self.curatedCitiesCollectionView.collectionViewLayout.invalidateLayout()
-        }, completion: nil)
-    }
-    
-    override func viewWillLayoutSubviews() {
-        curatedCitiesCollectionView.updateItemSizeForOrientationChange()
-        super.viewWillLayoutSubviews()
-    }
 }
 
 extension SearchViewController: GMSAutocompleteResultsViewControllerDelegate {
@@ -373,20 +326,6 @@ extension SearchViewController: UISearchControllerDelegate {
         UIView.animate(withDuration: 0.3, animations: {
             self.resetSearchUI()
         })
-    }
-}
-
-extension SearchViewController: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let cell = collectionView.cellForItem(at: indexPath) as? CuratedCityCollectionViewCell,
-            let place = cell.place,
-            let image = cell.placeImage else {
-            return
-        }
-        let searchDetailVC = SearchDetailViewController(backgroundImage: image, place: place)
-        searchDetailVC.modalPresentationStyle = .fullScreen
-        searchDetailVC.modalTransitionStyle = .crossDissolve
-        present(searchDetailVC, animated: true, completion: nil)
     }
 }
 

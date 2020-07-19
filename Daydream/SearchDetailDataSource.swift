@@ -10,7 +10,7 @@ import UIKit
 import CoreLocation
 import Combine
 
-final class SearchDetailDataSource: NSObject, UITableViewDataSource {
+class SearchDetailDataSource: NSObject, UITableViewDataSource {
 
     enum LoadingState {
         case uninitiated, loading, results, error

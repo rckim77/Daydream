@@ -10,7 +10,7 @@ import UIKit
 
 extension UIDevice {
     enum DeviceSize {
-        case iPhoneSE, iPhone8, iPhone8Plus, iPhone11Pro, iPhone11, iPhone11ProMax, unknown
+        case iPhoneSE, iPhone8, iPhone8Plus, iPhoneXS, iPhoneXR, iPhoneXSMax, unknown
     }
 
     func getVersionCode() -> String {
@@ -34,27 +34,21 @@ extension UIDevice {
         case 736:
             return .iPhone8Plus // 5.5"
         case 812:
-            return .iPhone11Pro // 5.8"
+            return .iPhoneXS // 5.8"
         case 896:
-            let versionCode = getVersionCode()
-            if versionCode == "iPhone11,8" || versionCode == "iPhone12,1" { // XR or 11
-                return .iPhone11 // 6.1"
+            if getVersionCode() == "iPhone11,8" {
+                return .iPhoneXR // 6.1"
             } 
-            return .iPhone11ProMax // 6.5"
+            return .iPhoneXSMax // 6.5"
         default:
             return .unknown
         }
     }
-    
-    /// Returns whether device is iPhone SE (1st generation) or iPhone 8 size.
-    var isSmallDevice: Bool {
-        deviceSize == .iPhoneSE || deviceSize == .iPhone8
-    }
 
     var notchHeight: CGFloat {
-        if deviceSize == .iPhoneSE || deviceSize == .iPhone8 || deviceSize == .iPhone8Plus { // no notch
+        if deviceSize == .iPhoneSE || deviceSize == .iPhone8 || deviceSize == .iPhone8Plus { // no notch devices
             return 24
-        } else { // notch
+        } else { // notch devices
             return 44
         }
     }

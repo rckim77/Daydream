@@ -63,17 +63,12 @@ extension UIViewController {
 
     var deviceSize: UIDevice.DeviceSize {
         // swiftlint:disable discouraged_direct_init
-        UIDevice().deviceSize
-    }
-    
-    var isSmallDevice: Bool {
-        // swiftlint:disable discouraged_direct_init
-        UIDevice().isSmallDevice
+        return UIDevice().deviceSize
     }
 
     var notchHeight: CGFloat {
         // swiftlint:disable discouraged_direct_init
-        UIDevice().notchHeight
+        return UIDevice().notchHeight
     }
 
     func add(_ childVC: UIViewController) {

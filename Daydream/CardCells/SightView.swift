@@ -72,7 +72,7 @@ final class SightView: UIView {
         case .bottom:
             addBottomRoundedCorners()
         }
-        gradientView.updateFrame()
+        gradientView.gradientLayer.frame = gradientView.bounds
     }
 
     private func addViews() {

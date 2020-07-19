@@ -14,6 +14,7 @@
 		9434BA4C247998D4004294F0 /* MapReviewCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9434BA4B247998D4004294F0 /* MapReviewCard.swift */; };
 		94380AC8203BAE1D00684863 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94380AC7203BAE1D00684863 /* AppDelegate.swift */; };
 		94380ACA203BAE1D00684863 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94380AC9203BAE1D00684863 /* SearchViewController.swift */; };
+		94380ACD203BAE1D00684863 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 94380ACB203BAE1D00684863 /* Main.storyboard */; };
 		94380ACF203BAE1D00684863 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 94380ACE203BAE1D00684863 /* Assets.xcassets */; };
 		94380AD2203BAE1D00684863 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 94380AD0203BAE1D00684863 /* LaunchScreen.storyboard */; };
 		94600FBA24987B8300E605FD /* JSONCustomDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94600FB924987B8300E605FD /* JSONCustomDecoder.swift */; };
@@ -61,9 +62,6 @@
 		94E9F32B2492E12900B1D003 /* PlaceCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E9F32A2492E12900B1D003 /* PlaceCollection.swift */; };
 		EC14499724B4F63500CA47B1 /* PhotoReference.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC14499624B4F63500CA47B1 /* PhotoReference.swift */; };
 		EC14499924BA20B600CA47B1 /* FloatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC14499824BA20B600CA47B1 /* FloatingView.swift */; };
-		EC14499B24BD07D900CA47B1 /* CuratedCityCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC14499A24BD07D900CA47B1 /* CuratedCityCollectionViewCell.swift */; };
-		EC14499E24BFBA1100CA47B1 /* CuratedCityCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC14499D24BFBA1100CA47B1 /* CuratedCityCollectionViewDataSource.swift */; };
-		EC1449A224C005D700CA47B1 /* CuratedCityCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC1449A124C005D700CA47B1 /* CuratedCityCollectionView.swift */; };
 		EC34ADDA24A1A1D200916FE2 /* apiKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = EC34ADD924A1A1D200916FE2 /* apiKeys.plist */; };
 /* End PBXBuildFile section */
 
@@ -90,6 +88,7 @@
 		94380AC4203BAE1D00684863 /* Daydream.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Daydream.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94380AC7203BAE1D00684863 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		94380AC9203BAE1D00684863 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		94380ACC203BAE1D00684863 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		94380ACE203BAE1D00684863 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		94380AD1203BAE1D00684863 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		94380AD3203BAE1D00684863 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -138,9 +137,6 @@
 		94E9F32A2492E12900B1D003 /* PlaceCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceCollection.swift; sourceTree = "<group>"; };
 		EC14499624B4F63500CA47B1 /* PhotoReference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoReference.swift; sourceTree = "<group>"; };
 		EC14499824BA20B600CA47B1 /* FloatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingView.swift; sourceTree = "<group>"; };
-		EC14499A24BD07D900CA47B1 /* CuratedCityCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CuratedCityCollectionViewCell.swift; sourceTree = "<group>"; };
-		EC14499D24BFBA1100CA47B1 /* CuratedCityCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CuratedCityCollectionViewDataSource.swift; sourceTree = "<group>"; };
-		EC1449A124C005D700CA47B1 /* CuratedCityCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CuratedCityCollectionView.swift; sourceTree = "<group>"; };
 		EC34ADD924A1A1D200916FE2 /* apiKeys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = apiKeys.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -205,7 +201,7 @@
 			isa = PBXGroup;
 			children = (
 				94380AC7203BAE1D00684863 /* AppDelegate.swift */,
-				EC14499C24BD0B9D00CA47B1 /* Search */,
+				94380AC9203BAE1D00684863 /* SearchViewController.swift */,
 				949630B9203BCBBD007139CA /* SearchDetailViewController.swift */,
 				94B8CEB2207DC31D00CA8101 /* SearchDetailDataSource.swift */,
 				94090909205F4613002A65EF /* MapViewController.swift */,
@@ -214,6 +210,7 @@
 				94B7DB5A205E2C800040D61C /* Models */,
 				94A9CCBC2489C312008551B6 /* Networking */,
 				94B7DB5B205E2C920040D61C /* Shared */,
+				94380ACB203BAE1D00684863 /* Main.storyboard */,
 				94380ACE203BAE1D00684863 /* Assets.xcassets */,
 				94380AD0203BAE1D00684863 /* LaunchScreen.storyboard */,
 				94380AD3203BAE1D00684863 /* Info.plist */,
@@ -326,17 +323,6 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
-		EC14499C24BD0B9D00CA47B1 /* Search */ = {
-			isa = PBXGroup;
-			children = (
-				94380AC9203BAE1D00684863 /* SearchViewController.swift */,
-				EC1449A124C005D700CA47B1 /* CuratedCityCollectionView.swift */,
-				EC14499A24BD07D900CA47B1 /* CuratedCityCollectionViewCell.swift */,
-				EC14499D24BFBA1100CA47B1 /* CuratedCityCollectionViewDataSource.swift */,
-			);
-			path = Search;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -439,6 +425,7 @@
 				94E392AD2070B4300073E8C9 /* GoogleService-Info.plist in Resources */,
 				94E392B02074B29E0073E8C9 /* style.json in Resources */,
 				94380ACF203BAE1D00684863 /* Assets.xcassets in Resources */,
+				94380ACD203BAE1D00684863 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -566,7 +553,6 @@
 				94E1086D24836F660091D043 /* GradientView.swift in Sources */,
 				94600FCC249AA81D00E605FD /* API+UIImage.swift in Sources */,
 				94380ACA203BAE1D00684863 /* SearchViewController.swift in Sources */,
-				EC14499E24BFBA1100CA47B1 /* CuratedCityCollectionViewDataSource.swift in Sources */,
 				94600FCE249AA8C500E605FD /* API+EaterySearch.swift in Sources */,
 				94600FCA249AA17900E605FD /* PlaceSearchRoutes.swift in Sources */,
 				94E1086B248228790091D043 /* CardLabel.swift in Sources */,
@@ -584,10 +570,8 @@
 				94380AC8203BAE1D00684863 /* AppDelegate.swift in Sources */,
 				947EC656204667EB004A911D /* MapCardCell.swift in Sources */,
 				94600FBA24987B8300E605FD /* JSONCustomDecoder.swift in Sources */,
-				EC1449A224C005D700CA47B1 /* CuratedCityCollectionView.swift in Sources */,
 				EC14499924BA20B600CA47B1 /* FloatingView.swift in Sources */,
 				94600FC6249A986600E605FD /* API.swift in Sources */,
-				EC14499B24BD07D900CA47B1 /* CuratedCityCollectionViewCell.swift in Sources */,
 				9434BA4C247998D4004294F0 /* MapReviewCard.swift in Sources */,
 				94E108712484AF5A0091D043 /* CellLoadingView.swift in Sources */,
 				94AE9B852094DAF500450399 /* LoadingViewController.swift in Sources */,
@@ -622,6 +606,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		94380ACB203BAE1D00684863 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				94380ACC203BAE1D00684863 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
 		94380AD0203BAE1D00684863 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
