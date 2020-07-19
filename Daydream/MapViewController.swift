@@ -140,25 +140,29 @@ final class MapViewController: UIViewController {
             make.height.equalTo(68)
         }
 
+        let iPadOffset = UIDevice.current.userInterfaceIdiom == .pad ? 12 : 0
+        
         darkModeButton.snp.makeConstraints { make in
-            make.leading.top.equalToSuperview().inset(12)
+            make.top.equalToSuperview().inset(12 + iPadOffset)
+            make.leading.equalToSuperview().inset(12)
             make.size.equalTo(40)
         }
 
         aboutButton.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(12)
+            make.top.equalToSuperview().inset(12 + iPadOffset)
             make.size.equalTo(40)
         }
 
         closeButton.snp.makeConstraints { make in
             make.leading.equalTo(aboutButton.snp.trailing)
-            make.top.trailing.equalToSuperview().inset(12)
+            make.top.equalToSuperview().inset(12 + iPadOffset)
+            make.trailing.equalToSuperview().inset(12)
             make.size.equalTo(40)
         }
 
         reviewCard.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(12)
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(12)
+            make.leading.trailing.equalToSuperview().inset(12 + iPadOffset)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(12 + iPadOffset)
             make.height.equalTo(MapReviewCard.height)
         }
 

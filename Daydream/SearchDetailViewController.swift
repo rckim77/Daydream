@@ -405,6 +405,7 @@ extension SearchDetailViewController: SightsCardCellDelegate {
         guard let mapVC = MapViewController(place: place) else {
             return
         }
+        mapVC.modalPresentationStyle = UIDevice.current.userInterfaceIdiom == .pad ? .fullScreen : .automatic
         present(mapVC, animated: true)
     }
 
