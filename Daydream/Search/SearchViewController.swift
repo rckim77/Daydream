@@ -33,6 +33,7 @@ final class SearchViewController: UIViewController {
     private var randomButtonYOffset: CGFloat {
         30 - deviceYOffset
     }
+    private var defaultSearchBarContainerY: CGFloat?
 
     private lazy var searchBarContainerView: UIView = {
         let view = UIView()
@@ -125,7 +126,6 @@ final class SearchViewController: UIViewController {
         super.viewWillAppear(animated)
 
         fadeInTitleAndButton()
-        searchBarContainerView.frame.origin.y = defaultSearchBarYOffset
         searchController?.searchBar.text = ""
     }
 
@@ -212,8 +212,9 @@ final class SearchViewController: UIViewController {
     }
 
     private func resetSearchUI() {
-        searchController?.searchBar.text = nil
-        searchBarContainerView.frame = CGRect(x: 0, y: defaultSearchBarYOffset, width: view.bounds.width, height: searchBarViewHeight)
+        if let defaultSearchBarContainerY = defaultSearchBarContainerY {
+            searchBarContainerView.frame = CGRect(x: 0, y: defaultSearchBarContainerY, width: view.bounds.width, height: searchBarViewHeight)
+        }
         titleLabel.alpha = 1
     }
     
@@ -361,6 +362,7 @@ extension SearchViewController: GMSAutocompleteResultsViewControllerDelegate {
 extension SearchViewController: UISearchControllerDelegate {
 
     func willPresentSearchController(_ searchController: UISearchController) {
+        defaultSearchBarContainerY = searchBarContainerView.frame.origin.y
         UIView.animate(withDuration: 0.3, animations: {
             self.searchBarContainerView.frame.origin.y = 65.0
             self.titleLabel.alpha = 0
