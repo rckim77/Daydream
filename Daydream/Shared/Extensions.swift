@@ -127,12 +127,14 @@ extension String {
 }
 
 extension UISearchBar {
+    /// DEPRECATED
     func setPlaceholderColor(_ color: UIColor) {
         searchTextField.setPlaceholder(textColor: color)
     }
 }
 
 extension UITextField {
+    /// DEPRECATED
     private class Label: UILabel {
         private var _textColor: UIColor = .lightGray
 
@@ -154,10 +156,12 @@ extension UITextField {
         }
     }
 
+    /// DEPRECATED
     var placeholderLabel: UILabel? {
         return value(forKey: "placeholderLabel") as? UILabel
     }
 
+    /// DEPRECATED
     func setPlaceholder(textColor: UIColor) {
         guard let placeholderLabel = placeholderLabel else {
             return
@@ -203,7 +207,14 @@ extension UISearchController {
         searchBar.searchTextField.textColor = .white
         searchBar.searchTextField.placeholder = "e.g., Tokyo"
         searchBar.searchBarStyle = .minimal
-        searchBar.setPlaceholderColor(.white)
+        
+        // Once we drop iOS 13, we can remove our UITextField extension hack
+        if #available(iOS 14.0, *) {
+            searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: "e.g., Tokyo",
+                                                                                 attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
+        } else {
+            searchBar.setPlaceholderColor(.white)
+        }
 
         // style search icon
         searchBar.setImage(#imageLiteral(resourceName: "searchIconWhite"), for: .search, state: .normal)
