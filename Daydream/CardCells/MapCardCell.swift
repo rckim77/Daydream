@@ -14,7 +14,7 @@ final class MapCardCell: UITableViewCell {
 
     private lazy var mapView: GMSMapView = {
         let defaultCamera = GMSCameraPosition.camera(withLatitude: 0, longitude: 0, zoom: 0)
-        let mapView = GMSMapView(frame: .zero, camera: defaultCamera)
+        let mapView = GMSMapView()
         mapView.addRoundedCorners(radius: 10)
         mapView.configureMapStyle(isDark: traitCollection.userInterfaceStyle == .dark)
         mapView.isUserInteractionEnabled = false
@@ -41,7 +41,14 @@ final class MapCardCell: UITableViewCell {
             make.top.bottom.equalToSuperview()
             make.left.right.equalToSuperview().inset(16)
         }
+        
+        registerForTraitChanges([UITraitUserInterfaceStyle.self], handler: { (self: Self, previousTraitCollection: UITraitCollection) in
+            if previousTraitCollection.userInterfaceStyle != self.traitCollection.userInterfaceStyle {
+                self.mapView.configureMapStyle(isDark: self.traitCollection.userInterfaceStyle == .dark)
+            }
+        })
     }
+    
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -64,15 +71,5 @@ final class MapCardCell: UITableViewCell {
         marker.title = place.name
         marker.snippet = place.formattedAddress
         marker.map = mapView
-    }
-
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        guard let previousTraitCollection = previousTraitCollection else {
-            return
-        }
-        if traitCollection.userInterfaceStyle != previousTraitCollection.userInterfaceStyle {
-            mapView.configureMapStyle(isDark: traitCollection.userInterfaceStyle == .dark)
-        }
     }
 }

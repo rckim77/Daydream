@@ -164,7 +164,7 @@ final class SearchDetailViewController: UIViewController {
 
         resultsViewController = GMSAutocompleteResultsViewController()
         resultsViewController?.delegate = self
-        resultsViewController?.setAutocompleteFilter(.city)
+        resultsViewController?.setAutocompleteFilter()
         resultsViewController?.setStyle()
 
         searchController = UISearchController(searchResultsController: resultsViewController)
@@ -259,8 +259,8 @@ final class SearchDetailViewController: UIViewController {
         cardsTableView.reloadData()
 
         loadPlaceByNameCancellable = API.PlaceSearch.loadPlace(name: randomCity, queryType: .placeByName)?
-            .sink(receiveCompletion: { [weak self] completion in
-                if case let Subscribers.Completion.failure(error) = completion {
+            .sink(receiveCompletion: { completion in
+                if case Subscribers.Completion.failure(_) = completion {
                     loadingVC.remove()
                 }
             }, receiveValue: { [weak self] place in

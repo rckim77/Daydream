@@ -120,6 +120,16 @@ final class SearchViewController: UIViewController {
                     self?.placeBackgroundImage = image
                 })
         }
+        
+        registerForTraitChanges([UITraitUserInterfaceStyle.self], handler: { (self: Self, previousTraitCollection: UITraitCollection) in
+            if self.traitCollection.userInterfaceStyle != previousTraitCollection.userInterfaceStyle {
+                if self.traitCollection.userInterfaceStyle == .dark {
+                    self.overlayView.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+                } else {
+                    self.overlayView.backgroundColor = .clear
+                }
+            }
+        })
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -180,7 +190,7 @@ final class SearchViewController: UIViewController {
 
         resultsViewController = GMSAutocompleteResultsViewController()
         resultsViewController?.delegate = self
-        resultsViewController?.setAutocompleteFilter(.city)
+        resultsViewController?.setAutocompleteFilter()
         resultsViewController?.setStyle()
 
         searchController = UISearchController(searchResultsController: resultsViewController)
@@ -288,22 +298,6 @@ final class SearchViewController: UIViewController {
             .compactMap { API.PlaceSearch.loadGooglePhoto(photoRef: $0, maxHeight: Int(UIScreen.main.bounds.height)) } // strips nil
             .flatMap { $0 } // converts into correct publisher so sink works
             .eraseToAnyPublisher()
-    }
-
-    // MARK: - TraitCollection
-
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        guard let previousTraitCollection = previousTraitCollection else {
-            return
-        }
-        if traitCollection.userInterfaceStyle != previousTraitCollection.userInterfaceStyle {
-            if traitCollection.userInterfaceStyle == .dark {
-                overlayView.backgroundColor = UIColor.black.withAlphaComponent(0.4)
-            } else {
-                overlayView.backgroundColor = .clear
-            }
-        }
     }
     
     // MARK: - Device Orientation Change

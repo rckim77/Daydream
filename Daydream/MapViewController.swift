@@ -110,6 +110,12 @@ final class MapViewController: UIViewController {
 
         addOrUpdateMapView(for: place.placeId, name: place.name, location: place.coordinate)
         addProgrammaticViews()
+        
+        registerForTraitChanges([UITraitUserInterfaceStyle.self], handler: { (self: Self, previousTraitCollection: UITraitCollection) in
+            if self.traitCollection.userInterfaceStyle != previousTraitCollection.userInterfaceStyle {
+                self.isViewingDarkMode = self.traitCollection.userInterfaceStyle == .dark
+            }
+        })
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -179,7 +185,10 @@ final class MapViewController: UIViewController {
             addOrUpdateMarkerAndReviews(for: placeId, name: name, location: location, in: dynamicMapView)
         } else {
             let frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-            let mapViewNew = GMSMapView.map(withFrame: frame, camera: camera)
+            let options = GMSMapViewOptions()
+            options.camera = camera
+            options.frame = frame
+            let mapViewNew = GMSMapView(options: options)
             dynamicMapView = mapViewNew
 
             guard let dynamicMapView = dynamicMapView else {
@@ -336,16 +345,6 @@ final class MapViewController: UIViewController {
             return
         }
         openUrl(authorUrl)
-    }
-
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        guard let previousTraitCollection = previousTraitCollection else {
-            return
-        }
-        if traitCollection.userInterfaceStyle != previousTraitCollection.userInterfaceStyle {
-            isViewingDarkMode = traitCollection.userInterfaceStyle == .dark
-        }
     }
 }
 

@@ -10,7 +10,7 @@ import UIKit
 import GooglePlaces
 import SnapKit
 
-protocol SightsCardCellDelegate: class {
+protocol SightsCardCellDelegate: AnyObject {
     func sightsCardCell(_ cell: SightsCardCell, didSelectPlace place: Place)
     func sightsCardCellDidTapBusinessStatusButton(_ businessStatus: PlaceBusinessStatus)
     func sightsCardCellDidTapRetry()
