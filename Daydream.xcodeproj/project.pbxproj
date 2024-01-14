@@ -63,6 +63,13 @@
 		EC14499B24BD07D900CA47B1 /* CuratedCityCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC14499A24BD07D900CA47B1 /* CuratedCityCollectionViewCell.swift */; };
 		EC14499E24BFBA1100CA47B1 /* CuratedCityCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC14499D24BFBA1100CA47B1 /* CuratedCityCollectionViewDataSource.swift */; };
 		EC1449A224C005D700CA47B1 /* CuratedCityCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC1449A124C005D700CA47B1 /* CuratedCityCollectionView.swift */; };
+		EC1D58E22B546D8D0068D03A /* GooglePlaces in Frameworks */ = {isa = PBXBuildFile; productRef = EC1D58E12B546D8D0068D03A /* GooglePlaces */; };
+		EC1D58E52B546E230068D03A /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = EC1D58E42B546E230068D03A /* SnapKit */; };
+		EC1D58E72B546E230068D03A /* SnapKit-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = EC1D58E62B546E230068D03A /* SnapKit-Dynamic */; };
+		EC1D58EA2B546EB90068D03A /* GoogleMaps in Frameworks */ = {isa = PBXBuildFile; productRef = EC1D58E92B546EB90068D03A /* GoogleMaps */; };
+		EC1D58EC2B546EB90068D03A /* GoogleMapsBase in Frameworks */ = {isa = PBXBuildFile; productRef = EC1D58EB2B546EB90068D03A /* GoogleMapsBase */; };
+		EC1D58EE2B546EB90068D03A /* GoogleMapsCore in Frameworks */ = {isa = PBXBuildFile; productRef = EC1D58ED2B546EB90068D03A /* GoogleMapsCore */; };
+		EC1D58F02B546EB90068D03A /* GoogleMapsM4B in Frameworks */ = {isa = PBXBuildFile; productRef = EC1D58EF2B546EB90068D03A /* GoogleMapsM4B */; };
 		EC34ADDA24A1A1D200916FE2 /* apiKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = EC34ADD924A1A1D200916FE2 /* apiKeys.plist */; };
 /* End PBXBuildFile section */
 
@@ -152,6 +159,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EC1D58EC2B546EB90068D03A /* GoogleMapsBase in Frameworks */,
+				EC1D58F02B546EB90068D03A /* GoogleMapsM4B in Frameworks */,
+				EC1D58EE2B546EB90068D03A /* GoogleMapsCore in Frameworks */,
+				EC1D58EA2B546EB90068D03A /* GoogleMaps in Frameworks */,
+				EC1D58E22B546D8D0068D03A /* GooglePlaces in Frameworks */,
+				EC1D58E52B546E230068D03A /* SnapKit in Frameworks */,
+				EC1D58E72B546E230068D03A /* SnapKit-Dynamic in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -347,6 +361,15 @@
 			dependencies = (
 			);
 			name = Daydream;
+			packageProductDependencies = (
+				EC1D58E12B546D8D0068D03A /* GooglePlaces */,
+				EC1D58E42B546E230068D03A /* SnapKit */,
+				EC1D58E62B546E230068D03A /* SnapKit-Dynamic */,
+				EC1D58E92B546EB90068D03A /* GoogleMaps */,
+				EC1D58EB2B546EB90068D03A /* GoogleMapsBase */,
+				EC1D58ED2B546EB90068D03A /* GoogleMapsCore */,
+				EC1D58EF2B546EB90068D03A /* GoogleMapsM4B */,
+			);
 			productName = Daydream;
 			productReference = 94380AC4203BAE1D00684863 /* Daydream.app */;
 			productType = "com.apple.product-type.application";
@@ -383,6 +406,11 @@
 				Base,
 			);
 			mainGroup = 94380ABB203BAE1D00684863;
+			packageReferences = (
+				EC1D58E02B546D8D0068D03A /* XCRemoteSwiftPackageReference "ios-places-sdk" */,
+				EC1D58E32B546E230068D03A /* XCRemoteSwiftPackageReference "SnapKit" */,
+				EC1D58E82B546EB90068D03A /* XCRemoteSwiftPackageReference "ios-maps-sdk" */,
+			);
 			productRefGroup = 94380AC5203BAE1D00684863 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -745,6 +773,71 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		EC1D58E02B546D8D0068D03A /* XCRemoteSwiftPackageReference "ios-places-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googlemaps/ios-places-sdk";
+			requirement = {
+				kind = exactVersion;
+				version = 8.3.0;
+			};
+		};
+		EC1D58E32B546E230068D03A /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
+			requirement = {
+				kind = exactVersion;
+				version = 5.7.0;
+			};
+		};
+		EC1D58E82B546EB90068D03A /* XCRemoteSwiftPackageReference "ios-maps-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googlemaps/ios-maps-sdk";
+			requirement = {
+				kind = exactVersion;
+				version = 8.3.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		EC1D58E12B546D8D0068D03A /* GooglePlaces */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EC1D58E02B546D8D0068D03A /* XCRemoteSwiftPackageReference "ios-places-sdk" */;
+			productName = GooglePlaces;
+		};
+		EC1D58E42B546E230068D03A /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EC1D58E32B546E230068D03A /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+		EC1D58E62B546E230068D03A /* SnapKit-Dynamic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EC1D58E32B546E230068D03A /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = "SnapKit-Dynamic";
+		};
+		EC1D58E92B546EB90068D03A /* GoogleMaps */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EC1D58E82B546EB90068D03A /* XCRemoteSwiftPackageReference "ios-maps-sdk" */;
+			productName = GoogleMaps;
+		};
+		EC1D58EB2B546EB90068D03A /* GoogleMapsBase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EC1D58E82B546EB90068D03A /* XCRemoteSwiftPackageReference "ios-maps-sdk" */;
+			productName = GoogleMapsBase;
+		};
+		EC1D58ED2B546EB90068D03A /* GoogleMapsCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EC1D58E82B546EB90068D03A /* XCRemoteSwiftPackageReference "ios-maps-sdk" */;
+			productName = GoogleMapsCore;
+		};
+		EC1D58EF2B546EB90068D03A /* GoogleMapsM4B */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EC1D58E82B546EB90068D03A /* XCRemoteSwiftPackageReference "ios-maps-sdk" */;
+			productName = GoogleMapsM4B;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 94380ABC203BAE1D00684863 /* Project object */;
 }

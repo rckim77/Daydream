@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SVProgressHUD
 
 /// Refactors loading spinner into a child VC that any VC can add like a plugin. The benefits are:
 ///
@@ -22,14 +21,12 @@ class LoadingViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        DispatchQueue.main.async {
-            SVProgressHUD.show()
-        }
+        // start loading UI
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
-        SVProgressHUD.dismiss()
+        // stop loading UI
     }
 }

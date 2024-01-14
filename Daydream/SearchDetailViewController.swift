@@ -202,9 +202,6 @@ final class SearchDetailViewController: UIViewController {
 
         sightsCancellable = dataSource.loadSights(name: dataSource.place.name, location: dataSource.place.coordinate, queryType: .touristSpots)?
             .sink(receiveCompletion: { [weak self] receiveCompletion in
-                if case let Subscribers.Completion.failure(error) = receiveCompletion {
-                    self?.logErrorEvent(error)
-                }
                 self?.cardsTableView.reloadRows(at: [SearchDetailDataSource.sightsIndexPath], with: .fade)
                 completion()
                 }, receiveValue: { [weak self] _ in
@@ -213,9 +210,6 @@ final class SearchDetailViewController: UIViewController {
 
         eateriesCancellable = dataSource.loadEateries()?
             .sink(receiveCompletion: { [weak self] receiveCompletion in
-                if case let Subscribers.Completion.failure(error) = receiveCompletion {
-                    self?.logErrorEvent(error)
-                }
                 self?.cardsTableView.reloadRows(at: [SearchDetailDataSource.eateriesIndexPath], with: .fade)
                 completion()
                 }, receiveValue: { [weak self] _ in
@@ -230,13 +224,7 @@ final class SearchDetailViewController: UIViewController {
     private func fetchBackgroundPhoto() {
         loadPhotoCancellable = dataSource.loadPhoto()?
             .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { [weak self] receiveCompletion in
-                guard let strongSelf = self else {
-                    return
-                }
-                if case let Subscribers.Completion.failure(error) = receiveCompletion {
-                    strongSelf.logErrorEvent(error)
-                }
+            .sink(receiveCompletion: { _ in
             }, receiveValue: { [weak self] image in
                 guard let strongSelf = self else {
                     return
@@ -255,13 +243,11 @@ final class SearchDetailViewController: UIViewController {
 
     @objc
     private func homeButtonTapped() {
-        logEvent(contentType: "home button tapped", title)
         dismiss(animated: true, completion: nil)
     }
 
     @objc
     func randomCityButtonTapped() {
-        logEvent(contentType: "random button tapped", title)
         guard let randomCity = getRandomCity() else {
             return
         }
@@ -276,7 +262,6 @@ final class SearchDetailViewController: UIViewController {
             .sink(receiveCompletion: { [weak self] completion in
                 if case let Subscribers.Completion.failure(error) = completion {
                     loadingVC.remove()
-                    self?.logErrorEvent(error)
                 }
             }, receiveValue: { [weak self] place in
                 self?.dataSource.place = place
@@ -306,16 +291,11 @@ extension SearchDetailViewController: UITableViewDelegate {
             return
         }
 
-        logEvent(contentType: "select map card cell", title)
-
         if let mapUrl = dataSource.place.mapUrl {
             openUrl(mapUrl)
         } else {
             loadMapUrlCancellable = API.PlaceSearch.getMapUrl(placeId: dataSource.place.placeId)?
-                .sink(receiveCompletion: { [weak self] completion in
-                    if case let Subscribers.Completion.failure(error) = completion {
-                        self?.logErrorEvent(error)
-                    }
+                .sink(receiveCompletion: { _ in
                 }, receiveValue: { url in
                     UIApplication.shared.open(url, options: [:])
                 })
@@ -374,9 +354,6 @@ extension SearchDetailViewController: UITableViewDelegate {
 
 extension SearchDetailViewController: GMSAutocompleteResultsViewControllerDelegate {
     func resultsController(_ resultsController: GMSAutocompleteResultsViewController, didAutocompleteWith place: GMSPlace) {
-        let searchBarText = searchController?.searchBar.text ?? "Couldn't get search bar text"
-        let placeId = place.placeID ?? "Couldn't get place ID"
-        logSearchEvent(searchTerm: searchBarText, placeId: placeId)
         searchController?.searchBar.text = nil // reset to search bar text
 
         guard let placeModel = Place(from: place) else {
@@ -395,13 +372,12 @@ extension SearchDetailViewController: GMSAutocompleteResultsViewControllerDelega
     }
 
     func resultsController(_ resultsController: GMSAutocompleteResultsViewController, didFailAutocompleteWithError error: Error) {
-        logErrorEvent(error)
+        // log error
     }
 }
 
 extension SearchDetailViewController: SightsCardCellDelegate {
     func sightsCardCell(_ cell: SightsCardCell, didSelectPlace place: Place) {
-        logEvent(contentType: "select point of interest", title)
         guard let mapVC = MapViewController(place: place) else {
             return
         }
@@ -422,8 +398,6 @@ extension SearchDetailViewController: SightsCardCellDelegate {
 
 extension SearchDetailViewController: EateriesCardCellDelegate {
     func eateriesCardCell(_ cell: EateriesCardCell, didSelectEatery eatery: Eatable) {
-        logEvent(contentType: "select eatery", title)
-
         switch eatery.type {
         case .yelp:
             if let url = eatery.eatableUrl {
@@ -455,4 +429,4 @@ extension SearchDetailViewController: EateriesCardCellDelegate {
     }
 }
 
-extension SearchDetailViewController: RandomCitySelectable, Loggable {}
+extension SearchDetailViewController: RandomCitySelectable {}

@@ -218,10 +218,7 @@ final class MapViewController: UIViewController {
         dynamicMarker.tracksInfoWindowChanges = true
 
         loadPlaceCancellable = API.PlaceSearch.loadPlaceWithReviews(placeId: placeId)?
-            .sink(receiveCompletion: { [weak self] completion in
-                if case let Subscribers.Completion.failure(error) = completion {
-                    self?.logErrorEvent(error)
-                }
+            .sink(receiveCompletion: { completion in
             }, receiveValue: { [weak self] place in
                 guard let strongSelf = self else {
                     return
@@ -354,17 +351,15 @@ final class MapViewController: UIViewController {
 
 extension MapViewController: GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, didTapPOIWithPlaceID placeID: String, name: String, location: CLLocationCoordinate2D) {
-        logEvent(contentType: "POI on map tapped", title)
         stopDisplayingReviews()
         addOrUpdateMapView(for: placeID, name: name, location: location)
     }
 
     func mapView(_ mapView: GMSMapView, didTapInfoWindowOf marker: GMSMarker) {
-        logEvent(contentType: "info window on marker tapped", title)
         if let mapUrl = place.mapUrl, let url = URL(string: mapUrl) {
             UIApplication.shared.open(url, options: [:])
         }
     }
 }
 
-extension MapViewController: Loggable, ImageViewFadeable {}
+extension MapViewController: ImageViewFadeable {}

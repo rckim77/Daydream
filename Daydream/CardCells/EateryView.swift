@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 import Combine
 
-protocol EateryViewDelegate: class {
+protocol EateryViewDelegate: AnyObject {
     func eateryViewDidTapEatery(layoutType: EateryView.LayoutType)
 }
 

@@ -234,7 +234,6 @@ final class SearchViewController: UIViewController {
 
     @objc
     func randomButtonTapped() {
-        logEvent(contentType: "random button tapped", title)
         if placeBackgroundImage != nil && placeData != nil {
             resetAndPresentDetailViewController()
             return
@@ -247,11 +246,8 @@ final class SearchViewController: UIViewController {
         add(loadingVC)
         
         placeCancellable = fetchCityAndBackgroundPhoto(cityName: randomCity)?
-            .sink(receiveCompletion: { [weak self] completion in
+            .sink(receiveCompletion: { completion in
                 loadingVC.remove()
-                if case let Subscribers.Completion.failure(error) = completion {
-                    self?.logErrorEvent(error)
-                }
             }, receiveValue: { [weak self] image in
                 guard let strongSelf = self else {
                     return
@@ -328,9 +324,7 @@ final class SearchViewController: UIViewController {
 extension SearchViewController: GMSAutocompleteResultsViewControllerDelegate {
     // Handle the user's selection
     func resultsController(_ resultsController: GMSAutocompleteResultsViewController, didAutocompleteWith place: GMSPlace) {
-        let searchBarText = searchController?.searchBar.text ?? "Couldn't get search bar text"
         let placeId = place.placeID ?? "Couldn't get place ID"
-        logSearchEvent(searchTerm: searchBarText, placeId: placeId)
 
         guard let placeModel = Place(from: place) else {
             dismiss(animated: true, completion: nil)
@@ -355,7 +349,7 @@ extension SearchViewController: GMSAutocompleteResultsViewControllerDelegate {
 
     // Handle the error
     func resultsController(_ resultsController: GMSAutocompleteResultsViewController, didFailAutocompleteWithError error: Error) {
-        logErrorEvent(error)
+        // log error
     }
 }
 
@@ -392,4 +386,4 @@ extension SearchViewController: UICollectionViewDelegate {
     }
 }
 
-extension SearchViewController: RandomCitySelectable, Loggable {}
+extension SearchViewController: RandomCitySelectable {}

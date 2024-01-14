@@ -183,4 +183,4 @@ extension SightsCardCell: SightViewDelegate {
     }
 }
 
-extension SightsCardCell: ImageViewFadeable, Loggable {}
+extension SightsCardCell: ImageViewFadeable {}
