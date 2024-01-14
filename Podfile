@@ -8,7 +8,7 @@ target 'Daydream' do
   # Pods for Daydream
   pod 'GooglePlaces', '~> 3.9'
   pod 'GoogleMaps', '~> 3.9'
-  pod 'SwiftLint', '~> 0.39'
+  pod 'SwiftLint', '~> 0.41'
   pod 'SVProgressHUD'
   pod 'Firebase/Core'
   pod 'Firebase/Crashlytics'
