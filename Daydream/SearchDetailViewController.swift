@@ -54,9 +54,7 @@ final class SearchDetailViewController: UIViewController {
         let button = UIButton(type: .system)
         button.configureWithSystemIcon("arrow.clockwise")
         button.addTarget(self, action: #selector(randomCityButtonTapped), for: .touchUpInside)
-        if #available(iOS 13.4, *) {
-            button.pointerStyleProvider = buttonProvider
-        }
+        button.pointerStyleProvider = buttonProvider
         return button
     }()
 
@@ -64,9 +62,7 @@ final class SearchDetailViewController: UIViewController {
         let button = UIButton(type: .system)
         button.configureWithSystemIcon("house.fill")
         button.addTarget(self, action: #selector(homeButtonTapped), for: .touchUpInside)
-        if #available(iOS 13.4, *) {
-            button.pointerStyleProvider = buttonProvider
-        }
+        button.pointerStyleProvider = buttonProvider
         return button
     }()
     

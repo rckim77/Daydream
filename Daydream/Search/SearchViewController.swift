@@ -72,9 +72,7 @@ final class SearchViewController: UIViewController {
         button.setTitle("Got feedback?", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.addTarget(self, action: #selector(feedbackButtonTapped), for: .touchUpInside)
-        if #available(iOS 13.4, *) {
-            button.pointerStyleProvider = buttonProvider
-        }
+        button.pointerStyleProvider = buttonProvider
         return button
     }()
 

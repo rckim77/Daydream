@@ -30,7 +30,7 @@ final class CuratedCityCollectionView: UICollectionView {
         
         flowLayout.itemSize = itemSize
         flowLayout.scrollDirection = .horizontal
-        flowLayout.minimumLineSpacing = isIpad ? 18 : 10
+        flowLayout.minimumLineSpacing = isIpad ? 18 : 16
         super.init(frame: .zero, collectionViewLayout: flowLayout)
         
         register(CuratedCityCollectionViewCell.self, forCellWithReuseIdentifier: CuratedCityCollectionViewCell.reuseIdentifier)

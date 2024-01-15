@@ -35,9 +35,7 @@ final class SightView: UIView {
         let button = UIButton(type: .system)
         button.addShadow(opacity: 0.8, offset: CGSize(width: 0, height: 1))
         button.addTarget(self, action: #selector(businessStatusButtonTapped), for: .touchUpInside)
-        if #available(iOS 13.4, *) {
-            button.pointerStyleProvider = buttonProvider
-        }
+        button.pointerStyleProvider = buttonProvider
         return button
     }()
 

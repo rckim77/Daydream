@@ -49,9 +49,7 @@ final class SightsCardCell: UITableViewCell {
         let button = UIButton(type: .system)
         button.configureForError()
         button.addTarget(self, action: #selector(retryButtonTapped), for: .touchUpInside)
-        if #available(iOS 13.4, *) {
-            button.pointerStyleProvider = buttonProvider
-        }
+        button.pointerStyleProvider = buttonProvider
         return button
     }()
     

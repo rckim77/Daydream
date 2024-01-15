@@ -30,12 +30,12 @@ final class SightsCarouselCollectionView: UICollectionView {
         
         flowLayout.itemSize = itemSize
         flowLayout.scrollDirection = .horizontal
-        flowLayout.minimumLineSpacing = isIpad ? 18 : 10
+        flowLayout.minimumLineSpacing = isIpad ? 18 : 16
         super.init(frame: .zero, collectionViewLayout: flowLayout)
         
         register(SightsCarouselCardCell.self, forCellWithReuseIdentifier: SightsCarouselCardCell.reuseIdentifier)
         backgroundColor = .clear
-        let contentInsetHorizontal: CGFloat = isIpad ? 18 : 12
+        let contentInsetHorizontal: CGFloat = isIpad ? 18 : 16
         contentInset = UIEdgeInsets(top: 0, left: contentInsetHorizontal, bottom: defaultContentInsetBottom, right: contentInsetHorizontal)
         showsHorizontalScrollIndicator = false
     }
