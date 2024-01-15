@@ -9,9 +9,9 @@
 import UIKit
 import SnapKit
 
-final class SightsCarouselTableViewCell: UITableViewCell, UICollectionViewDelegate {
+final class SightsCarouselTableViewCell: UITableViewCell {
     
-    static let defaultHeight: CGFloat = 340
+    static let defaultHeight: CGFloat = 300
     private let titleLabel = CardLabel(textStyle: .title1, text: "Top Sights")
     private let carouselCollectionViewDataSource = SightsCarouselDataSource()
     
@@ -22,7 +22,7 @@ final class SightsCarouselTableViewCell: UITableViewCell, UICollectionViewDelega
         return collectionView
     }()
     
-    weak var delegate: SightsCardCellDelegate?
+    weak var delegate: SightsCarouselCardCellDelegate?
     var sights: [Place]? {
         didSet {
             if let sights = sights, sights.count >= 3 {
@@ -68,5 +68,15 @@ final class SightsCarouselTableViewCell: UITableViewCell, UICollectionViewDelega
     
     func configureError() {
         
+    }
+}
+
+extension SightsCarouselTableViewCell: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? SightsCarouselCardCell, let place = cell.place else {
+            return
+        }
+
+        delegate?.sightsCardCell(didSelectPlace: place)
     }
 }

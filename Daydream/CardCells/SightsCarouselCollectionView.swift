@@ -26,7 +26,7 @@ final class SightsCarouselCollectionView: UICollectionView {
         let width: CGFloat = isIpad ? 180 : 120
         self.defaultHeight = isIpad ? 280 : isSmallDevice ? 130 : 212
         self.itemSize = CGSize(width: width, height: defaultHeight)
-        self.defaultContentInsetBottom = isIpad ? 80 : isSmallDevice ? 36 : 58
+        self.defaultContentInsetBottom = isIpad ? 80 : isSmallDevice ? 4 : 12
         
         flowLayout.itemSize = itemSize
         flowLayout.scrollDirection = .horizontal

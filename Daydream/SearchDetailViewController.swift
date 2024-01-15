@@ -81,7 +81,6 @@ final class SearchDetailViewController: UIViewController {
         tableView.dataSource = dataSource
         tableView.register(MapCardCell.self, forCellReuseIdentifier: "mapCardCell")
         tableView.register(SightsCarouselTableViewCell.self, forCellReuseIdentifier: "sightsCarouselTableViewCell")
-        tableView.register(SightsCardCell.self, forCellReuseIdentifier: "sightsCardCell")
         tableView.register(EateriesCardCell.self, forCellReuseIdentifier: "eateriesCardCell")
         tableView.delegate = self
         tableView.tableFooterView = UIView()
@@ -113,7 +112,7 @@ final class SearchDetailViewController: UIViewController {
         addProgrammaticComponents()
         configureFloatingTitleLabel()
 
-        dataSource.sightsLoadingState = .loading
+        dataSource.sightsCarouselLoadingState = .loading
         dataSource.eateriesLoadingState = .loading
         cardsTableView.reloadData()
         loadDataSource(reloadMapCard: false, fetchBackground: false, completion: {})
@@ -203,10 +202,10 @@ final class SearchDetailViewController: UIViewController {
 
         sightsCancellable = dataSource.loadSights(name: dataSource.place.name, location: dataSource.place.coordinate, queryType: .touristSpots)?
             .sink(receiveCompletion: { [weak self] receiveCompletion in
-                self?.cardsTableView.reloadRows(at: [SearchDetailDataSource.sightsIndexPath, SearchDetailDataSource.sightsCarouselIndexPath], with: .fade)
+                self?.cardsTableView.reloadRows(at: [SearchDetailDataSource.sightsCarouselIndexPath], with: .fade)
                 completion()
                 }, receiveValue: { [weak self] _ in
-                    self?.cardsTableView.reloadRows(at: [SearchDetailDataSource.sightsIndexPath, SearchDetailDataSource.sightsCarouselIndexPath], with: .fade)
+                    self?.cardsTableView.reloadRows(at: [SearchDetailDataSource.sightsCarouselIndexPath], with: .fade)
             })
 
         eateriesCancellable = dataSource.loadEateries()?
@@ -255,7 +254,7 @@ final class SearchDetailViewController: UIViewController {
 
         let loadingVC = LoadingViewController()
         add(loadingVC)
-        dataSource.sightsLoadingState = .loading
+        dataSource.sightsCarouselLoadingState = .loading
         dataSource.eateriesLoadingState = .loading
         cardsTableView.reloadData()
 
@@ -279,11 +278,9 @@ extension SearchDetailViewController: UITableViewDelegate {
         case 0:
             return dataSource.mapCardCellHeight
         case 1:
-            return dataSource.sightsCardCellHeight
+            return dataSource.sightsCarouselCardCellHeight
         case 2:
             return dataSource.eateriesCardCellHeight
-        case 3:
-            return dataSource.sightsCarouselCardCellHeight
         default:
             return 0
         }
@@ -379,23 +376,13 @@ extension SearchDetailViewController: GMSAutocompleteResultsViewControllerDelega
     }
 }
 
-extension SearchDetailViewController: SightsCardCellDelegate {
-    func sightsCardCell(_ cell: SightsCardCell, didSelectPlace place: Place) {
+extension SearchDetailViewController: SightsCarouselCardCellDelegate {
+    func sightsCardCell(didSelectPlace place: Place) {
         guard let mapVC = MapViewController(place: place) else {
             return
         }
         mapVC.modalPresentationStyle = UIDevice.current.userInterfaceIdiom == .pad ? .fullScreen : .automatic
         present(mapVC, animated: true)
-    }
-
-    func sightsCardCellDidTapBusinessStatusButton(_ businessStatus: PlaceBusinessStatus) {
-        let alert = UIAlertController(title: "This place is \(businessStatus.displayValue).", message: nil, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        present(alert, animated: true, completion: nil)
-    }
-
-    func sightsCardCellDidTapRetry() {
-        randomCityButtonTapped()
     }
 }
 

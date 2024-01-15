@@ -16,6 +16,10 @@ protocol SightsCardCellDelegate: AnyObject {
     func sightsCardCellDidTapRetry()
 }
 
+protocol SightsCarouselCardCellDelegate: AnyObject {
+    func sightsCardCell(didSelectPlace place: Place)
+}
+
 final class SightsCardCell: UITableViewCell {
 
     static let defaultHeight: CGFloat = 600
