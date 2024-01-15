@@ -7,4 +7,4 @@ Explore cities around the world
 
 To run locally, run `pod repo update && pod install` to fetch pods. You'll also need Google and Yelp API keys.
 
-![daydreamdemoshorter](https://user-images.githubusercontent.com/2919157/83190847-16561180-a101-11ea-91af-ba3f41378d7c.gif)
+![Simulator Screen Recording - iPhone 15 Pro - 2024-01-15 at 16 42 13](https://github.com/rckim77/Daydream/assets/2919157/0c7abba1-2fd7-4b33-8629-6d30e6e3ab3c)
