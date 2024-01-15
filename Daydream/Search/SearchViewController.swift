@@ -46,6 +46,12 @@ final class SearchViewController: UIViewController {
         imageView.contentMode = .scaleAspectFill
         return imageView
     }()
+    
+    private lazy var backgroundBlurEffectView: UIVisualEffectView = {
+        let blurEffect = UIBlurEffect(style: .systemUltraThinMaterialLight)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        return blurEffectView
+    }()
 
     /// Note: When the user does not have Dark Mode on, this does nothing.
     private lazy var overlayView: UIView = {
@@ -151,6 +157,7 @@ final class SearchViewController: UIViewController {
 
     private func addViews() {
         view.addSubview(backgroundImageView)
+        backgroundImageView.addSubview(backgroundBlurEffectView)
         view.addSubview(overlayView)
         view.addSubview(titleLabel)
         view.addSubview(randomButton)
@@ -158,6 +165,10 @@ final class SearchViewController: UIViewController {
         view.addSubview(feedbackButton)
 
         backgroundImageView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        backgroundBlurEffectView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
 
