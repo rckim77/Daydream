@@ -72,6 +72,7 @@
 		EC253B272B55A8F800D52EB9 /* SightsCarouselCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC253B262B55A8F800D52EB9 /* SightsCarouselCollectionView.swift */; };
 		EC253B292B55A94500D52EB9 /* SightsCarouselCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC253B282B55A94500D52EB9 /* SightsCarouselCardCell.swift */; };
 		EC253B2B2B55AA2300D52EB9 /* SightsCarouselDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC253B2A2B55AA2300D52EB9 /* SightsCarouselDataSource.swift */; };
+		EC253B2D2B55C35700D52EB9 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC253B2C2B55C35700D52EB9 /* ImageCache.swift */; };
 		EC34ADDA24A1A1D200916FE2 /* apiKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = EC34ADD924A1A1D200916FE2 /* apiKeys.plist */; };
 /* End PBXBuildFile section */
 
@@ -149,6 +150,7 @@
 		EC253B262B55A8F800D52EB9 /* SightsCarouselCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SightsCarouselCollectionView.swift; sourceTree = "<group>"; };
 		EC253B282B55A94500D52EB9 /* SightsCarouselCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SightsCarouselCardCell.swift; sourceTree = "<group>"; };
 		EC253B2A2B55AA2300D52EB9 /* SightsCarouselDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SightsCarouselDataSource.swift; sourceTree = "<group>"; };
+		EC253B2C2B55C35700D52EB9 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		EC34ADD924A1A1D200916FE2 /* apiKeys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = apiKeys.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -288,6 +290,7 @@
 		94B7DB5B205E2C920040D61C /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				EC253B2C2B55C35700D52EB9 /* ImageCache.swift */,
 				947EC6512043F28F004A911D /* Extensions.swift */,
 				94E9C03F2488538300103770 /* GoogleExtensions.swift */,
 				94673BAB225075AA00EC04FD /* DesignableView.swift */,
@@ -473,6 +476,7 @@
 				94600FCA249AA17900E605FD /* PlaceSearchRoutes.swift in Sources */,
 				94E1086B248228790091D043 /* CardLabel.swift in Sources */,
 				94A7B7DB20780D39003E28A8 /* Review.swift in Sources */,
+				EC253B2D2B55C35700D52EB9 /* ImageCache.swift in Sources */,
 				94B8CEB3207DC31D00CA8101 /* SearchDetailDataSource.swift in Sources */,
 				EC14499724B4F63500CA47B1 /* PhotoReference.swift in Sources */,
 				EC253B2B2B55AA2300D52EB9 /* SightsCarouselDataSource.swift in Sources */,

@@ -30,8 +30,7 @@ final class SightsCarouselCardCell: UICollectionViewCell {
     private let gradientView = GradientView()
     
     static let reuseIdentifier = "sightsCarouselCardCell"
-    
-    private var imageSet = false
+
     private var titleLabelPadding: CGFloat {
         UIDevice.current.userInterfaceIdiom == .pad ? 12 : 8
     }
@@ -70,34 +69,34 @@ final class SightsCarouselCardCell: UICollectionViewCell {
     func configure(place: Place) {
         titleLabel.text = place.name
         
-        // prevent cancellable being set unnecessarily
-        guard !imageSet else {
-            return
+        if let cachedImage = ImageCache.shared.get(forKey: place.name) {
+            gradientView.updateFrame()
+            placeImage = cachedImage
+        } else {
+            cancellable = API.PlaceSearch.loadPlace(name: place.name, queryType: .placeByName)?
+                .tryMap { [weak self] place -> String in
+                    guard let photoRef = place.photoRef else {
+                        throw NetworkError.noImage
+                    }
+                    self?.place = place
+                    return photoRef
+                }
+                .compactMap { photoRef -> AnyPublisher<UIImage, Error>? in
+                    let imageMaxHeight = Int(UIScreen.main.bounds.height) / 4
+                    return API.PlaceSearch.loadGooglePhoto(photoRef: photoRef, maxHeight: imageMaxHeight)
+                }
+                .flatMap { $0 } // converts into correct publisher so sink works
+                .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] image in
+                    guard let strongSelf = self else {
+                        return
+                    }
+                    strongSelf.gradientView.updateFrame()
+                    strongSelf.placeImage = image
+                    strongSelf.fadeInImage(image, forImageView: strongSelf.imageView)
+                    
+                    ImageCache.shared.set(image, forKey: place.name)
+                })
         }
-        imageSet = true
-        
-        cancellable = API.PlaceSearch.loadPlace(name: place.name, queryType: .placeByName)?
-            .tryMap { [weak self] place -> String in
-                guard let photoRef = place.photoRef else {
-                    throw NetworkError.noImage
-                }
-                self?.place = place
-                return photoRef
-            }
-            .compactMap { photoRef -> AnyPublisher<UIImage, Error>? in
-                let imageMaxHeight = Int(UIScreen.main.bounds.height) / 4
-                return API.PlaceSearch.loadGooglePhoto(photoRef: photoRef, maxHeight: imageMaxHeight)
-            }
-            .flatMap { $0 } // converts into correct publisher so sink works
-            .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] image in
-                guard let strongSelf = self else {
-                    return
-                }
-                strongSelf.gradientView.updateFrame()
-                strongSelf.placeImage = image
-                strongSelf.fadeInImage(image, forImageView: strongSelf.imageView)
-            })
-        
     }
 }
 
