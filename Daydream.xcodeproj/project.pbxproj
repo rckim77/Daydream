@@ -310,10 +310,7 @@
 			isa = PBXGroup;
 			children = (
 				947EC655204667EB004A911D /* MapCardCell.swift */,
-				EC253B242B55A79300D52EB9 /* SightsCarouselTableViewCell.swift */,
-				EC253B2A2B55AA2300D52EB9 /* SightsCarouselDataSource.swift */,
-				EC253B262B55A8F800D52EB9 /* SightsCarouselCollectionView.swift */,
-				EC253B282B55A94500D52EB9 /* SightsCarouselCardCell.swift */,
+				EC253B2E2B55C61500D52EB9 /* SightsCarousel */,
 				94DB8FE6204B946200FA7CF7 /* EateriesCardCell.swift */,
 				94E108742486DB480091D043 /* EateryView.swift */,
 			);
@@ -329,6 +326,17 @@
 				EC14499D24BFBA1100CA47B1 /* CuratedCityCollectionViewDataSource.swift */,
 			);
 			path = Search;
+			sourceTree = "<group>";
+		};
+		EC253B2E2B55C61500D52EB9 /* SightsCarousel */ = {
+			isa = PBXGroup;
+			children = (
+				EC253B242B55A79300D52EB9 /* SightsCarouselTableViewCell.swift */,
+				EC253B2A2B55AA2300D52EB9 /* SightsCarouselDataSource.swift */,
+				EC253B262B55A8F800D52EB9 /* SightsCarouselCollectionView.swift */,
+				EC253B282B55A94500D52EB9 /* SightsCarouselCardCell.swift */,
+			);
+			path = SightsCarousel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
