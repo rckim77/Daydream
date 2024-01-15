@@ -10,7 +10,7 @@ import UIKit
 import GooglePlaces
 import SnapKit
 
-protocol SightsCardCellDelegate: class {
+protocol SightsCardCellDelegate: AnyObject {
     func sightsCardCell(_ cell: SightsCardCell, didSelectPlace place: Place)
     func sightsCardCellDidTapBusinessStatusButton(_ businessStatus: PlaceBusinessStatus)
     func sightsCardCellDidTapRetry()
@@ -26,7 +26,7 @@ final class SightsCardCell: UITableViewCell {
     private let titleLabel = CardLabel(textStyle: .title1, text: "Top Sights")
     private lazy var sightsSectionView: UIView = {
         let view = UIView()
-        view.addRoundedCorners(radius: 8)
+        view.addRoundedCorners(radius: 16)
         return view
     }()
     private lazy var sight1View: SightView = {
@@ -183,4 +183,4 @@ extension SightsCardCell: SightViewDelegate {
     }
 }
 
-extension SightsCardCell: ImageViewFadeable, Loggable {}
+extension SightsCardCell: ImageViewFadeable {}

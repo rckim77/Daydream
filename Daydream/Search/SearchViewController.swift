@@ -76,7 +76,7 @@ final class SearchViewController: UIViewController {
         let button = UIButton(type: .system)
         button.tintColor = .white
         button.setTitle("Random", for: .normal)
-        button.addRoundedCorners(radius: 12)
+        button.addRoundedCorners(radius: 16)
         button.addBorder(color: .white, width: 1)
         button.titleLabel?.font = .preferredFont(forTextStyle: .title2)
         button.addTarget(self, action: #selector(randomButtonTapped), for: .touchUpInside)
@@ -120,6 +120,16 @@ final class SearchViewController: UIViewController {
                     self?.placeBackgroundImage = image
                 })
         }
+        
+        registerForTraitChanges([UITraitUserInterfaceStyle.self], handler: { (self: Self, previousTraitCollection: UITraitCollection) in
+            if self.traitCollection.userInterfaceStyle != previousTraitCollection.userInterfaceStyle {
+                if self.traitCollection.userInterfaceStyle == .dark {
+                    self.overlayView.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+                } else {
+                    self.overlayView.backgroundColor = .clear
+                }
+            }
+        })
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -180,7 +190,7 @@ final class SearchViewController: UIViewController {
 
         resultsViewController = GMSAutocompleteResultsViewController()
         resultsViewController?.delegate = self
-        resultsViewController?.setAutocompleteFilter(.city)
+        resultsViewController?.setAutocompleteFilter()
         resultsViewController?.setStyle()
 
         searchController = UISearchController(searchResultsController: resultsViewController)
@@ -234,7 +244,6 @@ final class SearchViewController: UIViewController {
 
     @objc
     func randomButtonTapped() {
-        logEvent(contentType: "random button tapped", title)
         if placeBackgroundImage != nil && placeData != nil {
             resetAndPresentDetailViewController()
             return
@@ -247,11 +256,8 @@ final class SearchViewController: UIViewController {
         add(loadingVC)
         
         placeCancellable = fetchCityAndBackgroundPhoto(cityName: randomCity)?
-            .sink(receiveCompletion: { [weak self] completion in
+            .sink(receiveCompletion: { completion in
                 loadingVC.remove()
-                if case let Subscribers.Completion.failure(error) = completion {
-                    self?.logErrorEvent(error)
-                }
             }, receiveValue: { [weak self] image in
                 guard let strongSelf = self else {
                     return
@@ -293,22 +299,6 @@ final class SearchViewController: UIViewController {
             .flatMap { $0 } // converts into correct publisher so sink works
             .eraseToAnyPublisher()
     }
-
-    // MARK: - TraitCollection
-
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        guard let previousTraitCollection = previousTraitCollection else {
-            return
-        }
-        if traitCollection.userInterfaceStyle != previousTraitCollection.userInterfaceStyle {
-            if traitCollection.userInterfaceStyle == .dark {
-                overlayView.backgroundColor = UIColor.black.withAlphaComponent(0.4)
-            } else {
-                overlayView.backgroundColor = .clear
-            }
-        }
-    }
     
     // MARK: - Device Orientation Change
     
@@ -328,9 +318,7 @@ final class SearchViewController: UIViewController {
 extension SearchViewController: GMSAutocompleteResultsViewControllerDelegate {
     // Handle the user's selection
     func resultsController(_ resultsController: GMSAutocompleteResultsViewController, didAutocompleteWith place: GMSPlace) {
-        let searchBarText = searchController?.searchBar.text ?? "Couldn't get search bar text"
         let placeId = place.placeID ?? "Couldn't get place ID"
-        logSearchEvent(searchTerm: searchBarText, placeId: placeId)
 
         guard let placeModel = Place(from: place) else {
             dismiss(animated: true, completion: nil)
@@ -355,7 +343,7 @@ extension SearchViewController: GMSAutocompleteResultsViewControllerDelegate {
 
     // Handle the error
     func resultsController(_ resultsController: GMSAutocompleteResultsViewController, didFailAutocompleteWithError error: Error) {
-        logErrorEvent(error)
+        // log error
     }
 }
 
@@ -392,4 +380,4 @@ extension SearchViewController: UICollectionViewDelegate {
     }
 }
 
-extension SearchViewController: RandomCitySelectable, Loggable {}
+extension SearchViewController: RandomCitySelectable {}

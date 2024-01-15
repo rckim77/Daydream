@@ -110,6 +110,12 @@ final class MapViewController: UIViewController {
 
         addOrUpdateMapView(for: place.placeId, name: place.name, location: place.coordinate)
         addProgrammaticViews()
+        
+        registerForTraitChanges([UITraitUserInterfaceStyle.self], handler: { (self: Self, previousTraitCollection: UITraitCollection) in
+            if self.traitCollection.userInterfaceStyle != previousTraitCollection.userInterfaceStyle {
+                self.isViewingDarkMode = self.traitCollection.userInterfaceStyle == .dark
+            }
+        })
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -179,7 +185,10 @@ final class MapViewController: UIViewController {
             addOrUpdateMarkerAndReviews(for: placeId, name: name, location: location, in: dynamicMapView)
         } else {
             let frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-            let mapViewNew = GMSMapView.map(withFrame: frame, camera: camera)
+            let options = GMSMapViewOptions()
+            options.camera = camera
+            options.frame = frame
+            let mapViewNew = GMSMapView(options: options)
             dynamicMapView = mapViewNew
 
             guard let dynamicMapView = dynamicMapView else {
@@ -218,10 +227,7 @@ final class MapViewController: UIViewController {
         dynamicMarker.tracksInfoWindowChanges = true
 
         loadPlaceCancellable = API.PlaceSearch.loadPlaceWithReviews(placeId: placeId)?
-            .sink(receiveCompletion: { [weak self] completion in
-                if case let Subscribers.Completion.failure(error) = completion {
-                    self?.logErrorEvent(error)
-                }
+            .sink(receiveCompletion: { completion in
             }, receiveValue: { [weak self] place in
                 guard let strongSelf = self else {
                     return
@@ -340,31 +346,19 @@ final class MapViewController: UIViewController {
         }
         openUrl(authorUrl)
     }
-
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        guard let previousTraitCollection = previousTraitCollection else {
-            return
-        }
-        if traitCollection.userInterfaceStyle != previousTraitCollection.userInterfaceStyle {
-            isViewingDarkMode = traitCollection.userInterfaceStyle == .dark
-        }
-    }
 }
 
 extension MapViewController: GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, didTapPOIWithPlaceID placeID: String, name: String, location: CLLocationCoordinate2D) {
-        logEvent(contentType: "POI on map tapped", title)
         stopDisplayingReviews()
         addOrUpdateMapView(for: placeID, name: name, location: location)
     }
 
     func mapView(_ mapView: GMSMapView, didTapInfoWindowOf marker: GMSMarker) {
-        logEvent(contentType: "info window on marker tapped", title)
         if let mapUrl = place.mapUrl, let url = URL(string: mapUrl) {
             UIApplication.shared.open(url, options: [:])
         }
     }
 }
 
-extension MapViewController: Loggable, ImageViewFadeable {}
+extension MapViewController: ImageViewFadeable {}

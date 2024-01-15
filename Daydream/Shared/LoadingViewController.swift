@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import SVProgressHUD
+import SnapKit
 
 /// Refactors loading spinner into a child VC that any VC can add like a plugin. The benefits are:
 ///
@@ -18,18 +18,32 @@ import SVProgressHUD
 ///
 /// See: https://medium.com/@johnsundell/using-child-view-controllers-as-plugins-in-swift-458e6b277b54
 class LoadingViewController: UIViewController {
+    
+    private lazy var spinner: UIActivityIndicatorView = {
+        let spinner = UIActivityIndicatorView(style: .large)
+        spinner.color = .white
+        
+        return spinner
+    }()
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        DispatchQueue.main.async {
-            SVProgressHUD.show()
+        view.backgroundColor = .black.withAlphaComponent(0.3)
+        
+        view.addSubview(spinner)
+        
+        spinner.snp.makeConstraints { make in
+            make.center.equalToSuperview()
         }
+        
+        spinner.startAnimating()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
-        SVProgressHUD.dismiss()
+        spinner.stopAnimating()
+        spinner.removeFromSuperview()
     }
 }

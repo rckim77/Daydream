@@ -17,9 +17,9 @@ extension GMSAutocompleteResultsViewController {
         secondaryTextColor = .lightGray
     }
 
-    func setAutocompleteFilter(_ type: GMSPlacesAutocompleteTypeFilter) {
+    func setAutocompleteFilter() {
         let filter = GMSAutocompleteFilter()
-        filter.type = type
+        filter.types = ["(cities)"]
         autocompleteFilter = filter
     }
 }

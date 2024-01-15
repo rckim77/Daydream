@@ -84,10 +84,7 @@ extension API {
         /// DEPRECATED DO NOT USE. Load photo as UIImage using Google Places SDK.
         static func loadGooglePhotoSDK(placeId: String) -> Future<UIImage, Error> {
             return Future<UIImage, Error> { promise in
-                guard let photoField = GMSPlaceField(rawValue: UInt(GMSPlaceField.photos.rawValue)) else {
-                    promise(.failure(NetworkError.malformedPhotoField))
-                    return
-                }
+                let photoField = GMSPlaceField(rawValue: GMSPlaceField.photos.rawValue)
 
                 GMSPlacesClient.shared().fetchPlace(fromPlaceID: placeId, placeFields: photoField, sessionToken: nil) { place, error in
                     if let place = place {

@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 import Combine
 
-protocol SightViewDelegate: class {
+protocol SightViewDelegate: AnyObject {
     func sightViewDidTap(layoutType: SightView.LayoutType)
     func sightViewDidTapBusinessStatus(status: PlaceBusinessStatus)
 }

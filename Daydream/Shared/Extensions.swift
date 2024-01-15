@@ -21,7 +21,7 @@ extension UIView {
         rectShape.position = center
         rectShape.path = UIBezierPath(roundedRect: bounds,
                                       byRoundingCorners: [.bottomLeft, .bottomRight],
-                                      cornerRadii: CGSize(width: 10, height: 10)).cgPath
+                                      cornerRadii: CGSize(width: 16, height: 16)).cgPath
 
         layer.mask = rectShape
     }
@@ -32,7 +32,7 @@ extension UIView {
         rectShape.position = center
         rectShape.path = UIBezierPath(roundedRect: bounds,
                                       byRoundingCorners: [.topLeft, .topRight],
-                                      cornerRadii: CGSize(width: 10, height: 10)).cgPath
+                                      cornerRadii: CGSize(width: 16, height: 16)).cgPath
 
         layer.mask = rectShape
     }
@@ -193,7 +193,6 @@ extension UIButton {
         tintColor = .white
         backgroundColor = UIColor.black.withAlphaComponent(0.2)
         setImage(retryImage, for: .normal)
-        imageEdgeInsets.right = 12
         addRoundedCorners(radius: 8)
     }
 }
