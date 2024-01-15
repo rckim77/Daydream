@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		9409090A205F4613002A65EF /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94090909205F4613002A65EF /* MapViewController.swift */; };
 		9434BA3A24738C25004294F0 /* DaydreamUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9434BA3924738C25004294F0 /* DaydreamUITests.swift */; };
-		9434BA4424738D2F004294F0 /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9434BA4324738D2F004294F0 /* SnapshotHelper.swift */; };
 		9434BA4C247998D4004294F0 /* MapReviewCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9434BA4B247998D4004294F0 /* MapReviewCard.swift */; };
 		94380AC8203BAE1D00684863 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94380AC7203BAE1D00684863 /* AppDelegate.swift */; };
 		94380ACA203BAE1D00684863 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94380AC9203BAE1D00684863 /* SearchViewController.swift */; };
@@ -64,12 +63,11 @@
 		EC14499E24BFBA1100CA47B1 /* CuratedCityCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC14499D24BFBA1100CA47B1 /* CuratedCityCollectionViewDataSource.swift */; };
 		EC1449A224C005D700CA47B1 /* CuratedCityCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC1449A124C005D700CA47B1 /* CuratedCityCollectionView.swift */; };
 		EC1D58E22B546D8D0068D03A /* GooglePlaces in Frameworks */ = {isa = PBXBuildFile; productRef = EC1D58E12B546D8D0068D03A /* GooglePlaces */; };
-		EC1D58E52B546E230068D03A /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = EC1D58E42B546E230068D03A /* SnapKit */; };
-		EC1D58E72B546E230068D03A /* SnapKit-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = EC1D58E62B546E230068D03A /* SnapKit-Dynamic */; };
 		EC1D58EA2B546EB90068D03A /* GoogleMaps in Frameworks */ = {isa = PBXBuildFile; productRef = EC1D58E92B546EB90068D03A /* GoogleMaps */; };
 		EC1D58EC2B546EB90068D03A /* GoogleMapsBase in Frameworks */ = {isa = PBXBuildFile; productRef = EC1D58EB2B546EB90068D03A /* GoogleMapsBase */; };
 		EC1D58EE2B546EB90068D03A /* GoogleMapsCore in Frameworks */ = {isa = PBXBuildFile; productRef = EC1D58ED2B546EB90068D03A /* GoogleMapsCore */; };
 		EC1D58F02B546EB90068D03A /* GoogleMapsM4B in Frameworks */ = {isa = PBXBuildFile; productRef = EC1D58EF2B546EB90068D03A /* GoogleMapsM4B */; };
+		EC1D58F62B54B3470068D03A /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = EC1D58F52B54B3470068D03A /* SnapKit */; };
 		EC34ADDA24A1A1D200916FE2 /* apiKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = EC34ADD924A1A1D200916FE2 /* apiKeys.plist */; };
 /* End PBXBuildFile section */
 
@@ -88,7 +86,6 @@
 		9434BA3724738C25004294F0 /* DaydreamUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DaydreamUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9434BA3924738C25004294F0 /* DaydreamUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaydreamUITests.swift; sourceTree = "<group>"; };
 		9434BA3B24738C25004294F0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		9434BA4324738D2F004294F0 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SnapshotHelper.swift; path = fastlane/SnapshotHelper.swift; sourceTree = SOURCE_ROOT; };
 		9434BA4B247998D4004294F0 /* MapReviewCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapReviewCard.swift; sourceTree = "<group>"; };
 		94380AC4203BAE1D00684863 /* Daydream.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Daydream.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94380AC7203BAE1D00684863 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -162,10 +159,9 @@
 				EC1D58EC2B546EB90068D03A /* GoogleMapsBase in Frameworks */,
 				EC1D58F02B546EB90068D03A /* GoogleMapsM4B in Frameworks */,
 				EC1D58EE2B546EB90068D03A /* GoogleMapsCore in Frameworks */,
+				EC1D58F62B54B3470068D03A /* SnapKit in Frameworks */,
 				EC1D58EA2B546EB90068D03A /* GoogleMaps in Frameworks */,
 				EC1D58E22B546D8D0068D03A /* GooglePlaces in Frameworks */,
-				EC1D58E52B546E230068D03A /* SnapKit in Frameworks */,
-				EC1D58E72B546E230068D03A /* SnapKit-Dynamic in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -176,7 +172,6 @@
 			isa = PBXGroup;
 			children = (
 				9434BA3924738C25004294F0 /* DaydreamUITests.swift */,
-				9434BA4324738D2F004294F0 /* SnapshotHelper.swift */,
 				9434BA3B24738C25004294F0 /* Info.plist */,
 			);
 			path = DaydreamUITests;
@@ -363,12 +358,11 @@
 			name = Daydream;
 			packageProductDependencies = (
 				EC1D58E12B546D8D0068D03A /* GooglePlaces */,
-				EC1D58E42B546E230068D03A /* SnapKit */,
-				EC1D58E62B546E230068D03A /* SnapKit-Dynamic */,
 				EC1D58E92B546EB90068D03A /* GoogleMaps */,
 				EC1D58EB2B546EB90068D03A /* GoogleMapsBase */,
 				EC1D58ED2B546EB90068D03A /* GoogleMapsCore */,
 				EC1D58EF2B546EB90068D03A /* GoogleMapsM4B */,
+				EC1D58F52B54B3470068D03A /* SnapKit */,
 			);
 			productName = Daydream;
 			productReference = 94380AC4203BAE1D00684863 /* Daydream.app */;
@@ -387,13 +381,11 @@
 				TargetAttributes = {
 					9434BA3624738C25004294F0 = {
 						CreatedOnToolsVersion = 11.3;
-						ProvisioningStyle = Automatic;
 						TestTargetID = 94380AC3203BAE1D00684863;
 					};
 					94380AC3203BAE1D00684863 = {
 						CreatedOnToolsVersion = 9.2;
 						LastSwiftMigration = 1140;
-						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -408,8 +400,8 @@
 			mainGroup = 94380ABB203BAE1D00684863;
 			packageReferences = (
 				EC1D58E02B546D8D0068D03A /* XCRemoteSwiftPackageReference "ios-places-sdk" */,
-				EC1D58E32B546E230068D03A /* XCRemoteSwiftPackageReference "SnapKit" */,
 				EC1D58E82B546EB90068D03A /* XCRemoteSwiftPackageReference "ios-maps-sdk" */,
+				EC1D58F42B54B3470068D03A /* XCRemoteSwiftPackageReference "SnapKit" */,
 			);
 			productRefGroup = 94380AC5203BAE1D00684863 /* Products */;
 			projectDirPath = "";
@@ -450,7 +442,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				9434BA3A24738C25004294F0 /* DaydreamUITests.swift in Sources */,
-				9434BA4424738D2F004294F0 /* SnapshotHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -536,6 +527,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 49BZEB79BF;
 				INFOPLIST_FILE = DaydreamUITests/Info.plist;
@@ -549,6 +541,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rckim.DaydreamUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = Daydream;
@@ -559,6 +552,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 49BZEB79BF;
 				INFOPLIST_FILE = DaydreamUITests/Info.plist;
@@ -571,6 +565,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rckim.DaydreamUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = Daydream;
@@ -703,8 +698,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 15;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 49BZEB79BF;
 				INFOPLIST_FILE = Daydream/Info.plist;
@@ -713,9 +709,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 2.28.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rckim.Daydream;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "daydream-prov-profile-distribution-new-mac";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -725,8 +722,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_TEAM = 49BZEB79BF;
 				INFOPLIST_FILE = Daydream/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
@@ -734,9 +732,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 2.28.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rckim.Daydream;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "daydream-prov-profile-distribution-new-mac";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -783,20 +782,20 @@
 				version = 8.3.0;
 			};
 		};
-		EC1D58E32B546E230068D03A /* XCRemoteSwiftPackageReference "SnapKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
-			requirement = {
-				kind = exactVersion;
-				version = 5.7.0;
-			};
-		};
 		EC1D58E82B546EB90068D03A /* XCRemoteSwiftPackageReference "ios-maps-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/googlemaps/ios-maps-sdk";
 			requirement = {
 				kind = exactVersion;
 				version = 8.3.1;
+			};
+		};
+		EC1D58F42B54B3470068D03A /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -806,16 +805,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = EC1D58E02B546D8D0068D03A /* XCRemoteSwiftPackageReference "ios-places-sdk" */;
 			productName = GooglePlaces;
-		};
-		EC1D58E42B546E230068D03A /* SnapKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = EC1D58E32B546E230068D03A /* XCRemoteSwiftPackageReference "SnapKit" */;
-			productName = SnapKit;
-		};
-		EC1D58E62B546E230068D03A /* SnapKit-Dynamic */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = EC1D58E32B546E230068D03A /* XCRemoteSwiftPackageReference "SnapKit" */;
-			productName = "SnapKit-Dynamic";
 		};
 		EC1D58E92B546EB90068D03A /* GoogleMaps */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -836,6 +825,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = EC1D58E82B546EB90068D03A /* XCRemoteSwiftPackageReference "ios-maps-sdk" */;
 			productName = GoogleMapsM4B;
+		};
+		EC1D58F52B54B3470068D03A /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EC1D58F42B54B3470068D03A /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
