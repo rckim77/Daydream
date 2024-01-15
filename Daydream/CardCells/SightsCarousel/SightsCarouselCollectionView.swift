@@ -34,6 +34,8 @@ final class SightsCarouselCollectionView: UICollectionView {
         super.init(frame: .zero, collectionViewLayout: flowLayout)
         
         register(SightsCarouselCardCell.self, forCellWithReuseIdentifier: SightsCarouselCardCell.reuseIdentifier)
+        register(EateriesCarouselCardCell.self, forCellWithReuseIdentifier: EateriesCarouselCardCell.reuseIdentifier)
+        
         backgroundColor = .clear
         let contentInsetHorizontal: CGFloat = isIpad ? 18 : 16
         contentInset = UIEdgeInsets(top: 0, left: contentInsetHorizontal, bottom: defaultContentInsetBottom, right: contentInsetHorizontal)

@@ -44,16 +44,14 @@ final class SearchDetailDataSource: NSObject, UITableViewDataSource {
     }
     weak var viewController: SearchDetailViewController?
     var sightsCarouselLoadingState: LoadingState = .uninitiated
-    var eateriesLoadingState: LoadingState = .uninitiated
+    var eateriesCarouselLoadingState: LoadingState = .uninitiated
 
     let mapCardCellHeight: CGFloat = 186
-    var eateriesCardCellHeight: CGFloat {
-        return eateriesLoadingState == .error ? EateriesCardCell.errorHeight: EateriesCardCell.defaultHeight
-    }
     let sightsCarouselCardCellHeight: CGFloat = SightsCarouselTableViewCell.defaultHeight
+    let eateriesCarouselCardCellHeight: CGFloat = EateriesCarouselTableViewCell.defaultHeight
     static let mapIndexPath = IndexPath(row: 0, section: 0)
     static let sightsCarouselIndexPath = IndexPath(row: 1, section: 0)
-    static let eateriesIndexPath = IndexPath(row: 2, section: 0)
+    static let eateriesCarouselIndexPath = IndexPath(row: 2, section: 0)
 
     init(place: Place) {
         self.place = place
@@ -80,12 +78,12 @@ final class SearchDetailDataSource: NSObject, UITableViewDataSource {
     func loadEateries() -> AnyPublisher<Void, Error>? {
         return API.EaterySearch.loadEateries(place: place)?
             .mapError { [weak self] error -> Error in
-                self?.eateriesLoadingState = .error
+                self?.eateriesCarouselLoadingState = .error
                 return error
             }
             .map { [weak self] eateries -> Void in
                 self?.eateries = eateries
-                self?.eateriesLoadingState = .results
+                self?.eateriesCarouselLoadingState = .results
                 return
             }
             .receive(on: DispatchQueue.main)
@@ -131,25 +129,21 @@ final class SearchDetailDataSource: NSObject, UITableViewDataSource {
             }
             
             return sightsCarouselCell
-        case SearchDetailDataSource.eateriesIndexPath:
-            guard let eateriesCardCell = tableView.dequeueReusableCell(withIdentifier: "eateriesCardCell", for: indexPath) as? EateriesCardCell else {
+        case SearchDetailDataSource.eateriesCarouselIndexPath:
+            guard let eateriesCarouselCell = tableView.dequeueReusableCell(withIdentifier: "eateriesCarouselTableViewCell", for: indexPath) as? EateriesCarouselTableViewCell else {
                 return UITableViewCell()
             }
 
-            eateriesCardCell.delegate = viewController
+            eateriesCarouselCell.delegate = viewController
 
-            switch eateriesLoadingState {
-            case .loading:
-                eateriesCardCell.configureLoading()
+            switch eateriesCarouselLoadingState {
             case .results:
-                eateriesCardCell.eateries = eateries
-            case .error:
-                eateriesCardCell.configureError()
-            case .uninitiated:
-                return eateriesCardCell
+                eateriesCarouselCell.eateries = eateries
+            default:
+                return eateriesCarouselCell
             }
 
-            return eateriesCardCell
+            return eateriesCarouselCell
         default:
             return UITableViewCell()
         }

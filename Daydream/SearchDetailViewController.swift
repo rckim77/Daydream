@@ -77,7 +77,7 @@ final class SearchDetailViewController: UIViewController {
         tableView.dataSource = dataSource
         tableView.register(MapCardCell.self, forCellReuseIdentifier: "mapCardCell")
         tableView.register(SightsCarouselTableViewCell.self, forCellReuseIdentifier: "sightsCarouselTableViewCell")
-        tableView.register(EateriesCardCell.self, forCellReuseIdentifier: "eateriesCardCell")
+        tableView.register(EateriesCarouselTableViewCell.self, forCellReuseIdentifier: "eateriesCarouselTableViewCell")
         tableView.delegate = self
         tableView.tableFooterView = UIView()
         tableView.backgroundColor = .clear
@@ -109,7 +109,7 @@ final class SearchDetailViewController: UIViewController {
         configureFloatingTitleLabel()
 
         dataSource.sightsCarouselLoadingState = .loading
-        dataSource.eateriesLoadingState = .loading
+        dataSource.eateriesCarouselLoadingState = .loading
         cardsTableView.reloadData()
         loadDataSource(reloadMapCard: false, fetchBackground: false, completion: {})
     }
@@ -206,10 +206,10 @@ final class SearchDetailViewController: UIViewController {
 
         eateriesCancellable = dataSource.loadEateries()?
             .sink(receiveCompletion: { [weak self] receiveCompletion in
-                self?.cardsTableView.reloadRows(at: [SearchDetailDataSource.eateriesIndexPath], with: .fade)
+                self?.cardsTableView.reloadRows(at: [SearchDetailDataSource.eateriesCarouselIndexPath], with: .fade)
                 completion()
                 }, receiveValue: { [weak self] _ in
-                    self?.cardsTableView.reloadRows(at: [SearchDetailDataSource.eateriesIndexPath], with: .fade)
+                    self?.cardsTableView.reloadRows(at: [SearchDetailDataSource.eateriesCarouselIndexPath], with: .fade)
             })
 
         if reloadMapCard {
@@ -251,7 +251,7 @@ final class SearchDetailViewController: UIViewController {
         let loadingVC = LoadingViewController()
         add(loadingVC)
         dataSource.sightsCarouselLoadingState = .loading
-        dataSource.eateriesLoadingState = .loading
+        dataSource.eateriesCarouselLoadingState = .loading
         cardsTableView.reloadData()
 
         loadPlaceByNameCancellable = API.PlaceSearch.loadPlace(name: randomCity, queryType: .placeByName)?
@@ -276,7 +276,7 @@ extension SearchDetailViewController: UITableViewDelegate {
         case 1:
             return dataSource.sightsCarouselCardCellHeight
         case 2:
-            return dataSource.eateriesCardCellHeight
+            return dataSource.eateriesCarouselCardCellHeight
         default:
             return 0
         }
@@ -382,8 +382,8 @@ extension SearchDetailViewController: SightsCarouselCardCellDelegate {
     }
 }
 
-extension SearchDetailViewController: EateriesCardCellDelegate {
-    func eateriesCardCell(_ cell: EateriesCardCell, didSelectEatery eatery: Eatable) {
+extension SearchDetailViewController: EateriesCarouselCardCellDelegate {
+    func eateriesCardCell(didSelectEatery eatery: Eatable) {
         switch eatery.type {
         case .yelp:
             if let url = eatery.eatableUrl {
@@ -396,7 +396,7 @@ extension SearchDetailViewController: EateriesCardCellDelegate {
             present(mapVC, animated: true)
         }
     }
-
+    
     func eateriesCardCellDidTapInfoButtonForEateryType(_ type: EateryType) {
         let title = "Top Eateries"
         let message: String
@@ -408,10 +408,6 @@ extension SearchDetailViewController: EateriesCardCellDelegate {
         }
         presentInfoAlertModal(title: title,
                               message: message)
-    }
-
-    func eateriesCardCellDidTapRetry() {
-        randomCityButtonTapped()
     }
 }
 
