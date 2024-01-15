@@ -98,6 +98,20 @@ final class EateriesCarouselCardCell: UICollectionViewCell {
                 })
         }
     }
+    
+    func configureLoading() {
+        imageView.image = nil
+        titleLabel.text = nil
+        placeImage = nil
+        place = nil
+    }
+    
+    func configureError() {
+        imageView.image = nil
+        titleLabel.text = nil
+        placeImage = nil
+        place = nil
+    }
 }
 
 extension EateriesCarouselCardCell: ImageViewFadeable {}

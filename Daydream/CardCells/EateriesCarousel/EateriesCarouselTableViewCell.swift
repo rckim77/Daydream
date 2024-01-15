@@ -83,6 +83,16 @@ final class EateriesCarouselTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func configureLoading() {
+        carouselCollectionViewDataSource.loadingState = .loading
+        carouselCollectionView.reloadData()
+    }
+    
+    func configureError() {
+        carouselCollectionViewDataSource.loadingState = .error
+        carouselCollectionView.reloadData()
+    }
+    
     // MARK: - Button selector methods
 
     @objc

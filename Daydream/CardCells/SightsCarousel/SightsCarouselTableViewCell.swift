@@ -67,11 +67,13 @@ final class SightsCarouselTableViewCell: UITableViewCell {
     }
     
     func configureLoading() {
-        
+        carouselCollectionViewDataSource.loadingState = .loading
+        carouselCollectionView.reloadData()
     }
     
     func configureError() {
-        
+        carouselCollectionViewDataSource.loadingState = .error
+        carouselCollectionView.reloadData()
     }
 }
 

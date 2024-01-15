@@ -14,11 +14,12 @@ final class SightsCarouselDataSource: NSObject, UICollectionViewDataSource {
     var loadingState: LoadingState = .uninitiated
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        guard let sights = sights else {
+        switch loadingState {
+        case .loading, .error, .uninitiated:
             return 3
+        case .results:
+            return sights?.count ?? 0
         }
-        
-        return sights.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -28,6 +29,8 @@ final class SightsCarouselDataSource: NSObject, UICollectionViewDataSource {
         }
         
         switch loadingState {
+        case .loading:
+            cell.configureLoading()
         case .results:
             guard let sights = sights else {
                 return cell
@@ -35,6 +38,8 @@ final class SightsCarouselDataSource: NSObject, UICollectionViewDataSource {
             
             let place = sights[indexPath.row]
             cell.configure(place: place)
+        case .error:
+            cell.configureError()
         default:
             return cell
         }

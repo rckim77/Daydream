@@ -28,6 +28,8 @@ final class EateriesCarouselDataSource: NSObject, UICollectionViewDataSource {
         }
         
         switch loadingState {
+        case .loading:
+            cell.configureLoading()
         case .results:
             guard let eateries = eateries else {
                 return cell
@@ -35,6 +37,8 @@ final class EateriesCarouselDataSource: NSObject, UICollectionViewDataSource {
             
             let eatery = eateries[indexPath.row]
             cell.configure(eatery: eatery)
+        case .error:
+            cell.configureError()
         default:
             return cell
         }

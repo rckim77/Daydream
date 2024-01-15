@@ -63,7 +63,8 @@ final class SearchDetailDataSource: NSObject, UITableViewDataSource {
 
     func loadSights(name: String, location: CLLocationCoordinate2D, queryType: API.PlaceSearch.TextSearchRoute.QueryType) -> AnyPublisher<Void, Error>? {
         return API.PlaceSearch.loadPlaces(name: name, location: location, queryType: queryType)?
-            .mapError { error -> Error in
+            .mapError { [weak self] error -> Error in
+                self?.eateriesCarouselLoadingState = .error
                 return error
             }
             .map { [weak self] places -> Void in
@@ -137,9 +138,13 @@ final class SearchDetailDataSource: NSObject, UITableViewDataSource {
             eateriesCarouselCell.delegate = viewController
 
             switch eateriesCarouselLoadingState {
+            case .loading:
+                eateriesCarouselCell.configureLoading()
             case .results:
                 eateriesCarouselCell.eateries = eateries
-            default:
+            case .error:
+                eateriesCarouselCell.configureError()
+            case .uninitiated:
                 return eateriesCarouselCell
             }
 
