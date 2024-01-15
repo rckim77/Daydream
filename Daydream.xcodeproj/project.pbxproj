@@ -43,11 +43,9 @@
 		94B7DB59205E06080040D61C /* Eatery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B7DB58205E06080040D61C /* Eatery.swift */; };
 		94B8CEB3207DC31D00CA8101 /* SearchDetailDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B8CEB2207DC31D00CA8101 /* SearchDetailDataSource.swift */; };
 		94C9385022500D31005E0653 /* UIDevice+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C9384F22500D31005E0653 /* UIDevice+Helpers.swift */; };
-		94DB8FE7204B946200FA7CF7 /* EateriesCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94DB8FE6204B946200FA7CF7 /* EateriesCardCell.swift */; };
 		94E1086B248228790091D043 /* CardLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E1086A248228790091D043 /* CardLabel.swift */; };
 		94E1086D24836F660091D043 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E1086C24836F660091D043 /* GradientView.swift */; };
 		94E108712484AF5A0091D043 /* CellLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E108702484AF5A0091D043 /* CellLoadingView.swift */; };
-		94E108752486DB480091D043 /* EateryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E108742486DB480091D043 /* EateryView.swift */; };
 		94E392AD2070B4300073E8C9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 94E392AC2070B4300073E8C9 /* GoogleService-Info.plist */; };
 		94E392B02074B29E0073E8C9 /* style.json in Resources */ = {isa = PBXBuildFile; fileRef = 94E392AF2074B29E0073E8C9 /* style.json */; };
 		94E3D9582097EEC800384680 /* ExpiringCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E3D9572097EEC800384680 /* ExpiringCache.swift */; };
@@ -128,11 +126,9 @@
 		94B7DB58205E06080040D61C /* Eatery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Eatery.swift; sourceTree = "<group>"; };
 		94B8CEB2207DC31D00CA8101 /* SearchDetailDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDetailDataSource.swift; sourceTree = "<group>"; };
 		94C9384F22500D31005E0653 /* UIDevice+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice+Helpers.swift"; sourceTree = "<group>"; };
-		94DB8FE6204B946200FA7CF7 /* EateriesCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EateriesCardCell.swift; sourceTree = "<group>"; };
 		94E1086A248228790091D043 /* CardLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardLabel.swift; sourceTree = "<group>"; };
 		94E1086C24836F660091D043 /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		94E108702484AF5A0091D043 /* CellLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellLoadingView.swift; sourceTree = "<group>"; };
-		94E108742486DB480091D043 /* EateryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EateryView.swift; sourceTree = "<group>"; };
 		94E392AC2070B4300073E8C9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		94E392AF2074B29E0073E8C9 /* style.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = style.json; sourceTree = "<group>"; };
 		94E3D9572097EEC800384680 /* ExpiringCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpiringCache.swift; sourceTree = "<group>"; };
@@ -317,8 +313,6 @@
 			isa = PBXGroup;
 			children = (
 				947EC655204667EB004A911D /* MapCardCell.swift */,
-				94DB8FE6204B946200FA7CF7 /* EateriesCardCell.swift */,
-				94E108742486DB480091D043 /* EateryView.swift */,
 				EC253B2E2B55C61500D52EB9 /* SightsCarousel */,
 				EC253B372B55D70200D52EB9 /* EateriesCarousel */,
 			);
@@ -500,7 +494,6 @@
 				EC253B322B55D29C00D52EB9 /* EateriesCarouselDataSource.swift in Sources */,
 				EC14499724B4F63500CA47B1 /* PhotoReference.swift in Sources */,
 				EC253B2B2B55AA2300D52EB9 /* SightsCarouselDataSource.swift in Sources */,
-				94DB8FE7204B946200FA7CF7 /* EateriesCardCell.swift in Sources */,
 				94E9F3272492B86200B1D003 /* PlaceBusinessStatus.swift in Sources */,
 				EC253B292B55A94500D52EB9 /* SightsCarouselCardCell.swift in Sources */,
 				EC253B252B55A79300D52EB9 /* SightsCarouselTableViewCell.swift in Sources */,
@@ -529,7 +522,6 @@
 				94A9CCBE2489C366008551B6 /* Agent.swift in Sources */,
 				EC253B302B55D20600D52EB9 /* EateriesCarouselTableViewCell.swift in Sources */,
 				EC253B272B55A8F800D52EB9 /* CarouselCollectionView.swift in Sources */,
-				94E108752486DB480091D043 /* EateryView.swift in Sources */,
 				EC253B362B55D30500D52EB9 /* EateriesCarouselCardCell.swift in Sources */,
 				947EC658204673BF004A911D /* ShadowView.swift in Sources */,
 				94600FBC2499734600E605FD /* RandomCity.swift in Sources */,
