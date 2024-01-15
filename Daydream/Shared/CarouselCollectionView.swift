@@ -1,14 +1,14 @@
 //
-//  CuratedCityCollectionView.swift
+//  CarouselCollectionView.swift
 //  Daydream
 //
-//  Created by Ray Kim on 7/15/20.
-//  Copyright © 2020 Raymond Kim. All rights reserved.
+//  Created by Ray Kim on 1/15/24.
+//  Copyright © 2024 Raymond Kim. All rights reserved.
 //
 
 import UIKit
 
-final class CuratedCityCollectionView: UICollectionView {
+final class CarouselCollectionView: UICollectionView {
 
     private var itemSize: CGSize
     private let isIpad: Bool
@@ -26,16 +26,19 @@ final class CuratedCityCollectionView: UICollectionView {
         let width: CGFloat = isIpad ? 180 : 120
         self.defaultHeight = isIpad ? 280 : isSmallDevice ? 130 : 212
         self.itemSize = CGSize(width: width, height: defaultHeight)
-        self.defaultContentInsetBottom = isIpad ? 80 : isSmallDevice ? 36 : 58
+        self.defaultContentInsetBottom = isIpad ? 80 : isSmallDevice ? 4 : 12
         
         flowLayout.itemSize = itemSize
         flowLayout.scrollDirection = .horizontal
         flowLayout.minimumLineSpacing = isIpad ? 18 : 16
         super.init(frame: .zero, collectionViewLayout: flowLayout)
         
+        register(SightsCarouselCardCell.self, forCellWithReuseIdentifier: SightsCarouselCardCell.reuseIdentifier)
+        register(EateriesCarouselCardCell.self, forCellWithReuseIdentifier: EateriesCarouselCardCell.reuseIdentifier)
         register(CuratedCityCollectionViewCell.self, forCellWithReuseIdentifier: CuratedCityCollectionViewCell.reuseIdentifier)
+        
         backgroundColor = .clear
-        let contentInsetHorizontal: CGFloat = isIpad ? 18 : 12
+        let contentInsetHorizontal: CGFloat = isIpad ? 18 : 16
         contentInset = UIEdgeInsets(top: 0, left: contentInsetHorizontal, bottom: defaultContentInsetBottom, right: contentInsetHorizontal)
         showsHorizontalScrollIndicator = false
     }

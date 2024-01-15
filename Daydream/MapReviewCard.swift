@@ -18,7 +18,7 @@ final class MapReviewCard: UIView {
     private lazy var containerView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
-        view.addRoundedCorners(radius: 10)
+        view.addRoundedCorners(radius: 16)
         return view
     }()
 
