@@ -1,5 +1,5 @@
 //
-//  SightsCarouselCollectionView.swift
+//  CarouselCollectionView.swift
 //  Daydream
 //
 //  Created by Ray Kim on 1/15/24.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class SightsCarouselCollectionView: UICollectionView {
+final class CarouselCollectionView: UICollectionView {
 
     private var itemSize: CGSize
     private let isIpad: Bool
@@ -35,6 +35,7 @@ final class SightsCarouselCollectionView: UICollectionView {
         
         register(SightsCarouselCardCell.self, forCellWithReuseIdentifier: SightsCarouselCardCell.reuseIdentifier)
         register(EateriesCarouselCardCell.self, forCellWithReuseIdentifier: EateriesCarouselCardCell.reuseIdentifier)
+        register(CuratedCityCollectionViewCell.self, forCellWithReuseIdentifier: CuratedCityCollectionViewCell.reuseIdentifier)
         
         backgroundColor = .clear
         let contentInsetHorizontal: CGFloat = isIpad ? 18 : 16

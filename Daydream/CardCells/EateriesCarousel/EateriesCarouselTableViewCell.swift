@@ -28,8 +28,8 @@ final class EateriesCarouselTableViewCell: UITableViewCell {
         return button
     }()
 
-    private lazy var carouselCollectionView: SightsCarouselCollectionView = {
-        let collectionView = SightsCarouselCollectionView(deviceSize: UIDevice().deviceSize, isIpad: UIDevice.current.userInterfaceIdiom == .pad)
+    private lazy var carouselCollectionView: CarouselCollectionView = {
+        let collectionView = CarouselCollectionView(deviceSize: UIDevice().deviceSize, isIpad: UIDevice.current.userInterfaceIdiom == .pad)
         collectionView.delegate = self
         collectionView.dataSource = carouselCollectionViewDataSource
         return collectionView

@@ -67,7 +67,7 @@
 		EC1D58F02B546EB90068D03A /* GoogleMapsM4B in Frameworks */ = {isa = PBXBuildFile; productRef = EC1D58EF2B546EB90068D03A /* GoogleMapsM4B */; };
 		EC1D58F62B54B3470068D03A /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = EC1D58F52B54B3470068D03A /* SnapKit */; };
 		EC253B252B55A79300D52EB9 /* SightsCarouselTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC253B242B55A79300D52EB9 /* SightsCarouselTableViewCell.swift */; };
-		EC253B272B55A8F800D52EB9 /* SightsCarouselCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC253B262B55A8F800D52EB9 /* SightsCarouselCollectionView.swift */; };
+		EC253B272B55A8F800D52EB9 /* CarouselCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC253B262B55A8F800D52EB9 /* CarouselCollectionView.swift */; };
 		EC253B292B55A94500D52EB9 /* SightsCarouselCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC253B282B55A94500D52EB9 /* SightsCarouselCardCell.swift */; };
 		EC253B2B2B55AA2300D52EB9 /* SightsCarouselDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC253B2A2B55AA2300D52EB9 /* SightsCarouselDataSource.swift */; };
 		EC253B2D2B55C35700D52EB9 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC253B2C2B55C35700D52EB9 /* ImageCache.swift */; };
@@ -146,7 +146,7 @@
 		EC14499D24BFBA1100CA47B1 /* CuratedCityCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CuratedCityCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		EC1449A124C005D700CA47B1 /* CuratedCityCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CuratedCityCollectionView.swift; sourceTree = "<group>"; };
 		EC253B242B55A79300D52EB9 /* SightsCarouselTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SightsCarouselTableViewCell.swift; sourceTree = "<group>"; };
-		EC253B262B55A8F800D52EB9 /* SightsCarouselCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SightsCarouselCollectionView.swift; sourceTree = "<group>"; };
+		EC253B262B55A8F800D52EB9 /* CarouselCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselCollectionView.swift; sourceTree = "<group>"; };
 		EC253B282B55A94500D52EB9 /* SightsCarouselCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SightsCarouselCardCell.swift; sourceTree = "<group>"; };
 		EC253B2A2B55AA2300D52EB9 /* SightsCarouselDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SightsCarouselDataSource.swift; sourceTree = "<group>"; };
 		EC253B2C2B55C35700D52EB9 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
@@ -292,6 +292,7 @@
 		94B7DB5B205E2C920040D61C /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				EC253B262B55A8F800D52EB9 /* CarouselCollectionView.swift */,
 				EC253B2C2B55C35700D52EB9 /* ImageCache.swift */,
 				947EC6512043F28F004A911D /* Extensions.swift */,
 				94E9C03F2488538300103770 /* GoogleExtensions.swift */,
@@ -340,7 +341,6 @@
 			children = (
 				EC253B242B55A79300D52EB9 /* SightsCarouselTableViewCell.swift */,
 				EC253B2A2B55AA2300D52EB9 /* SightsCarouselDataSource.swift */,
-				EC253B262B55A8F800D52EB9 /* SightsCarouselCollectionView.swift */,
 				EC253B282B55A94500D52EB9 /* SightsCarouselCardCell.swift */,
 			);
 			path = SightsCarousel;
@@ -528,7 +528,7 @@
 				947EC6522043F28F004A911D /* Extensions.swift in Sources */,
 				94A9CCBE2489C366008551B6 /* Agent.swift in Sources */,
 				EC253B302B55D20600D52EB9 /* EateriesCarouselTableViewCell.swift in Sources */,
-				EC253B272B55A8F800D52EB9 /* SightsCarouselCollectionView.swift in Sources */,
+				EC253B272B55A8F800D52EB9 /* CarouselCollectionView.swift in Sources */,
 				94E108752486DB480091D043 /* EateryView.swift in Sources */,
 				EC253B362B55D30500D52EB9 /* EateriesCarouselCardCell.swift in Sources */,
 				947EC658204673BF004A911D /* ShadowView.swift in Sources */,

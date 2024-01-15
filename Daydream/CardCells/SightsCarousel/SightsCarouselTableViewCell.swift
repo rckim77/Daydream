@@ -19,8 +19,8 @@ final class SightsCarouselTableViewCell: UITableViewCell {
     private let titleLabel = CardLabel(textStyle: .title1, text: "Top Sights")
     private let carouselCollectionViewDataSource = SightsCarouselDataSource()
     
-    private lazy var carouselCollectionView: SightsCarouselCollectionView = {
-        let collectionView = SightsCarouselCollectionView(deviceSize: UIDevice().deviceSize, isIpad: UIDevice.current.userInterfaceIdiom == .pad)
+    private lazy var carouselCollectionView: CarouselCollectionView = {
+        let collectionView = CarouselCollectionView(deviceSize: UIDevice().deviceSize, isIpad: UIDevice.current.userInterfaceIdiom == .pad)
         collectionView.delegate = self
         collectionView.dataSource = carouselCollectionViewDataSource
         return collectionView

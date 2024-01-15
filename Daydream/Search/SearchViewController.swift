@@ -87,8 +87,8 @@ final class SearchViewController: UIViewController {
         return button
     }()
     
-    private lazy var curatedCitiesCollectionView: CuratedCityCollectionView = {
-        let collectionView = CuratedCityCollectionView(deviceSize: deviceSize, isIpad: UIDevice.current.userInterfaceIdiom == .pad)
+    private lazy var curatedCitiesCollectionView: CarouselCollectionView = {
+        let collectionView = CarouselCollectionView(deviceSize: deviceSize, isIpad: UIDevice.current.userInterfaceIdiom == .pad)
         collectionView.delegate = self
         collectionView.dataSource = curatedCitiesDataSource
         return collectionView
