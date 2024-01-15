@@ -10,11 +10,11 @@ import UIKit
 import CoreLocation
 import Combine
 
-final class SearchDetailDataSource: NSObject, UITableViewDataSource {
+enum LoadingState {
+    case uninitiated, loading, results, error
+}
 
-    enum LoadingState {
-        case uninitiated, loading, results, error
-    }
+final class SearchDetailDataSource: NSObject, UITableViewDataSource {
 
     var place: Place
     var sights: [Place]?
@@ -44,6 +44,7 @@ final class SearchDetailDataSource: NSObject, UITableViewDataSource {
     }
     weak var viewController: SearchDetailViewController?
     var sightsLoadingState: LoadingState = .uninitiated
+    var sightsCarouselLoadingState: LoadingState = .uninitiated
     var eateriesLoadingState: LoadingState = .uninitiated
 
     let mapCardCellHeight: CGFloat = 186
@@ -53,9 +54,11 @@ final class SearchDetailDataSource: NSObject, UITableViewDataSource {
     var eateriesCardCellHeight: CGFloat {
         return eateriesLoadingState == .error ? EateriesCardCell.errorHeight: EateriesCardCell.defaultHeight
     }
+    let sightsCarouselCardCellHeight: CGFloat = SightsCarouselTableViewCell.defaultHeight
     static let mapIndexPath = IndexPath(row: 0, section: 0)
     static let sightsIndexPath = IndexPath(row: 1, section: 0)
     static let eateriesIndexPath = IndexPath(row: 2, section: 0)
+    static let sightsCarouselIndexPath = IndexPath(row: 3, section: 0)
 
     init(place: Place) {
         self.place = place
@@ -74,6 +77,7 @@ final class SearchDetailDataSource: NSObject, UITableViewDataSource {
             .map { [weak self] places -> Void in
                 self?.sights = places
                 self?.sightsLoadingState = .results
+                self?.sightsCarouselLoadingState = .results
                 return
             }
             .receive(on: DispatchQueue.main)
@@ -101,7 +105,7 @@ final class SearchDetailDataSource: NSObject, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return 4
     }
 
     // swiftlint:disable cyclomatic_complexity
@@ -153,6 +157,23 @@ final class SearchDetailDataSource: NSObject, UITableViewDataSource {
             }
 
             return eateriesCardCell
+        case SearchDetailDataSource.sightsCarouselIndexPath:
+            guard let sightsCarouselCell = tableView.dequeueReusableCell(withIdentifier: "sightsCarouselTableViewCell", for: indexPath) as? SightsCarouselTableViewCell else {
+                return UITableViewCell()
+            }
+            
+            switch sightsCarouselLoadingState {
+            case .loading:
+                sightsCarouselCell.configureLoading()
+            case .results:
+                sightsCarouselCell.sights = sights
+            case .error:
+                sightsCarouselCell.configureError()
+            case .uninitiated:
+                return sightsCarouselCell
+            }
+            
+            return sightsCarouselCell
         default:
             return UITableViewCell()
         }

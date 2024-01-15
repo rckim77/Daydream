@@ -80,6 +80,7 @@ final class SearchDetailViewController: UIViewController {
         let tableView = UITableView()
         tableView.dataSource = dataSource
         tableView.register(MapCardCell.self, forCellReuseIdentifier: "mapCardCell")
+        tableView.register(SightsCarouselTableViewCell.self, forCellReuseIdentifier: "sightsCarouselTableViewCell")
         tableView.register(SightsCardCell.self, forCellReuseIdentifier: "sightsCardCell")
         tableView.register(EateriesCardCell.self, forCellReuseIdentifier: "eateriesCardCell")
         tableView.delegate = self
@@ -202,10 +203,10 @@ final class SearchDetailViewController: UIViewController {
 
         sightsCancellable = dataSource.loadSights(name: dataSource.place.name, location: dataSource.place.coordinate, queryType: .touristSpots)?
             .sink(receiveCompletion: { [weak self] receiveCompletion in
-                self?.cardsTableView.reloadRows(at: [SearchDetailDataSource.sightsIndexPath], with: .fade)
+                self?.cardsTableView.reloadRows(at: [SearchDetailDataSource.sightsIndexPath, SearchDetailDataSource.sightsCarouselIndexPath], with: .fade)
                 completion()
                 }, receiveValue: { [weak self] _ in
-                    self?.cardsTableView.reloadRows(at: [SearchDetailDataSource.sightsIndexPath], with: .fade)
+                    self?.cardsTableView.reloadRows(at: [SearchDetailDataSource.sightsIndexPath, SearchDetailDataSource.sightsCarouselIndexPath], with: .fade)
             })
 
         eateriesCancellable = dataSource.loadEateries()?
@@ -281,6 +282,8 @@ extension SearchDetailViewController: UITableViewDelegate {
             return dataSource.sightsCardCellHeight
         case 2:
             return dataSource.eateriesCardCellHeight
+        case 3:
+            return dataSource.sightsCarouselCardCellHeight
         default:
             return 0
         }
