@@ -9,6 +9,10 @@
 import UIKit
 import SnapKit
 
+protocol SightsCarouselCardCellDelegate: AnyObject {
+    func sightsCardCell(didSelectPlace place: Place)
+}
+
 final class SightsCarouselTableViewCell: UITableViewCell {
     
     static let defaultHeight: CGFloat = 300
