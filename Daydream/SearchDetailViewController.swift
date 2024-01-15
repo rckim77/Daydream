@@ -270,13 +270,15 @@ final class SearchDetailViewController: UIViewController {
 
 extension SearchDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let isIpad = UIDevice.current.userInterfaceIdiom == .pad
+
         switch indexPath.row {
         case 0:
             return dataSource.mapCardCellHeight
         case 1:
-            return dataSource.sightsCarouselCardCellHeight
+            return isIpad ? SightsCarouselTableViewCell.defaultIpadHeight : SightsCarouselTableViewCell.defaultHeight
         case 2:
-            return dataSource.eateriesCarouselCardCellHeight
+            return isIpad ? EateriesCarouselTableViewCell.defaultIpadHeight : EateriesCarouselTableViewCell.defaultHeight
         default:
             return 0
         }

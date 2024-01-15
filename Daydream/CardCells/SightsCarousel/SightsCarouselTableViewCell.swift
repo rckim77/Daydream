@@ -16,6 +16,7 @@ protocol SightsCarouselCardCellDelegate: AnyObject {
 final class SightsCarouselTableViewCell: UITableViewCell {
     
     static let defaultHeight: CGFloat = 300
+    static let defaultIpadHeight: CGFloat = 380
     private let titleLabel = CardLabel(textStyle: .title1, text: "Top Sights")
     private let carouselCollectionViewDataSource = SightsCarouselDataSource()
     

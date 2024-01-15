@@ -47,8 +47,6 @@ final class SearchDetailDataSource: NSObject, UITableViewDataSource {
     var eateriesCarouselLoadingState: LoadingState = .uninitiated
 
     let mapCardCellHeight: CGFloat = 186
-    let sightsCarouselCardCellHeight: CGFloat = SightsCarouselTableViewCell.defaultHeight
-    let eateriesCarouselCardCellHeight: CGFloat = EateriesCarouselTableViewCell.defaultHeight
     static let mapIndexPath = IndexPath(row: 0, section: 0)
     static let sightsCarouselIndexPath = IndexPath(row: 1, section: 0)
     static let eateriesCarouselIndexPath = IndexPath(row: 2, section: 0)

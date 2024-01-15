@@ -193,7 +193,7 @@ final class SearchViewController: UIViewController {
         
         curatedCitiesCollectionView.snp.makeConstraints { make in
             make.height.equalTo(curatedCitiesCollectionView.height)
-            make.bottom.equalTo(feedbackButton.snp.top)
+            make.bottom.equalTo(feedbackButton.snp.top).offset(-24)
             make.leading.trailing.equalToSuperview()
         }
 
