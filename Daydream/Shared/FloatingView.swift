@@ -31,7 +31,7 @@ class FloatingView: UIView {
     
     private let cornerRadius: CGFloat
     
-    init(cornerRadius: CGFloat = 12) {
+    init(cornerRadius: CGFloat = 16) {
         self.cornerRadius = cornerRadius
         super.init(frame: .zero)
         
@@ -49,7 +49,7 @@ class FloatingView: UIView {
         
         titleLabel.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview().inset(6)
-            make.left.right.equalToSuperview().inset(12)
+            make.left.right.equalToSuperview().inset(16)
         }
     }
     

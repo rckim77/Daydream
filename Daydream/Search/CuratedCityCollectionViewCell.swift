@@ -43,7 +43,7 @@ final class CuratedCityCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        contentView.addRoundedCorners(radius: 8)
+        contentView.addRoundedCorners(radius: 16)
         contentView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.75)
         contentView.addSubview(imageView)
         contentView.addSubview(gradientView)

@@ -26,7 +26,7 @@ final class SightsCardCell: UITableViewCell {
     private let titleLabel = CardLabel(textStyle: .title1, text: "Top Sights")
     private lazy var sightsSectionView: UIView = {
         let view = UIView()
-        view.addRoundedCorners(radius: 8)
+        view.addRoundedCorners(radius: 16)
         return view
     }()
     private lazy var sight1View: SightView = {

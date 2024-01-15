@@ -76,7 +76,7 @@ final class SearchViewController: UIViewController {
         let button = UIButton(type: .system)
         button.tintColor = .white
         button.setTitle("Random", for: .normal)
-        button.addRoundedCorners(radius: 12)
+        button.addRoundedCorners(radius: 16)
         button.addBorder(color: .white, width: 1)
         button.titleLabel?.font = .preferredFont(forTextStyle: .title2)
         button.addTarget(self, action: #selector(randomButtonTapped), for: .touchUpInside)

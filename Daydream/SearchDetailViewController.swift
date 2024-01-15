@@ -36,7 +36,7 @@ final class SearchDetailViewController: UIViewController {
     // MARK: - Constants
 
     private let headerContentInset: CGFloat = 144
-    private let headerFadeOutStartPoint: CGFloat = 100
+    private let headerFadeOutStartPoint: CGFloat = 130
     private let headerFadeOutEndPoint: CGFloat = 80
     private let floatingTitleViewFadeInStartPoint: CGFloat = 85
     private let floatingTitleViewFadeInEndPoint: CGFloat = 65

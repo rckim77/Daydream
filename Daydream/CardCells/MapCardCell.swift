@@ -15,7 +15,7 @@ final class MapCardCell: UITableViewCell {
     private lazy var mapView: GMSMapView = {
         let defaultCamera = GMSCameraPosition.camera(withLatitude: 0, longitude: 0, zoom: 0)
         let mapView = GMSMapView()
-        mapView.addRoundedCorners(radius: 10)
+        mapView.addRoundedCorners(radius: 16)
         mapView.configureMapStyle(isDark: traitCollection.userInterfaceStyle == .dark)
         mapView.isUserInteractionEnabled = false
         return mapView
