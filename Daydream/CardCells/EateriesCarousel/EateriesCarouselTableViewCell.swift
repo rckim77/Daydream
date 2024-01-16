@@ -17,6 +17,7 @@ protocol EateriesCarouselCardCellDelegate: AnyObject {
 final class EateriesCarouselTableViewCell: UITableViewCell {
     
     static let defaultHeight: CGFloat = 300
+    static let defaultIpadHeight: CGFloat = 380
     private let titleLabel = CardLabel(textStyle: .title1, text: "Top Eateries")
     private let carouselCollectionViewDataSource = EateriesCarouselDataSource()
     

@@ -14,11 +14,14 @@ final class EateriesCarouselDataSource: NSObject, UICollectionViewDataSource {
     var loadingState: LoadingState = .uninitiated
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        guard let eateries = eateries else {
-            return 3
+        let isIpad = UIDevice.current.userInterfaceIdiom == .pad
+
+        switch loadingState {
+        case .loading, .error, .uninitiated:
+            return isIpad ? 7 : 3
+        case .results:
+            return eateries?.count ?? 0
         }
-        
-        return eateries.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

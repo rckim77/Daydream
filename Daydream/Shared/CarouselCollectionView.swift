@@ -26,7 +26,7 @@ final class CarouselCollectionView: UICollectionView {
         let width: CGFloat = isIpad ? 180 : 120
         self.defaultHeight = isIpad ? 280 : isSmallDevice ? 130 : 212
         self.itemSize = CGSize(width: width, height: defaultHeight)
-        self.defaultContentInsetBottom = isIpad ? 80 : isSmallDevice ? 4 : 12
+        self.defaultContentInsetBottom = isSmallDevice ? 4 : 12
         
         flowLayout.itemSize = itemSize
         flowLayout.scrollDirection = .horizontal
@@ -45,11 +45,5 @@ final class CarouselCollectionView: UICollectionView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    func updateItemSizeForOrientationChange() {
-        let isLandscapeIpad = UIDevice.current.orientation == .landscapeRight || UIDevice.current.orientation == .landscapeLeft && isIpad
-        flowLayout.itemSize.height = isLandscapeIpad ? 220 : defaultHeight
-        contentInset.bottom = isLandscapeIpad ? 24 : defaultContentInsetBottom
     }
 }

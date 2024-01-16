@@ -14,9 +14,11 @@ final class SightsCarouselDataSource: NSObject, UICollectionViewDataSource {
     var loadingState: LoadingState = .uninitiated
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        let isIpad = UIDevice.current.userInterfaceIdiom == .pad
+
         switch loadingState {
         case .loading, .error, .uninitiated:
-            return 3
+            return isIpad ? 7 : 3
         case .results:
             return sights?.count ?? 0
         }

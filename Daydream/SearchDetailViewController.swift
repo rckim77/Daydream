@@ -19,10 +19,11 @@ final class SearchDetailViewController: UIViewController {
     private var resultsViewController: GMSAutocompleteResultsViewController?
     private var searchController: UISearchController?
     private var mapView: GMSMapView?
+
     private lazy var visualEffectView: UIVisualEffectView = {
-        let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .regular))
-        visualEffectView.frame = view.bounds
-        return visualEffectView
+        let blurEffect = UIBlurEffect(style: .systemUltraThinMaterialLight)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        return blurEffectView
     }()
 
     // MARK: - Cancellable objects
@@ -130,6 +131,10 @@ final class SearchDetailViewController: UIViewController {
         backgroundImageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+        
+        visualEffectView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
 
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(24)
@@ -222,12 +227,7 @@ final class SearchDetailViewController: UIViewController {
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { _ in
             }, receiveValue: { [weak self] image in
-                guard let strongSelf = self else {
-                    return
-                }
-                strongSelf.backgroundImageView.subviews.forEach { $0.removeFromSuperview() }
-                strongSelf.backgroundImageView.image = image
-                strongSelf.backgroundImageView.addSubview(strongSelf.visualEffectView)
+                self?.backgroundImageView.image = image
             })
     }
 
@@ -266,17 +266,28 @@ final class SearchDetailViewController: UIViewController {
                 })
             })
     }
+    
+    // MARK: - Device Orientation Change
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        coordinator.animate(alongsideTransition: { _ in
+            self.searchController?.searchBar.frame.size.width = self.view.frame.size.width
+        }, completion: nil)
+    }
 }
 
 extension SearchDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let isIpad = UIDevice.current.userInterfaceIdiom == .pad
+
         switch indexPath.row {
         case 0:
-            return dataSource.mapCardCellHeight
+            return isIpad ? dataSource.mapCardIpadCellHeight: dataSource.mapCardCellHeight
         case 1:
-            return dataSource.sightsCarouselCardCellHeight
+            return isIpad ? SightsCarouselTableViewCell.defaultIpadHeight : SightsCarouselTableViewCell.defaultHeight
         case 2:
-            return dataSource.eateriesCarouselCardCellHeight
+            return isIpad ? EateriesCarouselTableViewCell.defaultIpadHeight : EateriesCarouselTableViewCell.defaultHeight
         default:
             return 0
         }
