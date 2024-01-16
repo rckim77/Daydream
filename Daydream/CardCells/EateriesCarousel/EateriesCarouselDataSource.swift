@@ -18,7 +18,7 @@ final class EateriesCarouselDataSource: NSObject, UICollectionViewDataSource {
 
         switch loadingState {
         case .loading, .error, .uninitiated:
-            return isIpad ? 6 : 3
+            return isIpad ? 7 : 3
         case .results:
             return eateries?.count ?? 0
         }

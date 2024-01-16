@@ -283,7 +283,7 @@ extension SearchDetailViewController: UITableViewDelegate {
 
         switch indexPath.row {
         case 0:
-            return dataSource.mapCardCellHeight
+            return isIpad ? dataSource.mapCardIpadCellHeight: dataSource.mapCardCellHeight
         case 1:
             return isIpad ? SightsCarouselTableViewCell.defaultIpadHeight : SightsCarouselTableViewCell.defaultHeight
         case 2:
