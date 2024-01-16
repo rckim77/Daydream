@@ -314,13 +314,8 @@ final class SearchViewController: UIViewController {
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         coordinator.animate(alongsideTransition: { _ in
-            self.curatedCitiesCollectionView.collectionViewLayout.invalidateLayout()
+            self.searchController?.searchBar.frame.size.width = self.view.frame.size.width
         }, completion: nil)
-    }
-    
-    override func viewWillLayoutSubviews() {
-        curatedCitiesCollectionView.updateItemSizeForOrientationChange()
-        super.viewWillLayoutSubviews()
     }
 }
 

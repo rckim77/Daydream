@@ -266,6 +266,15 @@ final class SearchDetailViewController: UIViewController {
                 })
             })
     }
+    
+    // MARK: - Device Orientation Change
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        coordinator.animate(alongsideTransition: { _ in
+            self.searchController?.searchBar.frame.size.width = self.view.frame.size.width
+        }, completion: nil)
+    }
 }
 
 extension SearchDetailViewController: UITableViewDelegate {
