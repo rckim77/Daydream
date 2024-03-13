@@ -46,6 +46,8 @@ final class SearchDetailViewController: UIViewController {
         let label = UILabel()
         label.font = .preferredFont(forTextStyle: .largeTitle)
         label.textColor = .white
+        label.minimumScaleFactor = 0.6
+        label.adjustsFontSizeToFitWidth = true
         label.shadowColor = .black
         label.shadowOffset = CGSize(width: 0, height: 1)
         return label
@@ -56,6 +58,7 @@ final class SearchDetailViewController: UIViewController {
         button.configureWithSystemIcon("arrow.clockwise")
         button.addTarget(self, action: #selector(randomCityButtonTapped), for: .touchUpInside)
         button.pointerStyleProvider = buttonProvider
+        button.isSymbolAnimationEnabled = true
         return button
     }()
 
@@ -64,6 +67,7 @@ final class SearchDetailViewController: UIViewController {
         button.configureWithSystemIcon("house.fill")
         button.addTarget(self, action: #selector(homeButtonTapped), for: .touchUpInside)
         button.pointerStyleProvider = buttonProvider
+        button.isSymbolAnimationEnabled = true
         return button
     }()
     
