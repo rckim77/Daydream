@@ -51,6 +51,7 @@ final class MapViewController: UIViewController {
         button.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
         button.accessibilityIdentifier = "map-close-button"
         button.pointerStyleProvider = buttonProvider
+        button.isSymbolAnimationEnabled = true
         return button
     }()
 
@@ -60,6 +61,7 @@ final class MapViewController: UIViewController {
         button.addTarget(self, action: #selector(darkModeButtonTapped), for: .touchUpInside)
         button.accessibilityIdentifier = "map-dark-mode-button"
         button.pointerStyleProvider = buttonProvider
+        button.isSymbolAnimationEnabled = true
         return button
     }()
 
@@ -68,6 +70,7 @@ final class MapViewController: UIViewController {
         button.configureWithSystemIcon("info.circle.fill")
         button.addTarget(self, action: #selector(aboutButtonTapped), for: .touchUpInside)
         button.pointerStyleProvider = buttonProvider
+        button.isSymbolAnimationEnabled = true
         return button
     }()
 
