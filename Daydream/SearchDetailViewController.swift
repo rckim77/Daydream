@@ -252,8 +252,10 @@ final class SearchDetailViewController: UIViewController {
             return
         }
 
-        let loadingVC = LoadingViewController()
-        add(loadingVC)
+        randomCityButton.showLoadingSpinner()
+        UIView.animate(withDuration: 0.4) {
+            self.titleLabel.layer.opacity = 0
+        }
         dataSource.sightsCarouselLoadingState = .loading
         dataSource.eateriesCarouselLoadingState = .loading
         cardsTableView.reloadData()
@@ -261,14 +263,21 @@ final class SearchDetailViewController: UIViewController {
         loadPlaceByNameCancellable = API.PlaceSearch.loadPlace(name: randomCity, queryType: .placeByName)?
             .sink(receiveCompletion: { completion in
                 if case Subscribers.Completion.failure(_) = completion {
-                    loadingVC.remove()
+                    self.updateHeaderAfterReload()
                 }
             }, receiveValue: { [weak self] place in
                 self?.dataSource.place = place
                 self?.loadDataSource(reloadMapCard: true, completion: {
-                    loadingVC.remove()
+                    self?.updateHeaderAfterReload()
                 })
             })
+    }
+    
+    private func updateHeaderAfterReload() {
+        randomCityButton.hideLoadingSpinnerAndReplace("arrow.clockwise")
+        UIView.animate(withDuration: 0.4) {
+            self.titleLabel.layer.opacity = 1
+        }
     }
     
     // MARK: - Device Orientation Change
