@@ -46,6 +46,8 @@ final class SearchDetailViewController: UIViewController {
         let label = UILabel()
         label.font = .preferredFont(forTextStyle: .largeTitle)
         label.textColor = .white
+        label.minimumScaleFactor = 0.6
+        label.adjustsFontSizeToFitWidth = true
         label.shadowColor = .black
         label.shadowOffset = CGSize(width: 0, height: 1)
         return label
@@ -56,6 +58,7 @@ final class SearchDetailViewController: UIViewController {
         button.configureWithSystemIcon("arrow.clockwise")
         button.addTarget(self, action: #selector(randomCityButtonTapped), for: .touchUpInside)
         button.pointerStyleProvider = buttonProvider
+        button.isSymbolAnimationEnabled = true
         return button
     }()
 
@@ -64,6 +67,7 @@ final class SearchDetailViewController: UIViewController {
         button.configureWithSystemIcon("house.fill")
         button.addTarget(self, action: #selector(homeButtonTapped), for: .touchUpInside)
         button.pointerStyleProvider = buttonProvider
+        button.isSymbolAnimationEnabled = true
         return button
     }()
     
@@ -248,8 +252,11 @@ final class SearchDetailViewController: UIViewController {
             return
         }
 
-        let loadingVC = LoadingViewController()
-        add(loadingVC)
+        randomCityButton.showLoadingSpinner()
+        UIView.animate(withDuration: 0.4) {
+            self.titleLabel.layer.opacity = 0
+        }
+        dataSource.mapCellIsLoading = true
         dataSource.sightsCarouselLoadingState = .loading
         dataSource.eateriesCarouselLoadingState = .loading
         cardsTableView.reloadData()
@@ -257,14 +264,23 @@ final class SearchDetailViewController: UIViewController {
         loadPlaceByNameCancellable = API.PlaceSearch.loadPlace(name: randomCity, queryType: .placeByName)?
             .sink(receiveCompletion: { completion in
                 if case Subscribers.Completion.failure(_) = completion {
-                    loadingVC.remove()
+                    self.dataSource.mapCellIsLoading = false
+                    self.updateHeaderAfterReload()
                 }
             }, receiveValue: { [weak self] place in
+                self?.dataSource.mapCellIsLoading = false
                 self?.dataSource.place = place
                 self?.loadDataSource(reloadMapCard: true, completion: {
-                    loadingVC.remove()
+                    self?.updateHeaderAfterReload()
                 })
             })
+    }
+    
+    private func updateHeaderAfterReload() {
+        randomCityButton.hideLoadingSpinnerAndReplace("arrow.clockwise")
+        UIView.animate(withDuration: 0.4) {
+            self.titleLabel.layer.opacity = 1
+        }
     }
     
     // MARK: - Device Orientation Change

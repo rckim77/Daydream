@@ -187,13 +187,31 @@ extension UIButton {
         layer.shadowOpacity = 1
     }
 
-    func configureForError() {
-        setTitle("Something went wrong. Try another city!", for: .normal)
-        let retryImage = UIImage(systemName: "arrow.clockwise")
-        tintColor = .white
-        backgroundColor = UIColor.black.withAlphaComponent(0.2)
-        setImage(retryImage, for: .normal)
-        addRoundedCorners(radius: 8)
+    func showLoadingSpinner() {
+        setImage(nil, for: .normal)
+
+        if let activityIndicator = subviews.first(where: { $0 is UIActivityIndicatorView }) as? UIActivityIndicatorView {
+            activityIndicator.startAnimating()
+        } else {
+            let activityIndicator = UIActivityIndicatorView()
+            activityIndicator.color = .white
+            activityIndicator.hidesWhenStopped = true
+
+            addSubview(activityIndicator)
+            activityIndicator.snp.makeConstraints { make in
+                make.edges.equalToSuperview()
+            }
+
+            activityIndicator.startAnimating()
+        }
+    }
+    
+    func hideLoadingSpinnerAndReplace(_ name: String) {
+        configureWithSystemIcon(name)
+
+        if let activityIndicator = subviews.first(where: { $0 is UIActivityIndicatorView }) as? UIActivityIndicatorView {
+            activityIndicator.stopAnimating()
+        }
     }
 }
 

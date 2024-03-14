@@ -26,6 +26,7 @@ final class EateriesCarouselTableViewCell: UITableViewCell {
         button.configureWithSystemIcon("info.circle.fill")
         button.addTarget(self, action: #selector(infoButtonTapped), for: .touchUpInside)
         button.pointerStyleProvider = buttonProvider
+        button.isSymbolAnimationEnabled = true
         return button
     }()
 
