@@ -72,4 +72,8 @@ final class MapCardCell: UITableViewCell {
         marker.snippet = place.formattedAddress
         marker.map = mapView
     }
+    
+    func clearForLoading() {
+        mapView.clear()
+    }
 }

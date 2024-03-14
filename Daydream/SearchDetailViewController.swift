@@ -256,6 +256,7 @@ final class SearchDetailViewController: UIViewController {
         UIView.animate(withDuration: 0.4) {
             self.titleLabel.layer.opacity = 0
         }
+        dataSource.mapCellIsLoading = true
         dataSource.sightsCarouselLoadingState = .loading
         dataSource.eateriesCarouselLoadingState = .loading
         cardsTableView.reloadData()
@@ -263,9 +264,11 @@ final class SearchDetailViewController: UIViewController {
         loadPlaceByNameCancellable = API.PlaceSearch.loadPlace(name: randomCity, queryType: .placeByName)?
             .sink(receiveCompletion: { completion in
                 if case Subscribers.Completion.failure(_) = completion {
+                    self.dataSource.mapCellIsLoading = false
                     self.updateHeaderAfterReload()
                 }
             }, receiveValue: { [weak self] place in
+                self?.dataSource.mapCellIsLoading = false
                 self?.dataSource.place = place
                 self?.loadDataSource(reloadMapCard: true, completion: {
                     self?.updateHeaderAfterReload()

@@ -43,6 +43,8 @@ final class SearchDetailDataSource: NSObject, UITableViewDataSource {
         return eateriesIsEqualToPrevious
     }
     weak var viewController: SearchDetailViewController?
+    /// Map cell has simpler state management (place or loading state) than sights and eateries
+    var mapCellIsLoading = false
     var sightsCarouselLoadingState: LoadingState = .uninitiated
     var eateriesCarouselLoadingState: LoadingState = .uninitiated
 
@@ -107,7 +109,11 @@ final class SearchDetailDataSource: NSObject, UITableViewDataSource {
                 return UITableViewCell()
             }
 
-            mapCardCell.place = place
+            if mapCellIsLoading {
+                mapCardCell.clearForLoading()
+            } else {
+                mapCardCell.place = place
+            }
 
             return mapCardCell
         case SearchDetailDataSource.sightsCarouselIndexPath:
