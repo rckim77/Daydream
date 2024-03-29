@@ -73,16 +73,21 @@ final class SearchViewController: UIViewController {
         button.setTitleColor(.white, for: .normal)
         button.addTarget(self, action: #selector(feedbackButtonTapped), for: .touchUpInside)
         button.pointerStyleProvider = buttonProvider
+        button.titleLabel?.font = .preferredFont(forTextStyle: .body)
+        button.titleLabel?.adjustsFontForContentSizeCategory = true
         return button
     }()
 
     private lazy var randomButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.tintColor = .white
-        button.setTitle("Random", for: .normal)
-        button.addRoundedCorners(radius: 16)
-        button.addBorder(color: .white, width: 1)
+        var configuration = UIButton.Configuration.bordered()
+        configuration.cornerStyle = .capsule
+        configuration.title = "Random"
+        configuration.contentInsets = .init(top: 8, leading: 18, bottom: 8, trailing: 18)
+        configuration.baseForegroundColor = .white
+        
+        let button = UIButton(configuration: configuration)
         button.titleLabel?.font = .preferredFont(forTextStyle: .title2)
+        button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.addTarget(self, action: #selector(randomButtonTapped), for: .touchUpInside)
         return button
     }()
@@ -180,8 +185,6 @@ final class SearchViewController: UIViewController {
         }
 
         randomButton.snp.makeConstraints { make in
-            make.width.equalTo(110)
-            make.height.equalTo(40)
             make.centerX.equalToSuperview()
             make.centerY.equalToSuperview().offset(randomButtonYOffset)
         }

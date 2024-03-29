@@ -60,6 +60,7 @@ final class MapViewController: UIViewController {
         button.configureWithSystemIcon("moon.fill")
         button.addTarget(self, action: #selector(darkModeButtonTapped), for: .touchUpInside)
         button.accessibilityIdentifier = "map-dark-mode-button"
+        button.accessibilityLabel = "dark mode toggle"
         button.pointerStyleProvider = buttonProvider
         button.isSymbolAnimationEnabled = true
         return button
