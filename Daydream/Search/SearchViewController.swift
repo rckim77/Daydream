@@ -68,25 +68,27 @@ final class SearchViewController: UIViewController {
     }()
 
     private lazy var feedbackButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("Got feedback?", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.addTarget(self, action: #selector(feedbackButtonTapped), for: .touchUpInside)
+        var config = UIButton.Configuration.plain()
+        config.title = "Got feedback?"
+        config.baseForegroundColor = .white
+
+        let button = UIButton(configuration: config)
         button.pointerStyleProvider = buttonProvider
         button.titleLabel?.font = .preferredFont(forTextStyle: .footnote)
         button.titleLabel?.adjustsFontForContentSizeCategory = true
+        button.addTarget(self, action: #selector(feedbackButtonTapped), for: .touchUpInside)
         return button
     }()
 
     private lazy var randomButton: UIButton = {
-        var configuration = UIButton.Configuration.gray()
-        configuration.cornerStyle = .capsule
-        configuration.title = "Random"
-        configuration.contentInsets = .init(top: 8, leading: 18, bottom: 8, trailing: 18)
-        configuration.imagePadding = 4
-        configuration.baseForegroundColor = .white
+        var config = UIButton.Configuration.gray()
+        config.cornerStyle = .capsule
+        config.title = "Random"
+        config.contentInsets = .init(top: 8, leading: 18, bottom: 8, trailing: 18)
+        config.imagePadding = 4
+        config.baseForegroundColor = .white
         
-        let button = UIButton(configuration: configuration)
+        let button = UIButton(configuration: config)
         button.titleLabel?.font = .preferredFont(forTextStyle: .title2)
         button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.addTarget(self, action: #selector(randomButtonTapped), for: .touchUpInside)
