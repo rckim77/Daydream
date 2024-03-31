@@ -73,13 +73,13 @@ final class SearchViewController: UIViewController {
         button.setTitleColor(.white, for: .normal)
         button.addTarget(self, action: #selector(feedbackButtonTapped), for: .touchUpInside)
         button.pointerStyleProvider = buttonProvider
-        button.titleLabel?.font = .preferredFont(forTextStyle: .body)
+        button.titleLabel?.font = .preferredFont(forTextStyle: .footnote)
         button.titleLabel?.adjustsFontForContentSizeCategory = true
         return button
     }()
 
     private lazy var randomButton: UIButton = {
-        var configuration = UIButton.Configuration.bordered()
+        var configuration = UIButton.Configuration.gray()
         configuration.cornerStyle = .capsule
         configuration.title = "Random"
         configuration.contentInsets = .init(top: 8, leading: 18, bottom: 8, trailing: 18)
