@@ -83,6 +83,7 @@ final class SearchViewController: UIViewController {
         configuration.cornerStyle = .capsule
         configuration.title = "Random"
         configuration.contentInsets = .init(top: 8, leading: 18, bottom: 8, trailing: 18)
+        configuration.imagePadding = 4
         configuration.baseForegroundColor = .white
         
         let button = UIButton(configuration: configuration)
@@ -264,12 +265,12 @@ final class SearchViewController: UIViewController {
         guard let randomCity = getRandomCity() else {
             return
         }
-        let loadingVC = LoadingViewController()
-        add(loadingVC)
-        
+
+        randomButton.configuration?.showsActivityIndicator = true
+
         placeCancellable = fetchCityAndBackgroundPhoto(cityName: randomCity)?
-            .sink(receiveCompletion: { completion in
-                loadingVC.remove()
+            .sink(receiveCompletion: { [weak self] _ in
+                self?.randomButton.configuration?.showsActivityIndicator = false
             }, receiveValue: { [weak self] image in
                 guard let strongSelf = self else {
                     return
