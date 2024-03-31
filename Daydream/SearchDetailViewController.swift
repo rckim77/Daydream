@@ -48,6 +48,7 @@ final class SearchDetailViewController: UIViewController {
         label.textColor = .white
         label.minimumScaleFactor = 0.6
         label.adjustsFontSizeToFitWidth = true
+        label.adjustsFontForContentSizeCategory = true
         label.shadowColor = .black
         label.shadowOffset = CGSize(width: 0, height: 1)
         return label
@@ -147,14 +148,12 @@ final class SearchDetailViewController: UIViewController {
 
         randomCityButton.snp.makeConstraints { make in
             make.centerY.equalTo(titleLabel.snp.centerY)
-            make.size.equalTo(40)
             make.leading.equalTo(titleLabel.snp.trailing).offset(6)
         }
 
         homeButton.snp.makeConstraints { make in
             make.centerY.equalTo(titleLabel.snp.centerY)
-            make.size.equalTo(40)
-            make.leading.equalTo(randomCityButton.snp.trailing)
+            make.leading.equalTo(randomCityButton.snp.trailing).offset(8)
             make.trailing.equalToSuperview().inset(8)
         }
         

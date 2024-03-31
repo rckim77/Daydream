@@ -175,8 +175,8 @@ extension UITextField {
 extension UIButton {
     func configureWithSystemIcon(_ name: String) {
         let heavyConfig = UIImage.SymbolConfiguration(weight: .heavy)
-        let largeConfig = UIImage.SymbolConfiguration(scale: .large)
-        let symbolConfig = largeConfig.applying(heavyConfig)
+        let scalingConfig = UIImage.SymbolConfiguration(font: .preferredFont(forTextStyle: .footnote), scale: .large)
+        let symbolConfig = scalingConfig.applying(heavyConfig)
         let icon = UIImage(systemName: name)
         setImage(icon, for: .normal)
         setPreferredSymbolConfiguration(symbolConfig, forImageIn: .normal)
@@ -185,6 +185,7 @@ extension UIButton {
         layer.shadowOffset = CGSize(width: 0, height: 1)
         layer.shadowRadius = 0.5
         layer.shadowOpacity = 1
+        adjustsImageSizeForAccessibilityContentSizeCategory = true
     }
 
     func showLoadingSpinner() {
