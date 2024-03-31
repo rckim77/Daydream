@@ -147,21 +147,18 @@ final class MapViewController: UIViewController {
         let iPadOffset = UIDevice.current.userInterfaceIdiom == .pad ? 12 : 0
         
         darkModeButton.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(12 + iPadOffset)
-            make.leading.equalToSuperview().inset(12)
-            make.size.equalTo(40)
+            make.top.equalToSuperview().inset(16 + iPadOffset)
+            make.leading.equalToSuperview().inset(16)
         }
 
         aboutButton.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(12 + iPadOffset)
-            make.size.equalTo(40)
+            make.top.equalToSuperview().inset(16 + iPadOffset)
         }
 
         closeButton.snp.makeConstraints { make in
-            make.leading.equalTo(aboutButton.snp.trailing)
-            make.top.equalToSuperview().inset(12 + iPadOffset)
-            make.trailing.equalToSuperview().inset(12)
-            make.size.equalTo(40)
+            make.leading.equalTo(aboutButton.snp.trailing).offset(8)
+            make.top.equalToSuperview().inset(16 + iPadOffset)
+            make.trailing.equalToSuperview().inset(16)
         }
 
         reviewCard.snp.makeConstraints { make in
