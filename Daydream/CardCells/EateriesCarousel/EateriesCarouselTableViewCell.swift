@@ -22,11 +22,15 @@ final class EateriesCarouselTableViewCell: UITableViewCell {
     private let carouselCollectionViewDataSource = EateriesCarouselDataSource()
     
     private lazy var infoButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.configureWithSystemIcon("info.circle.fill")
+        var config = UIButton.Configuration.plain()
+        config.configureForIcon("info.circle.fill")
+
+        let button = UIButton(configuration: config)
+        button.addDropShadow()
         button.addTarget(self, action: #selector(infoButtonTapped), for: .touchUpInside)
         button.pointerStyleProvider = buttonProvider
         button.isSymbolAnimationEnabled = true
+        button.adjustsImageSizeForAccessibilityContentSizeCategory = true
         return button
     }()
 
