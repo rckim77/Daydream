@@ -32,7 +32,6 @@
 		9490BA18206CAA8300B880E7 /* Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9490BA17206CAA8300B880E7 /* Place.swift */; };
 		949630BA203BCBBD007139CA /* SearchDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949630B9203BCBBD007139CA /* SearchDetailViewController.swift */; };
 		94A7B7DB20780D39003E28A8 /* Review.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A7B7DA20780D39003E28A8 /* Review.swift */; };
-		94A9CCBE2489C366008551B6 /* Agent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A9CCBD2489C366008551B6 /* Agent.swift */; };
 		94A9CCC02489ED2D008551B6 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A9CCBF2489ED2D008551B6 /* NetworkError.swift */; };
 		94A9CCC22489F6C6008551B6 /* EateryCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A9CCC12489F6C6008551B6 /* EateryCollection.swift */; };
 		94A9CCC6248BE871008551B6 /* Eatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A9CCC5248BE871008551B6 /* Eatable.swift */; };
@@ -114,7 +113,6 @@
 		9490BA17206CAA8300B880E7 /* Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Place.swift; sourceTree = "<group>"; };
 		949630B9203BCBBD007139CA /* SearchDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDetailViewController.swift; sourceTree = "<group>"; };
 		94A7B7DA20780D39003E28A8 /* Review.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Review.swift; sourceTree = "<group>"; };
-		94A9CCBD2489C366008551B6 /* Agent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Agent.swift; sourceTree = "<group>"; };
 		94A9CCBF2489ED2D008551B6 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		94A9CCC12489F6C6008551B6 /* EateryCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EateryCollection.swift; sourceTree = "<group>"; };
 		94A9CCC5248BE871008551B6 /* Eatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Eatable.swift; sourceTree = "<group>"; };
@@ -257,7 +255,6 @@
 				94600FD4249AAF9500E605FD /* EaterySearch */,
 				94600FD5249AAFA000E605FD /* ArticleSearch */,
 				94600FCB249AA81D00E605FD /* API+UIImage.swift */,
-				94A9CCBD2489C366008551B6 /* Agent.swift */,
 				94600FB924987B8300E605FD /* JSONCustomDecoder.swift */,
 				94A9CCBF2489ED2D008551B6 /* NetworkError.swift */,
 			);
@@ -515,7 +512,6 @@
 				94A9CCC6248BE871008551B6 /* Eatable.swift in Sources */,
 				9490BA18206CAA8300B880E7 /* Place.swift in Sources */,
 				947EC6522043F28F004A911D /* Extensions.swift in Sources */,
-				94A9CCBE2489C366008551B6 /* Agent.swift in Sources */,
 				EC253B302B55D20600D52EB9 /* EateriesCarouselTableViewCell.swift in Sources */,
 				EC253B272B55A8F800D52EB9 /* CarouselCollectionView.swift in Sources */,
 				EC253B362B55D30500D52EB9 /* EateriesCarouselCardCell.swift in Sources */,
