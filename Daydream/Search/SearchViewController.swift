@@ -68,21 +68,29 @@ final class SearchViewController: UIViewController {
     }()
 
     private lazy var feedbackButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("Got feedback?", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.addTarget(self, action: #selector(feedbackButtonTapped), for: .touchUpInside)
+        var config = UIButton.Configuration.plain()
+        config.title = "Got feedback?"
+        config.baseForegroundColor = .white
+
+        let button = UIButton(configuration: config)
         button.pointerStyleProvider = buttonProvider
+        button.titleLabel?.font = .preferredFont(forTextStyle: .footnote)
+        button.titleLabel?.adjustsFontForContentSizeCategory = true
+        button.addTarget(self, action: #selector(feedbackButtonTapped), for: .touchUpInside)
         return button
     }()
 
     private lazy var randomButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.tintColor = .white
-        button.setTitle("Random", for: .normal)
-        button.addRoundedCorners(radius: 16)
-        button.addBorder(color: .white, width: 1)
+        var config = UIButton.Configuration.gray()
+        config.cornerStyle = .capsule
+        config.title = "Random"
+        config.contentInsets = .init(top: 8, leading: 18, bottom: 8, trailing: 18)
+        config.imagePadding = 4
+        config.baseForegroundColor = .white
+        
+        let button = UIButton(configuration: config)
         button.titleLabel?.font = .preferredFont(forTextStyle: .title2)
+        button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.addTarget(self, action: #selector(randomButtonTapped), for: .touchUpInside)
         return button
     }()
@@ -180,8 +188,6 @@ final class SearchViewController: UIViewController {
         }
 
         randomButton.snp.makeConstraints { make in
-            make.width.equalTo(110)
-            make.height.equalTo(40)
             make.centerX.equalToSuperview()
             make.centerY.equalToSuperview().offset(randomButtonYOffset)
         }
@@ -261,12 +267,12 @@ final class SearchViewController: UIViewController {
         guard let randomCity = getRandomCity() else {
             return
         }
-        let loadingVC = LoadingViewController()
-        add(loadingVC)
-        
+
+        randomButton.configuration?.showsActivityIndicator = true
+
         placeCancellable = fetchCityAndBackgroundPhoto(cityName: randomCity)?
-            .sink(receiveCompletion: { completion in
-                loadingVC.remove()
+            .sink(receiveCompletion: { [weak self] _ in
+                self?.randomButton.configuration?.showsActivityIndicator = false
             }, receiveValue: { [weak self] image in
                 guard let strongSelf = self else {
                     return

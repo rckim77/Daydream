@@ -173,45 +173,22 @@ extension UITextField {
 }
 
 extension UIButton {
-    func configureWithSystemIcon(_ name: String) {
-        let heavyConfig = UIImage.SymbolConfiguration(weight: .heavy)
-        let largeConfig = UIImage.SymbolConfiguration(scale: .large)
-        let symbolConfig = largeConfig.applying(heavyConfig)
-        let icon = UIImage(systemName: name)
-        setImage(icon, for: .normal)
-        setPreferredSymbolConfiguration(symbolConfig, forImageIn: .normal)
-        tintColor = .white
+    func addDropShadow() {
         layer.shadowColor = UIColor.black.cgColor
         layer.shadowOffset = CGSize(width: 0, height: 1)
         layer.shadowRadius = 0.5
         layer.shadowOpacity = 1
     }
+}
 
-    func showLoadingSpinner() {
-        setImage(nil, for: .normal)
-
-        if let activityIndicator = subviews.first(where: { $0 is UIActivityIndicatorView }) as? UIActivityIndicatorView {
-            activityIndicator.startAnimating()
-        } else {
-            let activityIndicator = UIActivityIndicatorView()
-            activityIndicator.color = .white
-            activityIndicator.hidesWhenStopped = true
-
-            addSubview(activityIndicator)
-            activityIndicator.snp.makeConstraints { make in
-                make.edges.equalToSuperview()
-            }
-
-            activityIndicator.startAnimating()
-        }
-    }
-    
-    func hideLoadingSpinnerAndReplace(_ name: String) {
-        configureWithSystemIcon(name)
-
-        if let activityIndicator = subviews.first(where: { $0 is UIActivityIndicatorView }) as? UIActivityIndicatorView {
-            activityIndicator.stopAnimating()
-        }
+extension UIButton.Configuration {
+    mutating func configureForIcon(_ name: String) {
+        let heavyConfig = UIImage.SymbolConfiguration(weight: .heavy)
+        let textStyle: UIFont.TextStyle = .body
+        let scalingConfig = UIImage.SymbolConfiguration(font: .preferredFont(forTextStyle: textStyle), scale: .large)
+        let symbolConfig = scalingConfig.applying(heavyConfig)
+        image = UIImage(systemName: name, withConfiguration: symbolConfig)
+        baseForegroundColor = .white
     }
 }
 

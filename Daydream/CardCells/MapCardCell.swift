@@ -33,6 +33,7 @@ final class MapCardCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
+        accessibilityLabel = "Map"
         backgroundColor = .clear
         selectionStyle = .none
         contentView.addSubview(mapView)
@@ -60,6 +61,7 @@ final class MapCardCell: UITableViewCell {
                                               zoom: 14.0)
         mapView.animate(to: camera)
         createMarkerFor(mapView, with: place)
+        accessibilityLabel = "Map of \(place.name)"
     }
     
     // Creates a marker in center of map

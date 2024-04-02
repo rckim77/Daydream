@@ -48,26 +48,35 @@ final class SearchDetailViewController: UIViewController {
         label.textColor = .white
         label.minimumScaleFactor = 0.6
         label.adjustsFontSizeToFitWidth = true
+        label.adjustsFontForContentSizeCategory = true
         label.shadowColor = .black
         label.shadowOffset = CGSize(width: 0, height: 1)
         return label
     }()
 
     private lazy var randomCityButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.configureWithSystemIcon("arrow.clockwise")
+        var config = UIButton.Configuration.plain()
+        config.configureForIcon("arrow.clockwise")
+        
+        let button = UIButton(configuration: config)
+        button.addDropShadow()
         button.addTarget(self, action: #selector(randomCityButtonTapped), for: .touchUpInside)
         button.pointerStyleProvider = buttonProvider
         button.isSymbolAnimationEnabled = true
+        button.adjustsImageSizeForAccessibilityContentSizeCategory = true
         return button
     }()
 
     private lazy var homeButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.configureWithSystemIcon("house.fill")
+        var config = UIButton.Configuration.plain()
+        config.configureForIcon("house.fill")
+        
+        let button = UIButton(configuration: config)
+        button.addDropShadow()
         button.addTarget(self, action: #selector(homeButtonTapped), for: .touchUpInside)
         button.pointerStyleProvider = buttonProvider
         button.isSymbolAnimationEnabled = true
+        button.adjustsImageSizeForAccessibilityContentSizeCategory = true
         return button
     }()
     
@@ -147,13 +156,11 @@ final class SearchDetailViewController: UIViewController {
 
         randomCityButton.snp.makeConstraints { make in
             make.centerY.equalTo(titleLabel.snp.centerY)
-            make.size.equalTo(40)
             make.leading.equalTo(titleLabel.snp.trailing).offset(6)
         }
 
         homeButton.snp.makeConstraints { make in
             make.centerY.equalTo(titleLabel.snp.centerY)
-            make.size.equalTo(40)
             make.leading.equalTo(randomCityButton.snp.trailing)
             make.trailing.equalToSuperview().inset(8)
         }
@@ -252,7 +259,7 @@ final class SearchDetailViewController: UIViewController {
             return
         }
 
-        randomCityButton.showLoadingSpinner()
+        randomCityButton.configuration?.showsActivityIndicator = true
         UIView.animate(withDuration: 0.4) {
             self.titleLabel.layer.opacity = 0
         }
@@ -277,7 +284,7 @@ final class SearchDetailViewController: UIViewController {
     }
     
     private func updateHeaderAfterReload() {
-        randomCityButton.hideLoadingSpinnerAndReplace("arrow.clockwise")
+        randomCityButton.configuration?.showsActivityIndicator = false
         UIView.animate(withDuration: 0.4) {
             self.titleLabel.layer.opacity = 1
         }

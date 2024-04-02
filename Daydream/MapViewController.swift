@@ -27,7 +27,9 @@ final class MapViewController: UIViewController {
         didSet {
             dynamicMapView?.configureMapStyle(isDark: isViewingDarkMode)
             let imageName = isViewingDarkMode ? "sun.max.fill" : "moon.fill"
-            darkModeButton.configureWithSystemIcon(imageName)
+            var newConfig = UIButton.Configuration.plain()
+            newConfig.configureForIcon(imageName)
+            darkModeButton.configuration = newConfig
         }
     }
 
@@ -46,31 +48,44 @@ final class MapViewController: UIViewController {
     }()
 
     private lazy var closeButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.configureWithSystemIcon("xmark.circle.fill")
+        var config = UIButton.Configuration.plain()
+        config.configureForIcon("xmark.circle.fill")
+
+        let button = UIButton(configuration: config)
+        button.addDropShadow()
         button.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
         button.accessibilityIdentifier = "map-close-button"
         button.pointerStyleProvider = buttonProvider
         button.isSymbolAnimationEnabled = true
+        button.adjustsImageSizeForAccessibilityContentSizeCategory = true
         return button
     }()
 
     private lazy var darkModeButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.configureWithSystemIcon("moon.fill")
+        var config = UIButton.Configuration.plain()
+        config.configureForIcon("moon.fill")
+
+        let button = UIButton(configuration: config)
+        button.addDropShadow()
         button.addTarget(self, action: #selector(darkModeButtonTapped), for: .touchUpInside)
         button.accessibilityIdentifier = "map-dark-mode-button"
+        button.accessibilityLabel = "dark mode toggle"
         button.pointerStyleProvider = buttonProvider
         button.isSymbolAnimationEnabled = true
+        button.adjustsImageSizeForAccessibilityContentSizeCategory = true
         return button
     }()
 
     private lazy var aboutButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.configureWithSystemIcon("info.circle.fill")
+        var config = UIButton.Configuration.plain()
+        config.configureForIcon("info.circle.fill")
+
+        let button = UIButton(configuration: config)
+        button.addDropShadow()
         button.addTarget(self, action: #selector(aboutButtonTapped), for: .touchUpInside)
         button.pointerStyleProvider = buttonProvider
         button.isSymbolAnimationEnabled = true
+        button.adjustsImageSizeForAccessibilityContentSizeCategory = true
         return button
     }()
 
@@ -146,21 +161,18 @@ final class MapViewController: UIViewController {
         let iPadOffset = UIDevice.current.userInterfaceIdiom == .pad ? 12 : 0
         
         darkModeButton.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(12 + iPadOffset)
+            make.top.equalToSuperview().inset(16 + iPadOffset)
             make.leading.equalToSuperview().inset(12)
-            make.size.equalTo(40)
         }
 
         aboutButton.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(12 + iPadOffset)
-            make.size.equalTo(40)
+            make.top.equalToSuperview().inset(16 + iPadOffset)
         }
 
         closeButton.snp.makeConstraints { make in
             make.leading.equalTo(aboutButton.snp.trailing)
-            make.top.equalToSuperview().inset(12 + iPadOffset)
+            make.top.equalToSuperview().inset(16 + iPadOffset)
             make.trailing.equalToSuperview().inset(12)
-            make.size.equalTo(40)
         }
 
         reviewCard.snp.makeConstraints { make in
