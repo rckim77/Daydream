@@ -71,6 +71,8 @@
 		EC253B322B55D29C00D52EB9 /* EateriesCarouselDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC253B312B55D29C00D52EB9 /* EateriesCarouselDataSource.swift */; };
 		EC253B362B55D30500D52EB9 /* EateriesCarouselCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC253B352B55D30500D52EB9 /* EateriesCarouselCardCell.swift */; };
 		EC34ADDA24A1A1D200916FE2 /* apiKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = EC34ADD924A1A1D200916FE2 /* apiKeys.plist */; };
+		EC92AB3A2BF1B15000A1C75F /* GoogleMapsPrivacy.bundle in Resources */ = {isa = PBXBuildFile; fileRef = EC92AB392BF1B15000A1C75F /* GoogleMapsPrivacy.bundle */; };
+		EC92AB3C2BF1B29600A1C75F /* GooglePlacesPrivacy.bundle in Resources */ = {isa = PBXBuildFile; fileRef = EC92AB3B2BF1B29500A1C75F /* GooglePlacesPrivacy.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -146,6 +148,8 @@
 		EC253B312B55D29C00D52EB9 /* EateriesCarouselDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EateriesCarouselDataSource.swift; sourceTree = "<group>"; };
 		EC253B352B55D30500D52EB9 /* EateriesCarouselCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EateriesCarouselCardCell.swift; sourceTree = "<group>"; };
 		EC34ADD924A1A1D200916FE2 /* apiKeys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = apiKeys.plist; sourceTree = "<group>"; };
+		EC92AB392BF1B15000A1C75F /* GoogleMapsPrivacy.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = GoogleMapsPrivacy.bundle; sourceTree = "<group>"; };
+		EC92AB3B2BF1B29500A1C75F /* GooglePlacesPrivacy.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = GooglePlacesPrivacy.bundle; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -184,6 +188,8 @@
 		94380ABB203BAE1D00684863 = {
 			isa = PBXGroup;
 			children = (
+				EC92AB3B2BF1B29500A1C75F /* GooglePlacesPrivacy.bundle */,
+				EC92AB392BF1B15000A1C75F /* GoogleMapsPrivacy.bundle */,
 				94380AC6203BAE1D00684863 /* Daydream */,
 				9434BA3824738C25004294F0 /* DaydreamUITests */,
 				94380AC5203BAE1D00684863 /* Products */,
@@ -448,9 +454,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				94380AD2203BAE1D00684863 /* LaunchScreen.storyboard in Resources */,
+				EC92AB3A2BF1B15000A1C75F /* GoogleMapsPrivacy.bundle in Resources */,
 				EC34ADDA24A1A1D200916FE2 /* apiKeys.plist in Resources */,
 				9490BA02206AF6F700B880E7 /* randomCitiesJSON.json in Resources */,
 				94E392AD2070B4300073E8C9 /* GoogleService-Info.plist in Resources */,
+				EC92AB3C2BF1B29600A1C75F /* GooglePlacesPrivacy.bundle in Resources */,
 				94E392B02074B29E0073E8C9 /* style.json in Resources */,
 				94380ACF203BAE1D00684863 /* Assets.xcassets in Resources */,
 			);
@@ -803,7 +811,7 @@
 			repositoryURL = "https://github.com/googlemaps/ios-places-sdk";
 			requirement = {
 				kind = exactVersion;
-				version = 8.3.0;
+				version = 8.5.0;
 			};
 		};
 		EC1D58E82B546EB90068D03A /* XCRemoteSwiftPackageReference "ios-maps-sdk" */ = {
@@ -811,7 +819,7 @@
 			repositoryURL = "https://github.com/googlemaps/ios-maps-sdk";
 			requirement = {
 				kind = exactVersion;
-				version = 8.3.1;
+				version = 8.4.0;
 			};
 		};
 		EC1D58F42B54B3470068D03A /* XCRemoteSwiftPackageReference "SnapKit" */ = {
