@@ -17,8 +17,7 @@ Always reference these instructions first and fallback to search or bash command
 - Open `Daydream.xcodeproj` (NOT .xcworkspace as there isn't one)
 - Dependencies are managed via SPM and will be resolved automatically by Xcode
 - **API Keys Setup (REQUIRED)**: 
-  - Copy `Daydream/Shared/apiKeys.plist.template` to `Daydream/Shared/apiKeys.plist`
-  - Edit the copied file and replace placeholder values with your actual API keys:
+  - Create `Daydream/Shared/apiKeys.plist` with your actual API keys:
     - Google API key (with Maps SDK and Places API enabled)
     - Yelp Fusion API key
     - NY Times Article Search API key
