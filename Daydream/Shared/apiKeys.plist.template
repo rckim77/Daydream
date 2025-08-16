@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>googleAPI</key>
+	<string>YOUR_GOOGLE_API_KEY_HERE</string>
+	<key>yelpAPI</key>
+	<string>YOUR_YELP_API_KEY_HERE</string>
+	<key>nyTimesAPI</key>
+	<string>YOUR_NY_TIMES_API_KEY_HERE</string>
+</dict>
+</plist>
