@@ -57,9 +57,18 @@ Always reference these instructions first and fallback to search or bash command
 ### Code Quality
 - **Linting**: `swiftlint` -- Takes 30-60 seconds. Always run before committing.
 - **Auto-fix linting**: `swiftlint --fix` -- Takes 30-60 seconds.
+- **Specific file linting**: `swiftlint lint --path Daydream/FileName.swift`
 - **SwiftLint Configuration**: Uses `.swiftlint.yml` with disabled rules for trailing_whitespace, identifier_name, function_body_length, type_body_length, and nesting.
+- **Line limit**: 158 characters as configured in .swiftlint.yml
 
 ## Validation
+
+### CRITICAL: Build Time Expectations
+- **Initial build**: 5-8 minutes for clean build -- NEVER CANCEL: Set timeout to 15+ minutes
+- **Incremental builds**: 1-3 minutes -- NEVER CANCEL: Set timeout to 10+ minutes  
+- **SPM dependency resolution**: 2-5 minutes first time -- NEVER CANCEL: Set timeout to 10+ minutes
+- **UI tests**: 5-10 minutes full suite -- NEVER CANCEL: Set timeout to 20+ minutes
+- **SwiftLint**: 30-60 seconds for full project scan
 
 ### Manual Testing Scenarios
 After making changes, ALWAYS test these core user scenarios:
@@ -182,5 +191,42 @@ When modifying API integrations, always check these files:
 - API keys must be in exact format in `apiKeys.plist`
 - UI tests are currently commented out but code exists
 - Review card cycling is disabled during UI testing
+- Image loading uses custom cache with expiration
+- App uses programmatic UI (no storyboards except LaunchScreen)
+
+## Troubleshooting
+
+### Build Issues
+- **"Package resolution failed"**: Clean DerivedData and restart Xcode
+- **"Command CodeSign failed"**: Check provisioning profiles and certificates
+- **"Missing API keys"**: Verify `apiKeys.plist` exists in `Daydream/Shared/`
+- **SPM timeout**: Network issues - retry after checking connection
+
+### Runtime Issues  
+- **App launches but no map**: Check Google API key and enable Maps SDK
+- **No search results**: Check Google Places API key and enable Places API
+- **No restaurant data**: Check Yelp API key format and permissions
+- **No article data**: Check NY Times API key format
+
+### Common Command Sequences
+```bash
+# Full validation workflow
+swiftlint
+xcodebuild -project Daydream.xcodeproj -scheme Daydream clean build
+# Launch in Xcode and test manually
+
+# Clean build after dependency changes
+rm -rf ~/Library/Developer/Xcode/DerivedData/Daydream-*
+xcodebuild -project Daydream.xcodeproj -scheme Daydream clean build
+
+# Check project status
+xcodebuild -project Daydream.xcodeproj -list
+```
+
+### Files to Check First When Debugging
+- Console output for runtime errors
+- `AppDelegate.swift` for API key loading issues  
+- Network layer files for API call failures
+- `ExpiringCache.swift` for image loading issuesg UI testing
 - Image loading uses custom cache with expiration
 - App uses programmatic UI (no storyboards except LaunchScreen)
