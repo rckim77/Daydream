@@ -55,9 +55,6 @@
 		EC14499E24BFBA1100CA47B1 /* CuratedCityCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC14499D24BFBA1100CA47B1 /* CuratedCityCollectionViewDataSource.swift */; };
 		EC1D58E22B546D8D0068D03A /* GooglePlaces in Frameworks */ = {isa = PBXBuildFile; productRef = EC1D58E12B546D8D0068D03A /* GooglePlaces */; };
 		EC1D58EA2B546EB90068D03A /* GoogleMaps in Frameworks */ = {isa = PBXBuildFile; productRef = EC1D58E92B546EB90068D03A /* GoogleMaps */; };
-		EC1D58EC2B546EB90068D03A /* GoogleMapsBase in Frameworks */ = {isa = PBXBuildFile; productRef = EC1D58EB2B546EB90068D03A /* GoogleMapsBase */; };
-		EC1D58EE2B546EB90068D03A /* GoogleMapsCore in Frameworks */ = {isa = PBXBuildFile; productRef = EC1D58ED2B546EB90068D03A /* GoogleMapsCore */; };
-		EC1D58F02B546EB90068D03A /* GoogleMapsM4B in Frameworks */ = {isa = PBXBuildFile; productRef = EC1D58EF2B546EB90068D03A /* GoogleMapsM4B */; };
 		EC1D58F62B54B3470068D03A /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = EC1D58F52B54B3470068D03A /* SnapKit */; };
 		EC2098A92E9D44930023CC1A /* apiKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = EC2098A82E9D448F0023CC1A /* apiKeys.plist */; };
 		EC253B252B55A79300D52EB9 /* SightsCarouselTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC253B242B55A79300D52EB9 /* SightsCarouselTableViewCell.swift */; };
@@ -139,9 +136,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EC1D58EC2B546EB90068D03A /* GoogleMapsBase in Frameworks */,
-				EC1D58F02B546EB90068D03A /* GoogleMapsM4B in Frameworks */,
-				EC1D58EE2B546EB90068D03A /* GoogleMapsCore in Frameworks */,
 				EC1D58F62B54B3470068D03A /* SnapKit in Frameworks */,
 				EC1D58EA2B546EB90068D03A /* GoogleMaps in Frameworks */,
 				EC1D58E22B546D8D0068D03A /* GooglePlaces in Frameworks */,
@@ -323,9 +317,6 @@
 			packageProductDependencies = (
 				EC1D58E12B546D8D0068D03A /* GooglePlaces */,
 				EC1D58E92B546EB90068D03A /* GoogleMaps */,
-				EC1D58EB2B546EB90068D03A /* GoogleMapsBase */,
-				EC1D58ED2B546EB90068D03A /* GoogleMapsCore */,
-				EC1D58EF2B546EB90068D03A /* GoogleMapsM4B */,
 				EC1D58F52B54B3470068D03A /* SnapKit */,
 			);
 			productName = Daydream;
@@ -661,7 +652,7 @@
 			repositoryURL = "https://github.com/googlemaps/ios-places-sdk";
 			requirement = {
 				kind = exactVersion;
-				version = 8.5.0;
+				version = 10.4.0;
 			};
 		};
 		EC1D58E82B546EB90068D03A /* XCRemoteSwiftPackageReference "ios-maps-sdk" */ = {
@@ -669,7 +660,7 @@
 			repositoryURL = "https://github.com/googlemaps/ios-maps-sdk";
 			requirement = {
 				kind = exactVersion;
-				version = 8.4.0;
+				version = 10.4.0;
 			};
 		};
 		EC1D58F42B54B3470068D03A /* XCRemoteSwiftPackageReference "SnapKit" */ = {
@@ -692,21 +683,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = EC1D58E82B546EB90068D03A /* XCRemoteSwiftPackageReference "ios-maps-sdk" */;
 			productName = GoogleMaps;
-		};
-		EC1D58EB2B546EB90068D03A /* GoogleMapsBase */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = EC1D58E82B546EB90068D03A /* XCRemoteSwiftPackageReference "ios-maps-sdk" */;
-			productName = GoogleMapsBase;
-		};
-		EC1D58ED2B546EB90068D03A /* GoogleMapsCore */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = EC1D58E82B546EB90068D03A /* XCRemoteSwiftPackageReference "ios-maps-sdk" */;
-			productName = GoogleMapsCore;
-		};
-		EC1D58EF2B546EB90068D03A /* GoogleMapsM4B */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = EC1D58E82B546EB90068D03A /* XCRemoteSwiftPackageReference "ios-maps-sdk" */;
-			productName = GoogleMapsM4B;
 		};
 		EC1D58F52B54B3470068D03A /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
