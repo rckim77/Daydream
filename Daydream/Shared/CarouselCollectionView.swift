@@ -23,8 +23,8 @@ final class CarouselCollectionView: UICollectionView {
     init(deviceSize: UIDevice.DeviceSize, isIpad: Bool) {
         self.isIpad = isIpad
         let isSmallDevice = deviceSize == .iPhoneSE || deviceSize == .iPhone8
-        let width: CGFloat = isIpad ? 180 : 120
-        self.defaultHeight = isIpad ? 280 : isSmallDevice ? 130 : 212
+        let width: CGFloat = isIpad ? 180 : 136
+        self.defaultHeight = isIpad ? 280 : isSmallDevice ? 130 : 240
         self.itemSize = CGSize(width: width, height: defaultHeight)
         self.defaultContentInsetBottom = isSmallDevice ? 4 : 12
         

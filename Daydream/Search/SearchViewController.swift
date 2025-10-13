@@ -10,12 +10,9 @@ import UIKit
 import GooglePlaces
 import SnapKit
 import Combine
+import SwiftUI
 
 final class SearchViewController: UIViewController {
-
-    private var resultsViewController: GMSAutocompleteResultsViewController?
-    private var searchController: UISearchController?
-    private let searchBarViewHeight: CGFloat = 45.0
 
     private var placeData: Place?
     private var placeBackgroundImage: UIImage?
@@ -24,21 +21,9 @@ final class SearchViewController: UIViewController {
     private var deviceYOffset: CGFloat {
         isSmallDevice ? 0 : 48
     }
-    private var defaultSearchBarYOffset: CGFloat {
-        -72 - deviceYOffset
-    }
     private var titleLabelCenterYOffset: CGFloat {
         -212 - deviceYOffset
     }
-    private var randomButtonYOffset: CGFloat {
-        30 - deviceYOffset
-    }
-    private var defaultSearchBarContainerY: CGFloat?
-
-    private lazy var searchBarContainerView: UIView = {
-        let view = UIView()
-        return view
-    }()
 
     private lazy var backgroundImageView: UIImageView = {
         let image = UIImage(named: "sunriseJungle")
@@ -65,34 +50,6 @@ final class SearchViewController: UIViewController {
         label.numberOfLines = 0
         label.textAlignment = .center
         return label
-    }()
-
-    private lazy var feedbackButton: UIButton = {
-        var config = UIButton.Configuration.plain()
-        config.title = "Got feedback?"
-        config.baseForegroundColor = .white
-
-        let button = UIButton(configuration: config)
-        button.pointerStyleProvider = buttonProvider
-        button.titleLabel?.font = .preferredFont(forTextStyle: .footnote)
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.addTarget(self, action: #selector(feedbackButtonTapped), for: .touchUpInside)
-        return button
-    }()
-
-    private lazy var randomButton: UIButton = {
-        var config = UIButton.Configuration.gray()
-        config.cornerStyle = .capsule
-        config.title = "Random"
-        config.contentInsets = .init(top: 8, leading: 18, bottom: 8, trailing: 18)
-        config.imagePadding = 4
-        config.baseForegroundColor = .white
-        
-        let button = UIButton(configuration: config)
-        button.titleLabel?.font = .preferredFont(forTextStyle: .title2)
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.addTarget(self, action: #selector(randomButtonTapped), for: .touchUpInside)
-        return button
     }()
     
     private lazy var curatedCitiesCollectionView: CarouselCollectionView = {
@@ -125,7 +82,6 @@ final class SearchViewController: UIViewController {
         super.viewDidLoad()
 
         addViews()
-        fadeInTitleAndButton()
         if let city = getRandomCity() {
             placeCancellable = fetchCityAndBackgroundPhoto(cityName: city)?
                 .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] image in
@@ -144,31 +100,23 @@ final class SearchViewController: UIViewController {
         })
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        fadeInTitleAndButton()
-        searchController?.searchBar.text = ""
-    }
-
-    private func fadeInTitleAndButton() {
-        titleLabel.alpha = 0
-        randomButton.alpha = 0
-
-        UIView.animate(withDuration: 0.4, delay: 0.4, options: .curveEaseInOut, animations: {
-            self.randomButton.alpha = 1
-            self.titleLabel.alpha = 1
-        }, completion: nil)
-    }
-
     private func addViews() {
         view.addSubview(backgroundImageView)
         backgroundImageView.addSubview(backgroundBlurEffectView)
         view.addSubview(overlayView)
         view.addSubview(titleLabel)
-        view.addSubview(randomButton)
         view.addSubview(curatedCitiesCollectionView)
-        view.addSubview(feedbackButton)
+        
+        let searchActionsView = SearchActionsView(randomCityButtonTapped: { [weak self] in
+            self?.randomButtonTapped()
+        }, feedbackButtonTapped: { [weak self] in
+            self?.feedbackButtonTapped()
+        })
+        let searchActionsHostVC = UIHostingController(rootView: searchActionsView)
+        addChild(searchActionsHostVC)
+        view.addSubview(searchActionsHostVC.view)
+        searchActionsHostVC.view.backgroundColor = .clear
+        searchActionsHostVC.didMove(toParent: self)
 
         backgroundImageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -187,60 +135,16 @@ final class SearchViewController: UIViewController {
             make.centerY.equalToSuperview().offset(titleLabelCenterYOffset)
         }
 
-        randomButton.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview().offset(randomButtonYOffset)
-        }
-
-        feedbackButton.snp.makeConstraints { make in
-            make.bottom.equalToSuperview().inset(30)
-            make.centerX.equalToSuperview()
+        searchActionsHostVC.view.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(24)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(16)
         }
         
         curatedCitiesCollectionView.snp.makeConstraints { make in
             make.height.equalTo(curatedCitiesCollectionView.height)
-            make.bottom.equalTo(feedbackButton.snp.top).offset(-24)
+            make.bottom.equalTo(searchActionsHostVC.view.snp.top).offset(-24)
             make.leading.trailing.equalToSuperview()
         }
-
-        resultsViewController = GMSAutocompleteResultsViewController()
-        resultsViewController?.delegate = self
-        resultsViewController?.setAutocompleteFilter()
-        resultsViewController?.setStyle()
-
-        searchController = UISearchController(searchResultsController: resultsViewController)
-        searchController?.searchResultsUpdater = resultsViewController
-        searchController?.setStyle()
-        searchController?.delegate = self
-
-        if let searchBar = searchController?.searchBar {
-            searchBarContainerView.alpha = 0
-            searchBarContainerView.addSubview(searchBar)
-            view.addSubview(searchBarContainerView)
-
-            searchBarContainerView.snp.makeConstraints { make in
-                make.centerY.equalToSuperview().offset(defaultSearchBarYOffset)
-                make.leading.trailing.equalToSuperview()
-                make.height.equalTo(searchBarViewHeight)
-            }
-
-            searchBar.sizeToFit()
-
-            // When UISearchController presents the results view, present it in
-            // this view controller, not one further up the chain.
-            definesPresentationContext = true
-
-            UIView.animate(withDuration: 0.8, delay: 0.3, options: .curveEaseInOut, animations: {
-                self.searchBarContainerView.alpha = 1
-            }, completion: nil)
-        }
-    }
-
-    private func resetSearchUI() {
-        if let defaultSearchBarContainerY = defaultSearchBarContainerY {
-            searchBarContainerView.frame = CGRect(x: 0, y: defaultSearchBarContainerY, width: view.bounds.width, height: searchBarViewHeight)
-        }
-        titleLabel.alpha = 1
     }
     
     private func resetAndPresentDetailViewController() {
@@ -257,7 +161,6 @@ final class SearchViewController: UIViewController {
 
     // MARK: - Button selector methods
 
-    @objc
     func randomButtonTapped() {
         if placeBackgroundImage != nil && placeData != nil {
             resetAndPresentDetailViewController()
@@ -268,12 +171,8 @@ final class SearchViewController: UIViewController {
             return
         }
 
-        randomButton.configuration?.showsActivityIndicator = true
-
         placeCancellable = fetchCityAndBackgroundPhoto(cityName: randomCity)?
-            .sink(receiveCompletion: { [weak self] _ in
-                self?.randomButton.configuration?.showsActivityIndicator = false
-            }, receiveValue: { [weak self] image in
+            .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] image in
                 guard let strongSelf = self else {
                     return
                 }
@@ -282,7 +181,6 @@ final class SearchViewController: UIViewController {
             })
     }
 
-    @objc
     private func feedbackButtonTapped() {
         var message: String?
 
@@ -314,67 +212,58 @@ final class SearchViewController: UIViewController {
             .flatMap { $0 } // converts into correct publisher so sink works
             .eraseToAnyPublisher()
     }
-    
-    // MARK: - Device Orientation Change
-    
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
-        coordinator.animate(alongsideTransition: { _ in
-            self.searchController?.searchBar.frame.size.width = self.view.frame.size.width
-        }, completion: nil)
-    }
 }
 
-extension SearchViewController: GMSAutocompleteResultsViewControllerDelegate {
-    // Handle the user's selection
-    func resultsController(_ resultsController: GMSAutocompleteResultsViewController, didAutocompleteWith place: GMSPlace) {
-        let placeId = place.placeID ?? "Couldn't get place ID"
+//extension SearchViewController: GMSAutocompleteResultsViewControllerDelegate {
+//    // Handle the user's selection
+//    func resultsController(_ resultsController: GMSAutocompleteResultsViewController, didAutocompleteWith place: GMSPlace) {
+//        let placeId = place.placeID ?? "Couldn't get place ID"
+//
+//        guard let placeModel = Place(from: place) else {
+//            dismiss(animated: true, completion: nil)
+//            return
+//        }
+//
+//        placeData = placeModel
+//
+//        dismiss(animated: true, completion: {
+//            self.resetSearchUI()
+//            let loadingVC = LoadingViewController()
+//            self.add(loadingVC)
+//            self.placeCancellable = API.PlaceSearch.loadGooglePhotoSDK(placeId: placeId)
+//                .sink(receiveCompletion: { _ in
+//                    loadingVC.remove()
+//                }, receiveValue: { [weak self] image in
+//                    self?.placeBackgroundImage = image
+//                    self?.resetAndPresentDetailViewController()
+//                })
+//        })
+//    }
+//
+//    // Handle the error
+//    func resultsController(_ resultsController: GMSAutocompleteResultsViewController, didFailAutocompleteWithError error: Error) {
+//        // log error
+//    }
+//}
 
-        guard let placeModel = Place(from: place) else {
-            dismiss(animated: true, completion: nil)
-            return
-        }
-
-        placeData = placeModel
-
-        dismiss(animated: true, completion: {
-            self.resetSearchUI()
-            let loadingVC = LoadingViewController()
-            self.add(loadingVC)
-            self.placeCancellable = API.PlaceSearch.loadGooglePhotoSDK(placeId: placeId)
-                .sink(receiveCompletion: { _ in
-                    loadingVC.remove()
-                }, receiveValue: { [weak self] image in
-                    self?.placeBackgroundImage = image
-                    self?.resetAndPresentDetailViewController()
-                })
-        })
-    }
-
-    // Handle the error
-    func resultsController(_ resultsController: GMSAutocompleteResultsViewController, didFailAutocompleteWithError error: Error) {
-        // log error
-    }
-}
-
-extension SearchViewController: UISearchControllerDelegate {
-
-    func willPresentSearchController(_ searchController: UISearchController) {
-        defaultSearchBarContainerY = searchBarContainerView.frame.origin.y
-        UIView.animate(withDuration: 0.3, animations: {
-            self.searchBarContainerView.frame.origin.y = 65.0
-            self.titleLabel.alpha = 0
-        })
-    }
-
-    // Note: only called when the user taps Cancel or out of the search bar to close autocorrect results VC and NOT when
-    // the user has tapped on a place.
-    func didDismissSearchController(_ searchController: UISearchController) {
-        UIView.animate(withDuration: 0.3, animations: {
-            self.resetSearchUI()
-        })
-    }
-}
+//extension SearchViewController: UISearchControllerDelegate {
+//
+//    func willPresentSearchController(_ searchController: UISearchController) {
+//        defaultSearchBarContainerY = searchBarContainerView.frame.origin.y
+//        UIView.animate(withDuration: 0.3, animations: {
+//            self.searchBarContainerView.frame.origin.y = 65.0
+//            self.titleLabel.alpha = 0
+//        })
+//    }
+//
+//    // Note: only called when the user taps Cancel or out of the search bar to close autocorrect results VC and NOT when
+//    // the user has tapped on a place.
+//    func didDismissSearchController(_ searchController: UISearchController) {
+//        UIView.animate(withDuration: 0.3, animations: {
+//            self.resetSearchUI()
+//        })
+//    }
+//}
 
 extension SearchViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

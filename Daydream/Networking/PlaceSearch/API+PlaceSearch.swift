@@ -81,15 +81,15 @@ extension API {
                     .eraseToAnyPublisher()
         }
 
-        /// DEPRECATED DO NOT USE. Load photo as UIImage using Google Places SDK.
         static func loadGooglePhotoSDK(placeId: String) -> Future<UIImage, Error> {
             return Future<UIImage, Error> { promise in
-                let photoField = GMSPlaceField(rawValue: GMSPlaceField.photos.rawValue)
-
-                GMSPlacesClient.shared().fetchPlace(fromPlaceID: placeId, placeFields: photoField, sessionToken: nil) { place, error in
+                let placeProps = [GMSPlaceProperty.photos.rawValue]
+                let request = GMSFetchPlaceRequest(placeID: placeId, placeProperties: placeProps, sessionToken: nil)
+                GMSPlacesClient.shared().fetchPlace(with: request) { place, error in
                     if let place = place {
                         if let photoMetadata = place.photos?.first {
-                            GMSPlacesClient.shared().loadPlacePhoto(photoMetadata) { image, error in
+                            let request = GMSFetchPhotoRequest(photoMetadata: photoMetadata, maxSize: .init(width: 300, height: 300))
+                            GMSPlacesClient.shared().fetchPhoto(with: request) { image, error in
                                 if let image = image {
                                     promise(.success(image))
                                 } else if let error = error {
