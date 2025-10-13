@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		9409090A205F4613002A65EF /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94090909205F4613002A65EF /* MapViewController.swift */; };
-		9434BA3A24738C25004294F0 /* DaydreamUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9434BA3924738C25004294F0 /* DaydreamUITests.swift */; };
 		9434BA4C247998D4004294F0 /* MapReviewCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9434BA4B247998D4004294F0 /* MapReviewCard.swift */; };
 		94380AC8203BAE1D00684863 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94380AC7203BAE1D00684863 /* AppDelegate.swift */; };
 		94380ACA203BAE1D00684863 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94380AC9203BAE1D00684863 /* SearchViewController.swift */; };
@@ -22,7 +21,6 @@
 		94600FCC249AA81D00E605FD /* API+UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94600FCB249AA81D00E605FD /* API+UIImage.swift */; };
 		94600FCE249AA8C500E605FD /* API+EaterySearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94600FCD249AA8C400E605FD /* API+EaterySearch.swift */; };
 		94600FD0249AAA6B00E605FD /* EaterySearchRoutes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94600FCF249AAA6B00E605FD /* EaterySearchRoutes.swift */; };
-		94600FD2249AACD400E605FD /* API+ArticleSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94600FD1249AACD400E605FD /* API+ArticleSearch.swift */; };
 		94673BAC225075AA00EC04FD /* DesignableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94673BAB225075AA00EC04FD /* DesignableView.swift */; };
 		947EC6522043F28F004A911D /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 947EC6512043F28F004A911D /* Extensions.swift */; };
 		947EC656204667EB004A911D /* MapCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 947EC655204667EB004A911D /* MapCardCell.swift */; };
@@ -36,7 +34,6 @@
 		94A9CCC22489F6C6008551B6 /* EateryCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A9CCC12489F6C6008551B6 /* EateryCollection.swift */; };
 		94A9CCC6248BE871008551B6 /* Eatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A9CCC5248BE871008551B6 /* Eatable.swift */; };
 		94A9CCCC248F50F7008551B6 /* Article.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A9CCCB248F50F7008551B6 /* Article.swift */; };
-		94A9CCCE24904636008551B6 /* ArticleSearchRoutes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A9CCCD24904636008551B6 /* ArticleSearchRoutes.swift */; };
 		94AE9B852094DAF500450399 /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94AE9B842094DAF500450399 /* LoadingViewController.swift */; };
 		94B7DB57205DEE980040D61C /* Viewport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B7DB56205DEE980040D61C /* Viewport.swift */; };
 		94B7DB59205E06080040D61C /* Eatery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B7DB58205E06080040D61C /* Eatery.swift */; };
@@ -62,6 +59,7 @@
 		EC1D58EE2B546EB90068D03A /* GoogleMapsCore in Frameworks */ = {isa = PBXBuildFile; productRef = EC1D58ED2B546EB90068D03A /* GoogleMapsCore */; };
 		EC1D58F02B546EB90068D03A /* GoogleMapsM4B in Frameworks */ = {isa = PBXBuildFile; productRef = EC1D58EF2B546EB90068D03A /* GoogleMapsM4B */; };
 		EC1D58F62B54B3470068D03A /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = EC1D58F52B54B3470068D03A /* SnapKit */; };
+		EC2098A92E9D44930023CC1A /* apiKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = EC2098A82E9D448F0023CC1A /* apiKeys.plist */; };
 		EC253B252B55A79300D52EB9 /* SightsCarouselTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC253B242B55A79300D52EB9 /* SightsCarouselTableViewCell.swift */; };
 		EC253B272B55A8F800D52EB9 /* CarouselCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC253B262B55A8F800D52EB9 /* CarouselCollectionView.swift */; };
 		EC253B292B55A94500D52EB9 /* SightsCarouselCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC253B282B55A94500D52EB9 /* SightsCarouselCardCell.swift */; };
@@ -70,26 +68,12 @@
 		EC253B302B55D20600D52EB9 /* EateriesCarouselTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC253B2F2B55D20600D52EB9 /* EateriesCarouselTableViewCell.swift */; };
 		EC253B322B55D29C00D52EB9 /* EateriesCarouselDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC253B312B55D29C00D52EB9 /* EateriesCarouselDataSource.swift */; };
 		EC253B362B55D30500D52EB9 /* EateriesCarouselCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC253B352B55D30500D52EB9 /* EateriesCarouselCardCell.swift */; };
-		EC34ADDA24A1A1D200916FE2 /* apiKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = EC34ADD924A1A1D200916FE2 /* apiKeys.plist */; };
 		EC92AB3A2BF1B15000A1C75F /* GoogleMapsPrivacy.bundle in Resources */ = {isa = PBXBuildFile; fileRef = EC92AB392BF1B15000A1C75F /* GoogleMapsPrivacy.bundle */; };
 		EC92AB3C2BF1B29600A1C75F /* GooglePlacesPrivacy.bundle in Resources */ = {isa = PBXBuildFile; fileRef = EC92AB3B2BF1B29500A1C75F /* GooglePlacesPrivacy.bundle */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		9434BA3C24738C25004294F0 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 94380ABC203BAE1D00684863 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 94380AC3203BAE1D00684863;
-			remoteInfo = Daydream;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
 		94090909205F4613002A65EF /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
-		9434BA3724738C25004294F0 /* DaydreamUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DaydreamUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		9434BA3924738C25004294F0 /* DaydreamUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaydreamUITests.swift; sourceTree = "<group>"; };
-		9434BA3B24738C25004294F0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9434BA4B247998D4004294F0 /* MapReviewCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapReviewCard.swift; sourceTree = "<group>"; };
 		94380AC4203BAE1D00684863 /* Daydream.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Daydream.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94380AC7203BAE1D00684863 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -105,7 +89,6 @@
 		94600FCB249AA81D00E605FD /* API+UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "API+UIImage.swift"; sourceTree = "<group>"; };
 		94600FCD249AA8C400E605FD /* API+EaterySearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "API+EaterySearch.swift"; sourceTree = "<group>"; };
 		94600FCF249AAA6B00E605FD /* EaterySearchRoutes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EaterySearchRoutes.swift; sourceTree = "<group>"; };
-		94600FD1249AACD400E605FD /* API+ArticleSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "API+ArticleSearch.swift"; sourceTree = "<group>"; };
 		94673BAB225075AA00EC04FD /* DesignableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignableView.swift; sourceTree = "<group>"; };
 		947EC6512043F28F004A911D /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		947EC655204667EB004A911D /* MapCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCardCell.swift; sourceTree = "<group>"; };
@@ -119,7 +102,6 @@
 		94A9CCC12489F6C6008551B6 /* EateryCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EateryCollection.swift; sourceTree = "<group>"; };
 		94A9CCC5248BE871008551B6 /* Eatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Eatable.swift; sourceTree = "<group>"; };
 		94A9CCCB248F50F7008551B6 /* Article.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Article.swift; sourceTree = "<group>"; };
-		94A9CCCD24904636008551B6 /* ArticleSearchRoutes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleSearchRoutes.swift; sourceTree = "<group>"; };
 		94AE9B842094DAF500450399 /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
 		94B7DB56205DEE980040D61C /* Viewport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Viewport.swift; sourceTree = "<group>"; };
 		94B7DB58205E06080040D61C /* Eatery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Eatery.swift; sourceTree = "<group>"; };
@@ -139,6 +121,7 @@
 		EC14499824BA20B600CA47B1 /* FloatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingView.swift; sourceTree = "<group>"; };
 		EC14499A24BD07D900CA47B1 /* CuratedCityCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CuratedCityCollectionViewCell.swift; sourceTree = "<group>"; };
 		EC14499D24BFBA1100CA47B1 /* CuratedCityCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CuratedCityCollectionViewDataSource.swift; sourceTree = "<group>"; };
+		EC2098A82E9D448F0023CC1A /* apiKeys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = apiKeys.plist; sourceTree = "<group>"; };
 		EC253B242B55A79300D52EB9 /* SightsCarouselTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SightsCarouselTableViewCell.swift; sourceTree = "<group>"; };
 		EC253B262B55A8F800D52EB9 /* CarouselCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselCollectionView.swift; sourceTree = "<group>"; };
 		EC253B282B55A94500D52EB9 /* SightsCarouselCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SightsCarouselCardCell.swift; sourceTree = "<group>"; };
@@ -147,19 +130,11 @@
 		EC253B2F2B55D20600D52EB9 /* EateriesCarouselTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EateriesCarouselTableViewCell.swift; sourceTree = "<group>"; };
 		EC253B312B55D29C00D52EB9 /* EateriesCarouselDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EateriesCarouselDataSource.swift; sourceTree = "<group>"; };
 		EC253B352B55D30500D52EB9 /* EateriesCarouselCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EateriesCarouselCardCell.swift; sourceTree = "<group>"; };
-		EC34ADD924A1A1D200916FE2 /* apiKeys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = apiKeys.plist; sourceTree = "<group>"; };
 		EC92AB392BF1B15000A1C75F /* GoogleMapsPrivacy.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = GoogleMapsPrivacy.bundle; sourceTree = "<group>"; };
 		EC92AB3B2BF1B29500A1C75F /* GooglePlacesPrivacy.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = GooglePlacesPrivacy.bundle; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		9434BA3424738C25004294F0 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		94380AC1203BAE1D00684863 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -176,22 +151,12 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		9434BA3824738C25004294F0 /* DaydreamUITests */ = {
-			isa = PBXGroup;
-			children = (
-				9434BA3924738C25004294F0 /* DaydreamUITests.swift */,
-				9434BA3B24738C25004294F0 /* Info.plist */,
-			);
-			path = DaydreamUITests;
-			sourceTree = "<group>";
-		};
 		94380ABB203BAE1D00684863 = {
 			isa = PBXGroup;
 			children = (
 				EC92AB3B2BF1B29500A1C75F /* GooglePlacesPrivacy.bundle */,
 				EC92AB392BF1B15000A1C75F /* GoogleMapsPrivacy.bundle */,
 				94380AC6203BAE1D00684863 /* Daydream */,
-				9434BA3824738C25004294F0 /* DaydreamUITests */,
 				94380AC5203BAE1D00684863 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -200,7 +165,6 @@
 			isa = PBXGroup;
 			children = (
 				94380AC4203BAE1D00684863 /* Daydream.app */,
-				9434BA3724738C25004294F0 /* DaydreamUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -244,22 +208,12 @@
 			path = EaterySearch;
 			sourceTree = "<group>";
 		};
-		94600FD5249AAFA000E605FD /* ArticleSearch */ = {
-			isa = PBXGroup;
-			children = (
-				94600FD1249AACD400E605FD /* API+ArticleSearch.swift */,
-				94A9CCCD24904636008551B6 /* ArticleSearchRoutes.swift */,
-			);
-			path = ArticleSearch;
-			sourceTree = "<group>";
-		};
 		94A9CCBC2489C312008551B6 /* Networking */ = {
 			isa = PBXGroup;
 			children = (
 				94600FC5249A986600E605FD /* API.swift */,
 				94600FD3249AAF8400E605FD /* PlaceSearch */,
 				94600FD4249AAF9500E605FD /* EaterySearch */,
-				94600FD5249AAFA000E605FD /* ArticleSearch */,
 				94600FCB249AA81D00E605FD /* API+UIImage.swift */,
 				94600FB924987B8300E605FD /* JSONCustomDecoder.swift */,
 				94A9CCBF2489ED2D008551B6 /* NetworkError.swift */,
@@ -297,13 +251,13 @@
 				94E108702484AF5A0091D043 /* CellLoadingView.swift */,
 				94E1086A248228790091D043 /* CardLabel.swift */,
 				94C9384F22500D31005E0653 /* UIDevice+Helpers.swift */,
+				EC2098A82E9D448F0023CC1A /* apiKeys.plist */,
 				94AE9B842094DAF500450399 /* LoadingViewController.swift */,
 				9490BA03206B03B300B880E7 /* Protocols.swift */,
 				9490BA01206AF6F700B880E7 /* randomCitiesJSON.json */,
 				94E392AF2074B29E0073E8C9 /* style.json */,
 				EC14499824BA20B600CA47B1 /* FloatingView.swift */,
 				947EC657204673BF004A911D /* ShadowView.swift */,
-				EC34ADD924A1A1D200916FE2 /* apiKeys.plist */,
 				94E1086C24836F660091D043 /* GradientView.swift */,
 				94E3D9572097EEC800384680 /* ExpiringCache.swift */,
 			);
@@ -353,24 +307,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		9434BA3624738C25004294F0 /* DaydreamUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 9434BA3E24738C25004294F0 /* Build configuration list for PBXNativeTarget "DaydreamUITests" */;
-			buildPhases = (
-				9434BA3324738C25004294F0 /* Sources */,
-				9434BA3424738C25004294F0 /* Frameworks */,
-				9434BA3524738C25004294F0 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				9434BA3D24738C25004294F0 /* PBXTargetDependency */,
-			);
-			name = DaydreamUITests;
-			productName = DaydreamUITests;
-			productReference = 9434BA3724738C25004294F0 /* DaydreamUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 		94380AC3203BAE1D00684863 /* Daydream */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 94380AD6203BAE1D00684863 /* Build configuration list for PBXNativeTarget "Daydream" */;
@@ -404,13 +340,9 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1130;
-				LastUpgradeCheck = 1520;
+				LastUpgradeCheck = 2600;
 				ORGANIZATIONNAME = "Raymond Kim";
 				TargetAttributes = {
-					9434BA3624738C25004294F0 = {
-						CreatedOnToolsVersion = 11.3;
-						TestTargetID = 94380AC3203BAE1D00684863;
-					};
 					94380AC3203BAE1D00684863 = {
 						CreatedOnToolsVersion = 9.2;
 						LastSwiftMigration = 1140;
@@ -436,29 +368,21 @@
 			projectRoot = "";
 			targets = (
 				94380AC3203BAE1D00684863 /* Daydream */,
-				9434BA3624738C25004294F0 /* DaydreamUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		9434BA3524738C25004294F0 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		94380AC2203BAE1D00684863 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				94380AD2203BAE1D00684863 /* LaunchScreen.storyboard in Resources */,
 				EC92AB3A2BF1B15000A1C75F /* GoogleMapsPrivacy.bundle in Resources */,
-				EC34ADDA24A1A1D200916FE2 /* apiKeys.plist in Resources */,
 				9490BA02206AF6F700B880E7 /* randomCitiesJSON.json in Resources */,
 				94E392AD2070B4300073E8C9 /* GoogleService-Info.plist in Resources */,
 				EC92AB3C2BF1B29600A1C75F /* GooglePlacesPrivacy.bundle in Resources */,
+				EC2098A92E9D44930023CC1A /* apiKeys.plist in Resources */,
 				94E392B02074B29E0073E8C9 /* style.json in Resources */,
 				94380ACF203BAE1D00684863 /* Assets.xcassets in Resources */,
 			);
@@ -467,14 +391,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		9434BA3324738C25004294F0 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				9434BA3A24738C25004294F0 /* DaydreamUITests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		94380AC0203BAE1D00684863 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -512,7 +428,6 @@
 				9434BA4C247998D4004294F0 /* MapReviewCard.swift in Sources */,
 				94E108712484AF5A0091D043 /* CellLoadingView.swift in Sources */,
 				94AE9B852094DAF500450399 /* LoadingViewController.swift in Sources */,
-				94A9CCCE24904636008551B6 /* ArticleSearchRoutes.swift in Sources */,
 				94E9F3292492BEF600B1D003 /* ResultsCollection.swift in Sources */,
 				94B7DB57205DEE980040D61C /* Viewport.swift in Sources */,
 				94B7DB59205E06080040D61C /* Eatery.swift in Sources */,
@@ -528,20 +443,11 @@
 				94673BAC225075AA00EC04FD /* DesignableView.swift in Sources */,
 				94E9F32B2492E12900B1D003 /* PlaceCollection.swift in Sources */,
 				9409090A205F4613002A65EF /* MapViewController.swift in Sources */,
-				94600FD2249AACD400E605FD /* API+ArticleSearch.swift in Sources */,
 				94E9C0402488538300103770 /* GoogleExtensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		9434BA3D24738C25004294F0 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 94380AC3203BAE1D00684863 /* Daydream */;
-			targetProxy = 9434BA3C24738C25004294F0 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		94380AD0203BAE1D00684863 /* LaunchScreen.storyboard */ = {
@@ -555,55 +461,6 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		9434BA3F24738C25004294F0 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 49BZEB79BF;
-				INFOPLIST_FILE = DaydreamUITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.rckim.DaydreamUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Daydream;
-			};
-			name = Debug;
-		};
-		9434BA4024738C25004294F0 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 49BZEB79BF;
-				INFOPLIST_FILE = DaydreamUITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.rckim.DaydreamUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Daydream;
-			};
-			name = Release;
-		};
 		94380AD4203BAE1D00684863 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -640,6 +497,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 16;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 49BZEB79BF;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -661,6 +519,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -704,6 +563,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 16;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 49BZEB79BF;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -718,6 +578,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
@@ -734,7 +595,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 21;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = 49BZEB79BF;
 				INFOPLIST_FILE = Daydream/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -757,7 +617,6 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 21;
-				DEVELOPMENT_TEAM = 49BZEB79BF;
 				INFOPLIST_FILE = Daydream/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -776,15 +635,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		9434BA3E24738C25004294F0 /* Build configuration list for PBXNativeTarget "DaydreamUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				9434BA3F24738C25004294F0 /* Debug */,
-				9434BA4024738C25004294F0 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		94380ABF203BAE1D00684863 /* Build configuration list for PBXProject "Daydream" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

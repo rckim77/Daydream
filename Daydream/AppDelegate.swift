@@ -69,5 +69,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 struct APIKeys: Codable {
     let googleAPI: String
     let yelpAPI: String
-    let nyTimesAPI: String
 }
