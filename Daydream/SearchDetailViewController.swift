@@ -234,12 +234,14 @@ final class SearchDetailViewController: UIViewController {
     }
 
     private func fetchBackgroundPhoto() {
-//        loadPhotoCancellable = dataSource.loadPhoto()?
-//            .receive(on: DispatchQueue.main)
-//            .sink(receiveCompletion: { _ in
-//            }, receiveValue: { [weak self] image in
-//                self?.backgroundImageView.image = image
-//            })
+        guard let photo = dataSource.place.photos?.first else {
+            return
+        }
+        
+        Task {
+            let image = await API.PlaceSearch.fetchImageBy(photo: photo)
+            backgroundImageView.image = image
+        }
     }
 
     private func configureFloatingTitleLabel() {
