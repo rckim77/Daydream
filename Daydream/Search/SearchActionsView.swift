@@ -7,68 +7,69 @@
 //
 
 import SwiftUI
+import GooglePlacesSwift
 
 struct SearchActionsView: View {
-    
+
+    @State private var showAutocompleteWidget = false
+
     var randomCityButtonTapped: () -> Void
     var feedbackButtonTapped: () -> Void
     
     var body: some View {
         HStack {
-            if #available(iOS 26.0, *) {
-                Button {
-                    // todo
-                } label: {
-                    Label("Search", systemImage: "magnifyingglass")
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 12)
-                }
-                .buttonStyle(.glass)
-                Button {
-                    randomCityButtonTapped()
-                } label: {
-                    Image(systemName: "shuffle")
-                        .padding(12)
-                }
-                .buttonStyle(.glass)
-                Button {
-                    feedbackButtonTapped()
-                } label: {
-                    Image(systemName: "questionmark")
-                        .padding(12)
-                }
-                .clipShape(Circle())
-                .buttonStyle(.glass)
-            } else {
-                Button {
-                    // todo
-                } label: {
-                    Label("Search", systemImage: "magnifyingglass")
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 8)
-                }
-                .buttonBorderShape(.capsule)
-                .buttonStyle(.bordered)
-                .tint(.white)
-                Button {
-                    randomCityButtonTapped()
-                } label: {
-                    Image(systemName: "shuffle")
-                        .padding(8)
-                }
-                .buttonBorderShape(.capsule)
-                .buttonStyle(.bordered)
-                .tint(.white)
-                Button {
-                    feedbackButtonTapped()
-                } label: {
-                    Image(systemName: "questionmark")
-                        .padding(8)
-                }
-                .buttonBorderShape(.circle)
-                .buttonStyle(.bordered)
-                .tint(.white)
+            Button {
+                showAutocompleteWidget.toggle()
+            } label: {
+                Label("Search", systemImage: "magnifyingglass")
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
             }
+            .modifier(SearchActionStyle(shape: .capsule))
+            .placeAutocomplete(filter: AutocompleteFilter(types: [.cities]), show: $showAutocompleteWidget) { suggestion, _ in
+                print("\(suggestion.description)")
+            } onError: { _ in
+                // do something with error?
+            }
+            
+            Button {
+                randomCityButtonTapped()
+            } label: {
+                Image(systemName: "shuffle")
+                    .padding(12)
+            }
+            .modifier(SearchActionStyle(shape: .capsule))
+
+            Button {
+                feedbackButtonTapped()
+            } label: {
+                Image(systemName: "questionmark")
+                    .padding(12)
+            }
+            .modifier(SearchActionStyle(shape: .circle))
+        }
+    }
+}
+
+private struct SearchActionStyle: ViewModifier {
+    
+    let shape: ButtonBorderShape
+    
+    func body(content: Content) -> some View {
+        if #available(iOS 26, *) {
+            if shape == .circle {
+                content
+                    .buttonStyle(.glass)
+                    .clipShape(Circle())
+            } else {
+                content
+                    .buttonStyle(.glass)
+            }
+        } else {
+            content
+                .buttonStyle(.bordered)
+                .tint(.white)
+                .buttonBorderShape(shape)
         }
     }
 }

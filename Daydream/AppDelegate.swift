@@ -8,6 +8,7 @@
 
 import UIKit
 import GooglePlaces
+import GooglePlacesSwift
 import GoogleMaps
 
 @UIApplicationMain
@@ -19,6 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         if let keys = AppDelegate.getAPIKeys() {
+            _ = PlacesClient.provideAPIKey(keys.placesNewAPI)
             GMSPlacesClient.provideAPIKey(keys.googleAPI)
             GMSServices.provideAPIKey(keys.googleAPI)
         }
@@ -67,6 +69,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 }
 
 struct APIKeys: Codable {
+    let placesNewAPI: String
     let googleAPI: String
     let yelpAPI: String
 }
