@@ -34,7 +34,6 @@ final class SearchDetailViewController: UIViewController {
     private var sightsCancellable: AnyCancellable?
     private var eateriesCancellable: AnyCancellable?
     private var loadPhotoCancellable: AnyCancellable?
-    private var loadPlaceByNameCancellable: AnyCancellable?
     private var loadMapUrlCancellable: AnyCancellable?
 
     // MARK: - Constants
@@ -257,10 +256,6 @@ final class SearchDetailViewController: UIViewController {
 
     @objc
     func randomCityButtonTapped() {
-        guard let randomCity = getRandomCity() else {
-            return
-        }
-
         randomCityButton.configuration?.showsActivityIndicator = true
         UIView.animate(withDuration: 0.4) {
             self.titleLabel.layer.opacity = 0
@@ -269,20 +264,20 @@ final class SearchDetailViewController: UIViewController {
         dataSource.sightsCarouselLoadingState = .loading
         dataSource.eateriesCarouselLoadingState = .loading
         cardsTableView.reloadData()
-
-        loadPlaceByNameCancellable = API.PlaceSearch.loadPlace(name: randomCity, queryType: .placeByName)?
-            .sink(receiveCompletion: { completion in
-                if case Subscribers.Completion.failure(_) = completion {
-                    self.dataSource.mapCellIsLoading = false
-                    self.updateHeaderAfterReload()
-                }
-            }, receiveValue: { [weak self] place in
-                self?.dataSource.mapCellIsLoading = false
-                self?.dataSource.legacyPlace = place
-                self?.loadDataSource(reloadMapCard: true, completion: {
+        
+        Task {
+            do {
+                let result = try await API.PlaceSearch.fetchRandomCity()
+                dataSource.mapCellIsLoading = false
+                dataSource.place = result.0
+                loadDataSource(reloadMapCard: true) { [weak self] in
                     self?.updateHeaderAfterReload()
-                })
-            })
+                }
+            } catch {
+                dataSource.mapCellIsLoading = false
+                updateHeaderAfterReload()
+            }
+        }
     }
     
     private func updateHeaderAfterReload() {

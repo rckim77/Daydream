@@ -61,7 +61,6 @@ final class SearchViewController: UIViewController {
 
     // MARK: - Cancellables
 
-    private var placeCancellable: AnyCancellable?
     private var curatedCitiesCancellable: AnyCancellable?
     
     // MARK: Init
@@ -82,12 +81,6 @@ final class SearchViewController: UIViewController {
         super.viewDidLoad()
 
         addViews()
-        if let city = getRandomCity() {
-            placeCancellable = fetchCityAndBackgroundPhoto(cityName: city)?
-                .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] image in
-                    self?.placeBackgroundImage = image
-                })
-        }
         
         registerForTraitChanges([UITraitUserInterfaceStyle.self], handler: { (self: Self, previousTraitCollection: UITraitCollection) in
             if self.traitCollection.userInterfaceStyle != previousTraitCollection.userInterfaceStyle {
@@ -107,14 +100,16 @@ final class SearchViewController: UIViewController {
         view.addSubview(titleLabel)
         view.addSubview(curatedCitiesCollectionView)
         
-        let searchActionsView = SearchActionsView(randomCityButtonTapped: { [weak self] in
-            self?.randomButtonTapped()
+        let searchActionsView = SearchActionsView(randomCityReceived: { [weak self] place, image in
+            if let image = image {
+                self?.resetAndPresentDetailViewController(place: place, image: image)
+            }
         }, feedbackButtonTapped: { [weak self] in
             self?.feedbackButtonTapped()
         }, autocompleteTapped: { [weak self] place, image in
-            self?.placeBackgroundImage = image
-            self?.autocompletePlace = place
-            self?.resetAndPresentDetailViewController()
+            if let image = image {
+                self?.resetAndPresentDetailViewController(place: place, image: image)
+            }
         })
 
         let searchActionsHostVC = UIHostingController(rootView: searchActionsView)
@@ -152,33 +147,13 @@ final class SearchViewController: UIViewController {
         }
     }
     
-    private func resetAndPresentDetailViewController() {
-        guard let backgroundImage = placeBackgroundImage, let place = autocompletePlace else {
-            return
-        }
+    func resetAndPresentDetailViewController(place: GooglePlacesSwift.Place, image: UIImage) {
         placeBackgroundImage = nil
         autocompletePlace = nil
-        let searchDetailVC = SearchDetailViewController(backgroundImage: backgroundImage, place: place)
+        let searchDetailVC = SearchDetailViewController(backgroundImage: image, place: place)
         searchDetailVC.modalPresentationStyle = .fullScreen
         searchDetailVC.modalTransitionStyle = .crossDissolve
         present(searchDetailVC, animated: true, completion: nil)
-    }
-
-    // MARK: - Button selector methods
-
-    func randomButtonTapped() {
-        guard let randomCity = getRandomCity() else {
-            return
-        }
-
-        placeCancellable = fetchCityAndBackgroundPhoto(cityName: randomCity)?
-            .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] image in
-                guard let strongSelf = self else {
-                    return
-                }
-                strongSelf.placeBackgroundImage = image
-                strongSelf.resetAndPresentDetailViewController()
-            })
     }
 
     private func feedbackButtonTapped() {
@@ -196,50 +171,7 @@ final class SearchViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         present(alert, animated: true, completion: nil)
     }
-
-    // MARK: - Networking
-    
-    private func fetchCityAndBackgroundPhoto(cityName: String) -> AnyPublisher<UIImage, Error>? {
-        API.PlaceSearch.loadPlace(name: cityName, queryType: .placeByName)?
-            .tryMap { [weak self] place -> String in
-                guard let strongSelf = self, let photoRef = place.photoRef else {
-                    throw NetworkError.noImage
-                }
-//                strongSelf.placeData = place
-                return photoRef
-            }
-            .compactMap { API.PlaceSearch.loadGooglePhoto(photoRef: $0, maxHeight: Int(UIScreen.main.bounds.height)) } // strips nil
-            .flatMap { $0 } // converts into correct publisher so sink works
-            .eraseToAnyPublisher()
-    }
 }
-
-//extension SearchViewController: GMSAutocompleteResultsViewControllerDelegate {
-//    // Handle the user's selection
-//    func resultsController(_ resultsController: GMSAutocompleteResultsViewController, didAutocompleteWith place: GMSPlace) {
-//        let placeId = place.placeID ?? "Couldn't get place ID"
-//
-//        guard let placeModel = Place(from: place) else {
-//            dismiss(animated: true, completion: nil)
-//            return
-//        }
-//
-//        placeData = placeModel
-//
-//        dismiss(animated: true, completion: {
-//            self.resetSearchUI()
-//            let loadingVC = LoadingViewController()
-//            self.add(loadingVC)
-//            self.placeCancellable = API.PlaceSearch.loadGooglePhotoSDK(placeId: placeId)
-//                .sink(receiveCompletion: { _ in
-//                    loadingVC.remove()
-//                }, receiveValue: { [weak self] image in
-//                    self?.placeBackgroundImage = image
-//                    self?.resetAndPresentDetailViewController()
-//                })
-//        })
-//    }
-//}
 
 extension SearchViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

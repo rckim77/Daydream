@@ -48,7 +48,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 topVC = presentedVC
             }
             if let topVC = topVC as? SearchViewController {
-                topVC.randomButtonTapped()
+                Task {
+                    do {
+                        let result = try await API.PlaceSearch.fetchRandomCity()
+                        if let image = result.1 {
+                            topVC.resetAndPresentDetailViewController(place: result.0, image: image)
+                        }
+                    } catch {}
+                }
             } else if let topVC = topVC as? SearchDetailViewController {
                 topVC.randomCityButtonTapped()
             }

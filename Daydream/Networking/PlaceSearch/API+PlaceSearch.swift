@@ -13,7 +13,7 @@ import GooglePlaces
 import GooglePlacesSwift
 
 enum APIError: Error {
-    case noResults
+    case bundleError, noResults
 }
 
 extension API {
@@ -56,6 +56,31 @@ extension API {
             let request = GMSPlaceSearchByTextRequest(textQuery: name, placeProperties: properties)
             
             GMSPlacesClient.shared().searchByText(with: request, callback: completion)
+        }
+        
+        /// Convenience function that will pick a random city, fetch `Place` data, and also return
+        /// a `UIImage` representation of the first photo if present.
+        static func fetchRandomCity() async throws -> (GooglePlacesSwift.Place, UIImage?) {
+            guard let path = Bundle.main.path(forResource: "randomCitiesJSON", ofType: "json") else {
+                throw APIError.bundleError
+            }
+
+            let url = URL(fileURLWithPath: path)
+            let data = try Data(contentsOf: url, options: .mappedIfSafe)
+            let randomCities = try JSONCustomDecoder().decode([RandomCity].self, from: data)
+            let randomIndex = Int(arc4random_uniform(UInt32(randomCities.count)))
+            let city = randomCities[randomIndex].city
+            
+            guard let place = await API.PlaceSearch.fetchPlaceBy(name: city) else {
+                throw APIError.noResults
+            }
+            
+            if let photo = place.photos?.first {
+                let image = await API.PlaceSearch.fetchImageBy(photo: photo)
+                return (place, image)
+            } else {
+                return (place, nil)
+            }
         }
         
         static func fetchPlaceBy(name: String) async -> GooglePlacesSwift.Place? {

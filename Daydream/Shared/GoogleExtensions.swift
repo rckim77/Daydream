@@ -6,23 +6,7 @@
 //  Copyright © 2020 Raymond Kim. All rights reserved.
 //
 
-import GooglePlaces
 import GoogleMaps
-
-extension GMSAutocompleteResultsViewController {
-    func setStyle() {
-        tableCellBackgroundColor = UIColor.black.withAlphaComponent(0.3)
-        primaryTextHighlightColor = .white
-        primaryTextColor = .lightGray
-        secondaryTextColor = .lightGray
-    }
-
-    func setAutocompleteFilter() {
-        let filter = GMSAutocompleteFilter()
-        filter.types = ["(cities)"]
-        autocompleteFilter = filter
-    }
-}
 
 extension GMSMapView {
     func configureMapStyle(isDark: Bool) {

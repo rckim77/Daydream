@@ -12,8 +12,9 @@ import GooglePlacesSwift
 struct SearchActionsView: View {
 
     @State private var showAutocompleteWidget = false
+    @State private var showLoadingSpinnerForRandomCityButton = false
 
-    var randomCityButtonTapped: () -> Void
+    var randomCityReceived: (GooglePlacesSwift.Place, UIImage?) -> Void
     var feedbackButtonTapped: () -> Void
     var autocompleteTapped: (GooglePlacesSwift.Place, UIImage?) -> Void
     
@@ -56,10 +57,24 @@ struct SearchActionsView: View {
             }
             
             Button {
-                randomCityButtonTapped()
+                showLoadingSpinnerForRandomCityButton = true
+                Task {
+                    do {
+                        let result = try await API.PlaceSearch.fetchRandomCity()
+                        showLoadingSpinnerForRandomCityButton = false
+                        randomCityReceived(result.0, result.1)
+                    } catch {
+                        showLoadingSpinnerForRandomCityButton = false
+                    }
+                }
             } label: {
-                Image(systemName: "shuffle")
-                    .padding(12)
+                if showLoadingSpinnerForRandomCityButton {
+                    ProgressView()
+                        .padding(12)
+                } else {
+                    Image(systemName: "shuffle")
+                        .padding(12)
+                }
             }
             .modifier(SearchActionStyle(shape: .capsule))
 
@@ -73,6 +88,8 @@ struct SearchActionsView: View {
         }
     }
 }
+
+extension SearchActionsView: RandomCitySelectable {}
 
 private struct SearchActionStyle: ViewModifier {
     
