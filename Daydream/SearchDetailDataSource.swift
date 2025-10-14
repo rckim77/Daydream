@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import GooglePlacesSwift
 import CoreLocation
 import Combine
 
@@ -16,7 +17,8 @@ enum LoadingState {
 
 final class SearchDetailDataSource: NSObject, UITableViewDataSource {
 
-    var place: Place
+    var place: GooglePlacesSwift.Place
+    var legacyPlace: Place?
     var sights: [Place]?
     var eateries: [Eatable]?
     private var prevEateries: [Eatable]?
@@ -54,13 +56,13 @@ final class SearchDetailDataSource: NSObject, UITableViewDataSource {
     static let sightsCarouselIndexPath = IndexPath(row: 1, section: 0)
     static let eateriesCarouselIndexPath = IndexPath(row: 2, section: 0)
 
-    init(place: Place) {
+    init(place: GooglePlacesSwift.Place) {
         self.place = place
     }
 
-    func loadPhoto() -> AnyPublisher<UIImage, Error>? {
-        API.PlaceSearch.loadGooglePhoto(photoRef: place.photoRef, maxHeight: Int(UIScreen.main.bounds.height))
-    }
+//    func loadPhoto() -> AnyPublisher<UIImage, Error>? {
+//        API.PlaceSearch.loadGooglePhoto(photoRef: place.photoRef, maxHeight: Int(UIScreen.main.bounds.height))
+//    }
 
     func loadSights(name: String, location: CLLocationCoordinate2D, queryType: API.PlaceSearch.TextSearchRoute.QueryType) -> AnyPublisher<Void, Error>? {
         return API.PlaceSearch.loadPlaces(name: name, location: location, queryType: queryType)?
@@ -77,20 +79,20 @@ final class SearchDetailDataSource: NSObject, UITableViewDataSource {
             .eraseToAnyPublisher()
     }
 
-    func loadEateries() -> AnyPublisher<Void, Error>? {
-        return API.EaterySearch.loadEateries(place: place)?
-            .mapError { [weak self] error -> Error in
-                self?.eateriesCarouselLoadingState = .error
-                return error
-            }
-            .map { [weak self] eateries -> Void in
-                self?.eateries = eateries
-                self?.eateriesCarouselLoadingState = .results
-                return
-            }
-            .receive(on: DispatchQueue.main)
-            .eraseToAnyPublisher()
-    }
+//    func loadEateries() -> AnyPublisher<Void, Error>? {
+//        return API.EaterySearch.loadEateries(place: place)?
+//            .mapError { [weak self] error -> Error in
+//                self?.eateriesCarouselLoadingState = .error
+//                return error
+//            }
+//            .map { [weak self] eateries -> Void in
+//                self?.eateries = eateries
+//                self?.eateriesCarouselLoadingState = .results
+//                return
+//            }
+//            .receive(on: DispatchQueue.main)
+//            .eraseToAnyPublisher()
+//    }
 
     // MARK: - UITableViewDataSource methods
     func numberOfSections(in tableView: UITableView) -> Int {

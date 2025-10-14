@@ -8,6 +8,7 @@
 
 import UIKit
 import GooglePlaces
+import GooglePlacesSwift
 import GoogleMaps
 
 final class MapCardCell: UITableViewCell {
@@ -21,7 +22,7 @@ final class MapCardCell: UITableViewCell {
         return mapView
     }()
 
-    var place: Place? {
+    var place: GooglePlacesSwift.Place? {
         didSet {
             guard let place = place, place != oldValue else {
                 return
@@ -55,22 +56,22 @@ final class MapCardCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func updateMapView(place: Place) {
-        let camera = GMSCameraPosition.camera(withLatitude: place.coordinate.latitude,
-                                              longitude: place.coordinate.longitude,
+    private func updateMapView(place: GooglePlacesSwift.Place) {
+        let camera = GMSCameraPosition.camera(withLatitude: place.location.latitude,
+                                              longitude: place.location.longitude,
                                               zoom: 14.0)
         mapView.animate(to: camera)
         createMarkerFor(mapView, with: place)
-        accessibilityLabel = "Map of \(place.name)"
+        accessibilityLabel = "Map of \(place.displayName ?? "")"
     }
     
     // Creates a marker in center of map
-    private func createMarkerFor(_ mapView: GMSMapView, with place: Place) {
+    private func createMarkerFor(_ mapView: GMSMapView, with place: GooglePlacesSwift.Place) {
         let marker = GMSMarker()
         
-        marker.position = CLLocationCoordinate2D(latitude: place.coordinate.latitude,
-                                                 longitude: place.coordinate.longitude)
-        marker.title = place.name
+        marker.position = CLLocationCoordinate2D(latitude: place.location.latitude,
+                                                 longitude: place.location.longitude)
+        marker.title = place.displayName
         marker.snippet = place.formattedAddress
         marker.map = mapView
     }

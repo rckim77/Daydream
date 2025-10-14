@@ -15,6 +15,7 @@ struct SearchActionsView: View {
 
     var randomCityButtonTapped: () -> Void
     var feedbackButtonTapped: () -> Void
+    var autocompleteTapped: (GooglePlacesSwift.Place, UIImage?) -> Void
     
     var body: some View {
         HStack {
@@ -27,9 +28,31 @@ struct SearchActionsView: View {
             }
             .modifier(SearchActionStyle(shape: .capsule))
             .placeAutocomplete(filter: AutocompleteFilter(types: [.cities]), show: $showAutocompleteWidget) { suggestion, _ in
-                print("\(suggestion.description)")
-            } onError: { _ in
-                // do something with error?
+                Task {
+                    let fetchPlaceRequest = FetchPlaceRequest(
+                        placeID: suggestion.placeID,
+                        placeProperties: [.displayName, .formattedAddress, .photos, .coordinate]
+                    )
+                    
+                    switch await PlacesClient.shared.fetchPlace(with: fetchPlaceRequest) {
+                    case .success(let place):
+                        if let photo = place.photos?.first {
+                            let fetchPhotoRequest = FetchPhotoRequest(photo: photo, maxSize: photo.maxSize)
+                            switch await PlacesClient.shared.fetchPhoto(with: fetchPhotoRequest) {
+                            case .success(let image):
+                                autocompleteTapped(place, image)
+                            case .failure(_):
+                                autocompleteTapped(place, nil)
+                            }
+                        } else {
+                            autocompleteTapped(place, nil)
+                        }
+                    case .failure(_):
+                        print("error")
+                    }
+                }
+            } onError: { error in
+                print(error.localizedDescription)
             }
             
             Button {

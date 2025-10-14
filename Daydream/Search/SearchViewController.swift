@@ -7,14 +7,14 @@
 //
 
 import UIKit
-import GooglePlaces
+import GooglePlacesSwift
 import SnapKit
 import Combine
 import SwiftUI
 
 final class SearchViewController: UIViewController {
 
-    private var placeData: Place?
+    private var autocompletePlace: GooglePlacesSwift.Place?
     private var placeBackgroundImage: UIImage?
 
     private let curatedCitiesDataSource: CuratedCityCollectionViewDataSource
@@ -111,7 +111,12 @@ final class SearchViewController: UIViewController {
             self?.randomButtonTapped()
         }, feedbackButtonTapped: { [weak self] in
             self?.feedbackButtonTapped()
+        }, autocompleteTapped: { [weak self] place, image in
+            self?.placeBackgroundImage = image
+            self?.autocompletePlace = place
+            self?.resetAndPresentDetailViewController()
         })
+
         let searchActionsHostVC = UIHostingController(rootView: searchActionsView)
         addChild(searchActionsHostVC)
         view.addSubview(searchActionsHostVC.view)
@@ -148,11 +153,11 @@ final class SearchViewController: UIViewController {
     }
     
     private func resetAndPresentDetailViewController() {
-        guard let backgroundImage = placeBackgroundImage, let place = placeData else {
+        guard let backgroundImage = placeBackgroundImage, let place = autocompletePlace else {
             return
         }
         placeBackgroundImage = nil
-        placeData = nil
+        autocompletePlace = nil
         let searchDetailVC = SearchDetailViewController(backgroundImage: backgroundImage, place: place)
         searchDetailVC.modalPresentationStyle = .fullScreen
         searchDetailVC.modalTransitionStyle = .crossDissolve
@@ -162,11 +167,6 @@ final class SearchViewController: UIViewController {
     // MARK: - Button selector methods
 
     func randomButtonTapped() {
-        if placeBackgroundImage != nil && placeData != nil {
-            resetAndPresentDetailViewController()
-            return
-        }
-
         guard let randomCity = getRandomCity() else {
             return
         }
@@ -205,7 +205,7 @@ final class SearchViewController: UIViewController {
                 guard let strongSelf = self, let photoRef = place.photoRef else {
                     throw NetworkError.noImage
                 }
-                strongSelf.placeData = place
+//                strongSelf.placeData = place
                 return photoRef
             }
             .compactMap { API.PlaceSearch.loadGooglePhoto(photoRef: $0, maxHeight: Int(UIScreen.main.bounds.height)) } // strips nil
@@ -237,30 +237,6 @@ final class SearchViewController: UIViewController {
 //                    self?.placeBackgroundImage = image
 //                    self?.resetAndPresentDetailViewController()
 //                })
-//        })
-//    }
-//
-//    // Handle the error
-//    func resultsController(_ resultsController: GMSAutocompleteResultsViewController, didFailAutocompleteWithError error: Error) {
-//        // log error
-//    }
-//}
-
-//extension SearchViewController: UISearchControllerDelegate {
-//
-//    func willPresentSearchController(_ searchController: UISearchController) {
-//        defaultSearchBarContainerY = searchBarContainerView.frame.origin.y
-//        UIView.animate(withDuration: 0.3, animations: {
-//            self.searchBarContainerView.frame.origin.y = 65.0
-//            self.titleLabel.alpha = 0
-//        })
-//    }
-//
-//    // Note: only called when the user taps Cancel or out of the search bar to close autocorrect results VC and NOT when
-//    // the user has tapped on a place.
-//    func didDismissSearchController(_ searchController: UISearchController) {
-//        UIView.animate(withDuration: 0.3, animations: {
-//            self.resetSearchUI()
 //        })
 //    }
 //}

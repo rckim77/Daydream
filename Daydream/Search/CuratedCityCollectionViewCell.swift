@@ -8,7 +8,7 @@
 
 import UIKit
 import SnapKit
-import Combine
+import GooglePlacesSwift
 
 final class CuratedCityCollectionViewCell: UICollectionViewCell {
     
@@ -30,14 +30,13 @@ final class CuratedCityCollectionViewCell: UICollectionViewCell {
     private let gradientView = GradientView()
     
     static let reuseIdentifier = "curatedCitiesCollectionViewCell"
-    
-    private var cancellable: AnyCancellable?
+
     private var imageSet = false
     private var titleLabelPadding: CGFloat {
         UIDevice.current.userInterfaceIdiom == .pad ? 12 : 8
     }
 
-    var place: Place?
+    var place: GooglePlacesSwift.Place?
     var placeImage: UIImage?
     
     override init(frame: CGRect) {
@@ -70,34 +69,24 @@ final class CuratedCityCollectionViewCell: UICollectionViewCell {
     func configure(name: String) {
         titleLabel.text = name
         
-        // prevent cancellable being set unnecessarily
+        // prevent image flickering and extra network calls
         guard !imageSet else {
             return
         }
         imageSet = true
-        
-        cancellable = API.PlaceSearch.loadPlace(name: name, queryType: .placeByName)?
-            .tryMap { [weak self] place -> String in
-                guard let photoRef = place.photoRef else {
-                    throw NetworkError.noImage
+        Task {
+            let fetchedPlace = await API.PlaceSearch.fetchPlaceBy(name: name)
+            place = fetchedPlace
+            
+            if let photo = fetchedPlace?.photos?.first, let image = await API.PlaceSearch.fetchImageBy(photo: photo) {
+                placeImage = image
+
+                await MainActor.run {
+                    fadeInImage(image, forImageView: imageView)
+                    gradientView.updateFrame()
                 }
-                self?.place = place
-                return photoRef
             }
-            .compactMap { photoRef -> AnyPublisher<UIImage, Error>? in
-                let imageMaxHeight = Int(UIScreen.main.bounds.height) / 4
-                return API.PlaceSearch.loadGooglePhoto(photoRef: photoRef, maxHeight: imageMaxHeight)
-            }
-            .flatMap { $0 } // converts into correct publisher so sink works
-            .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] image in
-                guard let strongSelf = self else {
-                    return
-                }
-                strongSelf.gradientView.updateFrame()
-                strongSelf.placeImage = image
-                strongSelf.fadeInImage(image, forImageView: strongSelf.imageView)
-            })
-        
+        }
     }
 }
 

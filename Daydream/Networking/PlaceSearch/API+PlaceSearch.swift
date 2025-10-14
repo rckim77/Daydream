@@ -10,6 +10,11 @@ import UIKit
 import CoreLocation
 import Combine
 import GooglePlaces
+import GooglePlacesSwift
+
+enum APIError: Error {
+    case noResults
+}
 
 extension API {
     enum PlaceSearch {
@@ -45,6 +50,62 @@ extension API {
                 return publisher?.eraseToAnyPublisher()
             }
         }
+        
+        static func searchPlace(name: String, completion: @escaping GMSPlaceSearchByTextResultCallback) {
+            let properties = [GMSPlaceProperty.name, GMSPlaceProperty.formattedAddress, GMSPlaceProperty.coordinate, GMSPlaceProperty.photos].map { $0.rawValue }
+            let request = GMSPlaceSearchByTextRequest(textQuery: name, placeProperties: properties)
+            
+            GMSPlacesClient.shared().searchByText(with: request, callback: completion)
+        }
+        
+        static func fetchPlaceBy(name: String) async -> GooglePlacesSwift.Place? {
+            // this is unfortunately a required param even though we don't need one...
+            guard let neutralBias = RectangularCoordinateRegion(
+                northEast: CLLocationCoordinate2D(latitude: 85, longitude: 180),
+                southWest: CLLocationCoordinate2D(latitude: -85, longitude: 0)
+            ) else {
+                return nil
+            }
+            let request = SearchByTextRequest(
+                textQuery: name,
+                placeProperties: [.displayName, .formattedAddress, .coordinate, .photos],
+                locationBias: neutralBias
+            )
+            
+            switch await PlacesClient.shared.searchByText(with: request) {
+            case .success(let places):
+                return places.first
+            case .failure(let error):
+                print(error.localizedDescription)
+                return nil
+            }
+        }
+        
+        static func fetchPlaceBy(placeId: String, properties: [GooglePlacesSwift.PlaceProperty]) async -> GooglePlacesSwift.Place? {
+            let fetchPlaceRequest = FetchPlaceRequest(
+                placeID: placeId,
+                placeProperties: properties
+            )
+            
+            switch await PlacesClient.shared.fetchPlace(with: fetchPlaceRequest) {
+            case .success(let place):
+                return place
+            case .failure(let error):
+                print(error.localizedDescription)
+                return nil
+            }
+        }
+        
+        static func fetchImageBy(photo: Photo) async -> UIImage? {
+            let fetchPhotoRequest = FetchPhotoRequest(photo: photo, maxSize: photo.maxSize)
+            switch await PlacesClient.shared.fetchPhoto(with: fetchPhotoRequest) {
+            case .success(let image):
+                return image
+            case .failure(let error):
+                print(error.localizedDescription)
+                return nil
+            }
+        }
 
         /// Returns a Place object with at least one review.
         static func loadPlaceWithReviews(placeId: String) -> AnyPublisher<Place, Error>? {
@@ -65,6 +126,7 @@ extension API {
         }
         
         /// Load photo based on photo reference provided by place request. Doesn't use Google Places SDK.
+        @available(*, deprecated, message: "Use new Google Places Swift SDK `fetchPhoto(with:) method")
         static func loadGooglePhoto(photoRef: String?, maxHeight: Int) -> AnyPublisher<UIImage, Error>? {
             guard let photoRef = photoRef, let url = PlacePhotosRoute(photoRef: photoRef, maxHeight: maxHeight)?.url else {
                 return nil
