@@ -9,6 +9,7 @@
 import UIKit
 import SnapKit
 import Combine
+import GooglePlacesSwift
 
 final class MapReviewCard: UIView {
 
@@ -126,28 +127,28 @@ final class MapReviewCard: UIView {
         }
     }
 
-    func configure(_ review: Review) {
-        authorLabel.text = review.authorName
+    func configure(_ review: GooglePlacesSwift.Review) {
+        authorLabel.text = review.authorAttribution?.displayName
         reviewLabel.text = review.text
         updateStars(rating: review.rating)
         authorImageView.image = nil
 
-        guard let profileUrl = review.profilePhotoUrl, let url = URL(string: profileUrl) else {
+        guard let profileUrl = review.authorAttribution?.photoUrl else {
             return
         }
 
-        profileImageCancellable = API.Image.loadImage(url: url)
+        profileImageCancellable = API.Image.loadImage(url: profileUrl)
             .assign(to: \.image, on: authorImageView)
     }
 
-    private func updateStars(rating: Int) {
+    private func updateStars(rating: Float) {
         guard rating >= 0 && rating <= 5 else {
             return
         }
 
         let starImageViews = [star1ImageView, star2ImageView, star3ImageView, star4ImageView, star5ImageView]
         for i in 1..<6 {
-            if i <= rating {
+            if Float(i) <= rating {
                 starImageViews[i-1].image = UIImage(systemName: "star.fill")
                 starImageViews[i-1].tintColor = .systemYellow
             } else {

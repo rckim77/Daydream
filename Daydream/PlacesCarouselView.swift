@@ -1,0 +1,33 @@
+//
+//  PlacesCarouselView.swift
+//  Daydream
+//
+//  Created by Ray Kim on 10/15/25.
+//  Copyright © 2025 Raymond Kim. All rights reserved.
+//
+
+import SwiftUI
+import GooglePlacesSwift
+
+struct PlacesCarouselView: View {
+    
+    let places: [GooglePlacesSwift.Place]
+    @Binding var showMapVC: Bool
+    
+    var body: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 16) {
+                if places.isEmpty {
+                    ForEach(0..<3) {_ in
+                        PlaceCardView(place: nil, showMapVC: $showMapVC)
+                    }
+                } else {
+                    ForEach(places, id: \.placeID) { place in
+                        PlaceCardView(place: place, showMapVC: $showMapVC)
+                    }
+                }
+            }
+        }
+        .contentMargins(24, for: .scrollContent)
+    }
+}

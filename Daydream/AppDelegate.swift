@@ -52,12 +52,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     do {
                         let result = try await API.PlaceSearch.fetchRandomCity()
                         if let image = result.1 {
-                            topVC.resetAndPresentDetailViewController(place: result.0, image: image)
+                            topVC.presentCityDetailView(place: result.0, image: image)
                         }
                     } catch {}
                 }
-            } else if let topVC = topVC as? SearchDetailViewController {
-                topVC.randomCityButtonTapped()
             }
 
             // Reset the shortcut item so it's never processed twice.

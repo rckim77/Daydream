@@ -102,13 +102,16 @@ final class SearchViewController: UIViewController {
         
         let searchActionsView = SearchActionsView(randomCityReceived: { [weak self] place, image in
             if let image = image {
-                self?.resetAndPresentDetailViewController(place: place, image: image)
+                let cityDetailVC = UIHostingController(rootView: CityDetailView(place: place, image: image))
+                cityDetailVC.modalPresentationStyle = .fullScreen
+                cityDetailVC.modalTransitionStyle = .crossDissolve
+                self?.present(cityDetailVC, animated: true, completion: nil)
             }
         }, feedbackButtonTapped: { [weak self] in
             self?.feedbackButtonTapped()
         }, autocompleteTapped: { [weak self] place, image in
             if let image = image {
-                self?.resetAndPresentDetailViewController(place: place, image: image)
+                self?.presentCityDetailView(place: place, image: image)
             }
         })
 
@@ -137,23 +140,14 @@ final class SearchViewController: UIViewController {
 
         searchActionsHostVC.view.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(24)
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(16)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
         
         curatedCitiesCollectionView.snp.makeConstraints { make in
             make.height.equalTo(curatedCitiesCollectionView.height)
-            make.bottom.equalTo(searchActionsHostVC.view.snp.top).offset(-24)
+            make.bottom.equalTo(searchActionsHostVC.view.snp.top).offset(-20)
             make.leading.trailing.equalToSuperview()
         }
-    }
-    
-    func resetAndPresentDetailViewController(place: GooglePlacesSwift.Place, image: UIImage) {
-        placeBackgroundImage = nil
-        autocompletePlace = nil
-        let searchDetailVC = SearchDetailViewController(backgroundImage: image, place: place)
-        searchDetailVC.modalPresentationStyle = .fullScreen
-        searchDetailVC.modalTransitionStyle = .crossDissolve
-        present(searchDetailVC, animated: true, completion: nil)
     }
 
     private func feedbackButtonTapped() {
@@ -171,19 +165,23 @@ final class SearchViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         present(alert, animated: true, completion: nil)
     }
+    
+    func presentCityDetailView(place: GooglePlacesSwift.Place, image: UIImage) -> Void {
+        let cityDetailVC = UIHostingController(rootView: CityDetailView(place: place, image: image))
+        cityDetailVC.modalPresentationStyle = .fullScreen
+        cityDetailVC.modalTransitionStyle = .crossDissolve
+        present(cityDetailVC, animated: true, completion: nil)
+    }
 }
 
 extension SearchViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let cell = collectionView.cellForItem(at: indexPath) as? CuratedCityCollectionViewCell,
-            let place = cell.place,
-            let image = cell.placeImage else {
+              let place = cell.place,
+              let image = cell.placeImage else {
             return
         }
-        let searchDetailVC = SearchDetailViewController(backgroundImage: image, place: place)
-        searchDetailVC.modalPresentationStyle = .fullScreen
-        searchDetailVC.modalTransitionStyle = .crossDissolve
-        present(searchDetailVC, animated: true, completion: nil)
+        presentCityDetailView(place: place, image: image)
     }
 }
 

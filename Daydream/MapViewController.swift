@@ -9,16 +9,34 @@
 import UIKit
 import GoogleMaps
 import GooglePlaces
+import GooglePlacesSwift
 import SnapKit
 import Combine
+import SwiftUI
+
+struct MapViewControllerRepresentable: UIViewControllerRepresentable {
+
+    typealias UIViewControllerType = MapViewController
+    
+    let place: GooglePlacesSwift.Place
+
+    func makeUIViewController(context: Context) -> MapViewController {
+        let vc = MapViewController(place: place)
+        return vc
+    }
+    
+    func updateUIViewController(_ uiViewController: MapViewController, context: Context) {
+        //
+    }
+}
 
 // swiftlint:disable type_body_length
 final class MapViewController: UIViewController {
 
-    private var place: Place
+    private var place: GooglePlacesSwift.Place
     private var dynamicMapView: GMSMapView?
     private var dynamicMarker: GMSMarker?
-    private var currentReviews: [Review]?
+    private var currentReviews: [GooglePlacesSwift.Review]?
     private var currentReviewIndex = 0
 
     // Will automatically sync with system user interface style settings but can be overridden
@@ -96,10 +114,7 @@ final class MapViewController: UIViewController {
         return card
     }()
     
-    init?(place: Place?) {
-        guard let place = place else {
-            return nil
-        }
+    init(place: GooglePlacesSwift.Place) {
         self.place = place
         super.init(nibName: nil, bundle: nil)
         
@@ -120,7 +135,7 @@ final class MapViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        addOrUpdateMapView(for: place.placeId, name: place.name, location: place.coordinate)
+        addOrUpdateMapView(for: place.placeID, name: place.displayName, location: place.location)
         addProgrammaticViews()
         
         registerForTraitChanges([UITraitUserInterfaceStyle.self], handler: { (self: Self, previousTraitCollection: UITraitCollection) in
@@ -184,7 +199,10 @@ final class MapViewController: UIViewController {
         reviewCard.isHidden = true
     }
 
-    private func addOrUpdateMapView(for placeId: String, name: String, location: CLLocationCoordinate2D) {
+    private func addOrUpdateMapView(for placeId: String?, name: String?, location: CLLocationCoordinate2D?) {
+        guard let placeId = placeId, let name = name, let location = location else {
+            return
+        }
         let camera = GMSCameraPosition.camera(withLatitude: location.latitude,
                                               longitude: location.longitude,
                                               zoom: 16.0)
@@ -235,22 +253,34 @@ final class MapViewController: UIViewController {
 
         dynamicMarker.tracksInfoWindowChanges = true
 
-        loadPlaceCancellable = API.PlaceSearch.loadPlaceWithReviews(placeId: placeId)?
-            .sink(receiveCompletion: { completion in
-            }, receiveValue: { [weak self] place in
-                guard let strongSelf = self else {
-                    return
-                }
-                dynamicMarker.snippet = place.formattedAddress
-                dynamicMarker.tracksInfoWindowChanges = false
-                strongSelf.place = place
-                strongSelf.displayReviews(place.reviews, index: 0)
-            })
+//        loadPlaceCancellable = API.PlaceSearch.loadPlaceWithReviews(placeId: placeId)?
+//            .sink(receiveCompletion: { completion in
+//            }, receiveValue: { [weak self] place in
+//                guard let strongSelf = self else {
+//                    return
+//                }
+//                dynamicMarker.snippet = place.formattedAddress
+//                dynamicMarker.tracksInfoWindowChanges = false
+//                strongSelf.legacyPlace = place
+//                strongSelf.displayReviews(place.reviews, index: 0)
+//            })
+        Task {
+            guard let result = await API.PlaceSearch.fetchPlaceWithReviewsBy(placeId: placeId) else {
+                return
+            }
+
+            dynamicMarker.snippet = result.formattedAddress
+            dynamicMarker.tracksInfoWindowChanges = false
+            place = result
+            await MainActor.run {
+                displayReviews(result.reviews, index: 0)
+            }
+        }
     }
 
     // MARK: - Review-specific methods
 
-    private func displayReviews(_ reviews: [Review]?, index: Int) {
+    private func displayReviews(_ reviews: [GooglePlacesSwift.Review]?, index: Int) {
         guard let reviews = reviews, !reviews.isEmpty else {
             return
         }
@@ -260,14 +290,10 @@ final class MapViewController: UIViewController {
         reviewCard.isHidden = false
         reviewCard.alpha = 1
 
-        if ProcessInfo.processInfo.environment["isUITest"] == "true" {
-            displayReviewForUITest(reviews)
-        } else {
-            startDisplayingReviews(reviews, index: index + 1)
-        }
+        startDisplayingReviews(reviews, index: index + 1)
     }
 
-    private func startDisplayingReviews(_ reviews: [Review], index: Int) {
+    private func startDisplayingReviews(_ reviews: [GooglePlacesSwift.Review], index: Int) {
         if index < reviews.count - 1 {
             UIView.animate(withDuration: 0.7, animations: {
                 self.reviewCard.alpha = 1
@@ -301,15 +327,6 @@ final class MapViewController: UIViewController {
         }
     }
 
-    private func displayReviewForUITest(_ reviews: [Review]) {
-        guard let firstReview = reviews.first else {
-            return
-        }
-        reviewCard.isHidden = false
-        currentReviewIndex = 1
-        loadReviewContent(firstReview)
-    }
-
     @objc
     private func restartDisplayingCurrentReviews() {
         guard let reviews = currentReviews else {
@@ -326,7 +343,7 @@ final class MapViewController: UIViewController {
         reviewCard.isHidden = true
     }
 
-    private func loadReviewContent(_ review: Review) {
+    private func loadReviewContent(_ review: GooglePlacesSwift.Review) {
         reviewCard.configure(review)
     }
 
@@ -350,10 +367,10 @@ final class MapViewController: UIViewController {
 
     @objc
     private func reviewCardTapped() {
-        guard let reviews = currentReviews, let authorUrl = reviews[currentReviewIndex].authorUrl else {
+        guard let reviews = currentReviews, let authorUrl = reviews[currentReviewIndex].authorAttribution?.url else {
             return
         }
-        openUrl(authorUrl)
+        UIApplication.shared.open(authorUrl, options: [:])
     }
 }
 
@@ -364,9 +381,9 @@ extension MapViewController: GMSMapViewDelegate {
     }
 
     func mapView(_ mapView: GMSMapView, didTapInfoWindowOf marker: GMSMarker) {
-        if let mapUrl = place.mapUrl, let url = URL(string: mapUrl) {
-            UIApplication.shared.open(url, options: [:])
-        }
+//        if let mapUrl = place.mapUrl, let url = URL(string: mapUrl) {
+//            UIApplication.shared.open(url, options: [:])
+//        }
     }
 }
 

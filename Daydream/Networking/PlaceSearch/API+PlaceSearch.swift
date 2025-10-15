@@ -8,55 +8,14 @@
 
 import UIKit
 import CoreLocation
-import Combine
-import GooglePlaces
 import GooglePlacesSwift
 
 enum APIError: Error {
-    case bundleError, noResults
+    case biasError, bundleError, noResults
 }
 
 extension API {
     enum PlaceSearch {
-        /// Can be used to return multiple Google Place objects (e.g., sights, fallback restaurants) based on the city name, optional location,
-        /// and query type.
-        static func loadPlaces(name: String, location: CLLocationCoordinate2D? = nil, queryType: TextSearchRoute.QueryType) -> AnyPublisher<[Place], Error>? {
-            guard let url = TextSearchRoute(name: name, location: location, queryType: queryType)?.url else {
-                return nil
-            }
-            return URLSession.shared.dataTaskPublisher(for: url)
-                .map { $0.data }
-                .decode(type: ResultsCollection.self, decoder: JSONCustomDecoder())
-                .map { $0.results }
-                .eraseToAnyPublisher()
-        }
-
-        /// Convenience method to return one Google place. Uses loadPlaces(name:location:queryType:) and ensures the first element is returned.
-        static func loadPlace(name: String,
-                              location: CLLocationCoordinate2D? = nil,
-                              queryType: TextSearchRoute.QueryType,
-                              receiveOnMainQueue: Bool = true) -> AnyPublisher<Place, Error>? {
-            let publisher = PlaceSearch.loadPlaces(name: name, location: location, queryType: queryType)?
-                .tryMap { places -> Place in
-                    guard let firstPlace = places.first else {
-                        throw NetworkError.insufficientResults
-                    }
-                    return firstPlace
-                }
-
-            if receiveOnMainQueue {
-                return publisher?.receive(on: DispatchQueue.main).eraseToAnyPublisher()
-            } else {
-                return publisher?.eraseToAnyPublisher()
-            }
-        }
-        
-        static func searchPlace(name: String, completion: @escaping GMSPlaceSearchByTextResultCallback) {
-            let properties = [GMSPlaceProperty.name, GMSPlaceProperty.formattedAddress, GMSPlaceProperty.coordinate, GMSPlaceProperty.photos].map { $0.rawValue }
-            let request = GMSPlaceSearchByTextRequest(textQuery: name, placeProperties: properties)
-            
-            GMSPlacesClient.shared().searchByText(with: request, callback: completion)
-        }
         
         /// Convenience function that will pick a random city, fetch `Place` data, and also return
         /// a `UIImage` representation of the first photo if present.
@@ -83,6 +42,22 @@ extension API {
             }
         }
         
+        static func fetchPlaceAndImageBy(name: String) async throws -> (GooglePlacesSwift.Place, UIImage) {
+            guard let place = await API.PlaceSearch.fetchPlaceBy(name: name) else {
+                throw APIError.noResults
+            }
+            
+            if let photo = place.photos?.first {
+                let image = await API.PlaceSearch.fetchImageBy(photo: photo)
+                guard let image = image else {
+                    throw APIError.noResults
+                }
+                return (place, image)
+            } else {
+                throw APIError.noResults
+            }
+        }
+        
         static func fetchPlaceBy(name: String) async -> GooglePlacesSwift.Place? {
             // this is unfortunately a required param even though we don't need one...
             guard let neutralBias = RectangularCoordinateRegion(
@@ -106,10 +81,10 @@ extension API {
             }
         }
         
-        static func fetchPlaceBy(placeId: String, properties: [GooglePlacesSwift.PlaceProperty]) async -> GooglePlacesSwift.Place? {
+        static func fetchPlaceWithReviewsBy(placeId: String) async -> GooglePlacesSwift.Place? {
             let fetchPlaceRequest = FetchPlaceRequest(
                 placeID: placeId,
-                placeProperties: properties
+                placeProperties: [.placeID, .coordinate, .reviews, .formattedAddress]
             )
             
             switch await PlacesClient.shared.fetchPlace(with: fetchPlaceRequest) {
@@ -131,88 +106,45 @@ extension API {
                 return nil
             }
         }
-
-        /// Returns a Place object with at least one review.
-        static func loadPlaceWithReviews(placeId: String) -> AnyPublisher<Place, Error>? {
-            guard let url = PlaceDetailsRoute(placeId: placeId)?.url else {
-                return nil
+        
+        /// Returns at most 7 results.
+        static func fetchPlacesFor(city: String) async throws -> [GooglePlacesSwift.Place] {
+            // this is unfortunately a required param even though we don't need one...
+            guard let neutralBias = RectangularCoordinateRegion(
+                northEast: CLLocationCoordinate2D(latitude: 85, longitude: 180),
+                southWest: CLLocationCoordinate2D(latitude: -85, longitude: 0)
+            ) else {
+                throw APIError.biasError
             }
-            return URLSession.shared.dataTaskPublisher(for: url)
-                .map { $0.data }
-                .decode(type: PlaceCollection.self, decoder: JSONCustomDecoder())
-                .tryMap { collection -> Place in
-                    guard !collection.result.reviews.isEmpty else {
-                        throw NetworkError.insufficientResults
-                    }
-                    return collection.result
-                }
-                .receive(on: DispatchQueue.main)
-                .eraseToAnyPublisher()
+            let query = "top sights in \(city)"
+            let request = SearchByTextRequest(textQuery: query, placeProperties: [.photos, .displayName, .placeID], locationBias: neutralBias)
+            switch await PlacesClient.shared.searchByText(with: request) {
+            case .success(let places):
+                return places.prefix(7).map { $0 }
+            case .failure(let error):
+                print(error.localizedDescription)
+                throw error
+            }
         }
         
-        /// Load photo based on photo reference provided by place request. Doesn't use Google Places SDK.
-        @available(*, deprecated, message: "Use new Google Places Swift SDK `fetchPhoto(with:) method")
-        static func loadGooglePhoto(photoRef: String?, maxHeight: Int) -> AnyPublisher<UIImage, Error>? {
-            guard let photoRef = photoRef, let url = PlacePhotosRoute(photoRef: photoRef, maxHeight: maxHeight)?.url else {
-                return nil
+        /// Returns at most 7 results.
+        static func fetchEateriesFor(city: String) async throws -> [GooglePlacesSwift.Place] {
+            // this is unfortunately a required param even though we don't need one...
+            guard let neutralBias = RectangularCoordinateRegion(
+                northEast: CLLocationCoordinate2D(latitude: 85, longitude: 180),
+                southWest: CLLocationCoordinate2D(latitude: -85, longitude: 0)
+            ) else {
+                throw APIError.biasError
             }
-            
-            return URLSession.shared.dataTaskPublisher(for: url)
-                    .tryMap { output -> UIImage in
-                        guard let image = UIImage(data: output.data) else {
-                            throw NetworkError.noImage
-                        }
-                        return image
-                    }
-                    .receive(on: DispatchQueue.main)
-                    .eraseToAnyPublisher()
-        }
-
-        static func loadGooglePhotoSDK(placeId: String) -> Future<UIImage, Error> {
-            return Future<UIImage, Error> { promise in
-                let placeProps = [GMSPlaceProperty.photos.rawValue]
-                let request = GMSFetchPlaceRequest(placeID: placeId, placeProperties: placeProps, sessionToken: nil)
-                GMSPlacesClient.shared().fetchPlace(with: request) { place, error in
-                    if let place = place {
-                        if let photoMetadata = place.photos?.first {
-                            let request = GMSFetchPhotoRequest(photoMetadata: photoMetadata, maxSize: .init(width: 300, height: 300))
-                            GMSPlacesClient.shared().fetchPhoto(with: request) { image, error in
-                                if let image = image {
-                                    promise(.success(image))
-                                } else if let error = error {
-                                    promise(.failure(error))
-                                } else {
-                                    promise(.failure(NetworkError.unknown))
-                                }
-                            }
-                        } else {
-                            promise(.failure(NetworkError.photoMetadataMissing))
-                        }
-                    } else if let error = error {
-                        promise(.failure(error))
-                    } else {
-                        promise(.failure(NetworkError.unknown))
-                    }
-                }
+            let query = "top resturants and cafes in \(city)"
+            let request = SearchByTextRequest(textQuery: query, placeProperties: [.photos, .displayName, .placeID], locationBias: neutralBias)
+            switch await PlacesClient.shared.searchByText(with: request) {
+            case .success(let places):
+                return places.prefix(7).map { $0 }
+            case .failure(let error):
+                print(error.localizedDescription)
+                throw error
             }
-        }
-
-        /// Returns a map url that opens a Google Maps view.
-        static func getMapUrl(placeId: String) -> AnyPublisher<URL, Error>? {
-            guard let url = PlaceDetailsRoute(placeId: placeId)?.url else {
-                return nil
-            }
-            return URLSession.shared.dataTaskPublisher(for: url)
-                .map { $0.data }
-                .decode(type: PlaceCollection.self, decoder: JSONCustomDecoder())
-                .tryMap { collection -> URL in
-                    guard let mapUrlString = collection.result.mapUrl, let url = URL(string: mapUrlString) else {
-                        throw NetworkError.noMapUrl
-                    }
-                    return url
-                }
-                .receive(on: DispatchQueue.main)
-                .eraseToAnyPublisher()
         }
     }
 }

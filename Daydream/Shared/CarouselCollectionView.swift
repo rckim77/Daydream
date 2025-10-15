@@ -32,9 +32,7 @@ final class CarouselCollectionView: UICollectionView {
         flowLayout.scrollDirection = .horizontal
         flowLayout.minimumLineSpacing = isIpad ? 18 : 16
         super.init(frame: .zero, collectionViewLayout: flowLayout)
-        
-        register(SightsCarouselCardCell.self, forCellWithReuseIdentifier: SightsCarouselCardCell.reuseIdentifier)
-        register(EateriesCarouselCardCell.self, forCellWithReuseIdentifier: EateriesCarouselCardCell.reuseIdentifier)
+
         register(CuratedCityCollectionViewCell.self, forCellWithReuseIdentifier: CuratedCityCollectionViewCell.reuseIdentifier)
         
         backgroundColor = .clear

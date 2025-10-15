@@ -91,7 +91,7 @@ struct SearchActionsView: View {
 
 extension SearchActionsView: RandomCitySelectable {}
 
-private struct SearchActionStyle: ViewModifier {
+struct SearchActionStyle: ViewModifier {
     
     let shape: ButtonBorderShape
     

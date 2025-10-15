@@ -75,17 +75,16 @@ final class CuratedCityCollectionViewCell: UICollectionViewCell {
         }
         imageSet = true
         Task {
-            let fetchedPlace = await API.PlaceSearch.fetchPlaceBy(name: name)
-            place = fetchedPlace
-            
-            if let photo = fetchedPlace?.photos?.first, let image = await API.PlaceSearch.fetchImageBy(photo: photo) {
-                placeImage = image
-
+            do {
+                let result = try await API.PlaceSearch.fetchPlaceAndImageBy(name: name)
+                place = result.0
+                placeImage = result.1
+                
                 await MainActor.run {
-                    fadeInImage(image, forImageView: imageView)
+                    fadeInImage(result.1, forImageView: imageView)
                     gradientView.updateFrame()
                 }
-            }
+            } catch {}
         }
     }
 }
