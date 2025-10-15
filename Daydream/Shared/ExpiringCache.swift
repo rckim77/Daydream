@@ -11,9 +11,9 @@ import UIKit
 // Default time interval is 1 hour
 private let kDefaultTimeInterval: TimeInterval = 60
 
-// Expiring, thread safe, in memory cache using a concurrent queue with dispatch barriers.
-// More performant than a serial queue with async/sync calls and more Swift-y than
-// NSCache since our cache values don't have to conform to AnyObject.
+/// CURRENTLY UNUSED. Expiring, thread safe, in memory cache using a concurrent queue with dispatch barriers.
+/// More performant than a serial queue with async/sync calls and more Swift-y than
+/// NSCache since our cache values don't have to conform to AnyObject.
 class ExpiringCache<K: Hashable, V: Any> {
 
     private let duration: TimeInterval
