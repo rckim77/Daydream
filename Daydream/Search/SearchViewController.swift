@@ -14,7 +14,7 @@ import SwiftUI
 
 final class SearchViewController: UIViewController {
 
-    private var autocompletePlace: GooglePlacesSwift.Place?
+    private var autocompletePlace: Place?
     private var placeBackgroundImage: UIImage?
 
     private let curatedCitiesDataSource: CuratedCityCollectionViewDataSource
@@ -166,7 +166,7 @@ final class SearchViewController: UIViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    func presentCityDetailView(place: GooglePlacesSwift.Place, image: UIImage) -> Void {
+    func presentCityDetailView(place: Place, image: UIImage) -> Void {
         let cityDetailVC = UIHostingController(rootView: CityDetailView(place: place, image: image))
         cityDetailVC.modalPresentationStyle = .fullScreen
         cityDetailVC.modalTransitionStyle = .crossDissolve

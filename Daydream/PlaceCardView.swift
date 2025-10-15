@@ -12,7 +12,7 @@ import GooglePlacesSwift
 struct PlaceCardView: View {
     
     /// When this is `nil`, a placeholder view will render
-    let place: GooglePlacesSwift.Place?
+    let place: Place?
     @Binding var showMapVC: Bool
     
     @State private var image: UIImage?

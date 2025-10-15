@@ -14,9 +14,9 @@ struct SearchActionsView: View {
     @State private var showAutocompleteWidget = false
     @State private var showLoadingSpinnerForRandomCityButton = false
 
-    var randomCityReceived: (GooglePlacesSwift.Place, UIImage?) -> Void
+    var randomCityReceived: (Place, UIImage?) -> Void
     var feedbackButtonTapped: () -> Void
-    var autocompleteTapped: (GooglePlacesSwift.Place, UIImage?) -> Void
+    var autocompleteTapped: (Place, UIImage?) -> Void
     
     var body: some View {
         HStack {

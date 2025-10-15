@@ -36,7 +36,7 @@ final class CuratedCityCollectionViewCell: UICollectionViewCell {
         UIDevice.current.userInterfaceIdiom == .pad ? 12 : 8
     }
 
-    var place: GooglePlacesSwift.Place?
+    var place: Place?
     var placeImage: UIImage?
     
     override init(frame: CGRect) {

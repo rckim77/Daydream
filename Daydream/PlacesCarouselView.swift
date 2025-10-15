@@ -11,7 +11,7 @@ import GooglePlacesSwift
 
 struct PlacesCarouselView: View {
     
-    let places: [GooglePlacesSwift.Place]
+    let places: [Place]
     @Binding var showMapVC: Bool
     
     var body: some View {

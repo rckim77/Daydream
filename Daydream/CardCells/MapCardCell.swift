@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import GooglePlaces
 import GooglePlacesSwift
 import GoogleMaps
 
@@ -22,7 +21,7 @@ final class MapCardCell: UITableViewCell {
         return mapView
     }()
 
-    var place: GooglePlacesSwift.Place? {
+    var place: Place? {
         didSet {
             guard let place = place, place != oldValue else {
                 return
@@ -56,7 +55,7 @@ final class MapCardCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func updateMapView(place: GooglePlacesSwift.Place) {
+    private func updateMapView(place: Place) {
         let camera = GMSCameraPosition.camera(withLatitude: place.location.latitude,
                                               longitude: place.location.longitude,
                                               zoom: 14.0)
@@ -66,7 +65,7 @@ final class MapCardCell: UITableViewCell {
     }
     
     // Creates a marker in center of map
-    private func createMarkerFor(_ mapView: GMSMapView, with place: GooglePlacesSwift.Place) {
+    private func createMarkerFor(_ mapView: GMSMapView, with place: Place) {
         let marker = GMSMarker()
         
         marker.position = CLLocationCoordinate2D(latitude: place.location.latitude,

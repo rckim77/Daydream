@@ -13,7 +13,7 @@ import MapKit
 struct MapView: View {
     
     @Binding var mapPosition: MapCameraPosition
-    let place: GooglePlacesSwift.Place
+    let place: Place
     
     var body: some View {
         Map(position: $mapPosition) {

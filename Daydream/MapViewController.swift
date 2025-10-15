@@ -8,7 +8,6 @@
 
 import UIKit
 import GoogleMaps
-import GooglePlaces
 import GooglePlacesSwift
 import SnapKit
 import Combine
@@ -18,7 +17,7 @@ struct MapViewControllerRepresentable: UIViewControllerRepresentable {
 
     typealias UIViewControllerType = MapViewController
     
-    let place: GooglePlacesSwift.Place
+    let place: Place
 
     func makeUIViewController(context: Context) -> MapViewController {
         let vc = MapViewController(place: place)
@@ -33,7 +32,7 @@ struct MapViewControllerRepresentable: UIViewControllerRepresentable {
 // swiftlint:disable type_body_length
 final class MapViewController: UIViewController {
 
-    private var place: GooglePlacesSwift.Place
+    private var place: Place
     private var dynamicMapView: GMSMapView?
     private var dynamicMarker: GMSMarker?
     private var currentReviews: [GooglePlacesSwift.Review]?
@@ -114,7 +113,7 @@ final class MapViewController: UIViewController {
         return card
     }()
     
-    init(place: GooglePlacesSwift.Place) {
+    init(place: Place) {
         self.place = place
         super.init(nibName: nil, bundle: nil)
         

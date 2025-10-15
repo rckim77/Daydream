@@ -19,7 +19,7 @@ extension API {
         
         /// Convenience function that will pick a random city, fetch `Place` data, and also return
         /// a `UIImage` representation of the first photo if present.
-        static func fetchRandomCity() async throws -> (GooglePlacesSwift.Place, UIImage?) {
+        static func fetchRandomCity() async throws -> (Place, UIImage?) {
             guard let path = Bundle.main.path(forResource: "randomCitiesJSON", ofType: "json") else {
                 throw APIError.bundleError
             }
@@ -42,7 +42,7 @@ extension API {
             }
         }
         
-        static func fetchPlaceAndImageBy(name: String) async throws -> (GooglePlacesSwift.Place, UIImage) {
+        static func fetchPlaceAndImageBy(name: String) async throws -> (Place, UIImage) {
             guard let place = await API.PlaceSearch.fetchPlaceBy(name: name) else {
                 throw APIError.noResults
             }
@@ -58,7 +58,7 @@ extension API {
             }
         }
         
-        static func fetchPlaceBy(name: String) async -> GooglePlacesSwift.Place? {
+        static func fetchPlaceBy(name: String) async -> Place? {
             // this is unfortunately a required param even though we don't need one...
             guard let neutralBias = RectangularCoordinateRegion(
                 northEast: CLLocationCoordinate2D(latitude: 85, longitude: 180),
@@ -81,7 +81,7 @@ extension API {
             }
         }
         
-        static func fetchPlaceWithReviewsBy(placeId: String) async -> GooglePlacesSwift.Place? {
+        static func fetchPlaceWithReviewsBy(placeId: String) async -> Place? {
             let fetchPlaceRequest = FetchPlaceRequest(
                 placeID: placeId,
                 placeProperties: [.placeID, .coordinate, .reviews, .formattedAddress]
@@ -108,7 +108,7 @@ extension API {
         }
         
         /// Returns at most 7 results.
-        static func fetchPlacesFor(city: String) async throws -> [GooglePlacesSwift.Place] {
+        static func fetchPlacesFor(city: String) async throws -> [Place] {
             // this is unfortunately a required param even though we don't need one...
             guard let neutralBias = RectangularCoordinateRegion(
                 northEast: CLLocationCoordinate2D(latitude: 85, longitude: 180),
@@ -128,7 +128,7 @@ extension API {
         }
         
         /// Returns at most 7 results.
-        static func fetchEateriesFor(city: String) async throws -> [GooglePlacesSwift.Place] {
+        static func fetchEateriesFor(city: String) async throws -> [Place] {
             // this is unfortunately a required param even though we don't need one...
             guard let neutralBias = RectangularCoordinateRegion(
                 northEast: CLLocationCoordinate2D(latitude: 85, longitude: 180),

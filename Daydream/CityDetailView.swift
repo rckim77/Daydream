@@ -14,13 +14,13 @@ struct CityDetailView: View {
     
     @Environment(\.dismiss) var dismiss
     @State private var showAutocompleteWidget = false
-    @State private var sights = [GooglePlacesSwift.Place]()
-    @State private var eateries = [GooglePlacesSwift.Place]()
+    @State private var sights = [Place]()
+    @State private var eateries = [Place]()
     @State private var showLoadingSpinnerForRandomCityButton = false
     @State private var mapPosition: MapCameraPosition = .automatic
     @State private var showingMapDetailViewController = false
 
-    @State var place: GooglePlacesSwift.Place
+    @State var place: Place
     @State var image: UIImage
     
     var body: some View {
@@ -110,7 +110,7 @@ struct CityDetailView: View {
         }
     }
     
-    private func fetchSightsAndEateries(_ city: GooglePlacesSwift.Place) async -> Void {
+    private func fetchSightsAndEateries(_ city: Place) async -> Void {
         guard let city = place.displayName else { return }
         do {
             async let fetchSights = API.PlaceSearch.fetchPlacesFor(city: city)
