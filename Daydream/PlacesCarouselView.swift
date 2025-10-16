@@ -12,18 +12,18 @@ import GooglePlacesSwift
 struct PlacesCarouselView: View {
     
     let places: [Place]
-    @Binding var showMapVC: Bool
+    @Binding var tappedPlace: IdentifiablePlace?
     
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 16) {
                 if places.isEmpty {
                     ForEach(0..<3) {_ in
-                        PlaceCardView(place: nil, showMapVC: $showMapVC)
+                        PlaceCardView(place: nil, tappedPlace: $tappedPlace)
                     }
                 } else {
                     ForEach(places, id: \.placeID) { place in
-                        PlaceCardView(place: place, showMapVC: $showMapVC)
+                        PlaceCardView(place: place, tappedPlace: $tappedPlace)
                     }
                 }
             }

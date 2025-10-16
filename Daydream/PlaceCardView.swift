@@ -13,7 +13,7 @@ struct PlaceCardView: View {
     
     /// When this is `nil`, a placeholder view will render
     let place: Place?
-    @Binding var showMapVC: Bool
+    @Binding var tappedPlace: IdentifiablePlace?
     
     @State private var image: UIImage?
     
@@ -46,7 +46,10 @@ struct PlaceCardView: View {
         .background(Color(.systemGray))
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .onTapGesture {
-            showMapVC = true
+            if let place = place {
+                let identifiablePlace = IdentifiablePlace(place: place)
+                tappedPlace = identifiablePlace
+            }
         }
         .task {
             guard let photo = place?.photos?.first else {

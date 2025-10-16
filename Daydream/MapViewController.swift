@@ -11,23 +11,6 @@ import GoogleMaps
 import GooglePlacesSwift
 import SnapKit
 import Combine
-import SwiftUI
-
-struct MapViewControllerRepresentable: UIViewControllerRepresentable {
-
-    typealias UIViewControllerType = MapViewController
-    
-    let place: Place
-
-    func makeUIViewController(context: Context) -> MapViewController {
-        let vc = MapViewController(place: place)
-        return vc
-    }
-    
-    func updateUIViewController(_ uiViewController: MapViewController, context: Context) {
-        //
-    }
-}
 
 // swiftlint:disable type_body_length
 final class MapViewController: UIViewController {
@@ -49,8 +32,6 @@ final class MapViewController: UIViewController {
             darkModeButton.configuration = newConfig
         }
     }
-
-    private var loadPlaceCancellable: AnyCancellable?
 
     // contains close and dark mode buttons (and creates frame for gradient)
     private lazy var containerView: UIView = {
@@ -157,6 +138,7 @@ final class MapViewController: UIViewController {
 
     private func addProgrammaticViews() {
         view.addSubview(containerView)
+        print("adding views")
 
         // Map header includes a gradient so that buttons are easier to see and creates a pannable section above
         // the map view so users can dismiss.
@@ -207,15 +189,18 @@ final class MapViewController: UIViewController {
                                               zoom: 16.0)
 
         if let dynamicMapView = dynamicMapView {
+            print("updating map view")
             dynamicMapView.animate(to: camera)
             addOrUpdateMarkerAndReviews(for: placeId, name: name, location: location, in: dynamicMapView)
         } else {
+            print("adding map view")
             let frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
             let options = GMSMapViewOptions()
             options.camera = camera
             options.frame = frame
             let mapViewNew = GMSMapView(options: options)
             dynamicMapView = mapViewNew
+            print("set initial map view")
 
             guard let dynamicMapView = dynamicMapView else {
                 return
@@ -229,6 +214,7 @@ final class MapViewController: UIViewController {
     }
 
     private func addOrUpdateMarkerAndReviews(for placeId: String, name: String, location: CLLocationCoordinate2D, in mapView: GMSMapView) {
+        print("adding or updating marker")
         if let marker = dynamicMarker {
             marker.map = nil // clears prev marker
             marker.title = name
@@ -261,6 +247,7 @@ final class MapViewController: UIViewController {
             dynamicMarker.tracksInfoWindowChanges = false
             place = result
             await MainActor.run {
+                print("displaying reviews")
                 displayReviews(result.reviews, index: 0)
             }
         }

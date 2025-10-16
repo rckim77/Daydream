@@ -1,5 +1,5 @@
 //
-//  MapView.swift
+//  MapCardView.swift
 //  Daydream
 //
 //  Created by Ray Kim on 10/15/25.
@@ -10,7 +10,7 @@ import SwiftUI
 import GooglePlacesSwift
 import MapKit
 
-struct MapView: View {
+struct MapCardView: View {
     
     @Binding var mapPosition: MapCameraPosition
     let place: Place

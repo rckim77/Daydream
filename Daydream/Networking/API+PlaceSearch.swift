@@ -117,7 +117,7 @@ extension API {
                 throw APIError.biasError
             }
             let query = "top sights in \(city)"
-            let request = SearchByTextRequest(textQuery: query, placeProperties: [.photos, .displayName, .placeID], locationBias: neutralBias)
+            let request = SearchByTextRequest(textQuery: query, placeProperties: [.photos, .displayName, .placeID, .coordinate], locationBias: neutralBias)
             switch await PlacesClient.shared.searchByText(with: request) {
             case .success(let places):
                 return places.prefix(7).map { $0 }
@@ -137,7 +137,7 @@ extension API {
                 throw APIError.biasError
             }
             let query = "top resturants and cafes in \(city)"
-            let request = SearchByTextRequest(textQuery: query, placeProperties: [.photos, .displayName, .placeID], locationBias: neutralBias)
+            let request = SearchByTextRequest(textQuery: query, placeProperties: [.photos, .displayName, .placeID, .coordinate], locationBias: neutralBias)
             switch await PlacesClient.shared.searchByText(with: request) {
             case .success(let places):
                 return places.prefix(7).map { $0 }

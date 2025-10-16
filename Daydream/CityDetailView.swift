@@ -11,6 +11,9 @@ import GooglePlacesSwift
 import MapKit
 
 struct CityDetailView: View {
+
+    @State var place: Place
+    @State var image: UIImage
     
     @Environment(\.dismiss) var dismiss
     @State private var showAutocompleteWidget = false
@@ -19,9 +22,7 @@ struct CityDetailView: View {
     @State private var showLoadingSpinnerForRandomCityButton = false
     @State private var mapPosition: MapCameraPosition = .automatic
     @State private var showingMapDetailViewController = false
-
-    @State var place: Place
-    @State var image: UIImage
+    @State private var tappedCardPlace: IdentifiablePlace?
     
     var body: some View {
         ScrollView {
@@ -30,15 +31,15 @@ struct CityDetailView: View {
                     .font(.largeTitle)
                     .padding(.top, 24)
                     .padding(.horizontal, 24)
-                MapView(mapPosition: $mapPosition, place: place)
+                MapCardView(mapPosition: $mapPosition, place: place)
                 Text("Top Sights")
                     .font(.title)
                     .padding(.horizontal, 24)
-                PlacesCarouselView(places: sights, showMapVC: $showingMapDetailViewController)
+                PlacesCarouselView(places: sights, tappedPlace: $tappedCardPlace)
                 Text("Top Eateries")
                     .font(.title)
                     .padding(.horizontal, 24)
-                PlacesCarouselView(places: eateries, showMapVC: $showingMapDetailViewController)
+                PlacesCarouselView(places: eateries, tappedPlace: $tappedCardPlace)
             }
             .frame(maxWidth: .infinity)
         }
@@ -105,8 +106,8 @@ struct CityDetailView: View {
             mapPosition = createMapPosition(place.location)
             await fetchSightsAndEateries(place)
         }
-        .sheet(isPresented: $showingMapDetailViewController) {
-            MapViewControllerRepresentable(place: place)
+        .sheet(item: $tappedCardPlace) { identifiablePlace in
+            MapViewControllerRepresentable(place: identifiablePlace.place)
         }
     }
     
@@ -124,6 +125,6 @@ struct CityDetailView: View {
     }
     
     private func createMapPosition(_ location: CLLocationCoordinate2D) -> MapCameraPosition {
-        .region(MKCoordinateRegion(center: place.location, span: .init(latitudeDelta: 0.4, longitudeDelta: 0.4)))
+        .region(MKCoordinateRegion(center: place.location, span: .init(latitudeDelta: 0.3, longitudeDelta: 0.3)))
     }
 }
