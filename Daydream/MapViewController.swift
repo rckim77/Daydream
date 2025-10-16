@@ -26,10 +26,16 @@ final class MapViewController: UIViewController {
     private var isViewingDarkMode = false {
         didSet {
             dynamicMapView?.configureMapStyle(isDark: isViewingDarkMode)
-            let imageName = isViewingDarkMode ? "sun.max.fill" : "moon.fill"
-            var newConfig = UIButton.Configuration.plain()
-            newConfig.configureForIcon(imageName)
-            darkModeButton.configuration = newConfig
+
+            if #available(iOS 26, *) {
+                let imageName = isViewingDarkMode ? "sun.max" : "moon"
+                darkModeButton.setImage(UIImage(systemName: imageName), for: .normal)
+            } else {
+                let imageName = isViewingDarkMode ? "sun.max.fill" : "moon.fill"
+                var newConfig = UIButton.Configuration.plain()
+                newConfig.configureForIcon(imageName)
+                darkModeButton.configuration = newConfig
+            }
         }
     }
 
@@ -46,27 +52,43 @@ final class MapViewController: UIViewController {
     }()
 
     private lazy var closeButton: UIButton = {
-        var config = UIButton.Configuration.plain()
-        config.configureForIcon("xmark.circle.fill")
+        let button: UIButton
 
-        let button = UIButton(configuration: config)
-        button.addDropShadow()
+        if #available(iOS 26, *) {
+            var config = UIButton.Configuration.glass()
+            config.configureForIcon("xmark")
+            button = UIButton(configuration: config)
+        } else {
+            var config = UIButton.Configuration.plain()
+            config.configureForIcon("xmark.circle.fill")
+            button = UIButton(configuration: config)
+            button.addDropShadow()
+        }
+        
         button.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
-        button.accessibilityIdentifier = "map-close-button"
+        button.accessibilityLabel = "map-close-button"
         button.pointerStyleProvider = buttonProvider
         button.isSymbolAnimationEnabled = true
         button.adjustsImageSizeForAccessibilityContentSizeCategory = true
+        
         return button
     }()
 
     private lazy var darkModeButton: UIButton = {
-        var config = UIButton.Configuration.plain()
-        config.configureForIcon("moon.fill")
+        let button: UIButton
 
-        let button = UIButton(configuration: config)
-        button.addDropShadow()
+        if #available(iOS 26, *) {
+            var config = UIButton.Configuration.glass()
+            config.configureForIcon("moon")
+            button = UIButton(configuration: config)
+        } else {
+            var config = UIButton.Configuration.plain()
+            config.configureForIcon("moon.fill")
+            button = UIButton(configuration: config)
+            button.addDropShadow()
+        }
+        
         button.addTarget(self, action: #selector(darkModeButtonTapped), for: .touchUpInside)
-        button.accessibilityIdentifier = "map-dark-mode-button"
         button.accessibilityLabel = "dark mode toggle"
         button.pointerStyleProvider = buttonProvider
         button.isSymbolAnimationEnabled = true
@@ -75,12 +97,21 @@ final class MapViewController: UIViewController {
     }()
 
     private lazy var aboutButton: UIButton = {
-        var config = UIButton.Configuration.plain()
-        config.configureForIcon("info.circle.fill")
+        let button: UIButton
 
-        let button = UIButton(configuration: config)
-        button.addDropShadow()
+        if #available(iOS 26, *) {
+            var config = UIButton.Configuration.glass()
+            config.configureForIcon("info")
+            button = UIButton(configuration: config)
+        } else {
+            var config = UIButton.Configuration.plain()
+            config.configureForIcon("info.circle.fill")
+            button = UIButton(configuration: config)
+            button.addDropShadow()
+        }
+        
         button.addTarget(self, action: #selector(aboutButtonTapped), for: .touchUpInside)
+        button.accessibilityLabel = "info button"
         button.pointerStyleProvider = buttonProvider
         button.isSymbolAnimationEnabled = true
         button.adjustsImageSizeForAccessibilityContentSizeCategory = true
@@ -156,20 +187,25 @@ final class MapViewController: UIViewController {
 
         let iPadOffset = UIDevice.current.userInterfaceIdiom == .pad ? 12 : 0
         
-        darkModeButton.snp.makeConstraints { make in
+        closeButton.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(16 + iPadOffset)
             make.leading.equalToSuperview().inset(12)
         }
 
-        aboutButton.snp.makeConstraints { make in
+        darkModeButton.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(16 + iPadOffset)
         }
 
-        closeButton.snp.makeConstraints { make in
-            make.leading.equalTo(aboutButton.snp.trailing)
+        aboutButton.snp.makeConstraints { make in
+            if #available(iOS 26, *) {
+                make.leading.equalTo(darkModeButton.snp.trailing).offset(6)
+            } else {
+                make.leading.equalTo(darkModeButton.snp.trailing)
+            }
             make.top.equalToSuperview().inset(16 + iPadOffset)
             make.trailing.equalToSuperview().inset(12)
         }
+
 
         reviewCard.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(12 + iPadOffset)
@@ -189,18 +225,15 @@ final class MapViewController: UIViewController {
                                               zoom: 16.0)
 
         if let dynamicMapView = dynamicMapView {
-            print("updating map view")
             dynamicMapView.animate(to: camera)
             addOrUpdateMarkerAndReviews(for: placeId, name: name, location: location, in: dynamicMapView)
         } else {
-            print("adding map view")
             let frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
             let options = GMSMapViewOptions()
             options.camera = camera
             options.frame = frame
             let mapViewNew = GMSMapView(options: options)
             dynamicMapView = mapViewNew
-            print("set initial map view")
 
             guard let dynamicMapView = dynamicMapView else {
                 return

@@ -88,11 +88,16 @@ extension UIButton {
 
 extension UIButton.Configuration {
     mutating func configureForIcon(_ name: String) {
-        let heavyConfig = UIImage.SymbolConfiguration(weight: .heavy)
-        let textStyle: UIFont.TextStyle = .body
-        let scalingConfig = UIImage.SymbolConfiguration(font: .preferredFont(forTextStyle: textStyle), scale: .large)
-        let symbolConfig = scalingConfig.applying(heavyConfig)
-        image = UIImage(systemName: name, withConfiguration: symbolConfig)
-        baseForegroundColor = .white
+        if #available(iOS 26, *) {
+            image = UIImage(systemName: name)
+            imagePadding = 4
+        } else {
+            let heavyConfig = UIImage.SymbolConfiguration(weight: .heavy)
+            let textStyle: UIFont.TextStyle = .body
+            let scalingConfig = UIImage.SymbolConfiguration(font: .preferredFont(forTextStyle: textStyle), scale: .large)
+            let symbolConfig = scalingConfig.applying(heavyConfig)
+            image = UIImage(systemName: name, withConfiguration: symbolConfig)
+            baseForegroundColor = .white
+        }
     }
 }
