@@ -34,7 +34,11 @@ struct PlaceCardView: View {
                     .padding(.horizontal, 6)
                     .padding(.vertical, 12)
                     .background(
-                        LinearGradient(colors: [Color.clear, Color(.systemBackground).opacity(0.6)], startPoint: .top, endPoint: .bottom)
+                        LinearGradient(colors: [Color.clear,
+                                                Color(.systemBackground).opacity(0.5),
+                                                Color(.systemBackground).opacity(0.7)],
+                                       startPoint: .top,
+                                       endPoint: .bottom)
                     )
             }
         }

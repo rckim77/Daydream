@@ -43,6 +43,7 @@
 		EC4A8F582E9F3C4500C13BBF /* PlaceCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4A8F572E9F3C4500C13BBF /* PlaceCardView.swift */; };
 		EC4A8F5A2EA000A700C13BBF /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4A8F592EA000A700C13BBF /* MapView.swift */; };
 		EC4A8F5C2EA0404300C13BBF /* PlacesCarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4A8F5B2EA0404300C13BBF /* PlacesCarouselView.swift */; };
+		EC4A8F5E2EA04E0700C13BBF /* style.json in Resources */ = {isa = PBXBuildFile; fileRef = EC4A8F5D2EA04E0700C13BBF /* style.json */; };
 		EC92AB3A2BF1B15000A1C75F /* GoogleMapsPrivacy.bundle in Resources */ = {isa = PBXBuildFile; fileRef = EC92AB392BF1B15000A1C75F /* GoogleMapsPrivacy.bundle */; };
 		EC92AB3C2BF1B29600A1C75F /* GooglePlacesPrivacy.bundle in Resources */ = {isa = PBXBuildFile; fileRef = EC92AB3B2BF1B29500A1C75F /* GooglePlacesPrivacy.bundle */; };
 /* End PBXBuildFile section */
@@ -82,6 +83,7 @@
 		EC4A8F572E9F3C4500C13BBF /* PlaceCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceCardView.swift; sourceTree = "<group>"; };
 		EC4A8F592EA000A700C13BBF /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		EC4A8F5B2EA0404300C13BBF /* PlacesCarouselView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacesCarouselView.swift; sourceTree = "<group>"; };
+		EC4A8F5D2EA04E0700C13BBF /* style.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = style.json; sourceTree = "<group>"; };
 		EC92AB392BF1B15000A1C75F /* GoogleMapsPrivacy.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = GoogleMapsPrivacy.bundle; sourceTree = "<group>"; };
 		EC92AB3B2BF1B29500A1C75F /* GooglePlacesPrivacy.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = GooglePlacesPrivacy.bundle; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -176,6 +178,7 @@
 				947EC657204673BF004A911D /* ShadowView.swift */,
 				94E1086C24836F660091D043 /* GradientView.swift */,
 				94E3D9572097EEC800384680 /* ExpiringCache.swift */,
+				EC4A8F5D2EA04E0700C13BBF /* style.json */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -265,6 +268,7 @@
 				94380AD2203BAE1D00684863 /* LaunchScreen.storyboard in Resources */,
 				EC92AB3A2BF1B15000A1C75F /* GoogleMapsPrivacy.bundle in Resources */,
 				9490BA02206AF6F700B880E7 /* randomCitiesJSON.json in Resources */,
+				EC4A8F5E2EA04E0700C13BBF /* style.json in Resources */,
 				94E392AD2070B4300073E8C9 /* GoogleService-Info.plist in Resources */,
 				EC92AB3C2BF1B29600A1C75F /* GooglePlacesPrivacy.bundle in Resources */,
 				EC2098A92E9D44930023CC1A /* apiKeys.plist in Resources */,

@@ -38,8 +38,8 @@ final class MapViewController: UIViewController {
     private var currentReviews: [GooglePlacesSwift.Review]?
     private var currentReviewIndex = 0
 
-    // Will automatically sync with system user interface style settings but can be overridden
-    // when the user taps the dark mode button. Note this must be called once dynamicMapView is set.
+    /// Will automatically sync with system user interface style settings but can be overridden
+    /// when the user taps the dark mode button. Note this must be called once `dynamicMapView` is set.
     private var isViewingDarkMode = false {
         didSet {
             dynamicMapView?.configureMapStyle(isDark: isViewingDarkMode)
@@ -252,17 +252,6 @@ final class MapViewController: UIViewController {
 
         dynamicMarker.tracksInfoWindowChanges = true
 
-//        loadPlaceCancellable = API.PlaceSearch.loadPlaceWithReviews(placeId: placeId)?
-//            .sink(receiveCompletion: { completion in
-//            }, receiveValue: { [weak self] place in
-//                guard let strongSelf = self else {
-//                    return
-//                }
-//                dynamicMarker.snippet = place.formattedAddress
-//                dynamicMarker.tracksInfoWindowChanges = false
-//                strongSelf.legacyPlace = place
-//                strongSelf.displayReviews(place.reviews, index: 0)
-//            })
         Task {
             guard let result = await API.PlaceSearch.fetchPlaceWithReviewsBy(placeId: placeId) else {
                 return
@@ -377,12 +366,6 @@ extension MapViewController: GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, didTapPOIWithPlaceID placeID: String, name: String, location: CLLocationCoordinate2D) {
         stopDisplayingReviews()
         addOrUpdateMapView(for: placeID, name: name, location: location)
-    }
-
-    func mapView(_ mapView: GMSMapView, didTapInfoWindowOf marker: GMSMarker) {
-//        if let mapUrl = place.mapUrl, let url = URL(string: mapUrl) {
-//            UIApplication.shared.open(url, options: [:])
-//        }
     }
 }
 
