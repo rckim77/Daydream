@@ -189,7 +189,11 @@ final class MapViewController: UIViewController {
         
         closeButton.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(16 + iPadOffset)
-            make.leading.equalToSuperview().inset(12)
+            if #available(iOS 26, *) {
+                make.leading.equalToSuperview().inset(12)
+            } else {
+                make.leading.equalToSuperview().inset(8)
+            }
         }
 
         darkModeButton.snp.makeConstraints { make in
@@ -203,7 +207,12 @@ final class MapViewController: UIViewController {
                 make.leading.equalTo(darkModeButton.snp.trailing)
             }
             make.top.equalToSuperview().inset(16 + iPadOffset)
-            make.trailing.equalToSuperview().inset(12)
+
+            if #available(iOS 26, *) {
+                make.trailing.equalToSuperview().inset(12)
+            } else {
+                make.trailing.equalToSuperview().inset(8)
+            }
         }
 
 

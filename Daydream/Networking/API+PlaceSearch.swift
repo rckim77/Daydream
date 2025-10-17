@@ -58,6 +58,30 @@ extension API {
             }
         }
         
+        
+        static func fetchPlaceAndImageBy(placeId: String) async throws -> (Place, UIImage) {
+            let fetchPlaceRequest = FetchPlaceRequest(
+                placeID: placeId,
+                placeProperties: [.placeID, .coordinate, .photos, .displayName]
+            )
+            
+            switch await PlacesClient.shared.fetchPlace(with: fetchPlaceRequest) {
+            case .success(let place):
+                if let photo = place.photos?.first {
+                    let image = await API.PlaceSearch.fetchImageBy(photo: photo)
+                    guard let image = image else {
+                        throw APIError.noResults
+                    }
+                    return (place, image)
+                } else {
+                    throw APIError.noResults
+                }
+            case .failure(let error):
+                print(error.localizedDescription)
+                throw APIError.noResults
+            }
+        }
+        
         static func fetchPlaceBy(name: String) async -> Place? {
             // this is unfortunately a required param even though we don't need one...
             guard let neutralBias = RectangularCoordinateRegion(
@@ -107,7 +131,7 @@ extension API {
             }
         }
         
-        /// Returns at most 7 results.
+        /// Returns at most 8 results.
         static func fetchPlacesFor(city: String) async throws -> [Place] {
             // this is unfortunately a required param even though we don't need one...
             guard let neutralBias = RectangularCoordinateRegion(
@@ -120,14 +144,14 @@ extension API {
             let request = SearchByTextRequest(textQuery: query, placeProperties: [.photos, .displayName, .placeID, .coordinate], locationBias: neutralBias)
             switch await PlacesClient.shared.searchByText(with: request) {
             case .success(let places):
-                return places.prefix(7).map { $0 }
+                return places.prefix(8).map { $0 }
             case .failure(let error):
                 print(error.localizedDescription)
                 throw error
             }
         }
         
-        /// Returns at most 7 results.
+        /// Returns at most 8 results.
         static func fetchEateriesFor(city: String) async throws -> [Place] {
             // this is unfortunately a required param even though we don't need one...
             guard let neutralBias = RectangularCoordinateRegion(
@@ -136,11 +160,11 @@ extension API {
             ) else {
                 throw APIError.biasError
             }
-            let query = "top resturants and cafes in \(city)"
+            let query = "top restaurants in \(city)"
             let request = SearchByTextRequest(textQuery: query, placeProperties: [.photos, .displayName, .placeID, .coordinate], locationBias: neutralBias)
             switch await PlacesClient.shared.searchByText(with: request) {
             case .success(let places):
-                return places.prefix(7).map { $0 }
+                return places.prefix(8).map { $0 }
             case .failure(let error):
                 print(error.localizedDescription)
                 throw error

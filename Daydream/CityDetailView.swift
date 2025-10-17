@@ -59,7 +59,17 @@ struct CityDetailView: View {
                 }
                 .modifier(SearchActionStyle(shape: .capsule))
                 .placeAutocomplete(filter: AutocompleteFilter(types: [.cities]), show: $showAutocompleteWidget) { suggestion, _ in
-                    print("\(suggestion)")
+                    Task {
+                        do {
+                            let result = try await API.PlaceSearch.fetchPlaceAndImageBy(placeId: suggestion.placeID)
+                            place = result.0
+                            image = result.1
+                            mapPosition = createMapPosition(place.location)
+                            await fetchSightsAndEateries(place)
+                        } catch {
+                            print(error.localizedDescription)
+                        }
+                    }
                 } onError: { error in
                     print(error.localizedDescription)
                 }
