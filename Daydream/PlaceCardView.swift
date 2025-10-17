@@ -72,31 +72,3 @@ struct PlaceCardView: View {
         }
     }
 }
-
-struct PriceLevelView: View {
-    
-    let priceLevel: PriceLevel
-    
-    var body: some View {
-        HStack(spacing: 2) {
-            if priceLevel == .inexpensive {
-                Image(systemName: "dollarsign").bold()
-            } else if priceLevel == .moderate {
-                Image(systemName: "dollarsign").bold()
-                Image(systemName: "dollarsign").bold()
-            } else if priceLevel == .expensive {
-                Image(systemName: "dollarsign").bold()
-                Image(systemName: "dollarsign").bold()
-                Image(systemName: "dollarsign").bold()
-            } else if priceLevel == .veryExpensive {
-                Image(systemName: "dollarsign").bold()
-                Image(systemName: "dollarsign").bold()
-                Image(systemName: "dollarsign").bold()
-                Image(systemName: "dollarsign").bold()
-            }
-        }
-        .padding(6)
-        .background(.ultraThinMaterial)
-        .clipShape(Capsule())
-    }
-}

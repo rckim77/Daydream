@@ -48,6 +48,7 @@
 		EC4A8F662EA1D44F00C13BBF /* FeedbackButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4A8F652EA1D44F00C13BBF /* FeedbackButton.swift */; };
 		EC4A8F682EA1D49000C13BBF /* HomeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4A8F672EA1D49000C13BBF /* HomeButton.swift */; };
 		EC4A8F6A2EA1D5D000C13BBF /* RandomCityButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4A8F692EA1D5D000C13BBF /* RandomCityButton.swift */; };
+		EC4A8F6C2EA1D6C800C13BBF /* PriceLevelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4A8F6B2EA1D6C800C13BBF /* PriceLevelView.swift */; };
 		EC92AB3A2BF1B15000A1C75F /* GoogleMapsPrivacy.bundle in Resources */ = {isa = PBXBuildFile; fileRef = EC92AB392BF1B15000A1C75F /* GoogleMapsPrivacy.bundle */; };
 		EC92AB3C2BF1B29600A1C75F /* GooglePlacesPrivacy.bundle in Resources */ = {isa = PBXBuildFile; fileRef = EC92AB3B2BF1B29500A1C75F /* GooglePlacesPrivacy.bundle */; };
 /* End PBXBuildFile section */
@@ -92,6 +93,7 @@
 		EC4A8F652EA1D44F00C13BBF /* FeedbackButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackButton.swift; sourceTree = "<group>"; };
 		EC4A8F672EA1D49000C13BBF /* HomeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeButton.swift; sourceTree = "<group>"; };
 		EC4A8F692EA1D5D000C13BBF /* RandomCityButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomCityButton.swift; sourceTree = "<group>"; };
+		EC4A8F6B2EA1D6C800C13BBF /* PriceLevelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceLevelView.swift; sourceTree = "<group>"; };
 		EC92AB392BF1B15000A1C75F /* GoogleMapsPrivacy.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = GoogleMapsPrivacy.bundle; sourceTree = "<group>"; };
 		EC92AB3B2BF1B29500A1C75F /* GooglePlacesPrivacy.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = GooglePlacesPrivacy.bundle; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -138,6 +140,7 @@
 				EC4A8F672EA1D49000C13BBF /* HomeButton.swift */,
 				EC4A8F592EA000A700C13BBF /* MapCardView.swift */,
 				EC4A8F572E9F3C4500C13BBF /* PlaceCardView.swift */,
+				EC4A8F6B2EA1D6C800C13BBF /* PriceLevelView.swift */,
 				EC4A8F5B2EA0404300C13BBF /* PlacesCarouselView.swift */,
 				94090909205F4613002A65EF /* MapViewController.swift */,
 				EC4A8F632EA1998700C13BBF /* MapViewControllerRepresentable.swift */,
@@ -316,6 +319,7 @@
 				947EC6522043F28F004A911D /* Extensions.swift in Sources */,
 				EC4A8F622EA1995000C13BBF /* IdentifiablePlace.swift in Sources */,
 				EC4A8F6A2EA1D5D000C13BBF /* RandomCityButton.swift in Sources */,
+				EC4A8F6C2EA1D6C800C13BBF /* PriceLevelView.swift in Sources */,
 				EC253B272B55A8F800D52EB9 /* CarouselCollectionView.swift in Sources */,
 				EC4A8F5C2EA0404300C13BBF /* PlacesCarouselView.swift in Sources */,
 				947EC658204673BF004A911D /* ShadowView.swift in Sources */,
