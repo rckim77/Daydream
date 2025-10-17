@@ -24,10 +24,27 @@ struct CityDetailView: View {
     @State private var showingMapDetailViewController = false
     @State private var tappedCardPlace: IdentifiablePlace?
     
+    /// Appends country flag to city name if available
+    private var cityText: String {
+        var text = place.displayName ?? ""
+        if let countryCodeComponent = place.addressComponents?.first(where: { $0.types.contains(.country) }),
+           let countryCode = countryCodeComponent.shortName {
+            let base = 127397
+            var usv = String.UnicodeScalarView()
+            for scalar in countryCode.uppercased().unicodeScalars {
+                if let offsetScalar = Unicode.Scalar(base + Int(scalar.value)) {
+                    usv.append(offsetScalar)
+                }
+            }
+            text += " " + String(usv)
+        }
+        return text
+    }
+    
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(alignment: .leading, spacing: 4) {
-                Text(place.displayName ?? "")
+                Text(cityText)
                     .font(.largeTitle)
                     .padding(.top, 24)
                     .padding(.horizontal, 24)

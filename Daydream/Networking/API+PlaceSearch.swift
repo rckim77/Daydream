@@ -92,7 +92,7 @@ extension API {
             }
             let request = SearchByTextRequest(
                 textQuery: name,
-                placeProperties: [.displayName, .formattedAddress, .coordinate, .photos, .placeID],
+                placeProperties: [.displayName, .formattedAddress, .coordinate, .photos, .placeID, .addressComponents],
                 locationBias: neutralBias
             )
             
