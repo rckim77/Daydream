@@ -17,6 +17,11 @@ struct PlaceCardView: View {
     
     @State private var image: UIImage?
     
+    private var shouldShowPriceLevel: Bool {
+        guard let place = place else { return false }
+        return place.priceLevel != .free && place.priceLevel != .unspecified
+    }
+
     private let width: CGFloat = 130
     private let height: CGFloat = 220
 
@@ -27,19 +32,26 @@ struct PlaceCardView: View {
                     .resizable()
                     .scaledToFill()
                     .frame(width: width, height: height) // this prevents weird UI layout issues
-                Text(place.displayName ?? "?")
-                    .frame(maxWidth: .infinity)
-                    .font(.subheadline).bold()
-                    .lineLimit(3)
-                    .padding(.horizontal, 6)
-                    .padding(.vertical, 12)
-                    .background(
-                        LinearGradient(colors: [Color.clear,
-                                                Color(.systemBackground).opacity(0.5),
-                                                Color(.systemBackground).opacity(0.7)],
-                                       startPoint: .top,
-                                       endPoint: .bottom)
-                    )
+                VStack(alignment: .leading) {
+                    if shouldShowPriceLevel {
+                        PriceLevelView(priceLevel: place.priceLevel)
+                            .padding(6)
+                        Spacer()
+                    }
+                    Text(place.displayName ?? "?")
+                        .frame(maxWidth: .infinity)
+                        .font(.subheadline).bold()
+                        .lineLimit(3)
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 12)
+                        .background(
+                            LinearGradient(colors: [Color.clear,
+                                                    Color(.systemBackground).opacity(0.5),
+                                                    Color(.systemBackground).opacity(0.7)],
+                                           startPoint: .top,
+                                           endPoint: .bottom)
+                        )
+                }
             }
         }
         .frame(width: width, height: height)
@@ -58,5 +70,33 @@ struct PlaceCardView: View {
             let fetchedImage = await API.PlaceSearch.fetchImageBy(photo: photo)
             image = fetchedImage
         }
+    }
+}
+
+struct PriceLevelView: View {
+    
+    let priceLevel: PriceLevel
+    
+    var body: some View {
+        HStack(spacing: 2) {
+            if priceLevel == .inexpensive {
+                Image(systemName: "dollarsign").bold()
+            } else if priceLevel == .moderate {
+                Image(systemName: "dollarsign").bold()
+                Image(systemName: "dollarsign").bold()
+            } else if priceLevel == .expensive {
+                Image(systemName: "dollarsign").bold()
+                Image(systemName: "dollarsign").bold()
+                Image(systemName: "dollarsign").bold()
+            } else if priceLevel == .veryExpensive {
+                Image(systemName: "dollarsign").bold()
+                Image(systemName: "dollarsign").bold()
+                Image(systemName: "dollarsign").bold()
+                Image(systemName: "dollarsign").bold()
+            }
+        }
+        .padding(6)
+        .background(.ultraThinMaterial)
+        .clipShape(Capsule())
     }
 }

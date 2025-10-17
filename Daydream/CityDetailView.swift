@@ -25,7 +25,7 @@ struct CityDetailView: View {
     @State private var tappedCardPlace: IdentifiablePlace?
     
     var body: some View {
-        ScrollView {
+        ScrollView(showsIndicators: false) {
             VStack(alignment: .leading, spacing: 4) {
                 Text(place.displayName ?? "")
                     .font(.largeTitle)
@@ -124,17 +124,14 @@ struct CityDetailView: View {
     private func fetchSightsAndEateries(_ city: Place) async -> Void {
         guard let city = place.displayName else { return }
         do {
-            async let fetchSights = API.PlaceSearch.fetchPlacesFor(city: city)
-            async let fetchEateries = API.PlaceSearch.fetchEateriesFor(city: city)
-            
-            sights = try await fetchSights
-            eateries = try await fetchEateries
+            sights = try await API.PlaceSearch.fetchPlacesFor(city: city)
+            eateries = try await API.PlaceSearch.fetchEateriesFor(city: city)
         } catch {
             return
         }
     }
     
     private func createMapPosition(_ location: CLLocationCoordinate2D) -> MapCameraPosition {
-        .region(MKCoordinateRegion(center: place.location, span: .init(latitudeDelta: 0.3, longitudeDelta: 0.3)))
+        .region(MKCoordinateRegion(center: place.location, span: .init(latitudeDelta: 0.25, longitudeDelta: 0.25)))
     }
 }

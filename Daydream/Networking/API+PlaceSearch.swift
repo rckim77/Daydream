@@ -28,9 +28,9 @@ extension API {
             let data = try Data(contentsOf: url, options: .mappedIfSafe)
             let randomCities = try JSONCustomDecoder().decode([RandomCity].self, from: data)
             let randomIndex = Int(arc4random_uniform(UInt32(randomCities.count)))
-            let city = randomCities[randomIndex].city
+            let fullCityName = "\(randomCities[randomIndex].city), \(randomCities[randomIndex].country)"
             
-            guard let place = await API.PlaceSearch.fetchPlaceBy(name: city) else {
+            guard let place = await API.PlaceSearch.fetchCityBy(name: fullCityName) else {
                 throw APIError.noResults
             }
             
@@ -43,7 +43,7 @@ extension API {
         }
         
         static func fetchPlaceAndImageBy(name: String) async throws -> (Place, UIImage) {
-            guard let place = await API.PlaceSearch.fetchPlaceBy(name: name) else {
+            guard let place = await API.PlaceSearch.fetchCityBy(name: name) else {
                 throw APIError.noResults
             }
             
@@ -82,7 +82,7 @@ extension API {
             }
         }
         
-        static func fetchPlaceBy(name: String) async -> Place? {
+        static func fetchCityBy(name: String) async -> Place? {
             // this is unfortunately a required param even though we don't need one...
             guard let neutralBias = RectangularCoordinateRegion(
                 northEast: CLLocationCoordinate2D(latitude: 85, longitude: 180),
@@ -131,7 +131,7 @@ extension API {
             }
         }
         
-        /// Returns at most 8 results.
+        /// Returns at most 7 results.
         static func fetchPlacesFor(city: String) async throws -> [Place] {
             // this is unfortunately a required param even though we don't need one...
             guard let neutralBias = RectangularCoordinateRegion(
@@ -141,17 +141,20 @@ extension API {
                 throw APIError.biasError
             }
             let query = "top sights in \(city)"
-            let request = SearchByTextRequest(textQuery: query, placeProperties: [.photos, .displayName, .placeID, .coordinate], locationBias: neutralBias)
+            let request = SearchByTextRequest(textQuery: query,
+                                              placeProperties: [.photos, .displayName, .placeID, .coordinate],
+                                              locationBias: neutralBias,
+                                              maxResultCount: 7)
             switch await PlacesClient.shared.searchByText(with: request) {
             case .success(let places):
-                return places.prefix(8).map { $0 }
+                return places
             case .failure(let error):
                 print(error.localizedDescription)
                 throw error
             }
         }
         
-        /// Returns at most 8 results.
+        /// Returns at most 7 results.
         static func fetchEateriesFor(city: String) async throws -> [Place] {
             // this is unfortunately a required param even though we don't need one...
             guard let neutralBias = RectangularCoordinateRegion(
@@ -161,10 +164,13 @@ extension API {
                 throw APIError.biasError
             }
             let query = "top restaurants in \(city)"
-            let request = SearchByTextRequest(textQuery: query, placeProperties: [.photos, .displayName, .placeID, .coordinate], locationBias: neutralBias)
+            let request = SearchByTextRequest(textQuery: query,
+                                              placeProperties: [.photos, .displayName, .placeID, .coordinate, .priceLevel],
+                                              locationBias: neutralBias,
+                                              maxResultCount: 7)
             switch await PlacesClient.shared.searchByText(with: request) {
             case .success(let places):
-                return places.prefix(8).map { $0 }
+                return places
             case .failure(let error):
                 print(error.localizedDescription)
                 throw error
