@@ -73,42 +73,22 @@ struct CityDetailView: View {
                 } onError: { error in
                     print(error.localizedDescription)
                 }
-                Button {
-                    showLoadingSpinnerForRandomCityButton = true
-                    Task {
-                        do {
-                            let result = try await API.PlaceSearch.fetchRandomCity()
-                            // now update all observed data (which will update UI automatically)
-                            showLoadingSpinnerForRandomCityButton = false
-                            place = result.0
-                            if let resultImage = result.1 {
-                                image = resultImage
-                            }
-                            mapPosition = createMapPosition(place.location)
-                            await fetchSightsAndEateries(place)
-                        } catch {
-                            showLoadingSpinnerForRandomCityButton = false
-                        }
+                RandomCityButton { fetchedPlace, fetchedImage in
+                    // now update all observed data (which will update UI automatically)
+                    place = fetchedPlace
+                    if let resultImage = fetchedImage {
+                        image = resultImage
                     }
-                } label: {
-                    if showLoadingSpinnerForRandomCityButton {
-                        ProgressView()
-                            .padding(12)
-                    } else {
-                        Image(systemName: "shuffle")
-                            .padding(12)
+                    mapPosition = createMapPosition(place.location)
+                    Task {
+                        await fetchSightsAndEateries(place)
                     }
                 }
-                .modifier(SearchActionStyle(shape: .capsule))
                 Spacer()
                     .frame(width: 2) // this helps the button spacing match SearchActionsView
-                Button {
+                HomeButton {
                     dismiss()
-                } label: {
-                    Image(systemName: "house.fill")
-                        .padding(12)
                 }
-                .modifier(SearchActionStyle(shape: .circle))
             }
             .frame(maxWidth: .infinity)
         }

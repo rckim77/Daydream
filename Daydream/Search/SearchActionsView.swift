@@ -55,36 +55,12 @@ struct SearchActionsView: View {
             } onError: { error in
                 print(error.localizedDescription)
             }
-            
-            Button {
-                showLoadingSpinnerForRandomCityButton = true
-                Task {
-                    do {
-                        let result = try await API.PlaceSearch.fetchRandomCity()
-                        showLoadingSpinnerForRandomCityButton = false
-                        randomCityReceived(result.0, result.1)
-                    } catch {
-                        showLoadingSpinnerForRandomCityButton = false
-                    }
-                }
-            } label: {
-                if showLoadingSpinnerForRandomCityButton {
-                    ProgressView()
-                        .padding(12)
-                } else {
-                    Image(systemName: "shuffle")
-                        .padding(12)
-                }
+            RandomCityButton { place, image in
+                randomCityReceived(place, image)
             }
-            .modifier(SearchActionStyle(shape: .capsule))
-
-            Button {
+            FeedbackButton {
                 feedbackButtonTapped()
-            } label: {
-                Image(systemName: "questionmark")
-                    .padding(12)
             }
-            .modifier(SearchActionStyle(shape: .circle))
         }
     }
 }
