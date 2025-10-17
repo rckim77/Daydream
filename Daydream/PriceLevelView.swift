@@ -14,6 +14,18 @@ struct PriceLevelView: View {
     let priceLevel: PriceLevel
     
     var body: some View {
+        if #available(iOS 26, *) {
+            dollarView
+                .glassEffect()
+                .clipShape(Capsule())
+        } else {
+            dollarView
+                .background(.ultraThinMaterial)
+                .clipShape(Capsule())
+        }
+    }
+    
+    private var dollarView: some View {
         HStack(spacing: 2) {
             if priceLevel == .inexpensive {
                 Image(systemName: "dollarsign").bold()
@@ -32,7 +44,5 @@ struct PriceLevelView: View {
             }
         }
         .padding(6)
-        .background(.ultraThinMaterial)
-        .clipShape(Capsule())
     }
 }
