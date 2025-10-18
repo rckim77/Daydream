@@ -10,13 +10,6 @@ import GoogleMaps
 
 extension GMSMapView {
     func configureMapStyle(isDark: Bool) {
-        if isDark {
-            guard let styleURL = Bundle.main.url(forResource: "style", withExtension: "json") else {
-                return
-            }
-            mapStyle = try? GMSMapStyle(contentsOfFileURL: styleURL)
-        } else {
-            mapStyle = nil
-        }
+        self.overrideUserInterfaceStyle = isDark ? .dark : .light
     }
 }

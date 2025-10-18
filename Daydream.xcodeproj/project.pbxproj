@@ -42,7 +42,6 @@
 		EC4A8F582E9F3C4500C13BBF /* PlaceCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4A8F572E9F3C4500C13BBF /* PlaceCardView.swift */; };
 		EC4A8F5A2EA000A700C13BBF /* MapCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4A8F592EA000A700C13BBF /* MapCardView.swift */; };
 		EC4A8F5C2EA0404300C13BBF /* PlacesCarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4A8F5B2EA0404300C13BBF /* PlacesCarouselView.swift */; };
-		EC4A8F5E2EA04E0700C13BBF /* style.json in Resources */ = {isa = PBXBuildFile; fileRef = EC4A8F5D2EA04E0700C13BBF /* style.json */; };
 		EC4A8F622EA1995000C13BBF /* IdentifiablePlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4A8F612EA1995000C13BBF /* IdentifiablePlace.swift */; };
 		EC4A8F642EA1998700C13BBF /* MapViewControllerRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4A8F632EA1998700C13BBF /* MapViewControllerRepresentable.swift */; };
 		EC4A8F662EA1D44F00C13BBF /* FeedbackButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4A8F652EA1D44F00C13BBF /* FeedbackButton.swift */; };
@@ -88,7 +87,6 @@
 		EC4A8F572E9F3C4500C13BBF /* PlaceCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceCardView.swift; sourceTree = "<group>"; };
 		EC4A8F592EA000A700C13BBF /* MapCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCardView.swift; sourceTree = "<group>"; };
 		EC4A8F5B2EA0404300C13BBF /* PlacesCarouselView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacesCarouselView.swift; sourceTree = "<group>"; };
-		EC4A8F5D2EA04E0700C13BBF /* style.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = style.json; sourceTree = "<group>"; };
 		EC4A8F612EA1995000C13BBF /* IdentifiablePlace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifiablePlace.swift; sourceTree = "<group>"; };
 		EC4A8F632EA1998700C13BBF /* MapViewControllerRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewControllerRepresentable.swift; sourceTree = "<group>"; };
 		EC4A8F652EA1D44F00C13BBF /* FeedbackButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackButton.swift; sourceTree = "<group>"; };
@@ -194,7 +192,6 @@
 				947EC657204673BF004A911D /* ShadowView.swift */,
 				94E1086C24836F660091D043 /* GradientView.swift */,
 				94E3D9572097EEC800384680 /* ExpiringCache.swift */,
-				EC4A8F5D2EA04E0700C13BBF /* style.json */,
 				EC4A8F6D2EA428EB00C13BBF /* SearchActionStyle.swift */,
 			);
 			path = Shared;
@@ -286,7 +283,6 @@
 				94380AD2203BAE1D00684863 /* LaunchScreen.storyboard in Resources */,
 				EC92AB3A2BF1B15000A1C75F /* GoogleMapsPrivacy.bundle in Resources */,
 				9490BA02206AF6F700B880E7 /* randomCitiesJSON.json in Resources */,
-				EC4A8F5E2EA04E0700C13BBF /* style.json in Resources */,
 				94E392AD2070B4300073E8C9 /* GoogleService-Info.plist in Resources */,
 				EC92AB3C2BF1B29600A1C75F /* GooglePlacesPrivacy.bundle in Resources */,
 				EC2098A92E9D44930023CC1A /* apiKeys.plist in Resources */,

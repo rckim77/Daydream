@@ -169,7 +169,6 @@ final class MapViewController: UIViewController {
 
     private func addProgrammaticViews() {
         view.addSubview(containerView)
-        print("adding views")
 
         // Map header includes a gradient so that buttons are easier to see and creates a pannable section above
         // the map view so users can dismiss.
@@ -256,7 +255,6 @@ final class MapViewController: UIViewController {
     }
 
     private func addOrUpdateMarkerAndReviews(for placeId: String, name: String, location: CLLocationCoordinate2D, in mapView: GMSMapView) {
-        print("adding or updating marker")
         if let marker = dynamicMarker {
             marker.map = nil // clears prev marker
             marker.title = name
@@ -289,7 +287,6 @@ final class MapViewController: UIViewController {
             dynamicMarker.tracksInfoWindowChanges = false
             place = result
             await MainActor.run {
-                print("displaying reviews")
                 displayReviews(result.reviews, index: 0)
             }
         }
