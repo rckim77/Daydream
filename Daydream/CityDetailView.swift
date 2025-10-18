@@ -71,8 +71,6 @@ struct CityDetailView: View {
                     showAutocompleteWidget.toggle()
                 } label: {
                     Label("Search", systemImage: "magnifyingglass")
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 12)
                 }
                 .modifier(SearchActionStyle(shape: .capsule))
                 .placeAutocomplete(filter: AutocompleteFilter(types: [.cities]), show: $showAutocompleteWidget) { suggestion, _ in

@@ -17,7 +17,6 @@ struct HomeButton: View {
             buttonTapped()
         } label: {
             Image(systemName: "house.fill")
-                .padding(12)
         }
         .modifier(SearchActionStyle(shape: .circle))
     }

@@ -30,10 +30,9 @@ struct RandomCityButton: View {
         } label: {
             if showLoadingSpinner {
                 ProgressView()
-                    .padding(12)
+                    .controlSize(.regular)
             } else {
                 Image(systemName: "shuffle")
-                    .padding(12)
             }
         }
         .modifier(SearchActionStyle(shape: .capsule))

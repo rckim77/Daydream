@@ -27,6 +27,7 @@ struct SearchActionStyle: ViewModifier {
                 .buttonStyle(.bordered)
                 .tint(.white)
                 .buttonBorderShape(shape)
+                .controlSize(.extraLarge)
         }
     }
 }

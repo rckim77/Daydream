@@ -17,7 +17,6 @@ struct FeedbackButton: View {
             buttonTapped()
         } label: {
             Image(systemName: "questionmark")
-                .padding(12)
         }
         .modifier(SearchActionStyle(shape: .circle))
     }

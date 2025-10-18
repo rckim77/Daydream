@@ -24,8 +24,7 @@ struct SearchActionsView: View {
                 showAutocompleteWidget.toggle()
             } label: {
                 Label("Search", systemImage: "magnifyingglass")
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 12)
+                    .foregroundStyle(.primary)
             }
             .modifier(SearchActionStyle(shape: .capsule))
             .placeAutocomplete(filter: AutocompleteFilter(types: [.cities]), show: $showAutocompleteWidget) { suggestion, _ in
