@@ -55,7 +55,7 @@ struct PlaceCardView: View {
             }
         }
         .frame(width: width, height: height)
-        .background(Color(.systemGray))
+        .background(Color(.lightGray))
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .onTapGesture {
             if let place = place {

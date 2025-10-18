@@ -14,10 +14,13 @@ final class CuratedCityCollectionViewCell: UICollectionViewCell {
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        let textStyle: UIFont.TextStyle = UIDevice.current.userInterfaceIdiom == .pad ? .title2 : .body
-        label.font = .preferredFont(forTextStyle: textStyle)
-        label.textColor = .white
+        let textStyle: UIFont.TextStyle = UIDevice.current.userInterfaceIdiom == .pad ? .title2 : .headline
+        if let descriptor = UIFont.preferredFont(forTextStyle: textStyle).fontDescriptor.withSymbolicTraits(.traitBold) {
+            label.font = UIFont(descriptor: descriptor, size: 0)
+        }
+        label.textColor = .label
         label.numberOfLines = 0
+        label.textAlignment = .center
         return label
     }()
     
@@ -32,9 +35,7 @@ final class CuratedCityCollectionViewCell: UICollectionViewCell {
     static let reuseIdentifier = "curatedCitiesCollectionViewCell"
 
     private var imageSet = false
-    private var titleLabelPadding: CGFloat {
-        UIDevice.current.userInterfaceIdiom == .pad ? 12 : 8
-    }
+    private let titleLabelPadding: CGFloat = 12
 
     var place: Place?
     var placeImage: UIImage?
@@ -54,7 +55,7 @@ final class CuratedCityCollectionViewCell: UICollectionViewCell {
         
         gradientView.snp.makeConstraints { make in
             make.leading.bottom.trailing.equalToSuperview()
-            make.height.equalTo(36)
+            make.height.equalTo(48)
         }
         
         titleLabel.snp.makeConstraints { make in
@@ -84,7 +85,9 @@ final class CuratedCityCollectionViewCell: UICollectionViewCell {
                     fadeInImage(result.1, forImageView: imageView)
                     gradientView.updateFrame()
                 }
-            } catch {}
+            } catch {
+                imageSet = false
+            }
         }
     }
 }
