@@ -67,25 +67,4 @@ struct SearchActionsView: View {
 
 extension SearchActionsView: RandomCitySelectable {}
 
-struct SearchActionStyle: ViewModifier {
-    
-    let shape: ButtonBorderShape
-    
-    func body(content: Content) -> some View {
-        if #available(iOS 26, *) {
-            if shape == .circle {
-                content
-                    .buttonStyle(.glass)
-                    .clipShape(Circle())
-            } else {
-                content
-                    .buttonStyle(.glass)
-            }
-        } else {
-            content
-                .buttonStyle(.bordered)
-                .tint(.white)
-                .buttonBorderShape(shape)
-        }
-    }
-}
+
