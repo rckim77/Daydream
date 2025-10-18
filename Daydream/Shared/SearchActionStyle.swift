@@ -14,20 +14,29 @@ struct SearchActionStyle: ViewModifier {
     
     func body(content: Content) -> some View {
         if #available(iOS 26, *) {
-            if shape == .circle {
-                content
-                    .buttonStyle(.glass)
-                    .clipShape(Circle())
-            } else {
-                content
-                    .buttonStyle(.glass)
-            }
-        } else {
             content
-                .buttonStyle(.bordered)
-                .tint(.white)
-                .buttonBorderShape(shape)
+                .buttonStyle(.glass)
                 .controlSize(.extraLarge)
+                .buttonBorderShape(shape)
+        } else {
+            let base = content
+                .buttonStyle(.bordered)
+                .foregroundStyle(.primary)
+                .controlSize(.extraLarge)
+                .buttonBorderShape(shape)
+            if shape == .circle {
+                base
+                    .background(
+                        Circle()
+                            .fill(.ultraThinMaterial)
+                    )
+            } else {
+                base
+                    .background(
+                        Capsule()
+                            .fill(.ultraThinMaterial)
+                    )
+            }
         }
     }
 }
