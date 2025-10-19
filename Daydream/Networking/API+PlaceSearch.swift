@@ -62,7 +62,7 @@ extension API {
         static func fetchPlaceAndImageBy(placeId: String) async throws -> (Place, UIImage) {
             let fetchPlaceRequest = FetchPlaceRequest(
                 placeID: placeId,
-                placeProperties: [.placeID, .coordinate, .photos, .displayName]
+                placeProperties: [.placeID, .coordinate, .photos, .displayName, .reviewSummary]
             )
             
             switch await PlacesClient.shared.fetchPlace(with: fetchPlaceRequest) {
@@ -108,7 +108,7 @@ extension API {
         static func fetchPlaceWithReviewsBy(placeId: String) async -> Place? {
             let fetchPlaceRequest = FetchPlaceRequest(
                 placeID: placeId,
-                placeProperties: [.placeID, .coordinate, .reviews, .formattedAddress]
+                placeProperties: [.placeID, .coordinate, .reviews, .reviewSummary, .formattedAddress]
             )
             
             switch await PlacesClient.shared.fetchPlace(with: fetchPlaceRequest) {
@@ -142,7 +142,7 @@ extension API {
             }
             let query = "top sights in \(city)"
             let request = SearchByTextRequest(textQuery: query,
-                                              placeProperties: [.photos, .displayName, .placeID, .coordinate],
+                                              placeProperties: [.photos, .displayName, .placeID, .coordinate, .reviewSummary],
                                               locationBias: neutralBias,
                                               maxResultCount: 7)
             switch await PlacesClient.shared.searchByText(with: request) {
@@ -165,7 +165,7 @@ extension API {
             }
             let query = "top restaurants in \(city)"
             let request = SearchByTextRequest(textQuery: query,
-                                              placeProperties: [.photos, .displayName, .placeID, .coordinate, .priceLevel],
+                                              placeProperties: [.photos, .displayName, .placeID, .coordinate, .priceLevel, .reviewSummary],
                                               locationBias: neutralBias,
                                               maxResultCount: 7)
             switch await PlacesClient.shared.searchByText(with: request) {

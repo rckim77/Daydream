@@ -189,7 +189,7 @@ final class MapViewController: UIViewController {
         closeButton.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(16 + iPadOffset)
             if #available(iOS 26, *) {
-                make.leading.equalToSuperview().inset(12)
+                make.leading.equalToSuperview().inset(16)
             } else {
                 make.leading.equalToSuperview().inset(8)
             }
@@ -201,14 +201,14 @@ final class MapViewController: UIViewController {
 
         aboutButton.snp.makeConstraints { make in
             if #available(iOS 26, *) {
-                make.leading.equalTo(darkModeButton.snp.trailing).offset(6)
+                make.leading.equalTo(darkModeButton.snp.trailing).offset(12)
             } else {
                 make.leading.equalTo(darkModeButton.snp.trailing)
             }
             make.top.equalToSuperview().inset(16 + iPadOffset)
 
             if #available(iOS 26, *) {
-                make.trailing.equalToSuperview().inset(12)
+                make.trailing.equalToSuperview().inset(16)
             } else {
                 make.trailing.equalToSuperview().inset(8)
             }
@@ -220,8 +220,12 @@ final class MapViewController: UIViewController {
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(12 + iPadOffset)
             make.height.equalTo(MapReviewCard.height)
         }
-
-        reviewCard.isHidden = true
+        
+        if let summary = place.reviewSummary {
+            reviewCard.configureWithSummary(summary)
+        } else {
+            reviewCard.isHidden = true
+        }
     }
 
     private func addOrUpdateMapView(for placeId: String?, name: String?, location: CLLocationCoordinate2D?) {
@@ -287,7 +291,11 @@ final class MapViewController: UIViewController {
             dynamicMarker.tracksInfoWindowChanges = false
             place = result
             await MainActor.run {
-                displayReviews(result.reviews, index: 0)
+                if let summary = result.reviewSummary {
+                    reviewCard.configureWithSummary(summary)
+                } else {
+                    displayReviews(result.reviews, index: 0)
+                }
             }
         }
     }

@@ -31,6 +31,7 @@ struct RandomCityButton: View {
             if showLoadingSpinner {
                 ProgressView()
                     .controlSize(.regular)
+                    .tint(.primary)
             } else {
                 Image(systemName: "shuffle")
             }
