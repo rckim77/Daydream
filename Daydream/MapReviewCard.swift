@@ -160,7 +160,6 @@ final class MapReviewCard: UIView {
         starsView.isHidden = true
         
         attributionLabel.text = summary.disclosureText
-        print(summary.disclosureText ?? "no disclosure text")
         containerView.addSubview(attributionLabel)
         
         reviewLabel.snp.remakeConstraints { make in

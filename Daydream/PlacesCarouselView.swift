@@ -16,7 +16,7 @@ struct PlacesCarouselView: View {
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 16) {
+            LazyHStack(spacing: 16) {
                 if places.isEmpty {
                     if isIpad {
                         ForEach(0..<10) {_ in
