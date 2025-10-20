@@ -163,13 +163,14 @@ final class MapReviewCard: UIView {
         containerView.addSubview(attributionLabel)
         
         reviewLabel.snp.remakeConstraints { make in
-            make.top.equalToSuperview().offset(4)
+            make.top.equalToSuperview().offset(6)
             make.leading.trailing.equalToSuperview().inset(16)
         }
         
         attributionLabel.snp.makeConstraints { make in
             make.top.equalTo(reviewLabel.snp.bottom).offset(4)
-            make.leading.bottom.trailing.equalToSuperview().inset(16)
+            make.leading.trailing.equalToSuperview().inset(16)
+            make.bottom.equalToSuperview().inset(8)
         }
     }
 

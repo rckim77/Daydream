@@ -69,8 +69,17 @@ struct PlaceCardView: View {
             guard let photo = place?.photos?.first else {
                 return
             }
-            let fetchedImage = await API.PlaceSearch.fetchImageBy(photo: photo)
-            image = fetchedImage
+
+            let hashKey = String(photo.hashValue)
+            
+            guard ImageCache.shared.get(forKey: hashKey) == nil else {
+                return
+            }
+
+            if let fetchedImage = await API.PlaceSearch.fetchImageBy(photo: photo) {
+                ImageCache.shared.set(fetchedImage, forKey: hashKey)
+                image = fetchedImage
+            }
         }
     }
 }
