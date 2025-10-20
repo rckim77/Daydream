@@ -9,7 +9,6 @@
 import UIKit
 import GooglePlacesSwift
 import SnapKit
-import Combine
 import SwiftUI
 
 final class SearchViewController: UIViewController {
@@ -58,10 +57,6 @@ final class SearchViewController: UIViewController {
         collectionView.dataSource = curatedCitiesDataSource
         return collectionView
     }()
-
-    // MARK: - Cancellables
-
-    private var curatedCitiesCancellable: AnyCancellable?
     
     // MARK: Init
     

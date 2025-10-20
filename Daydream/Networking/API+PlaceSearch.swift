@@ -11,7 +11,7 @@ import CoreLocation
 import GooglePlacesSwift
 
 enum APIError: Error {
-    case biasError, bundleError, noResults
+    case biasError, bundleError, imageDataError, noResults
 }
 
 extension API {

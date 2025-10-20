@@ -10,7 +10,6 @@ import UIKit
 import GoogleMaps
 import GooglePlacesSwift
 import SnapKit
-import Combine
 
 // swiftlint:disable type_body_length
 final class MapViewController: UIViewController {

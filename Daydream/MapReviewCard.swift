@@ -8,7 +8,6 @@
 
 import UIKit
 import SnapKit
-import Combine
 import GooglePlacesSwift
 
 final class MapReviewCard: UIView {
@@ -43,6 +42,7 @@ final class MapReviewCard: UIView {
         label.font = .preferredFont(forTextStyle: .footnote)
         label.textColor = .black
         label.numberOfLines = 0
+        label.minimumScaleFactor = 0.8
         return label
     }()
 
@@ -87,8 +87,6 @@ final class MapReviewCard: UIView {
         label.textAlignment = .right
         return label
     }()
-
-    private var profileImageCancellable: AnyCancellable?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -147,9 +145,15 @@ final class MapReviewCard: UIView {
         guard let profileUrl = review.authorAttribution?.photoUrl else {
             return
         }
-
-        profileImageCancellable = API.Image.loadImage(url: profileUrl)
-            .assign(to: \.image, on: authorImageView)
+        
+        Task {
+            do {
+                let image = try await API.Image.loadImage(url: profileUrl)
+                await MainActor.run {
+                    authorImageView.image = image
+                }
+            } catch {}
+        }
     }
     
     func configureWithSummary(_ summary: ReviewSummary) {
@@ -163,8 +167,7 @@ final class MapReviewCard: UIView {
         containerView.addSubview(attributionLabel)
         
         reviewLabel.snp.remakeConstraints { make in
-            make.top.equalToSuperview().offset(6)
-            make.leading.trailing.equalToSuperview().inset(16)
+            make.leading.top.trailing.equalToSuperview().inset(16)
         }
         
         attributionLabel.snp.makeConstraints { make in
