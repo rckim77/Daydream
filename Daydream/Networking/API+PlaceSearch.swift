@@ -130,9 +130,8 @@ extension API {
                 return nil
             }
         }
-        
-        /// Returns at most 7 results.
-        static func fetchPlacesFor(city: String) async throws -> [Place] {
+
+        static func fetchPlacesFor(city: String, maxResultCount: Int) async throws -> [Place] {
             // this is unfortunately a required param even though we don't need one...
             guard let neutralBias = RectangularCoordinateRegion(
                 northEast: CLLocationCoordinate2D(latitude: 85, longitude: 180),
@@ -144,7 +143,7 @@ extension API {
             let request = SearchByTextRequest(textQuery: query,
                                               placeProperties: [.photos, .displayName, .placeID, .coordinate, .reviewSummary],
                                               locationBias: neutralBias,
-                                              maxResultCount: 7)
+                                              maxResultCount: maxResultCount)
             switch await PlacesClient.shared.searchByText(with: request) {
             case .success(let places):
                 return places
@@ -153,9 +152,8 @@ extension API {
                 throw error
             }
         }
-        
-        /// Returns at most 7 results.
-        static func fetchEateriesFor(city: String) async throws -> [Place] {
+
+        static func fetchEateriesFor(city: String, maxResultCount: Int) async throws -> [Place] {
             // this is unfortunately a required param even though we don't need one...
             guard let neutralBias = RectangularCoordinateRegion(
                 northEast: CLLocationCoordinate2D(latitude: 85, longitude: 180),
@@ -167,7 +165,7 @@ extension API {
             let request = SearchByTextRequest(textQuery: query,
                                               placeProperties: [.photos, .displayName, .placeID, .coordinate, .priceLevel, .reviewSummary],
                                               locationBias: neutralBias,
-                                              maxResultCount: 7)
+                                              maxResultCount: maxResultCount)
             switch await PlacesClient.shared.searchByText(with: request) {
             case .success(let places):
                 return places

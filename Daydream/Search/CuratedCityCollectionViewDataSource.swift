@@ -10,17 +10,17 @@ import UIKit
 
 final class CuratedCityCollectionViewDataSource: NSObject, UICollectionViewDataSource {
 
-    private var cityNames: [String] = []
+    private var cityNames: [(String, String)] = []
 
     init(cityCount: Int) {
         super.init()
-        var nameSet = Set<String>()
+        var nameSet: [(String, String)] = []
         while nameSet.count != cityCount {
-            if let city = getRandomCity(), !nameSet.contains(city) {
-                nameSet.insert(city)
+            if let city = getRandomCity(), !nameSet.contains(where: { $0.0 == city.0 }) {
+                nameSet.append(city)
             }
         }
-        cityNames = Array(nameSet)
+        cityNames = nameSet
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

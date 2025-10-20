@@ -14,7 +14,6 @@ final class CarouselCollectionView: UICollectionView {
     private let isIpad: Bool
     private let flowLayout = UICollectionViewFlowLayout()
     private let defaultHeight: CGFloat
-    private let defaultContentInsetBottom: CGFloat
 
     var height: CGFloat {
         contentInset.bottom + itemSize.height
@@ -22,22 +21,21 @@ final class CarouselCollectionView: UICollectionView {
     
     init(deviceSize: UIDevice.DeviceSize, isIpad: Bool) {
         self.isIpad = isIpad
-        let isSmallDevice = deviceSize == .iPhoneSE || deviceSize == .iPhone8
-        let width: CGFloat = isIpad ? 180 : 136
-        self.defaultHeight = isIpad ? 280 : isSmallDevice ? 130 : 240
+        let width: CGFloat = isIpad ? 200 : 136
+        self.defaultHeight = isIpad ? 300 : 240
         self.itemSize = CGSize(width: width, height: defaultHeight)
-        self.defaultContentInsetBottom = isSmallDevice ? 4 : 12
         
         flowLayout.itemSize = itemSize
         flowLayout.scrollDirection = .horizontal
-        flowLayout.minimumLineSpacing = isIpad ? 18 : 16
+        flowLayout.minimumLineSpacing = isIpad ? 20 : 16
         super.init(frame: .zero, collectionViewLayout: flowLayout)
 
         register(CuratedCityCollectionViewCell.self, forCellWithReuseIdentifier: CuratedCityCollectionViewCell.reuseIdentifier)
         
         backgroundColor = .clear
-        let contentInsetHorizontal: CGFloat = isIpad ? 18 : 16
-        contentInset = UIEdgeInsets(top: 0, left: contentInsetHorizontal, bottom: defaultContentInsetBottom, right: contentInsetHorizontal)
+        let bottomContentInset: CGFloat = deviceSize == .iPhoneSE || deviceSize == .iPhone8 ? 4 : 12
+        contentInset = UIEdgeInsets(top: 0, left: 16, bottom: bottomContentInset, right: 16)
+
         showsHorizontalScrollIndicator = false
     }
     

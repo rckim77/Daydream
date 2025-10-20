@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreLocation
+import SwiftUI
 
 extension UIView {
     func addRoundedCorners(radius: CGFloat) {
@@ -32,11 +33,6 @@ extension UIView {
 }
 
 extension UIViewController {
-
-    var deviceSize: UIDevice.DeviceSize {
-        // swiftlint:disable discouraged_direct_init
-        UIDevice().deviceSize
-    }
     
     var isSmallDevice: Bool {
         // swiftlint:disable discouraged_direct_init
@@ -100,4 +96,8 @@ extension UIButton.Configuration {
             baseForegroundColor = .white
         }
     }
+}
+
+extension View {
+    var isIpad: Bool { UIDevice.current.userInterfaceIdiom == .pad }
 }

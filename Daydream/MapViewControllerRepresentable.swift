@@ -16,7 +16,6 @@ struct MapViewControllerRepresentable: UIViewControllerRepresentable {
     let place: Place
 
     func makeUIViewController(context: Context) -> MapViewController {
-        print(place)
         let vc = MapViewController(place: place)
         return vc
     }

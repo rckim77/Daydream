@@ -67,8 +67,8 @@ final class CuratedCityCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(name: String) {
-        titleLabel.text = name
+    func configure(name: (String, String)) {
+        titleLabel.text = name.0
         
         // prevent image flickering and extra network calls
         guard !imageSet else {
@@ -77,7 +77,7 @@ final class CuratedCityCollectionViewCell: UICollectionViewCell {
         imageSet = true
         Task {
             do {
-                let result = try await API.PlaceSearch.fetchPlaceAndImageBy(name: name)
+                let result = try await API.PlaceSearch.fetchPlaceAndImageBy(name: "\(name.0), \(name.1)")
                 place = result.0
                 placeImage = result.1
                 

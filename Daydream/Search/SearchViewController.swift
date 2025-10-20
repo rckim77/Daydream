@@ -53,7 +53,7 @@ final class SearchViewController: UIViewController {
     }()
     
     private lazy var curatedCitiesCollectionView: CarouselCollectionView = {
-        let collectionView = CarouselCollectionView(deviceSize: deviceSize, isIpad: UIDevice.current.userInterfaceIdiom == .pad)
+        let collectionView = CarouselCollectionView(deviceSize: UIDevice().deviceSize, isIpad: UIDevice.current.userInterfaceIdiom == .pad)
         collectionView.delegate = self
         collectionView.dataSource = curatedCitiesDataSource
         return collectionView
@@ -140,12 +140,12 @@ final class SearchViewController: UIViewController {
 
         searchActionsHostVC.view.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(24)
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(isSmallDevice ? 12 : 2)
         }
         
         curatedCitiesCollectionView.snp.makeConstraints { make in
             make.height.equalTo(curatedCitiesCollectionView.height)
-            make.bottom.equalTo(searchActionsHostVC.view.snp.top).offset(-20)
+            make.bottom.equalTo(searchActionsHostVC.view.snp.top).offset(isSmallDevice ? -8 : -16)
             make.leading.trailing.equalToSuperview()
         }
     }

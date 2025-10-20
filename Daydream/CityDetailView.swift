@@ -106,6 +106,7 @@ struct CityDetailView: View {
                 }
             }
             .frame(maxWidth: .infinity)
+            .padding(.bottom, 8)
         }
         .task {
             mapPosition = createMapPosition(place.location)
@@ -119,8 +120,9 @@ struct CityDetailView: View {
     private func fetchSightsAndEateries(_ city: Place) async -> Void {
         guard let city = place.displayName else { return }
         do {
-            sights = try await API.PlaceSearch.fetchPlacesFor(city: city)
-            eateries = try await API.PlaceSearch.fetchEateriesFor(city: city)
+            let isIpad = UIDevice.current.userInterfaceIdiom == .pad
+            sights = try await API.PlaceSearch.fetchPlacesFor(city: city, maxResultCount: isIpad ? 12 : 7)
+            eateries = try await API.PlaceSearch.fetchEateriesFor(city: city, maxResultCount: isIpad ? 12 : 7)
         } catch {
             return
         }

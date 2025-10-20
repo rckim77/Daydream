@@ -240,10 +240,9 @@ final class MapViewController: UIViewController {
             dynamicMapView.animate(to: camera)
             addOrUpdateMarkerAndReviews(for: placeId, name: name, location: location, in: dynamicMapView)
         } else {
-            let frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
             let options = GMSMapViewOptions()
             options.camera = camera
-            options.frame = frame
+            options.frame = .zero
             let mapViewNew = GMSMapView(options: options)
             dynamicMapView = mapViewNew
 
@@ -253,6 +252,16 @@ final class MapViewController: UIViewController {
             dynamicMapView.delegate = self
             view.addSubview(dynamicMapView)
             view.sendSubviewToBack(dynamicMapView)
+            
+            // fixes issue where map wasn't centered on iPad (but doesn't work on iPhone due to safe area)
+            if UIDevice().userInterfaceIdiom == .pad {
+                dynamicMapView.snp.makeConstraints { make in
+                    make.edges.equalToSuperview()
+                }
+            } else {
+                dynamicMapView.frame = view.frame
+            }
+
             addOrUpdateMarkerAndReviews(for: placeId, name: name, location: location, in: dynamicMapView)
         }
         isViewingDarkMode = traitCollection.userInterfaceStyle == .dark
