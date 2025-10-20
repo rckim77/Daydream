@@ -118,17 +118,17 @@ struct CityDetailView: View {
     }
     
     private func fetchSightsAndEateries(_ city: Place) async -> Void {
-        guard let city = place.displayName else { return }
+        guard let cityName = city.displayName else { return }
         do {
             let isIpad = UIDevice.current.userInterfaceIdiom == .pad
-            sights = try await API.PlaceSearch.fetchPlacesFor(city: city, maxResultCount: isIpad ? 12 : 7)
-            eateries = try await API.PlaceSearch.fetchEateriesFor(city: city, maxResultCount: isIpad ? 12 : 7)
+            sights = try await API.PlaceSearch.fetchPlacesFor(city: cityName, maxResultCount: isIpad ? 12 : 7)
+            eateries = try await API.PlaceSearch.fetchEateriesFor(city: cityName, maxResultCount: isIpad ? 12 : 7)
         } catch {
             return
         }
     }
     
     private func createMapPosition(_ location: CLLocationCoordinate2D) -> MapCameraPosition {
-        .region(MKCoordinateRegion(center: place.location, span: .init(latitudeDelta: 0.25, longitudeDelta: 0.25)))
+        .region(MKCoordinateRegion(center: place.location, span: .init(latitudeDelta: 0.07, longitudeDelta: 0.07)))
     }
 }

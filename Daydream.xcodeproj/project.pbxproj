@@ -49,8 +49,6 @@
 		EC4A8F6A2EA1D5D000C13BBF /* RandomCityButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4A8F692EA1D5D000C13BBF /* RandomCityButton.swift */; };
 		EC4A8F6C2EA1D6C800C13BBF /* PriceLevelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4A8F6B2EA1D6C800C13BBF /* PriceLevelView.swift */; };
 		EC4A8F6E2EA428EB00C13BBF /* SearchActionStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4A8F6D2EA428EB00C13BBF /* SearchActionStyle.swift */; };
-		EC92AB3A2BF1B15000A1C75F /* GoogleMapsPrivacy.bundle in Resources */ = {isa = PBXBuildFile; fileRef = EC92AB392BF1B15000A1C75F /* GoogleMapsPrivacy.bundle */; };
-		EC92AB3C2BF1B29600A1C75F /* GooglePlacesPrivacy.bundle in Resources */ = {isa = PBXBuildFile; fileRef = EC92AB3B2BF1B29500A1C75F /* GooglePlacesPrivacy.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -94,8 +92,6 @@
 		EC4A8F692EA1D5D000C13BBF /* RandomCityButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomCityButton.swift; sourceTree = "<group>"; };
 		EC4A8F6B2EA1D6C800C13BBF /* PriceLevelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceLevelView.swift; sourceTree = "<group>"; };
 		EC4A8F6D2EA428EB00C13BBF /* SearchActionStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchActionStyle.swift; sourceTree = "<group>"; };
-		EC92AB392BF1B15000A1C75F /* GoogleMapsPrivacy.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = GoogleMapsPrivacy.bundle; sourceTree = "<group>"; };
-		EC92AB3B2BF1B29500A1C75F /* GooglePlacesPrivacy.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = GooglePlacesPrivacy.bundle; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,8 +112,6 @@
 		94380ABB203BAE1D00684863 = {
 			isa = PBXGroup;
 			children = (
-				EC92AB3B2BF1B29500A1C75F /* GooglePlacesPrivacy.bundle */,
-				EC92AB392BF1B15000A1C75F /* GoogleMapsPrivacy.bundle */,
 				94380AC6203BAE1D00684863 /* Daydream */,
 				94380AC5203BAE1D00684863 /* Products */,
 			);
@@ -281,10 +275,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				94380AD2203BAE1D00684863 /* LaunchScreen.storyboard in Resources */,
-				EC92AB3A2BF1B15000A1C75F /* GoogleMapsPrivacy.bundle in Resources */,
 				9490BA02206AF6F700B880E7 /* randomCitiesJSON.json in Resources */,
 				94E392AD2070B4300073E8C9 /* GoogleService-Info.plist in Resources */,
-				EC92AB3C2BF1B29600A1C75F /* GooglePlacesPrivacy.bundle in Resources */,
 				EC2098A92E9D44930023CC1A /* apiKeys.plist in Resources */,
 				94380ACF203BAE1D00684863 /* Assets.xcassets in Resources */,
 			);

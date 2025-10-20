@@ -135,7 +135,7 @@ final class SearchViewController: UIViewController {
 
         searchActionsHostVC.view.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(24)
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(isSmallDevice ? 12 : 2)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(8)
         }
         
         curatedCitiesCollectionView.snp.makeConstraints { make in

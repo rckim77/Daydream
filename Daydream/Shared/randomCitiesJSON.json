@@ -340,10 +340,6 @@
    "country": "Australia"
  },
  {
-   "city": "Washington DC",
-   "country": "USA"
- },
- {
    "city": "Riyadh",
    "country": "Saudi Arabia"
  },
@@ -370,5 +366,9 @@
  {
    "city": "Nanjing",
    "country": "China"
+ },
+ {
+   "city": "Kyoto",
+   "country": "Japan"
  }
 ]
