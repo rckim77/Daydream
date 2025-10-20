@@ -26,42 +26,44 @@ struct PlaceCardView: View {
     private let height: CGFloat = 220
 
     var body: some View {
-        ZStack(alignment: .bottom) {
-            if let place = place, let image = image {
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: width, height: height) // this prevents weird UI layout issues
-                VStack(alignment: .leading) {
-                    if shouldShowPriceLevel {
-                        PriceLevelView(priceLevel: place.priceLevel)
-                            .padding(6)
-                        Spacer()
-                    }
-                    Text(place.displayName ?? "?")
-                        .frame(maxWidth: .infinity)
-                        .font(.subheadline).bold()
-                        .lineLimit(3)
-                        .padding(.horizontal, 6)
-                        .padding(.vertical, 12)
-                        .background(
-                            LinearGradient(colors: [Color.clear,
-                                                    Color(.systemBackground).opacity(0.5),
-                                                    Color(.systemBackground).opacity(0.7)],
-                                           startPoint: .top,
-                                           endPoint: .bottom)
-                        )
-                }
-            }
-        }
-        .frame(width: width, height: height)
-        .background(Color(.lightGray))
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-        .onTapGesture {
+        Button {
             if let place = place {
                 let identifiablePlace = IdentifiablePlace(place: place)
                 tappedPlace = identifiablePlace
             }
+        } label: {
+            ZStack(alignment: .bottom) {
+                if let place = place, let image = image {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: width, height: height) // this prevents weird UI layout issues
+                    VStack(alignment: .leading) {
+                        if shouldShowPriceLevel {
+                            PriceLevelView(priceLevel: place.priceLevel)
+                                .padding(6)
+                            Spacer()
+                        }
+                        Text(place.displayName ?? "?")
+                            .frame(maxWidth: .infinity)
+                            .font(.subheadline).bold()
+                            .lineLimit(3)
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 12)
+                            .background(
+                                LinearGradient(colors: [Color.clear,
+                                                        Color(.systemBackground).opacity(0.5),
+                                                        Color(.systemBackground).opacity(0.7)],
+                                               startPoint: .top,
+                                               endPoint: .bottom)
+                            )
+                    }
+                }
+            }
+            .tint(.primary)
+            .frame(width: width, height: height)
+            .background(Color(.lightGray))
+            .clipShape(RoundedRectangle(cornerRadius: 16))
         }
         .task {
             guard let photo = place?.photos?.first else {
