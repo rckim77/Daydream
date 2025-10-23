@@ -8,16 +8,19 @@
 
 import UIKit
 import SnapKit
-import Combine
+import GooglePlacesSwift
 
 final class CuratedCityCollectionViewCell: UICollectionViewCell {
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        let textStyle: UIFont.TextStyle = UIDevice.current.userInterfaceIdiom == .pad ? .title2 : .body
-        label.font = .preferredFont(forTextStyle: textStyle)
-        label.textColor = .white
+        let textStyle: UIFont.TextStyle = UIDevice.current.userInterfaceIdiom == .pad ? .title2 : .headline
+        if let descriptor = UIFont.preferredFont(forTextStyle: textStyle).fontDescriptor.withSymbolicTraits(.traitBold) {
+            label.font = UIFont(descriptor: descriptor, size: 0)
+        }
+        label.textColor = .label
         label.numberOfLines = 0
+        label.textAlignment = .center
         return label
     }()
     
@@ -30,12 +33,9 @@ final class CuratedCityCollectionViewCell: UICollectionViewCell {
     private let gradientView = GradientView()
     
     static let reuseIdentifier = "curatedCitiesCollectionViewCell"
-    
-    private var cancellable: AnyCancellable?
+
     private var imageSet = false
-    private var titleLabelPadding: CGFloat {
-        UIDevice.current.userInterfaceIdiom == .pad ? 12 : 8
-    }
+    private let titleLabelPadding: CGFloat = 12
 
     var place: Place?
     var placeImage: UIImage?
@@ -55,7 +55,7 @@ final class CuratedCityCollectionViewCell: UICollectionViewCell {
         
         gradientView.snp.makeConstraints { make in
             make.leading.bottom.trailing.equalToSuperview()
-            make.height.equalTo(36)
+            make.height.equalTo(48)
         }
         
         titleLabel.snp.makeConstraints { make in
@@ -67,37 +67,28 @@ final class CuratedCityCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(name: String) {
-        titleLabel.text = name
+    func configure(name: (String, String)) {
+        titleLabel.text = name.0
         
-        // prevent cancellable being set unnecessarily
+        // prevent image flickering and extra network calls
         guard !imageSet else {
             return
         }
         imageSet = true
-        
-        cancellable = API.PlaceSearch.loadPlace(name: name, queryType: .placeByName)?
-            .tryMap { [weak self] place -> String in
-                guard let photoRef = place.photoRef else {
-                    throw NetworkError.noImage
+        Task {
+            do {
+                let result = try await API.PlaceSearch.fetchPlaceAndImageBy(name: "\(name.0), \(name.1)")
+                place = result.0
+                placeImage = result.1
+                
+                await MainActor.run {
+                    fadeInImage(result.1, forImageView: imageView)
+                    gradientView.updateFrame()
                 }
-                self?.place = place
-                return photoRef
+            } catch {
+                imageSet = false
             }
-            .compactMap { photoRef -> AnyPublisher<UIImage, Error>? in
-                let imageMaxHeight = Int(UIScreen.main.bounds.height) / 4
-                return API.PlaceSearch.loadGooglePhoto(photoRef: photoRef, maxHeight: imageMaxHeight)
-            }
-            .flatMap { $0 } // converts into correct publisher so sink works
-            .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] image in
-                guard let strongSelf = self else {
-                    return
-                }
-                strongSelf.gradientView.updateFrame()
-                strongSelf.placeImage = image
-                strongSelf.fadeInImage(image, forImageView: strongSelf.imageView)
-            })
-        
+        }
     }
 }
 

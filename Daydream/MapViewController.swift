@@ -8,9 +8,8 @@
 
 import UIKit
 import GoogleMaps
-import GooglePlaces
+import GooglePlacesSwift
 import SnapKit
-import Combine
 
 // swiftlint:disable type_body_length
 final class MapViewController: UIViewController {
@@ -18,22 +17,26 @@ final class MapViewController: UIViewController {
     private var place: Place
     private var dynamicMapView: GMSMapView?
     private var dynamicMarker: GMSMarker?
-    private var currentReviews: [Review]?
+    private var currentReviews: [GooglePlacesSwift.Review]?
     private var currentReviewIndex = 0
 
-    // Will automatically sync with system user interface style settings but can be overridden
-    // when the user taps the dark mode button. Note this must be called once dynamicMapView is set.
+    /// Will automatically sync with system user interface style settings but can be overridden
+    /// when the user taps the dark mode button. Note this must be called once `dynamicMapView` is set.
     private var isViewingDarkMode = false {
         didSet {
             dynamicMapView?.configureMapStyle(isDark: isViewingDarkMode)
-            let imageName = isViewingDarkMode ? "sun.max.fill" : "moon.fill"
-            var newConfig = UIButton.Configuration.plain()
-            newConfig.configureForIcon(imageName)
-            darkModeButton.configuration = newConfig
+
+            if #available(iOS 26, *) {
+                let imageName = isViewingDarkMode ? "sun.max" : "moon"
+                darkModeButton.setImage(UIImage(systemName: imageName), for: .normal)
+            } else {
+                let imageName = isViewingDarkMode ? "sun.max.fill" : "moon.fill"
+                var newConfig = UIButton.Configuration.plain()
+                newConfig.configureForIcon(imageName)
+                darkModeButton.configuration = newConfig
+            }
         }
     }
-
-    private var loadPlaceCancellable: AnyCancellable?
 
     // contains close and dark mode buttons (and creates frame for gradient)
     private lazy var containerView: UIView = {
@@ -48,27 +51,43 @@ final class MapViewController: UIViewController {
     }()
 
     private lazy var closeButton: UIButton = {
-        var config = UIButton.Configuration.plain()
-        config.configureForIcon("xmark.circle.fill")
+        let button: UIButton
 
-        let button = UIButton(configuration: config)
-        button.addDropShadow()
+        if #available(iOS 26, *) {
+            var config = UIButton.Configuration.glass()
+            config.configureForIcon("xmark")
+            button = UIButton(configuration: config)
+        } else {
+            var config = UIButton.Configuration.plain()
+            config.configureForIcon("xmark.circle.fill")
+            button = UIButton(configuration: config)
+            button.addDropShadow()
+        }
+        
         button.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
-        button.accessibilityIdentifier = "map-close-button"
+        button.accessibilityLabel = "map-close-button"
         button.pointerStyleProvider = buttonProvider
         button.isSymbolAnimationEnabled = true
         button.adjustsImageSizeForAccessibilityContentSizeCategory = true
+        
         return button
     }()
 
     private lazy var darkModeButton: UIButton = {
-        var config = UIButton.Configuration.plain()
-        config.configureForIcon("moon.fill")
+        let button: UIButton
 
-        let button = UIButton(configuration: config)
-        button.addDropShadow()
+        if #available(iOS 26, *) {
+            var config = UIButton.Configuration.glass()
+            config.configureForIcon("moon")
+            button = UIButton(configuration: config)
+        } else {
+            var config = UIButton.Configuration.plain()
+            config.configureForIcon("moon.fill")
+            button = UIButton(configuration: config)
+            button.addDropShadow()
+        }
+        
         button.addTarget(self, action: #selector(darkModeButtonTapped), for: .touchUpInside)
-        button.accessibilityIdentifier = "map-dark-mode-button"
         button.accessibilityLabel = "dark mode toggle"
         button.pointerStyleProvider = buttonProvider
         button.isSymbolAnimationEnabled = true
@@ -77,12 +96,21 @@ final class MapViewController: UIViewController {
     }()
 
     private lazy var aboutButton: UIButton = {
-        var config = UIButton.Configuration.plain()
-        config.configureForIcon("info.circle.fill")
+        let button: UIButton
 
-        let button = UIButton(configuration: config)
-        button.addDropShadow()
+        if #available(iOS 26, *) {
+            var config = UIButton.Configuration.glass()
+            config.configureForIcon("info")
+            button = UIButton(configuration: config)
+        } else {
+            var config = UIButton.Configuration.plain()
+            config.configureForIcon("info.circle.fill")
+            button = UIButton(configuration: config)
+            button.addDropShadow()
+        }
+        
         button.addTarget(self, action: #selector(aboutButtonTapped), for: .touchUpInside)
+        button.accessibilityLabel = "info button"
         button.pointerStyleProvider = buttonProvider
         button.isSymbolAnimationEnabled = true
         button.adjustsImageSizeForAccessibilityContentSizeCategory = true
@@ -96,10 +124,7 @@ final class MapViewController: UIViewController {
         return card
     }()
     
-    init?(place: Place?) {
-        guard let place = place else {
-            return nil
-        }
+    init(place: Place) {
         self.place = place
         super.init(nibName: nil, bundle: nil)
         
@@ -120,7 +145,7 @@ final class MapViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        addOrUpdateMapView(for: place.placeId, name: place.name, location: place.coordinate)
+        addOrUpdateMapView(for: place.placeID, name: place.displayName, location: place.location)
         addProgrammaticViews()
         
         registerForTraitChanges([UITraitUserInterfaceStyle.self], handler: { (self: Self, previousTraitCollection: UITraitCollection) in
@@ -160,31 +185,52 @@ final class MapViewController: UIViewController {
 
         let iPadOffset = UIDevice.current.userInterfaceIdiom == .pad ? 12 : 0
         
+        closeButton.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(16 + iPadOffset)
+            if #available(iOS 26, *) {
+                make.leading.equalToSuperview().inset(16)
+            } else {
+                make.leading.equalToSuperview().inset(8)
+            }
+        }
+
         darkModeButton.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(16 + iPadOffset)
-            make.leading.equalToSuperview().inset(12)
         }
 
         aboutButton.snp.makeConstraints { make in
+            if #available(iOS 26, *) {
+                make.leading.equalTo(darkModeButton.snp.trailing).offset(12)
+            } else {
+                make.leading.equalTo(darkModeButton.snp.trailing)
+            }
             make.top.equalToSuperview().inset(16 + iPadOffset)
+
+            if #available(iOS 26, *) {
+                make.trailing.equalToSuperview().inset(16)
+            } else {
+                make.trailing.equalToSuperview().inset(8)
+            }
         }
 
-        closeButton.snp.makeConstraints { make in
-            make.leading.equalTo(aboutButton.snp.trailing)
-            make.top.equalToSuperview().inset(16 + iPadOffset)
-            make.trailing.equalToSuperview().inset(12)
-        }
 
         reviewCard.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(12 + iPadOffset)
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(12 + iPadOffset)
             make.height.equalTo(MapReviewCard.height)
         }
-
-        reviewCard.isHidden = true
+        
+        if let summary = place.reviewSummary {
+            reviewCard.configureWithSummary(summary)
+        } else {
+            reviewCard.isHidden = true
+        }
     }
 
-    private func addOrUpdateMapView(for placeId: String, name: String, location: CLLocationCoordinate2D) {
+    private func addOrUpdateMapView(for placeId: String?, name: String?, location: CLLocationCoordinate2D?) {
+        guard let placeId = placeId, let name = name, let location = location else {
+            return
+        }
         let camera = GMSCameraPosition.camera(withLatitude: location.latitude,
                                               longitude: location.longitude,
                                               zoom: 16.0)
@@ -193,10 +239,9 @@ final class MapViewController: UIViewController {
             dynamicMapView.animate(to: camera)
             addOrUpdateMarkerAndReviews(for: placeId, name: name, location: location, in: dynamicMapView)
         } else {
-            let frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
             let options = GMSMapViewOptions()
             options.camera = camera
-            options.frame = frame
+            options.frame = .zero
             let mapViewNew = GMSMapView(options: options)
             dynamicMapView = mapViewNew
 
@@ -206,6 +251,16 @@ final class MapViewController: UIViewController {
             dynamicMapView.delegate = self
             view.addSubview(dynamicMapView)
             view.sendSubviewToBack(dynamicMapView)
+            
+            // fixes issue where map wasn't centered on iPad (but doesn't work on iPhone due to safe area)
+            if UIDevice().userInterfaceIdiom == .pad {
+                dynamicMapView.snp.makeConstraints { make in
+                    make.edges.equalToSuperview()
+                }
+            } else {
+                dynamicMapView.frame = view.frame
+            }
+
             addOrUpdateMarkerAndReviews(for: placeId, name: name, location: location, in: dynamicMapView)
         }
         isViewingDarkMode = traitCollection.userInterfaceStyle == .dark
@@ -235,22 +290,27 @@ final class MapViewController: UIViewController {
 
         dynamicMarker.tracksInfoWindowChanges = true
 
-        loadPlaceCancellable = API.PlaceSearch.loadPlaceWithReviews(placeId: placeId)?
-            .sink(receiveCompletion: { completion in
-            }, receiveValue: { [weak self] place in
-                guard let strongSelf = self else {
-                    return
+        Task {
+            guard let result = await API.PlaceSearch.fetchPlaceWithReviewsBy(placeId: placeId) else {
+                return
+            }
+
+            dynamicMarker.snippet = result.formattedAddress
+            dynamicMarker.tracksInfoWindowChanges = false
+            place = result
+            await MainActor.run {
+                if let summary = result.reviewSummary {
+                    reviewCard.configureWithSummary(summary)
+                } else {
+                    displayReviews(result.reviews, index: 0)
                 }
-                dynamicMarker.snippet = place.formattedAddress
-                dynamicMarker.tracksInfoWindowChanges = false
-                strongSelf.place = place
-                strongSelf.displayReviews(place.reviews, index: 0)
-            })
+            }
+        }
     }
 
     // MARK: - Review-specific methods
 
-    private func displayReviews(_ reviews: [Review]?, index: Int) {
+    private func displayReviews(_ reviews: [GooglePlacesSwift.Review]?, index: Int) {
         guard let reviews = reviews, !reviews.isEmpty else {
             return
         }
@@ -260,14 +320,10 @@ final class MapViewController: UIViewController {
         reviewCard.isHidden = false
         reviewCard.alpha = 1
 
-        if ProcessInfo.processInfo.environment["isUITest"] == "true" {
-            displayReviewForUITest(reviews)
-        } else {
-            startDisplayingReviews(reviews, index: index + 1)
-        }
+        startDisplayingReviews(reviews, index: index + 1)
     }
 
-    private func startDisplayingReviews(_ reviews: [Review], index: Int) {
+    private func startDisplayingReviews(_ reviews: [GooglePlacesSwift.Review], index: Int) {
         if index < reviews.count - 1 {
             UIView.animate(withDuration: 0.7, animations: {
                 self.reviewCard.alpha = 1
@@ -301,15 +357,6 @@ final class MapViewController: UIViewController {
         }
     }
 
-    private func displayReviewForUITest(_ reviews: [Review]) {
-        guard let firstReview = reviews.first else {
-            return
-        }
-        reviewCard.isHidden = false
-        currentReviewIndex = 1
-        loadReviewContent(firstReview)
-    }
-
     @objc
     private func restartDisplayingCurrentReviews() {
         guard let reviews = currentReviews else {
@@ -326,7 +373,7 @@ final class MapViewController: UIViewController {
         reviewCard.isHidden = true
     }
 
-    private func loadReviewContent(_ review: Review) {
+    private func loadReviewContent(_ review: GooglePlacesSwift.Review) {
         reviewCard.configure(review)
     }
 
@@ -350,10 +397,10 @@ final class MapViewController: UIViewController {
 
     @objc
     private func reviewCardTapped() {
-        guard let reviews = currentReviews, let authorUrl = reviews[currentReviewIndex].authorUrl else {
+        guard let reviews = currentReviews, let authorUrl = reviews[currentReviewIndex].authorAttribution?.url else {
             return
         }
-        openUrl(authorUrl)
+        UIApplication.shared.open(authorUrl, options: [:])
     }
 }
 
@@ -361,12 +408,6 @@ extension MapViewController: GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, didTapPOIWithPlaceID placeID: String, name: String, location: CLLocationCoordinate2D) {
         stopDisplayingReviews()
         addOrUpdateMapView(for: placeID, name: name, location: location)
-    }
-
-    func mapView(_ mapView: GMSMapView, didTapInfoWindowOf marker: GMSMarker) {
-        if let mapUrl = place.mapUrl, let url = URL(string: mapUrl) {
-            UIApplication.shared.open(url, options: [:])
-        }
     }
 }
 

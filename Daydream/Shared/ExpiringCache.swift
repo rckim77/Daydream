@@ -11,9 +11,9 @@ import UIKit
 // Default time interval is 1 hour
 private let kDefaultTimeInterval: TimeInterval = 60
 
-// Expiring, thread safe, in memory cache using a concurrent queue with dispatch barriers.
-// More performant than a serial queue with async/sync calls and more Swift-y than
-// NSCache since our cache values don't have to conform to AnyObject.
+/// CURRENTLY UNUSED. Expiring, thread safe, in memory cache using a concurrent queue with dispatch barriers.
+/// More performant than a serial queue with async/sync calls and more Swift-y than
+/// NSCache since our cache values don't have to conform to AnyObject.
 class ExpiringCache<K: Hashable, V: Any> {
 
     private let duration: TimeInterval
@@ -28,24 +28,19 @@ class ExpiringCache<K: Hashable, V: Any> {
         observer = NotificationCenter.default.addObserver(forName: UIApplication.didReceiveMemoryWarningNotification,
                                                           object: nil,
                                                           queue: nil) { [weak self] _ in
-            print("added observer")
             self?.emptyCache()
         }
 
-        print("initiating timer")
         timer = Timer(timeInterval: duration, repeats: true, block: { [weak self] _ in
-            print("it's been a minute, check if expired")
             self?.checkIfExpired()
         })
 
         DispatchQueue.main.async {
-            print("added timer to run loop on main thread")
             RunLoop.current.add(self.timer, forMode: RunLoop.Mode.default)
         }
     }
 
     func getValue(for key: K, completion: @escaping ((V?) -> Void)) {
-        print("getting value async")
         queue.async { [weak self] in
             completion(self?.cache[key]?.value)
         }
@@ -84,7 +79,6 @@ class ExpiringCache<K: Hashable, V: Any> {
 
             for key in keys {
                 if let value = strongSelf.cache[key], value.isExpired(strongSelf.duration) {
-                    print("removing value \(value) for key \(key)")
                     strongSelf.removeValue(for: key)
                 }
             }
