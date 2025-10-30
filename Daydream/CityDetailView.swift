@@ -118,11 +118,11 @@ struct CityDetailView: View {
     }
     
     private func fetchSightsAndEateries(_ city: Place) async -> Void {
-        guard let cityName = city.displayName else { return }
+        guard let placeId = city.placeID else { return }
         do {
             let isIpad = UIDevice.current.userInterfaceIdiom == .pad
-            sights = try await API.PlaceSearch.fetchPlacesFor(city: cityName, maxResultCount: isIpad ? 12 : 7)
-            eateries = try await API.PlaceSearch.fetchEateriesFor(city: cityName, maxResultCount: isIpad ? 12 : 7)
+            sights = try await API.PlaceSearch.fetchPlacesFor(placeId: placeId, type: .sights, maxResultCount: isIpad ? 12 : 7)
+            eateries = try await API.PlaceSearch.fetchPlacesFor(placeId: placeId, type: .eateries, maxResultCount: isIpad ? 12 : 7)
         } catch {
             return
         }

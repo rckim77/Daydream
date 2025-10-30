@@ -9,13 +9,18 @@
 import UIKit
 import CoreLocation
 import GooglePlacesSwift
+import MapKit
 
 enum APIError: Error {
-    case biasError, bundleError, imageDataError, noResults
+    case biasError, bundleError, imageDataError, missingViewport, noResults
 }
 
 extension API {
     enum PlaceSearch {
+
+        enum PlaceSearchType {
+            case sights, eateries
+        }
         
         /// Convenience function that will pick a random city, fetch `Place` data, and also return
         /// a `UIImage` representation of the first photo if present.
@@ -130,48 +135,76 @@ extension API {
                 return nil
             }
         }
-
-        static func fetchPlacesFor(city: String, maxResultCount: Int) async throws -> [Place] {
-            // this is unfortunately a required param even though we don't need one...
-            guard let neutralBias = RectangularCoordinateRegion(
-                northEast: CLLocationCoordinate2D(latitude: 85, longitude: 180),
-                southWest: CLLocationCoordinate2D(latitude: -85, longitude: 0)
-            ) else {
-                throw APIError.biasError
-            }
-            let query = "top sights in \(city)"
-            let request = SearchByTextRequest(textQuery: query,
-                                              placeProperties: [.photos, .displayName, .placeID, .coordinate, .reviewSummary],
-                                              locationBias: neutralBias,
-                                              maxResultCount: maxResultCount)
-            switch await PlacesClient.shared.searchByText(with: request) {
-            case .success(let places):
-                return places
+        
+        static func fetchPlacesFor(placeId: String, type: PlaceSearch.PlaceSearchType, maxResultCount: Int) async throws -> [Place] {
+            let fetchPlaceRequest = FetchPlaceRequest(
+                placeID: placeId,
+                placeProperties: [.placeID, .coordinate, .viewportInfo]
+            )
+            
+            switch await PlacesClient.shared.fetchPlace(with: fetchPlaceRequest) {
+            case .success(let place):
+                let restriction = API.PlaceSearch.getPlaceRestriction(location: place.location, viewport: place.viewportInfo)
+                let placeProps: [PlaceProperty]
+                let includedTypes: Set<PlaceType>
+                let excludedTypes: Set<PlaceType>
+                switch type {
+                    case .sights:
+                        placeProps = [.photos, .displayName, .placeID, .coordinate, .reviewSummary]
+                        includedTypes = [.touristAttraction, .park, .museum]
+                        excludedTypes = [.restaurant]
+                    case .eateries:
+                        placeProps = [.photos, .displayName, .placeID, .coordinate, .priceLevel, .reviewSummary]
+                        includedTypes = [.restaurant]
+                        excludedTypes = [.touristAttraction, .park, .museum]
+                }
+                let request = SearchNearbyRequest(
+                    locationRestriction: restriction,
+                    placeProperties: placeProps,
+                    includedTypes: includedTypes,
+                    excludedTypes: excludedTypes,
+                    maxResultCount: maxResultCount
+                )
+                switch await PlacesClient.shared.searchNearby(with: request) {
+                case .success(let places):
+                    return places
+                case .failure(let error):
+                    print(error.localizedDescription)
+                    throw error
+                }
             case .failure(let error):
                 print(error.localizedDescription)
                 throw error
             }
         }
 
-        static func fetchEateriesFor(city: String, maxResultCount: Int) async throws -> [Place] {
-            // this is unfortunately a required param even though we don't need one...
-            guard let neutralBias = RectangularCoordinateRegion(
-                northEast: CLLocationCoordinate2D(latitude: 85, longitude: 180),
-                southWest: CLLocationCoordinate2D(latitude: -85, longitude: 0)
-            ) else {
-                throw APIError.biasError
-            }
-            let query = "top restaurants in \(city)"
-            let request = SearchByTextRequest(textQuery: query,
-                                              placeProperties: [.photos, .displayName, .placeID, .coordinate, .priceLevel, .reviewSummary],
-                                              locationBias: neutralBias,
-                                              maxResultCount: maxResultCount)
-            switch await PlacesClient.shared.searchByText(with: request) {
-            case .success(let places):
-                return places
-            case .failure(let error):
-                print(error.localizedDescription)
-                throw error
+        static func getPlaceRestriction(location: CLLocationCoordinate2D, viewport: RectangularCoordinateRegion?) -> CircularCoordinateRegion {
+            if let viewport = viewport { // calculate radius from viewport
+
+                func haversine(_ a: CLLocationCoordinate2D, _ b: CLLocationCoordinate2D) -> CLLocationDistance {
+                    let R = 6_371_000.0
+                    let dLat = (b.latitude - a.latitude) * .pi/180
+                    let dLon = (b.longitude - a.longitude) * .pi/180
+                    let lat1 = a.latitude * .pi/180
+                    let lat2 = b.latitude * .pi/180
+                    let h = pow(sin(dLat/2), 2) + cos(lat1) * cos(lat2) * pow(sin(dLon/2), 2)
+                    return 2 * R * asin(min(1, sqrt(h))) // meters
+                }
+
+                let dNE = haversine(location, viewport.northEast)
+                let dSW = haversine(location, viewport.southWest)
+                let farthest = max(dNE, dSW)
+
+                // Use ~70 – 80% of that to stay within the city
+                let estRadius = 0.75 * farthest
+
+                // Clamp between min and max
+                let minRadius: CLLocationDistance = 3000 // km
+                let maxRadius: CLLocationDistance = 10000
+                let radius = max(minRadius, min(maxRadius, estRadius))
+                return CircularCoordinateRegion(center: location, radius: radius)
+            } else {
+                return CircularCoordinateRegion(center: location, radius: 5000)
             }
         }
     }
