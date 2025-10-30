@@ -49,6 +49,7 @@
 		EC4A8F6A2EA1D5D000C13BBF /* RandomCityButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4A8F692EA1D5D000C13BBF /* RandomCityButton.swift */; };
 		EC4A8F6C2EA1D6C800C13BBF /* PriceLevelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4A8F6B2EA1D6C800C13BBF /* PriceLevelView.swift */; };
 		EC4A8F6E2EA428EB00C13BBF /* SearchActionStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4A8F6D2EA428EB00C13BBF /* SearchActionStyle.swift */; };
+		EC8DD79A2EB3CF0A006A20BE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8DD7992EB3CF0A006A20BE /* SceneDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -92,6 +93,7 @@
 		EC4A8F692EA1D5D000C13BBF /* RandomCityButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomCityButton.swift; sourceTree = "<group>"; };
 		EC4A8F6B2EA1D6C800C13BBF /* PriceLevelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceLevelView.swift; sourceTree = "<group>"; };
 		EC4A8F6D2EA428EB00C13BBF /* SearchActionStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchActionStyle.swift; sourceTree = "<group>"; };
+		EC8DD7992EB3CF0A006A20BE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +131,7 @@
 			isa = PBXGroup;
 			children = (
 				94380AC7203BAE1D00684863 /* AppDelegate.swift */,
+				EC8DD7992EB3CF0A006A20BE /* SceneDelegate.swift */,
 				EC14499C24BD0B9D00CA47B1 /* Search */,
 				EC2098B42E9F08170023CC1A /* CityDetailView.swift */,
 				EC4A8F672EA1D49000C13BBF /* HomeButton.swift */,
@@ -296,6 +299,7 @@
 				EC14499E24BFBA1100CA47B1 /* CuratedCityCollectionViewDataSource.swift in Sources */,
 				94E1086B248228790091D043 /* CardLabel.swift in Sources */,
 				EC253B2D2B55C35700D52EB9 /* ImageCache.swift in Sources */,
+				EC8DD79A2EB3CF0A006A20BE /* SceneDelegate.swift in Sources */,
 				94E3D9582097EEC800384680 /* ExpiringCache.swift in Sources */,
 				EC4A8F642EA1998700C13BBF /* MapViewControllerRepresentable.swift in Sources */,
 				94600FC8249A9B8000E605FD /* API+PlaceSearch.swift in Sources */,
