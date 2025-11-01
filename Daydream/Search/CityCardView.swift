@@ -35,7 +35,7 @@ struct CityCardView: View {
                         .padding(.horizontal, 8)
                         .padding(.vertical, 12)
                         .background(
-                            LinearGradient(colors: [Color(.systemBackground).opacity(0.79),
+                            LinearGradient(colors: [Color(.systemBackground).opacity(0.8),
                                                     Color(.systemBackground).opacity(0.55),
                                                     Color.clear],
                                            startPoint: .top,

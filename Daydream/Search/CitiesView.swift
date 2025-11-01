@@ -20,7 +20,7 @@ struct CitiesView: View {
             Text("Where do you want to go?")
                 .font(.largeTitle)
                 .multilineTextAlignment(.center)
-                .padding(.vertical, 24)
+                .padding(.vertical, 32)
                 .padding(.horizontal, 16)
                 .scrollTransition { content, phase in
                     content
