@@ -89,60 +89,69 @@ final class SearchViewController: UIViewController {
     }
 
     private func addViews() {
-        view.addSubview(backgroundImageView)
-        backgroundImageView.addSubview(backgroundBlurEffectView)
-        view.addSubview(overlayView)
-        view.addSubview(titleLabel)
-        view.addSubview(curatedCitiesCollectionView)
+        let citiesVC = UIHostingController(rootView: CitiesView())
+        addChild(citiesVC)
+        view.addSubview(citiesVC.view)
+        citiesVC.didMove(toParent: self)
         
-        let searchActionsView = SearchActionsView(randomCityReceived: { [weak self] place, image in
-            if let image = image {
-                let cityDetailVC = UIHostingController(rootView: CityDetailView(place: place, image: image))
-                cityDetailVC.modalPresentationStyle = .fullScreen
-                cityDetailVC.modalTransitionStyle = .crossDissolve
-                self?.present(cityDetailVC, animated: true, completion: nil)
-            }
-        }, feedbackButtonTapped: { [weak self] in
-            self?.feedbackButtonTapped()
-        }, autocompleteTapped: { [weak self] place, image in
-            if let image = image {
-                self?.presentCityDetailView(place: place, image: image)
-            }
-        })
-
-        let searchActionsHostVC = UIHostingController(rootView: searchActionsView)
-        addChild(searchActionsHostVC)
-        view.addSubview(searchActionsHostVC.view)
-        searchActionsHostVC.view.backgroundColor = .clear
-        searchActionsHostVC.didMove(toParent: self)
-
-        backgroundImageView.snp.makeConstraints { make in
+        citiesVC.view.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         
-        backgroundBlurEffectView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-
-        overlayView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-
-        titleLabel.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(16)
-            make.centerY.equalToSuperview().offset(titleLabelCenterYOffset)
-        }
-
-        searchActionsHostVC.view.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(24)
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(8)
-        }
-        
-        curatedCitiesCollectionView.snp.makeConstraints { make in
-            make.height.equalTo(curatedCitiesCollectionView.height)
-            make.bottom.equalTo(searchActionsHostVC.view.snp.top).offset(isSmallDevice ? -8 : -16)
-            make.leading.trailing.equalToSuperview()
-        }
+//        view.addSubview(backgroundImageView)
+//        backgroundImageView.addSubview(backgroundBlurEffectView)
+//        view.addSubview(overlayView)
+//        view.addSubview(titleLabel)
+//        view.addSubview(curatedCitiesCollectionView)
+//        
+//        let searchActionsView = SearchActionsView(randomCityReceived: { [weak self] place, image in
+//            if let image = image {
+//                let cityDetailVC = UIHostingController(rootView: CityDetailView(place: place, image: image))
+//                cityDetailVC.modalPresentationStyle = .fullScreen
+//                cityDetailVC.modalTransitionStyle = .crossDissolve
+//                self?.present(cityDetailVC, animated: true, completion: nil)
+//            }
+//        }, feedbackButtonTapped: { [weak self] in
+//            self?.feedbackButtonTapped()
+//        }, autocompleteTapped: { [weak self] place, image in
+//            if let image = image {
+//                self?.presentCityDetailView(place: place, image: image)
+//            }
+//        })
+//
+//        let searchActionsHostVC = UIHostingController(rootView: searchActionsView)
+//        addChild(searchActionsHostVC)
+//        view.addSubview(searchActionsHostVC.view)
+//        searchActionsHostVC.view.backgroundColor = .clear
+//        searchActionsHostVC.didMove(toParent: self)
+//
+//        backgroundImageView.snp.makeConstraints { make in
+//            make.edges.equalToSuperview()
+//        }
+//        
+//        backgroundBlurEffectView.snp.makeConstraints { make in
+//            make.edges.equalToSuperview()
+//        }
+//
+//        overlayView.snp.makeConstraints { make in
+//            make.edges.equalToSuperview()
+//        }
+//
+//        titleLabel.snp.makeConstraints { make in
+//            make.leading.trailing.equalToSuperview().inset(16)
+//            make.centerY.equalToSuperview().offset(titleLabelCenterYOffset)
+//        }
+//
+//        searchActionsHostVC.view.snp.makeConstraints { make in
+//            make.leading.trailing.equalToSuperview().inset(24)
+//            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(8)
+//        }
+//        
+//        curatedCitiesCollectionView.snp.makeConstraints { make in
+//            make.height.equalTo(curatedCitiesCollectionView.height)
+//            make.bottom.equalTo(searchActionsHostVC.view.snp.top).offset(isSmallDevice ? -8 : -16)
+//            make.leading.trailing.equalToSuperview()
+//        }
     }
 
     private func feedbackButtonTapped() {

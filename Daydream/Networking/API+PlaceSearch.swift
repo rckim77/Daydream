@@ -12,7 +12,7 @@ import GooglePlacesSwift
 import MapKit
 
 enum APIError: Error {
-    case biasError, bundleError, imageDataError, missingViewport, noResults
+    case biasError, bundleError, imageDataError, missingViewport, noResults, placeMissingPhotos
 }
 
 extension API {
@@ -48,19 +48,35 @@ extension API {
         }
         
         static func fetchPlaceAndImageBy(name: String) async throws -> (Place, UIImage) {
-            guard let place = await API.PlaceSearch.fetchCityBy(name: name) else {
-                throw APIError.noResults
+            let maxAttempts = 3
+            // milliseconds
+            var expoBackoff = 100
+            
+            for attempt in 1...maxAttempts {
+                if let place = await API.PlaceSearch.fetchCityBy(name: name) {
+                    if let photo = place.photos?.first {
+                        if let image = await API.PlaceSearch.fetchImageBy(photo: photo) {
+                            print("got place and image for \(name) on attempt \(attempt) ")
+                            return (place, image)
+                        } else {
+                            throw APIError.noResults
+                        }
+                    } else {
+                        throw APIError.placeMissingPhotos
+                    }
+                } else {
+                    if attempt < maxAttempts {
+                        print("attempting again...")
+                        try? await Task.sleep(for: .milliseconds(expoBackoff))
+                        expoBackoff *= 2
+                        continue
+                    } else {
+                        print("unable to get data for \(name) after last attempt")
+                    }
+                }
             }
             
-            if let photo = place.photos?.first {
-                let image = await API.PlaceSearch.fetchImageBy(photo: photo)
-                guard let image = image else {
-                    throw APIError.noResults
-                }
-                return (place, image)
-            } else {
-                throw APIError.noResults
-            }
+            throw APIError.noResults
         }
         
         
