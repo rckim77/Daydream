@@ -9,23 +9,6 @@
 import SwiftUI
 import GooglePlacesSwift
 
-struct CityCardButtonStyle: ButtonStyle {
-    
-    let height: CGFloat
-    
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .tint(.primary)
-            .background(Color(.lightGray))
-            .frame(maxWidth: .infinity)
-            .frame(height: height)
-            .clipShape(RoundedRectangle(cornerRadius: 24))
-            .shadow(radius: 3)
-            .offset(y: configuration.isPressed ? 12 : 0)
-            .animation(.easeInOut(duration: 0.2), value: configuration.isPressed)
-    }
-}
-
 struct CityCardView: View {
 
     let name: (String, String)
@@ -37,16 +20,15 @@ struct CityCardView: View {
 
     var body: some View {
         Button {
-            //
+            // use place
         } label: {
             ZStack(alignment: .topLeading) {
-                if let place = place, let image = image {
+                if let image = image {
                     Image(uiImage: image)
                         .resizable()
-                        .scaledToFill()
                         .frame(maxWidth: .infinity)
                         .frame(height: height)
-                    Text(place.displayName ?? "")
+                    Text(name.0)
                         .font(.largeTitle).bold()
                         .multilineTextAlignment(.center)
                         .frame(maxWidth: .infinity)
