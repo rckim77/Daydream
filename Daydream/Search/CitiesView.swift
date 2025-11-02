@@ -15,6 +15,17 @@ struct CitiesView: View {
     
     @State private var cityNames: [(String, String)] = []
     @State private var selectedCity: CityRoute?
+    @State private var showFeedbackAlert = false
+    private var alertMessage: String {
+        var message: String?
+
+        if let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String,
+            let bundleVersion = Bundle.main.infoDictionary?["CFBundleVersion"] as? String {
+            message = "The current app version is \(appVersion) (\(bundleVersion))."
+        }
+        return message ?? ""
+    }
+    @Environment(\.openURL) private var openURL
     @Namespace private var zoomNS
     
     var body: some View {
@@ -52,11 +63,15 @@ struct CitiesView: View {
             }
             .scrollIndicators(.never)
             .safeAreaInset(edge: .bottom, alignment: .center) {
-                SearchActionsView(randomCityReceived: { place, image in
-                    selectedCity = CityRoute(name: place.description, place: place, image: image)
-                },
-                                  feedbackButtonTapped: {},
-                                  autocompleteTapped: { _, _ in })
+                SearchActionsView(
+                    autocompleteTapped: { _, _ in
+                        // do something
+                    }, randomCityReceived: { place, image in
+                        selectedCity = CityRoute(name: place.description, place: place, image: image)
+                    }, feedbackButtonTapped: {
+                        showFeedbackAlert = true
+                    }
+                )
             }
             .fullScreenCover(item: $selectedCity) { item in
                 CityDetailView(place: item.place, image: item.image)
@@ -73,6 +88,14 @@ struct CitiesView: View {
             }
 
             cityNames = cities
+        }
+        .alert("Got feedback? Email me!", isPresented: $showFeedbackAlert) {
+            Button("Email") {
+                if let url = URL(string: "mailto:daydreamiosapp@gmail.com") {
+                    openURL(url)
+                }
+            }
+            Button("Cancel") {}
         }
     }
 }
