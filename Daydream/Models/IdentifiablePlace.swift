@@ -6,7 +6,7 @@
 //  Copyright © 2025 Raymond Kim. All rights reserved.
 //
 
-import UIKit
+import Foundation
 import GooglePlacesSwift
 
 /// Lightweight wrapper around `GooglePlaceSwift` `Place` struct for certain SwiftUI
@@ -14,10 +14,4 @@ import GooglePlacesSwift
 struct IdentifiablePlace: Identifiable {
     let id = UUID()
     let place: Place
-}
-
-struct IdentifiablePlaceWithImage: Identifiable {
-    let id = UUID()
-    let place: Place
-    let image: UIImage
 }

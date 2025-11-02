@@ -14,45 +14,53 @@ struct CitiesView: View {
     private let cityCount = 6
     
     @State private var cityNames: [(String, String)] = []
-    @State private var selectedCity: IdentifiablePlaceWithImage?
+    @State private var selectedCity: CityRoute?
+    @Namespace private var zoomNS
     
     var body: some View {
-        ScrollView {
-            Text("Where do you want to go?")
-                .font(.largeTitle)
-                .multilineTextAlignment(.center)
-                .padding(.vertical, 32)
-                .padding(.horizontal, 16)
-                .scrollTransition { content, phase in
-                    content
-                        .opacity(phase == .identity || phase == .bottomTrailing ? 1 : 0)
-                        .scaleEffect(phase == .identity || phase == .bottomTrailing ? 1 : 0.75)
-                }
-            VStack(spacing: -38) {
-                ForEach(cityNames, id: \.0) { name in
-                    CityCardView(name: name) { place, image in
-                        if let place = place, let image = image {
-                            let idPlace = IdentifiablePlaceWithImage(place: place, image: image)
-                            selectedCity = idPlace
-                        }
-                    }
+        NavigationStack {
+            ScrollView {
+                Text("Where do you want to go?")
+                    .font(.largeTitle)
+                    .multilineTextAlignment(.center)
+                    .padding(.vertical, 32)
+                    .padding(.horizontal, 16)
                     .scrollTransition { content, phase in
                         content
                             .opacity(phase == .identity || phase == .bottomTrailing ? 1 : 0)
                             .scaleEffect(phase == .identity || phase == .bottomTrailing ? 1 : 0.75)
                     }
+                VStack(spacing: -38) {
+                    ForEach(cityNames, id: \.0) { name in
+                        CityCardView(name: name) { place, image in
+                            guard let place, let image else {
+                                return
+                            }
+                            selectedCity = CityRoute(name: name.0, place: place, image: image)
+                        }
+                        .matchedTransitionSource(id: name.0, in: zoomNS) { source in
+                            source
+                                .clipShape(RoundedRectangle(cornerRadius: 24))
+                        }
+                        .scrollTransition { content, phase in
+                            content
+                                .opacity(phase == .identity || phase == .bottomTrailing ? 1 : 0)
+                                .scaleEffect(phase == .identity || phase == .bottomTrailing ? 1 : 0.75)
+                        }
+                    }
                 }
             }
+            .scrollIndicators(.never)
+            .safeAreaInset(edge: .bottom, alignment: .center) {
+                SearchActionsView(randomCityReceived: { _, _ in },
+                                  feedbackButtonTapped: {},
+                                  autocompleteTapped: { _, _ in })
+            }
+            .fullScreenCover(item: $selectedCity) { item in
+                CityDetailView(place: item.place, image: item.image)
+                    .navigationTransition(.zoom(sourceID: item.name, in: zoomNS))
+            }
         }
-        .scrollIndicators(.never)
-        .safeAreaInset(edge: .bottom, alignment: .center) {
-            SearchActionsView(randomCityReceived: { _, _ in },
-                              feedbackButtonTapped: {},
-                              autocompleteTapped: { _, _ in })
-        }
-        .sheet(item: $selectedCity, content: { place in
-            CityDetailView(place: place.place, image: place.image)
-        })
         .task {
             var cities = [(String, String)]()
             
