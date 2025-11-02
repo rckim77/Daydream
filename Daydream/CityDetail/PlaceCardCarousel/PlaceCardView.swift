@@ -76,7 +76,7 @@ struct PlaceCardView: View {
                 return
             }
 
-            if let fetchedImage = await API.PlaceSearch.fetchImageBy(photo: photo) {
+            if let fetchedImage = try? await API.PlaceSearch.fetchImageBy(photo: photo) {
                 ImageCache.shared.set(fetchedImage, forKey: hashKey)
                 image = fetchedImage
             }

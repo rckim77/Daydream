@@ -52,7 +52,9 @@ struct CitiesView: View {
             }
             .scrollIndicators(.never)
             .safeAreaInset(edge: .bottom, alignment: .center) {
-                SearchActionsView(randomCityReceived: { _, _ in },
+                SearchActionsView(randomCityReceived: { place, image in
+                    selectedCity = CityRoute(name: place.description, place: place, image: image)
+                },
                                   feedbackButtonTapped: {},
                                   autocompleteTapped: { _, _ in })
             }

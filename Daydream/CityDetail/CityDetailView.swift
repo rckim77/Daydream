@@ -91,9 +91,7 @@ struct CityDetailView: View {
                 RandomCityButton { fetchedPlace, fetchedImage in
                     // now update all observed data (which will update UI automatically)
                     place = fetchedPlace
-                    if let resultImage = fetchedImage {
-                        image = resultImage
-                    }
+                    image = fetchedImage
                     mapPosition = createMapPosition(place.location)
                     Task {
                         await fetchSightsAndEateries(place)

@@ -12,7 +12,13 @@ import GooglePlacesSwift
 import MapKit
 
 enum APIError: Error {
-    case biasError, bundleError, imageDataError, missingViewport, noResults, placeMissingPhotos
+    case biasError
+    case bundleError
+    case fetchPhotoError
+    case imageDataError
+    case missingViewport
+    case noResults
+    case placeMissingPhotos
 }
 
 extension API {
@@ -23,8 +29,8 @@ extension API {
         }
         
         /// Convenience function that will pick a random city, fetch `Place` data, and also return
-        /// a `UIImage` representation of the first photo if present.
-        static func fetchRandomCity() async throws -> (Place, UIImage?) {
+        /// a `UIImage` representation of the first photo.
+        static func fetchRandomCity() async throws -> (Place, UIImage) {
             guard let path = Bundle.main.path(forResource: "randomCitiesJSON", ofType: "json") else {
                 throw APIError.bundleError
             }
@@ -40,10 +46,10 @@ extension API {
             }
             
             if let photo = place.photos?.first {
-                let image = await API.PlaceSearch.fetchImageBy(photo: photo)
+                let image = try await API.PlaceSearch.fetchImageBy(photo: photo)
                 return (place, image)
             } else {
-                return (place, nil)
+                throw APIError.placeMissingPhotos
             }
         }
         
@@ -55,12 +61,9 @@ extension API {
             for attempt in 1...maxAttempts {
                 if let place = await API.PlaceSearch.fetchCityBy(name: name) {
                     if let photo = place.photos?.first {
-                        if let image = await API.PlaceSearch.fetchImageBy(photo: photo) {
-                            print("got place and image for \(name) on attempt \(attempt) ")
-                            return (place, image)
-                        } else {
-                            throw APIError.noResults
-                        }
+                        let image = try await API.PlaceSearch.fetchImageBy(photo: photo)
+                        print("got place and image for \(name) on attempt \(attempt) ")
+                        return (place, image)
                     } else {
                         throw APIError.placeMissingPhotos
                     }
@@ -89,10 +92,7 @@ extension API {
             switch await PlacesClient.shared.fetchPlace(with: fetchPlaceRequest) {
             case .success(let place):
                 if let photo = place.photos?.first {
-                    let image = await API.PlaceSearch.fetchImageBy(photo: photo)
-                    guard let image = image else {
-                        throw APIError.noResults
-                    }
+                    let image = try await API.PlaceSearch.fetchImageBy(photo: photo)
                     return (place, image)
                 } else {
                     throw APIError.noResults
@@ -141,14 +141,14 @@ extension API {
             }
         }
         
-        static func fetchImageBy(photo: Photo) async -> UIImage? {
+        static func fetchImageBy(photo: Photo) async throws -> UIImage {
             let fetchPhotoRequest = FetchPhotoRequest(photo: photo, maxSize: photo.maxSize)
             switch await PlacesClient.shared.fetchPhoto(with: fetchPhotoRequest) {
             case .success(let image):
                 return image
             case .failure(let error):
                 print(error.localizedDescription)
-                return nil
+                throw APIError.fetchPhotoError
             }
         }
         
