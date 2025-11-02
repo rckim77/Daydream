@@ -12,6 +12,7 @@ import GooglePlacesSwift
 struct CityCardView: View {
 
     let name: (String, String)
+    let onTap: (Place?, UIImage?) -> Void
     
     @State private var place: Place?
     @State private var image: UIImage?
@@ -20,7 +21,7 @@ struct CityCardView: View {
 
     var body: some View {
         Button {
-            // use place
+            onTap(place, image)
         } label: {
             ZStack(alignment: .topLeading) {
                 if let image = image {

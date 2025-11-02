@@ -14,6 +14,7 @@ struct CitiesView: View {
     private let cityCount = 6
     
     @State private var cityNames: [(String, String)] = []
+    @State private var selectedCity: IdentifiablePlaceWithImage?
     
     var body: some View {
         ScrollView {
@@ -29,12 +30,17 @@ struct CitiesView: View {
                 }
             VStack(spacing: -38) {
                 ForEach(cityNames, id: \.0) { name in
-                    CityCardView(name: name)
-                        .scrollTransition { content, phase in
-                            content
-                                .opacity(phase == .identity || phase == .bottomTrailing ? 1 : 0)
-                                .scaleEffect(phase == .identity || phase == .bottomTrailing ? 1 : 0.75)
+                    CityCardView(name: name) { place, image in
+                        if let place = place, let image = image {
+                            let idPlace = IdentifiablePlaceWithImage(place: place, image: image)
+                            selectedCity = idPlace
                         }
+                    }
+                    .scrollTransition { content, phase in
+                        content
+                            .opacity(phase == .identity || phase == .bottomTrailing ? 1 : 0)
+                            .scaleEffect(phase == .identity || phase == .bottomTrailing ? 1 : 0.75)
+                    }
                 }
             }
         }
@@ -44,10 +50,13 @@ struct CitiesView: View {
                               feedbackButtonTapped: {},
                               autocompleteTapped: { _, _ in })
         }
+        .sheet(item: $selectedCity, content: { place in
+            CityDetailView(place: place.place, image: place.image)
+        })
         .task {
             var cities = [(String, String)]()
             
-            while cities.count < 7 {
+            while cities.count < cityCount {
                 if let city = getRandomCity(), !cities.contains(where: { $0.0 == city.0 }) {
                     cities.append(city)
                 }
