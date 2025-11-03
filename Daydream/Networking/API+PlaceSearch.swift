@@ -12,7 +12,6 @@ import GooglePlacesSwift
 import MapKit
 
 enum APIError: Error {
-    case autocompleteFailure
     case biasError
     case bundleError
     case fetchPhotoError
