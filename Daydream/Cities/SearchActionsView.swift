@@ -31,7 +31,7 @@ struct SearchActionsView: View {
                 Task {
                     let fetchPlaceRequest = FetchPlaceRequest(
                         placeID: suggestion.placeID,
-                        placeProperties: [.displayName, .formattedAddress, .photos, .coordinate]
+                        placeProperties: [.displayName, .formattedAddress, .photos, .coordinate, .placeID]
                     )
                     
                     switch await PlacesClient.shared.fetchPlace(with: fetchPlaceRequest) {
