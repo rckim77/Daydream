@@ -14,5 +14,5 @@ struct CityRoute: Identifiable, Hashable {
     /// Used for zoom transition
     let name: String
     let place: Place
-    let image: UIImage
+    let image: UIImage?
 }

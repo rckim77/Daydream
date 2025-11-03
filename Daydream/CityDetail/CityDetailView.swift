@@ -13,7 +13,7 @@ import MapKit
 struct CityDetailView: View {
 
     @State var place: Place
-    @State var image: UIImage
+    @State var image: UIImage?
     
     @Environment(\.dismiss) var dismiss
     @State private var showAutocompleteWidget = false
@@ -61,9 +61,11 @@ struct CityDetailView: View {
             .frame(maxWidth: .infinity)
         }
         .background(content: {
-            Image(uiImage: image)
-                .aspectRatio(contentMode: .fill)
-                .blur(radius: 36)
+            if let image = image {
+                Image(uiImage: image)
+                    .aspectRatio(contentMode: .fill)
+                    .blur(radius: 36)
+            }
         })
         .safeAreaInset(edge: .bottom, alignment: .center) {
             HStack {
