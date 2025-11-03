@@ -55,15 +55,15 @@ struct CitiesView: View {
             }
             .scrollIndicators(.never)
             .safeAreaInset(edge: .bottom, alignment: .center) {
-                SearchActionsView(
-                    autocompleteTapped: { place, image in
-                        selectedCity = CityRoute(name: place.description, place: place, image: image)
-                    }, randomCityReceived: { place, image in
-                        selectedCity = CityRoute(name: place.description, place: place, image: image)
-                    }, feedbackButtonTapped: {
+                SearchToolbar { place, image in
+                    selectedCity = CityRoute(name: place.description, place: place, image: image)
+                } randomCityReceived: { place, image in
+                    selectedCity = CityRoute(name: place.description, place: place, image: image)
+                } additionalViews: {
+                    FeedbackButton {
                         showFeedbackAlert = true
                     }
-                )
+                }
             }
             .fullScreenCover(item: $selectedCity) { item in
                 CityDetailView(place: item.place, image: item.image)

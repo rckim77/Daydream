@@ -1,5 +1,5 @@
 //
-//  SearchActionsView.swift
+//  SearchToolbar.swift
 //  Daydream
 //
 //  Created by Ray Kim on 10/13/25.
@@ -9,14 +9,14 @@
 import SwiftUI
 import GooglePlacesSwift
 
-struct SearchActionsView: View {
+struct SearchToolbar<Content: View>: View {
+    
+    var autocompleteTapped: (Place, UIImage?) -> Void
+    var randomCityReceived: (Place, UIImage) -> Void
+    @ViewBuilder let additionalViews: Content
 
     @State private var showAutocompleteWidget = false
     @State private var showLoadingSpinnerForRandomCityButton = false
-
-    var autocompleteTapped: (Place, UIImage?) -> Void
-    var randomCityReceived: (Place, UIImage) -> Void
-    var feedbackButtonTapped: () -> Void
     
     var body: some View {
         HStack {
@@ -24,7 +24,6 @@ struct SearchActionsView: View {
                 showAutocompleteWidget.toggle()
             } label: {
                 Label("Search", systemImage: "magnifyingglass")
-                    .foregroundStyle(.primary)
             }
             .modifier(SearchActionStyle(shape: .capsule))
             .placeAutocomplete(filter: AutocompleteFilter(types: [.cities]), show: $showAutocompleteWidget) { suggestion, _ in
@@ -42,14 +41,8 @@ struct SearchActionsView: View {
             RandomCityButton { place, image in
                 randomCityReceived(place, image)
             }
-            FeedbackButton {
-                feedbackButtonTapped()
-            }
+            additionalViews
         }
         .padding(.bottom, 8)
     }
 }
-
-extension SearchActionsView: RandomCitySelectable {}
-
-

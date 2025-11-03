@@ -68,45 +68,27 @@ struct CityDetailView: View {
             }
         })
         .safeAreaInset(edge: .bottom, alignment: .center) {
-            HStack {
-                Button {
-                    showAutocompleteWidget.toggle()
-                } label: {
-                    Label("Search", systemImage: "magnifyingglass")
+            SearchToolbar { autocompletePlace, autocompleteImage in
+                place = autocompletePlace
+                image = autocompleteImage
+                mapPosition = createMapPosition(place.location)
+                Task {
+                    await fetchSightsAndEateries(place)
                 }
-                .modifier(SearchActionStyle(shape: .capsule))
-                .placeAutocomplete(filter: AutocompleteFilter(types: [.cities]), show: $showAutocompleteWidget) { suggestion, _ in
-                    Task {
-                        do {
-                            let result = try await API.PlaceSearch.fetchPlaceAndImageBy(placeId: suggestion.placeID)
-                            place = result.0
-                            image = result.1
-                            mapPosition = createMapPosition(place.location)
-                            await fetchSightsAndEateries(place)
-                        } catch {
-                            print(error.localizedDescription)
-                        }
-                    }
-                } onError: { error in
-                    print(error.localizedDescription)
+            } randomCityReceived: { randomPlace, randomImage in
+                place = randomPlace
+                image = randomImage
+                mapPosition = createMapPosition(place.location)
+                Task {
+                    await fetchSightsAndEateries(place)
                 }
-                RandomCityButton { fetchedPlace, fetchedImage in
-                    // now update all observed data (which will update UI automatically)
-                    place = fetchedPlace
-                    image = fetchedImage
-                    mapPosition = createMapPosition(place.location)
-                    Task {
-                        await fetchSightsAndEateries(place)
-                    }
-                }
+            } additionalViews: {
                 Spacer()
-                    .frame(width: 2) // this helps the button spacing match SearchActionsView
+                    .frame(width: 2)
                 HomeButton {
                     dismiss()
                 }
             }
-            .frame(maxWidth: .infinity)
-            .padding(.bottom, 8)
         }
         .task {
             mapPosition = createMapPosition(place.location)
