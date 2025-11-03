@@ -29,26 +29,11 @@ struct SearchActionsView: View {
             .modifier(SearchActionStyle(shape: .capsule))
             .placeAutocomplete(filter: AutocompleteFilter(types: [.cities]), show: $showAutocompleteWidget) { suggestion, _ in
                 Task {
-                    let fetchPlaceRequest = FetchPlaceRequest(
-                        placeID: suggestion.placeID,
-                        placeProperties: [.displayName, .formattedAddress, .photos, .coordinate, .placeID]
-                    )
-                    
-                    switch await PlacesClient.shared.fetchPlace(with: fetchPlaceRequest) {
-                    case .success(let place):
-                        if let photo = place.photos?.first {
-                            let fetchPhotoRequest = FetchPhotoRequest(photo: photo, maxSize: photo.maxSize)
-                            switch await PlacesClient.shared.fetchPhoto(with: fetchPhotoRequest) {
-                            case .success(let image):
-                                autocompleteTapped(place, image)
-                            case .failure(_):
-                                autocompleteTapped(place, nil)
-                            }
-                        } else {
-                            autocompleteTapped(place, nil)
-                        }
-                    case .failure(_):
-                        print("error")
+                    do {
+                        let result = try await API.PlaceSearch.fetchPlaceAndImageBy(placeId: suggestion.placeID)
+                        autocompleteTapped(result.0, result.1)
+                    } catch {
+                        print(error.localizedDescription)
                     }
                 }
             } onError: { error in
@@ -61,6 +46,7 @@ struct SearchActionsView: View {
                 feedbackButtonTapped()
             }
         }
+        .padding(.bottom, 8)
     }
 }
 
