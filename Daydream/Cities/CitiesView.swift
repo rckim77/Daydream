@@ -16,15 +16,7 @@ struct CitiesView: View {
     @State private var cityNames: [(String, String)] = []
     @State private var selectedCity: CityRoute?
     @State private var showFeedbackAlert = false
-    private var alertMessage: String {
-        var message: String?
 
-        if let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String,
-            let bundleVersion = Bundle.main.infoDictionary?["CFBundleVersion"] as? String {
-            message = "The current app version is \(appVersion) (\(bundleVersion))."
-        }
-        return message ?? ""
-    }
     @Environment(\.openURL) private var openURL
     @Namespace private var zoomNS
     
@@ -78,6 +70,9 @@ struct CitiesView: View {
                     .navigationTransition(.zoom(sourceID: item.name, in: zoomNS))
             }
         }
+        .feedbackAlert(showAlert: $showFeedbackAlert, onEmailButtonPress: { url in
+            openURL(url)
+        })
         .task {
             var cities = [(String, String)]()
             
@@ -88,14 +83,6 @@ struct CitiesView: View {
             }
 
             cityNames = cities
-        }
-        .alert("Got feedback? Email me!", isPresented: $showFeedbackAlert) {
-            Button("Email") {
-                if let url = URL(string: "mailto:daydreamiosapp@gmail.com") {
-                    openURL(url)
-                }
-            }
-            Button("Cancel") {}
         }
     }
 }
