@@ -63,7 +63,8 @@ struct CityDetailView: View {
         .background(content: {
             if let image = image {
                 Image(uiImage: image)
-                    .aspectRatio(contentMode: .fill)
+                    .resizable()
+                    .scaledToFill()
                     .blur(radius: 36)
             }
         })

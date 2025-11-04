@@ -10,6 +10,7 @@ import UIKit
 import CoreLocation
 import GooglePlacesSwift
 import MapKit
+import SwiftUI
 
 enum APIError: Error {
     case biasError
@@ -53,7 +54,7 @@ extension API {
             }
         }
         
-        static func fetchPlaceAndImageBy(name: String) async throws -> (Place, UIImage) {
+        static func fetchPlaceAndImageBy(name: String, horizontalSizeClass: UserInterfaceSizeClass?) async throws -> (Place, UIImage) {
             let maxAttempts = 3
             // milliseconds
             var expoBackoff = 100
@@ -61,7 +62,7 @@ extension API {
             for attempt in 1...maxAttempts {
                 if let place = await API.PlaceSearch.fetchCityBy(name: name) {
                     if let photo = place.photos?.first {
-                        let image = try await API.PlaceSearch.fetchImageBy(photo: photo)
+                        let image = try await API.PlaceSearch.fetchImageBy(photo: photo, horizontalSizeClass: horizontalSizeClass)
                         print("got place and image for \(name) on attempt \(attempt) ")
                         return (place, image)
                     } else {
@@ -141,8 +142,9 @@ extension API {
             }
         }
         
-        static func fetchImageBy(photo: Photo) async throws -> UIImage {
-            let fetchPhotoRequest = FetchPhotoRequest(photo: photo, maxSize: CGSizeMake(4800, 800))
+        static func fetchImageBy(photo: Photo, horizontalSizeClass: UserInterfaceSizeClass? = nil) async throws -> UIImage {
+            let maxSize = horizontalSizeClass == .compact ? CGSizeMake(4800, 800) : CGSizeMake(4800, 1600)
+            let fetchPhotoRequest = FetchPhotoRequest(photo: photo, maxSize: maxSize)
             switch await PlacesClient.shared.fetchPhoto(with: fetchPhotoRequest) {
             case .success(let image):
                 return image

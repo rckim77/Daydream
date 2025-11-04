@@ -16,8 +16,15 @@ struct CityCardView: View {
     
     @State private var place: Place?
     @State private var image: UIImage?
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     
-    private let height: CGFloat = 200
+    private var height: CGFloat {
+        horizontalSizeClass == .compact ? 200 : 320
+    }
+    
+    private var cityTextVerticalPadding: CGFloat {
+        horizontalSizeClass == .compact ? 16 : 36
+    }
 
     var body: some View {
         Button {
@@ -34,7 +41,7 @@ struct CityCardView: View {
                     .multilineTextAlignment(.center)
                     .frame(maxWidth: .infinity)
                     .padding(.horizontal, 8)
-                    .padding(.vertical, 16)
+                    .padding(.vertical, cityTextVerticalPadding)
                     .background(
                         LinearGradient(colors: [Color(.systemBackground).opacity(0.85),
                                                 Color(.systemBackground).opacity(0.55),
@@ -44,10 +51,11 @@ struct CityCardView: View {
                     )
             }
         }
-        .buttonStyle(CityCardButtonStyle(height: height))
+        .buttonStyle(CityCardButtonStyle(height: height, horizontalSizeClass: horizontalSizeClass))
         .task {
             do {
-                let result = try await API.PlaceSearch.fetchPlaceAndImageBy(name: "\(name.0), \(name.1)")
+                let result = try await API.PlaceSearch.fetchPlaceAndImageBy(name: "\(name.0), \(name.1)",
+                                                                            horizontalSizeClass: horizontalSizeClass)
                 place = result.0
                 image = result.1
             } catch {

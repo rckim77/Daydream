@@ -11,6 +11,11 @@ import SwiftUI
 struct CityCardButtonStyle: ButtonStyle {
     
     let height: CGFloat
+    let horizontalSizeClass: UserInterfaceSizeClass?
+    
+    private var pressedOffset: CGFloat {
+        horizontalSizeClass == .compact ? 12 : 24
+    }
     
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
@@ -18,8 +23,7 @@ struct CityCardButtonStyle: ButtonStyle {
             .frame(maxWidth: .infinity)
             .frame(height: height)
             .clipShape(RoundedRectangle(cornerRadius: 24))
-            .shadow(radius: 3)
-            .offset(y: configuration.isPressed ? 12 : 0)
+            .offset(y: configuration.isPressed ? pressedOffset : 0)
             .animation(.easeInOut(duration: 0.15), value: configuration.isPressed)
     }
 }

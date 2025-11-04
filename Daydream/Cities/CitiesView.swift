@@ -11,14 +11,25 @@ import GooglePlacesSwift
 
 struct CitiesView: View {
     
-    private let cityCount = 4
-    
     @State private var cityNames: [(String, String)] = []
     @State private var selectedCity: CityRoute?
     @State private var showFeedbackAlert = false
 
     @Environment(\.openURL) private var openURL
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Namespace private var zoomNS
+    
+    private var cityCount: Int {
+        horizontalSizeClass == .compact  ? 4 : 5
+    }
+    
+    private var scrollViewHorizontalPadding: CGFloat {
+        horizontalSizeClass == .compact ? 0 : 96
+    }
+    
+    private var cityCardsVerticalSpacing: CGFloat {
+        horizontalSizeClass == .compact ? -38 : -48
+    }
     
     var body: some View {
         NavigationStack {
@@ -54,6 +65,7 @@ struct CitiesView: View {
                 }
             }
             .scrollIndicators(.never)
+            .padding(.horizontal, scrollViewHorizontalPadding)
             .safeAreaInset(edge: .bottom, alignment: .center) {
                 SearchToolbar { place, image in
                     selectedCity = CityRoute(name: place.description, place: place, image: image)
