@@ -25,11 +25,4 @@ final class SearchViewController: UIViewController {
             make.edges.equalToSuperview()
         }
     }
-    
-    func presentCityDetailView(place: Place, image: UIImage) -> Void {
-        let cityDetailVC = UIHostingController(rootView: CityDetailView(place: place, image: image))
-        cityDetailVC.modalPresentationStyle = .fullScreen
-        cityDetailVC.modalTransitionStyle = .crossDissolve
-        present(cityDetailVC, animated: true, completion: nil)
-    }
 }

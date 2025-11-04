@@ -11,7 +11,7 @@ import GooglePlacesSwift
 
 struct CitiesView: View {
     
-    private let cityCount = 6
+    private let cityCount = 4
     
     @State private var cityNames: [(String, String)] = []
     @State private var selectedCity: CityRoute?

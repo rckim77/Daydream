@@ -142,7 +142,7 @@ extension API {
         }
         
         static func fetchImageBy(photo: Photo) async throws -> UIImage {
-            let fetchPhotoRequest = FetchPhotoRequest(photo: photo, maxSize: photo.maxSize)
+            let fetchPhotoRequest = FetchPhotoRequest(photo: photo, maxSize: CGSizeMake(4800, 800))
             switch await PlacesClient.shared.fetchPhoto(with: fetchPhotoRequest) {
             case .success(let image):
                 return image

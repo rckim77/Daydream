@@ -17,7 +17,7 @@ struct CityCardView: View {
     @State private var place: Place?
     @State private var image: UIImage?
     
-    private let height: CGFloat = 140
+    private let height: CGFloat = 200
 
     var body: some View {
         Button {
@@ -34,14 +34,19 @@ struct CityCardView: View {
                         .multilineTextAlignment(.center)
                         .frame(maxWidth: .infinity)
                         .padding(.horizontal, 8)
-                        .padding(.vertical, 12)
+                        .padding(.vertical, 16)
                         .background(
-                            LinearGradient(colors: [Color(.systemBackground).opacity(0.8),
+                            LinearGradient(colors: [Color(.systemBackground).opacity(0.85),
                                                     Color(.systemBackground).opacity(0.55),
                                                     Color.clear],
                                            startPoint: .top,
                                            endPoint: .bottom)
                         )
+                } else {
+                    Color(.lightGray)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: height)
+                        .shadow(radius: 3)
                 }
             }
         }
