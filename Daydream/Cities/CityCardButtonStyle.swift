@@ -15,7 +15,6 @@ struct CityCardButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .tint(.primary)
-            .background(Color(.lightGray))
             .frame(maxWidth: .infinity)
             .frame(height: height)
             .clipShape(RoundedRectangle(cornerRadius: 24))

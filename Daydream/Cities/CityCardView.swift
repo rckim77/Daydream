@@ -24,30 +24,24 @@ struct CityCardView: View {
             onTap(place, image)
         } label: {
             ZStack(alignment: .topLeading) {
-                if let image = image {
-                    Image(uiImage: image)
-                        .resizable()
-                        .frame(maxWidth: .infinity)
-                        .frame(height: height)
-                    Text(name.0)
-                        .font(.largeTitle).bold()
-                        .multilineTextAlignment(.center)
-                        .frame(maxWidth: .infinity)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 16)
-                        .background(
-                            LinearGradient(colors: [Color(.systemBackground).opacity(0.85),
-                                                    Color(.systemBackground).opacity(0.55),
-                                                    Color.clear],
-                                           startPoint: .top,
-                                           endPoint: .bottom)
-                        )
-                } else {
-                    Color(.lightGray)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: height)
-                        .shadow(radius: 3)
-                }
+                backgroundView
+                    .frame(maxWidth: .infinity)
+                    .frame(height: height)
+                    .clipShape(RoundedRectangle(cornerRadius: 24))
+                    .contentShape(RoundedRectangle(cornerRadius: 24))
+                Text(name.0)
+                    .font(.largeTitle).bold()
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: .infinity)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 16)
+                    .background(
+                        LinearGradient(colors: [Color(.systemBackground).opacity(0.85),
+                                                Color(.systemBackground).opacity(0.55),
+                                                Color.clear],
+                                       startPoint: .top,
+                                       endPoint: .bottom)
+                    )
             }
         }
         .buttonStyle(CityCardButtonStyle(height: height))
@@ -58,6 +52,17 @@ struct CityCardView: View {
                 image = result.1
             } catch {
             }
+        }
+    }
+
+    @ViewBuilder
+    private var backgroundView: some View {
+        if let image = image {
+            Image(uiImage: image)
+                .resizable()
+                .scaledToFill()
+        } else {
+            Color(.lightGray)
         }
     }
 }
