@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
-    <device id="retina5_9" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24128" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+    <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24063"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -18,18 +15,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="lights" translatesAutoresizingMaskIntoConstraints="NO" id="yJf-vz-hyq">
-                                <rect key="frame" x="127.66666666666669" y="346" width="120" height="120"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="120" id="nPl-bP-fm6"/>
-                                    <constraint firstAttribute="height" constant="120" id="uXW-9e-Nbw"/>
-                                </constraints>
-                            </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sunriseJungle" translatesAutoresizingMaskIntoConstraints="NO" id="lwd-Uy-2lP">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="beachGenerated" translatesAutoresizingMaskIntoConstraints="NO" id="lwd-Uy-2lP">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Daydream" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aUZ-vs-fmI">
-                                <rect key="frame" x="81.999999999999986" y="377" width="210.66666666666663" height="59.333333333333314"/>
+                                <rect key="frame" x="83.000000000000014" y="376.33333333333331" width="209.33333333333337" height="59.333333333333314"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="48"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
@@ -37,18 +27,16 @@
                                 <size key="shadowOffset" width="0.0" height="1"/>
                             </label>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" red="0.72549019607843135" green="0.88235294117647056" blue="0.86274509803921573" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="aUZ-vs-fmI" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="8Qu-ib-pVP"/>
                             <constraint firstItem="lwd-Uy-2lP" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="8fM-HD-8Cm"/>
-                            <constraint firstItem="yJf-vz-hyq" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="H1Z-xL-U8m"/>
                             <constraint firstItem="lwd-Uy-2lP" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="JVm-Ru-QmF"/>
                             <constraint firstItem="lwd-Uy-2lP" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="JiW-6Q-Iuk"/>
-                            <constraint firstItem="yJf-vz-hyq" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="O1d-RF-hFh"/>
                             <constraint firstAttribute="bottom" secondItem="lwd-Uy-2lP" secondAttribute="bottom" id="Xlc-E3-lZZ"/>
                             <constraint firstItem="aUZ-vs-fmI" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="nMc-S3-1Zl"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -57,7 +45,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="lights" width="189" height="189"/>
-        <image name="sunriseJungle" width="2246" height="3644"/>
+        <image name="beachGenerated" width="1024" height="1536"/>
     </resources>
 </document>

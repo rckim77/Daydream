@@ -24,10 +24,6 @@
    "country": "Malaysia"
  },
  {
-   "city": "Shenzhen",
-   "country": "China"
- },
- {
    "city": "New York City",
    "country": "USA"
  },
@@ -58,10 +54,6 @@
  {
    "city": "Phuket",
    "country": "Thailand"
- },
- {
-   "city": "Mecca",
-   "country": "Saudi Arabia"
  },
  {
    "city": "Pattaya",
@@ -228,14 +220,6 @@
    "country": "Germany"
  },
  {
-   "city": "Johannesburg",
-   "country": "South Africa"
- },
- {
-   "city": "Edirne",
-   "country": "Turkey"
- },
- {
    "city": "Suzhou",
    "country": "China"
  },
@@ -358,14 +342,6 @@
  {
    "city": "Harare",
    "country": "Zimbabwe"
- },
- {
-   "city": "Kolkata",
-   "country": "India"
- },
- {
-   "city": "Nanjing",
-   "country": "China"
  },
  {
    "city": "Kyoto",

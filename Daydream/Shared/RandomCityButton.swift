@@ -11,7 +11,7 @@ import GooglePlacesSwift
 
 struct RandomCityButton: View {
     
-    let onFetch: ((Place, UIImage?) -> Void)
+    let onFetch: ((Place, UIImage) -> Void)
     
     @State private var showLoadingSpinner = false
     
