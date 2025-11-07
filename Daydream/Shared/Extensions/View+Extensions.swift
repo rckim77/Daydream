@@ -9,6 +9,9 @@
 import SwiftUI
 
 extension View {
+
+    var isIpad: Bool { UIDevice.current.userInterfaceIdiom == .pad }
+
     private var alertMessage: String {
         var message: String?
 

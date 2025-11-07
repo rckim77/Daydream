@@ -40,17 +40,9 @@ struct CitiesView: View {
                     .multilineTextAlignment(.center)
                     .padding(.vertical, 32)
                     .padding(.horizontal, 16)
-                    .scrollTransition { content, phase in
-                        content
-                            .opacity(phase == .identity || phase == .bottomTrailing ? 1 : 0)
-                            .scaleEffect(phase == .identity || phase == .bottomTrailing ? 1 : 0.75)
-                    }
+                    .modifier(TopScrollTransition())
                 TipView(GettingStartedTip())
-                    .scrollTransition { content, phase in
-                        content
-                            .opacity(phase == .identity || phase == .bottomTrailing ? 1 : 0)
-                            .scaleEffect(phase == .identity || phase == .bottomTrailing ? 1 : 0.75)
-                    }
+                    .modifier(TopScrollTransition())
                 VStack(spacing: -38) {
                     ForEach(cityNames, id: \.0) { name in
                         CityCardView(name: name) { place, image in
@@ -63,11 +55,7 @@ struct CitiesView: View {
                             source
                                 .clipShape(RoundedRectangle(cornerRadius: 24))
                         }
-                        .scrollTransition { content, phase in
-                            content
-                                .opacity(phase == .identity || phase == .bottomTrailing ? 1 : 0)
-                                .scaleEffect(phase == .identity || phase == .bottomTrailing ? 1 : 0.75)
-                        }
+                        .modifier(TopScrollTransition())
                     }
                 }
             }

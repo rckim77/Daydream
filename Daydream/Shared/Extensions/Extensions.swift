@@ -97,7 +97,3 @@ extension UIButton.Configuration {
         }
     }
 }
-
-extension View {
-    var isIpad: Bool { UIDevice.current.userInterfaceIdiom == .pad }
-}
