@@ -8,6 +8,7 @@
 
 import SwiftUI
 import GooglePlacesSwift
+import TipKit
 
 struct CitiesView: View {
     
@@ -39,6 +40,12 @@ struct CitiesView: View {
                     .multilineTextAlignment(.center)
                     .padding(.vertical, 32)
                     .padding(.horizontal, 16)
+                    .scrollTransition { content, phase in
+                        content
+                            .opacity(phase == .identity || phase == .bottomTrailing ? 1 : 0)
+                            .scaleEffect(phase == .identity || phase == .bottomTrailing ? 1 : 0.75)
+                    }
+                TipView(GettingStartedTip())
                     .scrollTransition { content, phase in
                         content
                             .opacity(phase == .identity || phase == .bottomTrailing ? 1 : 0)

@@ -9,6 +9,7 @@
 import UIKit
 import GooglePlacesSwift
 import GoogleMaps
+import TipKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -18,6 +19,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			_ = PlacesClient.provideAPIKey(keys.placesNewAPI)
 			GMSServices.provideAPIKey(keys.googleAPI)
 		}
+        
+        try? Tips.configure()
+        
 		return true
 	}
 
