@@ -11,24 +11,22 @@ import SwiftUI
 
 struct MapReviewsCarousel: View {
     
-    let placeId: String
-    
-    @State private var place: Place?
+    @ObservedObject var context: MapReviewContext
     
     private var contentMarginOffset: CGFloat {
-        place?.reviewSummary != nil ? 0 : 12
+        context.place?.reviewSummary != nil ? 0 : 12
     }
     
     private var scrollDisabled: Bool {
-        place?.reviewSummary != nil
+        context.place?.reviewSummary != nil
     }
     
     var body: some View {
         ScrollView(.horizontal) {
             HStack(spacing: 4) {
-                if let reviewSummary = place?.reviewSummary {
+                if let reviewSummary = context.place?.reviewSummary {
                     ReviewSummaryCard(summary: reviewSummary)
-                } else if let reviews = place?.reviews {
+                } else if let reviews = context.place?.reviews {
                     ForEach(reviews, id: \.hashValue) { review in
                         ReviewCard(review: review)
                     }
@@ -41,12 +39,9 @@ struct MapReviewsCarousel: View {
         .scrollIndicators(.hidden)
         .scrollDisabled(scrollDisabled)
         .scrollTargetBehavior(.viewAligned)
-        .task {
-            place = await API.PlaceSearch.fetchPlaceWithReviewsBy(placeId: placeId)
-        }
     }
 }
 
 #Preview {
-    MapReviewsCarousel(placeId: "test")
+    MapReviewsCarousel(context: MapReviewContext(place: nil))
 }

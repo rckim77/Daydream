@@ -6,11 +6,20 @@
 //  Copyright © 2018 Raymond Kim. All rights reserved.
 //
 
+import Combine
 import UIKit
 import GoogleMaps
 import GooglePlacesSwift
 import SnapKit
 import SwiftUI
+
+final class MapReviewContext: ObservableObject {
+    @Published var place: Place?
+
+    init(place: Place?) {
+        self.place = place
+    }
+}
 
 final class MapViewController: UIViewController {
 
@@ -19,6 +28,7 @@ final class MapViewController: UIViewController {
     private var dynamicMarker: GMSMarker?
     private var currentReviews: [GooglePlacesSwift.Review]?
     private var currentReviewIndex = 0
+    private var mapReviewContext = MapReviewContext(place: nil)
 
     /// Will automatically sync with system user interface style settings but can be overridden
     /// when the user taps the dark mode button. Note this must be called once `dynamicMapView` is set.
@@ -157,18 +167,16 @@ final class MapViewController: UIViewController {
         
         let iPadOffset = UIDevice.current.userInterfaceIdiom == .pad ? 12 : 0
         
-        if let placeId = place.placeID {
-            let reviewsCarouselVC = UIHostingController(rootView: MapReviewsCarousel(placeId: placeId))
-            addChild(reviewsCarouselVC)
-            view.addSubview(reviewsCarouselVC.view)
-            reviewsCarouselVC.view.backgroundColor = .clear
-            reviewsCarouselVC.didMove(toParent: self)
-            
-            reviewsCarouselVC.view.snp.makeConstraints { make in
-                make.leading.trailing.equalToSuperview()
-                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(iPadOffset)
-                make.height.equalTo(200)
-            }
+        let reviewsCarouselVC = UIHostingController(rootView: MapReviewsCarousel(context: mapReviewContext))
+        addChild(reviewsCarouselVC)
+        view.addSubview(reviewsCarouselVC.view)
+        reviewsCarouselVC.view.backgroundColor = .clear
+        reviewsCarouselVC.didMove(toParent: self)
+        
+        reviewsCarouselVC.view.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(iPadOffset)
+            make.height.equalTo(200)
         }
 
         containerView.snp.makeConstraints { make in
@@ -276,6 +284,7 @@ final class MapViewController: UIViewController {
             dynamicMarker.snippet = result.formattedAddress
             dynamicMarker.tracksInfoWindowChanges = false
             place = result
+            mapReviewContext.place = result
         }
     }
 
