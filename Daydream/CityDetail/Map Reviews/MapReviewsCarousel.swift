@@ -15,9 +15,17 @@ struct MapReviewsCarousel: View {
     
     @State private var place: Place?
     
+    private var contentMarginOffset: CGFloat {
+        place?.reviewSummary != nil ? 0 : 12
+    }
+    
+    private var scrollDisabled: Bool {
+        place?.reviewSummary != nil
+    }
+    
     var body: some View {
         ScrollView(.horizontal) {
-            HStack(spacing: 2) {
+            HStack(spacing: 4) {
                 if let reviewSummary = place?.reviewSummary {
                     ReviewSummaryCard(summary: reviewSummary)
                 } else if let reviews = place?.reviews {
@@ -26,11 +34,13 @@ struct MapReviewsCarousel: View {
                     }
                 }
             }
+            .scrollTargetLayout()
         }
         .background(.clear)
+        .contentMargins(contentMarginOffset)
         .scrollIndicators(.hidden)
-        .contentMargins(16)
-        .scrollTargetBehavior(.paging)
+        .scrollDisabled(scrollDisabled)
+        .scrollTargetBehavior(.viewAligned)
         .task {
             place = await API.PlaceSearch.fetchPlaceWithReviewsBy(placeId: placeId)
         }

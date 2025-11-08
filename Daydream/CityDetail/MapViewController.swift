@@ -167,7 +167,7 @@ final class MapViewController: UIViewController {
             reviewsCarouselVC.view.snp.makeConstraints { make in
                 make.leading.trailing.equalToSuperview()
                 make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(iPadOffset)
-                make.height.equalTo(194)
+                make.height.equalTo(200)
             }
         }
 

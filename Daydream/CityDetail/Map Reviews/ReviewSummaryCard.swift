@@ -16,15 +16,23 @@ struct ReviewSummaryCard: View {
     var body: some View {
         VStack {
             Text(summary.text ?? "No review text!")
-                .font(.headline)
-                .minimumScaleFactor(0.7)
+                .font(.subheadline)
+                .minimumScaleFactor(0.9)
                 .frame(maxWidth: .infinity, alignment: .leading)
             if let disclosureText = summary.disclosureText {
                 Text(disclosureText)
-                    .font(.subheadline).italic()
+                    .font(.caption).italic()
                     .frame(maxWidth: .infinity, alignment: .trailing)
+                    .padding(.top, 4)
             }
         }
         .padding(12)
+        .background {
+            RoundedRectangle(cornerRadius: 16)
+                .fill(.white)
+                .shadow(radius: 2)
+        }
+        .padding(12)
+        .containerRelativeFrame(.horizontal)
     }
 }

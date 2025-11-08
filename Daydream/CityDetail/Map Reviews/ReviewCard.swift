@@ -27,25 +27,32 @@ struct ReviewCard: View {
                         image
                             .resizable()
                             .scaledToFill()
-                            .frame(width: 36, height: 36)
+                            .frame(width: 32, height: 32)
                     } placeholder: {
                         ProgressView()
                     }
-                    Text(review.authorAttribution?.displayName ?? "Author")
-                        .font(.headline).bold()
+                    VStack(alignment: .leading, spacing: 0) {
+                        Text(review.authorAttribution?.displayName ?? "Author")
+                            .font(.subheadline).bold()
+                            .minimumScaleFactor(0.9)
+                        if let dateText = review.relativePublishDateDescription {
+                            Text(dateText)
+                                .font(.caption).italic()
+                        }
+                    }
                     Spacer()
                     ReviewStars(rating: review.rating)
                 }
-                .padding(.horizontal, 12)
                 .padding(.top, 12)
                 Text(review.text ?? "Sorry, couldn't load review!")
                     .font(.subheadline)
-                    .minimumScaleFactor(0.7)
+                    .minimumScaleFactor(0.9)
+                    .lineLimit(5)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.horizontal, 12)
-                    .padding(.top, 4)
-                    .padding(.bottom, 16)
+                    .padding(.top, 2)
+                    .padding(.bottom, 14)
             }
+            .padding(.horizontal, 12)
         }
         .buttonStyle(.plain)
         .background {
@@ -53,7 +60,7 @@ struct ReviewCard: View {
                 .fill(.white)
                 .shadow(radius: 2)
         }
-        .padding(.trailing, 16)
+        .padding(.horizontal, 4)
         .containerRelativeFrame(.horizontal)
     }
 }
