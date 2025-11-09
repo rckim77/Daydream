@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import GooglePlacesSwift
 
 /// Uses `Photo` hashValue as hash key (converted from `Int` to `String`).
 final class ImageCache {
