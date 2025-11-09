@@ -6,20 +6,11 @@
 //  Copyright © 2018 Raymond Kim. All rights reserved.
 //
 
-import Combine
-import UIKit
 import GoogleMaps
 import GooglePlacesSwift
 import SnapKit
 import SwiftUI
-
-final class MapReviewContext: ObservableObject {
-    @Published var place: Place?
-
-    init(place: Place?) {
-        self.place = place
-    }
-}
+import UIKit
 
 final class MapViewController: UIViewController {
 
