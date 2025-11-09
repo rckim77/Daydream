@@ -83,24 +83,48 @@ extension API {
             throw APIError.noResults
         }
         
-        
+        /// Fetches Place and Image for `placeId`, using `PlacesCache` and `ImageCache` if cached.
         static func fetchPlaceAndImageBy(placeId: String) async throws -> (Place, UIImage) {
-            let fetchPlaceRequest = FetchPlaceRequest(
-                placeID: placeId,
-                placeProperties: [.placeID, .coordinate, .photos, .displayName, .reviewSummary]
-            )
-            
-            switch await PlacesClient.shared.fetchPlace(with: fetchPlaceRequest) {
-            case .success(let place):
-                if let photo = place.photos?.first {
-                    let image = try await API.PlaceSearch.fetchImageBy(photo: photo)
-                    return (place, image)
+            if let cachedPlace = PlacesCache.shared.get(forKey: placeId),
+                let photo = cachedPlace.photos?.first {
+                let image: UIImage
+                if let cachedImage = ImageCache.shared.get(forKey: String(photo.hashValue)) {
+                    print("used cached place and cached image")
+                    image = cachedImage
                 } else {
+                    image = try await API.PlaceSearch.fetchImageBy(photo: photo)
+                    ImageCache.shared.set(image, forKey: String(photo.hashValue))
+                    print("used cached place, fetched and then cached image")
+                }
+                return (cachedPlace, image)
+            } else {
+                let fetchPlaceRequest = FetchPlaceRequest(
+                    placeID: placeId,
+                    placeProperties: [.placeID, .coordinate, .photos, .displayName, .reviewSummary]
+                )
+
+                switch await PlacesClient.shared.fetchPlace(with: fetchPlaceRequest) {
+                case .success(let place):
+                    PlacesCache.shared.set(place, forKey: placeId)
+                    if let photo = place.photos?.first {
+                        let hashKey = String(photo.hashValue)
+                        let image: UIImage
+                        if let cachedImage = ImageCache.shared.get(forKey: hashKey) {
+                            print("fetched and then cached place, and used cached image")
+                            image = cachedImage
+                        } else {
+                            image = try await API.PlaceSearch.fetchImageBy(photo: photo)
+                            print("fetched and then cached place, and fetched and then cached image")
+                            ImageCache.shared.set(image, forKey: hashKey)
+                        }
+                        return (place, image)
+                    } else {
+                        throw APIError.noResults
+                    }
+                case .failure(let error):
+                    print(error.localizedDescription)
                     throw APIError.noResults
                 }
-            case .failure(let error):
-                print(error.localizedDescription)
-                throw APIError.noResults
             }
         }
         
@@ -120,6 +144,7 @@ extension API {
             
             switch await PlacesClient.shared.searchByText(with: request) {
             case .success(let places):
+                print("=== places \(places.compactMap { $0.displayName })")
                 return places.first
             case .failure(let error):
                 print(error.localizedDescription)
@@ -142,11 +167,19 @@ extension API {
             }
         }
         
+        /// Uses UIImage cache to fetch by photo hash value, otherwise calls Places SDK and adds to cache
         static func fetchImageBy(photo: Photo, horizontalSizeClass: UserInterfaceSizeClass? = nil) async throws -> UIImage {
+            let hashKey = String(photo.hashValue)
+            if let cachedImage = ImageCache.shared.get(forKey: hashKey) {
+                print("hit cache")
+                return cachedImage
+            }
+
             let maxSize = horizontalSizeClass == .compact ? CGSizeMake(4800, 800) : CGSizeMake(4800, 1600)
             let fetchPhotoRequest = FetchPhotoRequest(photo: photo, maxSize: maxSize)
             switch await PlacesClient.shared.fetchPhoto(with: fetchPhotoRequest) {
             case .success(let image):
+                ImageCache.shared.set(image, forKey: hashKey)
                 return image
             case .failure(let error):
                 print(error.localizedDescription)

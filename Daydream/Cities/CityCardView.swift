@@ -59,6 +59,7 @@ struct CityCardView: View {
                 place = result.0
                 image = result.1
             } catch {
+                print("=== error: \(error)")
             }
         }
     }
