@@ -26,8 +26,9 @@ final class MapViewController: UIViewController {
     private var place: Place
     private var dynamicMapView: GMSMapView?
     private var dynamicMarker: GMSMarker?
-    private var currentReviews: [GooglePlacesSwift.Review]?
-    private var currentReviewIndex = 0
+    /// Used to provide more accurate location when deeplinking to Google Maps
+    private var dynamicMarkerPlaceId: String?
+    /// Object that updates map review SwiftUI code
     private var mapReviewContext = MapReviewContext(place: nil)
 
     /// Will automatically sync with system user interface style settings but can be overridden
@@ -254,7 +255,8 @@ final class MapViewController: UIViewController {
 
     private func addOrUpdateMarkerAndReviews(for placeId: String, name: String, location: CLLocationCoordinate2D, in mapView: GMSMapView) {
         if let marker = dynamicMarker {
-            marker.map = nil // clears prev marker
+            marker.map = nil // removes previous marker from map
+            marker.appearAnimation = .pop
             marker.title = name
             marker.map = mapView
             marker.position = location
@@ -267,6 +269,8 @@ final class MapViewController: UIViewController {
 
             dynamicMarker = marker
         }
+
+        dynamicMarkerPlaceId = placeId
 
         guard let dynamicMarker = dynamicMarker else {
             return
@@ -310,6 +314,32 @@ final class MapViewController: UIViewController {
 extension MapViewController: GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, didTapPOIWithPlaceID placeID: String, name: String, location: CLLocationCoordinate2D) {
         addOrUpdateMapView(for: placeID, name: name, location: location)
+    }
+    
+    func mapView(_ mapView: GMSMapView, didTapInfoWindowOf marker: GMSMarker) {
+        var components = URLComponents()
+        components.scheme = "https"
+        components.host = "www.google.com"
+        components.path = "/maps/search/"
+        components.queryItems = [URLQueryItem(name: "api", value: "1")]
+        
+        // placeId is most accurate but can fallback with coordinate
+        // Google Map URLs must always contain a query, which can consist of a name, address, or comma-separated
+        // lat/lon coordinates. Strings must be URL-encoded so make sure to convert chars like commas.
+        if let placeId = dynamicMarkerPlaceId {
+            components.queryItems?.append(URLQueryItem(name: "query_place_id", value: placeId))
+            components.queryItems?.append(URLQueryItem(name: "query", value: marker.title))
+        } else {
+            var query = "\(marker.position.latitude), \(marker.position.longitude)"
+            if let name = marker.title {
+                query = name + " " + query
+            }
+            components.queryItems?.append(URLQueryItem(name: "query", value: query))
+        }
+        
+        if let url = components.url {
+            UIApplication.shared.open(url)
+        }
     }
 }
 

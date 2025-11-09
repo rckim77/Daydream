@@ -130,7 +130,7 @@ extension API {
         static func fetchPlaceWithReviewsBy(placeId: String) async -> Place? {
             let fetchPlaceRequest = FetchPlaceRequest(
                 placeID: placeId,
-                placeProperties: [.placeID, .coordinate, .reviews, .reviewSummary, .formattedAddress]
+                placeProperties: [.placeID, .coordinate, .reviews, .reviewSummary, .formattedAddress, .displayName]
             )
             
             switch await PlacesClient.shared.fetchPlace(with: fetchPlaceRequest) {
