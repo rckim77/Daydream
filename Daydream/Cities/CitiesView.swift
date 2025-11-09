@@ -14,9 +14,8 @@ struct CitiesView: View {
     
     @State private var cityNames: [(String, String)] = []
     @State private var selectedCity: CityRoute?
-    @State private var showFeedbackAlert = false
+    @State private var showFeedbackModal = false
 
-    @Environment(\.openURL) private var openURL
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Namespace private var zoomNS
     
@@ -68,7 +67,7 @@ struct CitiesView: View {
                     selectedCity = CityRoute(name: place.description, place: place, image: image)
                 } additionalViews: {
                     FeedbackButton {
-                        showFeedbackAlert = true
+                        showFeedbackModal = true
                     }
                 }
             }
@@ -77,9 +76,10 @@ struct CitiesView: View {
                     .navigationTransition(.zoom(sourceID: item.name, in: zoomNS))
             }
         }
-        .feedbackAlert(showAlert: $showFeedbackAlert, onEmailButtonPress: { url in
-            openURL(url)
-        })
+        .sheet(isPresented: $showFeedbackModal) {
+            FeedbackSheet()
+                .presentationDetents([.medium])
+        }
         .task {
             var cities = [(String, String)]()
             
