@@ -10,11 +10,11 @@ import UIKit
 import CoreLocation
 
 protocol RandomCitySelectable {
-    func getRandomCity() -> (String, String)?
+    func getRandomCity() -> RandomCity?
 }
 
 extension RandomCitySelectable {
-    func getRandomCity() -> (String, String)? {
+    func getRandomCity() -> RandomCity? {
         guard let path = Bundle.main.path(forResource: "randomCitiesJSON", ofType: "json") else {
             return nil
         }
@@ -24,9 +24,7 @@ extension RandomCitySelectable {
             let data = try Data(contentsOf: url, options: .mappedIfSafe)
             let randomCities = try JSONCustomDecoder().decode([RandomCity].self, from: data)
             let randomIndex = Int(arc4random_uniform(UInt32(randomCities.count)))
-            let city = randomCities[randomIndex].city
-            let country = randomCities[randomIndex].country
-            return (city, country)
+            return randomCities[randomIndex]
         } catch {
             return nil
         }

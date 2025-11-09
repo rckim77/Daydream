@@ -12,7 +12,7 @@ import TipKit
 
 struct CitiesView: View {
     
-    @State private var cityNames: [(String, String)] = []
+    @State private var cities: [RandomCity] = []
     @State private var selectedCity: CityRoute?
     @State private var showFeedbackModal = false
 
@@ -41,14 +41,14 @@ struct CitiesView: View {
                 TipView(GettingStartedTip())
                     .modifier(TopScrollTransition())
                 VStack(spacing: -60) {
-                    ForEach(cityNames, id: \.0) { name in
-                        CityCardView(name: name) { place, image in
+                    ForEach(cities, id: \.city) { city in
+                        CityCardView(city: city) { place, image in
                             guard let place, let image else {
                                 return
                             }
-                            selectedCity = CityRoute(name: name.0, place: place, image: image)
+                            selectedCity = CityRoute(name: "\(city.city), \(city.country)", place: place, image: image)
                         }
-                        .matchedTransitionSource(id: name.0, in: zoomNS) { source in
+                        .matchedTransitionSource(id: city.city, in: zoomNS) { source in
                             source
                                 .clipShape(RoundedRectangle(cornerRadius: 32))
                         }
@@ -79,15 +79,15 @@ struct CitiesView: View {
                 .presentationDetents([.medium])
         }
         .task {
-            var cities = [(String, String)]()
+            var selectedCities = [RandomCity]()
             
-            while cities.count < cityCount {
-                if let city = getRandomCity(), !cities.contains(where: { $0.0 == city.0 }) {
-                    cities.append(city)
+            while selectedCities.count < cityCount {
+                if let city = getRandomCity(), !selectedCities.contains(where: { $0.city == city.city }) {
+                    selectedCities.append(city)
                 }
             }
 
-            cityNames = cities
+            cities = selectedCities
         }
     }
 }

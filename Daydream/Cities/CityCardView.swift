@@ -11,7 +11,7 @@ import GooglePlacesSwift
 
 struct CityCardView: View {
 
-    let name: (String, String)
+    let city: RandomCity
     let onTap: (Place?, UIImage?) -> Void
     
     @State private var place: Place?
@@ -38,7 +38,7 @@ struct CityCardView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 24))
                     .contentShape(RoundedRectangle(cornerRadius: 24))
                 VStack(spacing: 0) {
-                    Text(name.0)
+                    Text(city.city)
                         .font(.largeTitle).bold()
                         .multilineTextAlignment(.center)
                         .frame(maxWidth: .infinity)
@@ -84,12 +84,10 @@ struct CityCardView: View {
     private func loadResults() async -> Void {
         do {
             showErrorView = false
-            let result = try await API.PlaceSearch.fetchPlaceAndImageBy(name: "\(name.0), \(name.1)",
-                                                                        horizontalSizeClass: horizontalSizeClass)
+            let result = try await API.PlaceSearch.fetchPlaceAndImageBy(city, horizontalSizeClass: horizontalSizeClass)
             place = result.0
             image = result.1
         } catch {
-            print("=== error fetching placeAndImage for \(name.0): \(error)")
             showErrorView = true
         }
     }

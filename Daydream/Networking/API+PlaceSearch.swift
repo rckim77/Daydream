@@ -40,9 +40,8 @@ extension API {
             let data = try Data(contentsOf: url, options: .mappedIfSafe)
             let randomCities = try JSONCustomDecoder().decode([RandomCity].self, from: data)
             let randomIndex = Int(arc4random_uniform(UInt32(randomCities.count)))
-            let fullCityName = "\(randomCities[randomIndex].city), \(randomCities[randomIndex].country)"
             
-            guard let place = await API.PlaceSearch.fetchCityBy(name: fullCityName) else {
+            guard let place = await API.PlaceSearch.fetchCityBy(randomCities[randomIndex]) else {
                 throw APIError.noResults
             }
             
@@ -54,27 +53,27 @@ extension API {
             }
         }
         
-        static func fetchPlaceAndImageBy(name: String, horizontalSizeClass: UserInterfaceSizeClass?) async throws -> (Place, UIImage) {
-            let maxAttempts = 3
+        static func fetchPlaceAndImageBy(_ city: RandomCity, horizontalSizeClass: UserInterfaceSizeClass?) async throws -> (Place, UIImage) {
+            let maxAttempts = 2
             var expoBackoff = 100 // in milliseconds
             
             for attempt in 1...maxAttempts {
-                if let place = await API.PlaceSearch.fetchCityBy(name: name) {
+                if let place = await API.PlaceSearch.fetchCityBy(city) {
                     if let photo = place.photos?.first {
                         let image = try await API.PlaceSearch.fetchImageBy(photo: photo, horizontalSizeClass: horizontalSizeClass)
-                        print("=== got place and image for \(name) on attempt \(attempt) ")
+                        print("=== got place and image for \(city.city) on attempt \(attempt) ")
                         return (place, image)
                     } else {
                         throw APIError.placeMissingPhotos
                     }
                 } else {
                     if attempt < maxAttempts {
-                        print("=== attempting \(name) again...")
+                        print("=== attempting \(city.city) again...")
                         try? await Task.sleep(for: .milliseconds(expoBackoff))
                         expoBackoff *= 2
                         continue
                     } else {
-                        print("=== unable to get data for \(name) after last attempt")
+                        print("=== unable to get data for \(city.city) after last attempt")
                     }
                 }
             }
@@ -127,23 +126,19 @@ extension API {
             }
         }
         
-        static func fetchCityBy(name: String) async -> Place? {
-            // this is unfortunately a required param even though we don't need one...
-            guard let neutralBias = RectangularCoordinateRegion(
-                northEast: CLLocationCoordinate2D(latitude: 85, longitude: 180),
-                southWest: CLLocationCoordinate2D(latitude: -85, longitude: 0)
-            ) else {
-                return nil
-            }
-            let request = SearchByTextRequest(
-                textQuery: name,
-                placeProperties: [.displayName, .formattedAddress, .coordinate, .photos, .placeID, .addressComponents],
-                locationBias: neutralBias
+        static func fetchCityBy(_ city: RandomCity) async -> Place? {
+            let center = CLLocationCoordinate2D(latitude: city.latitude, longitude: city.longitude)
+            let restriction = CircularCoordinateRegion(center: center, radius: city.radius * 1000)
+            let placeProps: [PlaceProperty] = [.displayName, .formattedAddress, .coordinate, .photos, .placeID, .addressComponents]
+            let request = SearchNearbyRequest(
+                locationRestriction: restriction,
+                placeProperties: placeProps,
+                includedPrimaryTypes: [.locality],
+                maxResultCount: 2
             )
-            
-            switch await PlacesClient.shared.searchByText(with: request) {
+
+            switch await PlacesClient.shared.searchNearby(with: request) {
             case .success(let places):
-                print("=== places \(places.compactMap { $0.displayName })")
                 return places.first
             case .failure(let error):
                 print("=== fetchCityBy(name:) call failed: \(error.localizedDescription)")

@@ -9,4 +9,10 @@
 struct RandomCity: Codable {
     let city: String
     let country: String
+    /// center latitude of city
+    let latitude: Double
+    /// center longitude of city
+    let longitude: Double
+    /// in kilometers
+    let radius: Double
 }
