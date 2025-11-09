@@ -16,6 +16,7 @@ struct CityCardView: View {
     
     @State private var place: Place?
     @State private var image: UIImage?
+    @State private var showErrorView = false
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     
     private var height: CGFloat {
@@ -36,31 +37,36 @@ struct CityCardView: View {
                     .frame(height: height)
                     .clipShape(RoundedRectangle(cornerRadius: 24))
                     .contentShape(RoundedRectangle(cornerRadius: 24))
-                Text(name.0)
-                    .font(.largeTitle).bold()
-                    .multilineTextAlignment(.center)
-                    .frame(maxWidth: .infinity)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, cityTextVerticalPadding)
-                    .background(
-                        LinearGradient(colors: [Color(.systemBackground).opacity(0.85),
-                                                Color(.systemBackground).opacity(0.55),
-                                                Color.clear],
-                                       startPoint: .top,
-                                       endPoint: .bottom)
-                    )
+                VStack(spacing: 0) {
+                    Text(name.0)
+                        .font(.largeTitle).bold()
+                        .multilineTextAlignment(.center)
+                        .frame(maxWidth: .infinity)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, cityTextVerticalPadding)
+                        .background(
+                            LinearGradient(colors: [Color(.systemBackground).opacity(0.85),
+                                                    Color(.systemBackground).opacity(0.55),
+                                                    Color.clear],
+                                           startPoint: .top,
+                                           endPoint: .bottom)
+                        )
+                    if showErrorView {
+                        Button {
+                            Task {
+                                await loadResults()
+                            }
+                        } label: {
+                            Label("Failed to load.", systemImage: "arrow.clockwise")
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
             }
         }
         .buttonStyle(CityCardButtonStyle(height: height, horizontalSizeClass: horizontalSizeClass))
         .task {
-            do {
-                let result = try await API.PlaceSearch.fetchPlaceAndImageBy(name: "\(name.0), \(name.1)",
-                                                                            horizontalSizeClass: horizontalSizeClass)
-                place = result.0
-                image = result.1
-            } catch {
-                print("=== error: \(error)")
-            }
+            await loadResults()
         }
     }
 
@@ -72,6 +78,19 @@ struct CityCardView: View {
                 .scaledToFill()
         } else {
             Color(.lightGray)
+        }
+    }
+    
+    private func loadResults() async -> Void {
+        do {
+            showErrorView = false
+            let result = try await API.PlaceSearch.fetchPlaceAndImageBy(name: "\(name.0), \(name.1)",
+                                                                        horizontalSizeClass: horizontalSizeClass)
+            place = result.0
+            image = result.1
+        } catch {
+            print("=== error fetching placeAndImage for \(name.0): \(error)")
+            showErrorView = true
         }
     }
 }

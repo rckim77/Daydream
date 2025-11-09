@@ -62,19 +62,19 @@ extension API {
                 if let place = await API.PlaceSearch.fetchCityBy(name: name) {
                     if let photo = place.photos?.first {
                         let image = try await API.PlaceSearch.fetchImageBy(photo: photo, horizontalSizeClass: horizontalSizeClass)
-                        print("got place and image for \(name) on attempt \(attempt) ")
+                        print("=== got place and image for \(name) on attempt \(attempt) ")
                         return (place, image)
                     } else {
                         throw APIError.placeMissingPhotos
                     }
                 } else {
                     if attempt < maxAttempts {
-                        print("attempting \(name) again...")
+                        print("=== attempting \(name) again...")
                         try? await Task.sleep(for: .milliseconds(expoBackoff))
                         expoBackoff *= 2
                         continue
                     } else {
-                        print("unable to get data for \(name) after last attempt")
+                        print("=== unable to get data for \(name) after last attempt")
                     }
                 }
             }
@@ -88,12 +88,12 @@ extension API {
                 let photo = cachedPlace.photos?.first {
                 let image: UIImage
                 if let cachedImage = ImageCache.shared.get(forKey: String(photo.hashValue)) {
-                    print("used cached place and cached image")
+                    print("=== used cached place and cached image")
                     image = cachedImage
                 } else {
                     image = try await API.PlaceSearch.fetchImageBy(photo: photo)
                     ImageCache.shared.set(image, forKey: String(photo.hashValue))
-                    print("used cached place, fetched and then cached image")
+                    print("=== used cached place, fetched and then cached image")
                 }
                 return (cachedPlace, image)
             } else {
@@ -109,11 +109,11 @@ extension API {
                         let hashKey = String(photo.hashValue)
                         let image: UIImage
                         if let cachedImage = ImageCache.shared.get(forKey: hashKey) {
-                            print("fetched and then cached place, and used cached image")
+                            print("=== fetched and then cached place, and used cached image")
                             image = cachedImage
                         } else {
                             image = try await API.PlaceSearch.fetchImageBy(photo: photo)
-                            print("fetched and then cached place, and fetched and then cached image")
+                            print("=== fetched and then cached place, and fetched and then cached image")
                             ImageCache.shared.set(image, forKey: hashKey)
                         }
                         return (place, image)
@@ -121,7 +121,7 @@ extension API {
                         throw APIError.noResults
                     }
                 case .failure(let error):
-                    print("fetchPlaceAndImageBy(placeId:) call failed: \(error.localizedDescription)")
+                    print("=== fetchPlaceAndImageBy(placeId:) call failed: \(error.localizedDescription)")
                     throw APIError.noResults
                 }
             }
@@ -161,7 +161,7 @@ extension API {
             case .success(let place):
                 return place
             case .failure(let error):
-                print("fetchPlaceWithReviewsBy(placeId:) call failed: \(error.localizedDescription)")
+                print("=== fetchPlaceWithReviewsBy(placeId:) call failed: \(error.localizedDescription)")
                 return nil
             }
         }
@@ -170,7 +170,7 @@ extension API {
         static func fetchImageBy(photo: Photo, horizontalSizeClass: UserInterfaceSizeClass? = nil) async throws -> UIImage {
             let hashKey = String(photo.hashValue)
             if let cachedImage = ImageCache.shared.get(forKey: hashKey) {
-                print("hit image cache")
+                print("=== hit image cache")
                 return cachedImage
             }
 
@@ -181,7 +181,7 @@ extension API {
                 ImageCache.shared.set(image, forKey: hashKey)
                 return image
             case .failure(let error):
-                print("fetchImageBy(photo:horizontalSizeClass:) call failed: \(error.localizedDescription)")
+                print("=== fetchImageBy(photo:horizontalSizeClass:) call failed: \(error.localizedDescription)")
                 throw APIError.fetchPhotoError
             }
         }
@@ -223,7 +223,7 @@ extension API {
                     throw error
                 }
             case .failure(let error):
-                print("fetchPlacesFor(placeId:type:maxResultCount:) call failed: \(error.localizedDescription)")
+                print("=== fetchPlacesFor(placeId:type:maxResultCount:) call failed: \(error.localizedDescription)")
                 throw error
             }
         }
