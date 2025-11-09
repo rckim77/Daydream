@@ -1,44 +1,618 @@
 [
-    {
-        "city": "Hong Kong",
-        "country": "Hong Kong",
-        "latitude": 22.3193,
-        "longitude": 114.1694,
-        "radius": 18
-    },
-    {
-        "city": "Singapore",
-        "country": "Singapore",
-        "latitude": 1.3521,
-        "longitude": 103.8198,
-        "radius": 15
-    },
-    {
-        "city": "Bangkok",
-        "country": "Thailand",
-        "latitude": 13.7563,
-        "longitude": 100.5018,
-        "radius": 20
-    },
-    {
-        "city": "London",
-        "country": "UK",
-        "latitude": 51.5074,
-        "longitude": -0.1278,
-        "radius": 25
-    },
-    {
-        "city": "Macau",
-        "country": "Macau",
-        "latitude": 22.1987,
-        "longitude": 113.5439,
-        "radius": 10
-    },
-    {
-        "city": "Seoul",
-        "country": "South Korea",
-        "latitude": 37.5665,
-        "longitude": 126.9780,
-        "radius": 18
-    }
+  {
+    "city": "Hong Kong",
+    "country": "Hong Kong",
+    "latitude": 22.3193,
+    "longitude": 114.1694,
+    "radius": 18
+  },
+  {
+    "city": "Singapore",
+    "country": "Singapore",
+    "latitude": 1.3521,
+    "longitude": 103.8198,
+    "radius": 15
+  },
+  {
+    "city": "Bangkok",
+    "country": "Thailand",
+    "latitude": 13.7563,
+    "longitude": 100.5018,
+    "radius": 20
+  },
+  {
+    "city": "London",
+    "country": "UK",
+    "latitude": 51.5074,
+    "longitude": -0.1278,
+    "radius": 25
+  },
+  {
+    "city": "Macau",
+    "country": "Macau",
+    "latitude": 22.1987,
+    "longitude": 113.5439,
+    "radius": 10
+  },
+  {
+    "city": "Kuala Lumpur",
+    "country": "Malaysia",
+    "latitude": 3.1390,
+    "longitude": 101.6869,
+    "radius": 18
+  },
+  {
+    "city": "New York City",
+    "country": "USA",
+    "latitude": 40.7128,
+    "longitude": -74.0060,
+    "radius": 30
+  },
+  {
+    "city": "Antalya",
+    "country": "Turkey",
+    "latitude": 36.8841,
+    "longitude": 30.7056,
+    "radius": 12
+  },
+  {
+    "city": "Paris",
+    "country": "France",
+    "latitude": 48.8566,
+    "longitude": 2.3522,
+    "radius": 20
+  },
+  {
+    "city": "Istanbul",
+    "country": "Turkey",
+    "latitude": 41.0082,
+    "longitude": 28.9784,
+    "radius": 22
+  },
+  {
+    "city": "Rome",
+    "country": "Italy",
+    "latitude": 41.9028,
+    "longitude": 12.4964,
+    "radius": 15
+  },
+  {
+    "city": "Dubai",
+    "country": "UAE",
+    "latitude": 25.2048,
+    "longitude": 55.2708,
+    "radius": 18
+  },
+  {
+    "city": "Guangzhou",
+    "country": "China",
+    "latitude": 23.1291,
+    "longitude": 113.2644,
+    "radius": 20
+  },
+  {
+    "city": "Phuket",
+    "country": "Thailand",
+    "latitude": 7.9519,
+    "longitude": 98.3381,
+    "radius": 12
+  },
+  {
+    "city": "Pattaya",
+    "country": "Thailand",
+    "latitude": 12.9236,
+    "longitude": 100.8825,
+    "radius": 10
+  },
+  {
+    "city": "Taipei City",
+    "country": "Taiwan",
+    "latitude": 25.0330,
+    "longitude": 121.5654,
+    "radius": 15
+  },
+  {
+    "city": "Prague",
+    "country": "Czech Republic",
+    "latitude": 50.0755,
+    "longitude": 14.4378,
+    "radius": 12
+  },
+  {
+    "city": "Shanghai",
+    "country": "China",
+    "latitude": 31.2304,
+    "longitude": 121.4737,
+    "radius": 25
+  },
+  {
+    "city": "Miami",
+    "country": "USA",
+    "latitude": 25.7617,
+    "longitude": -80.1918,
+    "radius": 18
+  },
+  {
+    "city": "Barcelona",
+    "country": "Spain",
+    "latitude": 41.3851,
+    "longitude": 2.1734,
+    "radius": 15
+  },
+  {
+    "city": "Beijing",
+    "country": "China",
+    "latitude": 39.9042,
+    "longitude": 116.4074,
+    "radius": 25
+  },
+  {
+    "city": "Los Angeles",
+    "country": "USA",
+    "latitude": 34.0522,
+    "longitude": -118.2437,
+    "radius": 30
+  },
+  {
+    "city": "Budapest",
+    "country": "Hungary",
+    "latitude": 47.4979,
+    "longitude": 19.0402,
+    "radius": 12
+  },
+  {
+    "city": "Vienna",
+    "country": "Austria",
+    "latitude": 48.2082,
+    "longitude": 16.3738,
+    "radius": 12
+  },
+  {
+    "city": "Amsterdam",
+    "country": "Netherlands",
+    "latitude": 52.3676,
+    "longitude": 4.9041,
+    "radius": 12
+  },
+  {
+    "city": "Sofia",
+    "country": "Bulgaria",
+    "latitude": 42.6977,
+    "longitude": 23.3219,
+    "radius": 10
+  },
+  {
+    "city": "Madrid",
+    "country": "Spain",
+    "latitude": 40.4168,
+    "longitude": -3.7038,
+    "radius": 20
+  },
+  {
+    "city": "Orlando",
+    "country": "USA",
+    "latitude": 28.5383,
+    "longitude": -81.3792,
+    "radius": 15
+  },
+  {
+    "city": "Ho Chi Minh City",
+    "country": "Vietnam",
+    "latitude": 10.8231,
+    "longitude": 106.6297,
+    "radius": 15
+  },
+  {
+    "city": "Lima",
+    "country": "Peru",
+    "latitude": -12.0464,
+    "longitude": -77.0428,
+    "radius": 18
+  },
+  {
+    "city": "Berlin",
+    "country": "Germany",
+    "latitude": 52.5200,
+    "longitude": 13.4050,
+    "radius": 18
+  },
+  {
+    "city": "Tokyo",
+    "country": "Japan",
+    "latitude": 35.6895,
+    "longitude": 139.6917,
+    "radius": 25
+  },
+  {
+    "city": "Warsaw",
+    "country": "Poland",
+    "latitude": 52.2297,
+    "longitude": 21.0122,
+    "radius": 12
+  },
+  {
+    "city": "Chennai",
+    "country": "India",
+    "latitude": 13.0827,
+    "longitude": 80.2707,
+    "radius": 15
+  },
+  {
+    "city": "Cairo",
+    "country": "Egypt",
+    "latitude": 30.0444,
+    "longitude": 31.2357,
+    "radius": 20
+  },
+  {
+    "city": "Nairobi",
+    "country": "Kenya",
+    "latitude": -1.2921,
+    "longitude": 36.8219,
+    "radius": 12
+  },
+  {
+    "city": "Hangzhou",
+    "country": "China",
+    "latitude": 30.2741,
+    "longitude": 120.1551,
+    "radius": 18
+  },
+  {
+    "city": "Milan",
+    "country": "Italy",
+    "latitude": 45.4642,
+    "longitude": 9.1900,
+    "radius": 12
+  },
+  {
+    "city": "San Francisco",
+    "country": "USA",
+    "latitude": 37.7749,
+    "longitude": -122.4194,
+    "radius": 20
+  },
+  {
+    "city": "Buenos Aires",
+    "country": "Argentina",
+    "latitude": -34.6037,
+    "longitude": -58.3816,
+    "radius": 20
+  },
+  {
+    "city": "Venice",
+    "country": "Italy",
+    "latitude": 45.4408,
+    "longitude": 12.3155,
+    "radius": 8
+  },
+  {
+    "city": "Mexico City",
+    "country": "Mexico",
+    "latitude": 19.4326,
+    "longitude": -99.1332,
+    "radius": 20
+  },
+  {
+    "city": "Dublin",
+    "country": "Ireland",
+    "latitude": 53.3498,
+    "longitude": -6.2603,
+    "radius": 10
+  },
+  {
+    "city": "Seoul",
+    "country": "South Korea",
+    "latitude": 37.5665,
+    "longitude": 126.9780,
+    "radius": 18
+  },
+  {
+    "city": "Mumbai",
+    "country": "India",
+    "latitude": 19.0760,
+    "longitude": 72.8777,
+    "radius": 20
+  },
+  {
+    "city": "Denpasar",
+    "country": "Indonesia",
+    "latitude": -8.6500,
+    "longitude": 115.2167,
+    "radius": 12
+  },
+  {
+    "city": "Delhi",
+    "country": "India",
+    "latitude": 28.7041,
+    "longitude": 77.1025,
+    "radius": 20
+  },
+  {
+    "city": "Toronto",
+    "country": "Canada",
+    "latitude": 43.6532,
+    "longitude": -79.3832,
+    "radius": 18
+  },
+  {
+    "city": "Zhuhai",
+    "country": "China",
+    "latitude": 22.2700,
+    "longitude": 113.5767,
+    "radius": 10
+  },
+  {
+    "city": "St Petersburg",
+    "country": "Russia",
+    "latitude": 59.9343,
+    "longitude": 30.3351,
+    "radius": 15
+  },
+  {
+    "city": "Sydney",
+    "country": "Australia",
+    "latitude": -33.8688,
+    "longitude": 151.2093,
+    "radius": 20
+  },
+  {
+    "city": "Munich",
+    "country": "Germany",
+    "latitude": 48.1351,
+    "longitude": 11.5820,
+    "radius": 12
+  },
+  {
+    "city": "Bucharest",
+    "country": "Romania",
+    "latitude": 44.4268,
+    "longitude": 26.1025,
+    "radius": 12
+  },
+  {
+    "city": "Punta Cana",
+    "country": "Dominican Republic",
+    "latitude": 18.5820,
+    "longitude": -68.4058,
+    "radius": 8
+  },
+  {
+    "city": "Agra",
+    "country": "India",
+    "latitude": 27.1767,
+    "longitude": 78.0081,
+    "radius": 8
+  },
+  {
+    "city": "Jaipur",
+    "country": "India",
+    "latitude": 26.9124,
+    "longitude": 75.7873,
+    "radius": 10
+  },
+  {
+    "city": "Brussels",
+    "country": "Belgium",
+    "latitude": 50.8503,
+    "longitude": 4.3517,
+    "radius": 12
+  },
+  {
+    "city": "Chiang Mai",
+    "country": "Thailand",
+    "latitude": 18.7877,
+    "longitude": 98.9931,
+    "radius": 8
+  },
+  {
+    "city": "Lisbon",
+    "country": "Portugal",
+    "latitude": 38.7223,
+    "longitude": -9.1393,
+    "radius": 12
+  },
+  {
+    "city": "Marrakech",
+    "country": "Morocco",
+    "latitude": 31.6295,
+    "longitude": -7.9811,
+    "radius": 12
+  },
+  {
+    "city": "Jakarta",
+    "country": "Indonesia",
+    "latitude": -6.2088,
+    "longitude": 106.8456,
+    "radius": 18
+  },
+  {
+    "city": "Hanoi",
+    "country": "Vietnam",
+    "latitude": 21.0278,
+    "longitude": 105.8342,
+    "radius": 12
+  },
+  {
+    "city": "Honolulu",
+    "country": "USA",
+    "latitude": 21.3069,
+    "longitude": -157.8583,
+    "radius": 12
+  },
+  {
+    "city": "Manila",
+    "country": "Philippines",
+    "latitude": 14.5995,
+    "longitude": 120.9842,
+    "radius": 15
+  },
+  {
+    "city": "Auckland",
+    "country": "New Zealand",
+    "latitude": -36.8485,
+    "longitude": 174.7633,
+    "radius": 15
+  },
+  {
+    "city": "Siem Reap",
+    "country": "Cambodia",
+    "latitude": 13.3671,
+    "longitude": 103.8448,
+    "radius": 8
+  },
+  {
+    "city": "Amman",
+    "country": "Jordan",
+    "latitude": 31.9454,
+    "longitude": 35.9284,
+    "radius": 10
+  },
+  {
+    "city": "Vancouver",
+    "country": "Canada",
+    "latitude": 49.2827,
+    "longitude": -123.1207,
+    "radius": 18
+  },
+  {
+    "city": "Abu Dhabi",
+    "country": "UAE",
+    "latitude": 24.4539,
+    "longitude": 54.3773,
+    "radius": 15
+  },
+  {
+    "city": "Doha",
+    "country": "Qatar",
+    "latitude": 25.2854,
+    "longitude": 51.5310,
+    "radius": 12
+  },
+  {
+    "city": "Florence",
+    "country": "Italy",
+    "latitude": 43.7696,
+    "longitude": 11.2558,
+    "radius": 8
+  },
+  {
+    "city": "Rio de Janeiro",
+    "country": "Brazil",
+    "latitude": -22.9068,
+    "longitude": -43.1729,
+    "radius": 20
+  },
+  {
+    "city": "Melbourne",
+    "country": "Australia",
+    "latitude": -37.8136,
+    "longitude": 144.9631,
+    "radius": 20
+  },
+  {
+    "city": "Riyadh",
+    "country": "Saudi Arabia",
+    "latitude": 24.7136,
+    "longitude": 46.6753,
+    "radius": 18
+  },
+  {
+    "city": "Christchurch",
+    "country": "New Zealand",
+    "latitude": -43.5321,
+    "longitude": 172.6362,
+    "radius": 12
+  },
+  {
+    "city": "Frankfurt",
+    "country": "Germany",
+    "latitude": 50.1109,
+    "longitude": 8.6821,
+    "radius": 12
+  },
+  {
+    "city": "Baku",
+    "country": "Azerbaijan",
+    "latitude": 40.4093,
+    "longitude": 49.8671,
+    "radius": 10
+  },
+  {
+    "city": "Mecca",
+    "country": "Saudi Arabia",
+    "latitude": 21.3891,
+    "longitude": 39.8579,
+    "radius": 12
+  },
+  {
+    "city": "Osaka",
+    "country": "Japan",
+    "latitude": 34.6937,
+    "longitude": 135.5023,
+    "radius": 15
+  },
+  {
+    "city": "Las Vegas",
+    "country": "USA",
+    "latitude": 36.1699,
+    "longitude": -115.1398,
+    "radius": 20
+  },
+  {
+    "city": "Athens",
+    "country": "Greece",
+    "latitude": 37.9838,
+    "longitude": 23.7275,
+    "radius": 15
+  },
+  {
+    "city": "Shenzhen",
+    "country": "China",
+    "latitude": 22.5431,
+    "longitude": 114.0579,
+    "radius": 20
+  },
+  {
+    "city": "Cancún",
+    "country": "Mexico",
+    "latitude": 21.1619,
+    "longitude": -86.8515,
+    "radius": 15
+  },
+  {
+    "city": "Copenhagen",
+    "country": "Denmark",
+    "latitude": 55.6761,
+    "longitude": 12.5683,
+    "radius": 12
+  },
+  {
+    "city": "Zurich",
+    "country": "Switzerland",
+    "latitude": 47.3769,
+    "longitude": 8.5417,
+    "radius": 10
+  },
+  {
+    "city": "Edinburgh",
+    "country": "United Kingdom",
+    "latitude": 55.9533,
+    "longitude": -3.1883,
+    "radius": 10
+  },
+  {
+    "city": "Montreal",
+    "country": "Canada",
+    "latitude": 45.5017,
+    "longitude": -73.5673,
+    "radius": 15
+  },
+  {
+    "city": "Seville",
+    "country": "Spain",
+    "latitude": 37.3891,
+    "longitude": -5.9845,
+    "radius": 10
+  }
 ]

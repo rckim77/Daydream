@@ -35,8 +35,8 @@ struct CityCardView: View {
                 backgroundView
                     .frame(maxWidth: .infinity)
                     .frame(height: height)
-                    .clipShape(RoundedRectangle(cornerRadius: 24))
-                    .contentShape(RoundedRectangle(cornerRadius: 24))
+                    .clipShape(RoundedRectangle(cornerRadius: 32))
+                    .contentShape(RoundedRectangle(cornerRadius: 32))
                 VStack(spacing: 0) {
                     Text(city.city)
                         .font(.largeTitle).bold()
