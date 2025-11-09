@@ -56,8 +56,7 @@ extension API {
         
         static func fetchPlaceAndImageBy(name: String, horizontalSizeClass: UserInterfaceSizeClass?) async throws -> (Place, UIImage) {
             let maxAttempts = 3
-            // milliseconds
-            var expoBackoff = 100
+            var expoBackoff = 100 // in milliseconds
             
             for attempt in 1...maxAttempts {
                 if let place = await API.PlaceSearch.fetchCityBy(name: name) {
@@ -70,7 +69,7 @@ extension API {
                     }
                 } else {
                     if attempt < maxAttempts {
-                        print("attempting again...")
+                        print("attempting \(name) again...")
                         try? await Task.sleep(for: .milliseconds(expoBackoff))
                         expoBackoff *= 2
                         continue
@@ -122,7 +121,7 @@ extension API {
                         throw APIError.noResults
                     }
                 case .failure(let error):
-                    print(error.localizedDescription)
+                    print("fetchPlaceAndImageBy(placeId:) call failed: \(error.localizedDescription)")
                     throw APIError.noResults
                 }
             }
@@ -147,7 +146,7 @@ extension API {
                 print("=== places \(places.compactMap { $0.displayName })")
                 return places.first
             case .failure(let error):
-                print(error.localizedDescription)
+                print("=== fetchCityBy(name:) call failed: \(error.localizedDescription)")
                 return nil
             }
         }
@@ -162,7 +161,7 @@ extension API {
             case .success(let place):
                 return place
             case .failure(let error):
-                print(error.localizedDescription)
+                print("fetchPlaceWithReviewsBy(placeId:) call failed: \(error.localizedDescription)")
                 return nil
             }
         }
@@ -171,7 +170,7 @@ extension API {
         static func fetchImageBy(photo: Photo, horizontalSizeClass: UserInterfaceSizeClass? = nil) async throws -> UIImage {
             let hashKey = String(photo.hashValue)
             if let cachedImage = ImageCache.shared.get(forKey: hashKey) {
-                print("hit cache")
+                print("hit image cache")
                 return cachedImage
             }
 
@@ -182,7 +181,7 @@ extension API {
                 ImageCache.shared.set(image, forKey: hashKey)
                 return image
             case .failure(let error):
-                print(error.localizedDescription)
+                print("fetchImageBy(photo:horizontalSizeClass:) call failed: \(error.localizedDescription)")
                 throw APIError.fetchPhotoError
             }
         }
@@ -224,7 +223,7 @@ extension API {
                     throw error
                 }
             case .failure(let error):
-                print(error.localizedDescription)
+                print("fetchPlacesFor(placeId:type:maxResultCount:) call failed: \(error.localizedDescription)")
                 throw error
             }
         }
