@@ -20,7 +20,7 @@ struct CityCardView: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     
     private var height: CGFloat {
-        horizontalSizeClass == .compact ? 200 : 320
+        horizontalSizeClass == .compact ? 188 : 280
     }
     
     private var cityTextVerticalPadding: CGFloat {

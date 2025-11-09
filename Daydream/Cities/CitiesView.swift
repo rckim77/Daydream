@@ -19,10 +19,8 @@ struct CitiesView: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Namespace private var zoomNS
     
-    private var cityCount: Int {
-        horizontalSizeClass == .compact  ? 4 : 5
-    }
-    
+    private let cityCount = 5
+
     private var scrollViewHorizontalPadding: CGFloat {
         horizontalSizeClass == .compact ? 0 : 96
     }
@@ -42,7 +40,7 @@ struct CitiesView: View {
                     .modifier(TopScrollTransition())
                 TipView(GettingStartedTip())
                     .modifier(TopScrollTransition())
-                VStack(spacing: -38) {
+                VStack(spacing: -60) {
                     ForEach(cityNames, id: \.0) { name in
                         CityCardView(name: name) { place, image in
                             guard let place, let image else {
@@ -52,7 +50,7 @@ struct CitiesView: View {
                         }
                         .matchedTransitionSource(id: name.0, in: zoomNS) { source in
                             source
-                                .clipShape(RoundedRectangle(cornerRadius: 24))
+                                .clipShape(RoundedRectangle(cornerRadius: 32))
                         }
                         .modifier(TopScrollTransition())
                     }
