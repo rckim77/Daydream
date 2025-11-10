@@ -46,7 +46,7 @@ struct CitiesView: View {
                             guard let place, let image else {
                                 return
                             }
-                            selectedCity = CityRoute(name: "\(city.city), \(city.country)", place: place, image: image)
+                            selectedCity = CityRoute(name: city.city, place: place, image: image)
                         }
                         .matchedTransitionSource(id: city.city, in: zoomNS) { source in
                             source
