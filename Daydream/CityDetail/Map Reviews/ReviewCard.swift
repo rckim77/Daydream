@@ -34,10 +34,12 @@ struct ReviewCard: View {
                     VStack(alignment: .leading, spacing: 0) {
                         Text(review.authorAttribution?.displayName ?? "Author")
                             .font(.subheadline).bold()
+                            .foregroundStyle(.black)
                             .minimumScaleFactor(0.9)
                         if let dateText = review.relativePublishDateDescription {
                             Text(dateText)
                                 .font(.caption).italic()
+                                .foregroundStyle(.black)
                         }
                     }
                     Spacer()
@@ -46,6 +48,7 @@ struct ReviewCard: View {
                 .padding(.top, 12)
                 Text(review.text ?? "Sorry, couldn't load review!")
                     .font(.subheadline)
+                    .foregroundStyle(.black)
                     .minimumScaleFactor(0.9)
                     .lineLimit(5)
                     .frame(maxWidth: .infinity, alignment: .leading)

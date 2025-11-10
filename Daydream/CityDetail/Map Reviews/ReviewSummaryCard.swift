@@ -17,11 +17,13 @@ struct ReviewSummaryCard: View {
         VStack {
             Text(summary.text ?? "No review text!")
                 .font(.subheadline)
+                .foregroundStyle(.black)
                 .minimumScaleFactor(0.9)
                 .frame(maxWidth: .infinity, alignment: .leading)
             if let disclosureText = summary.disclosureText {
                 Text(disclosureText)
                     .font(.caption).italic()
+                    .foregroundStyle(.black)
                     .frame(maxWidth: .infinity, alignment: .trailing)
                     .padding(.top, 4)
             }
