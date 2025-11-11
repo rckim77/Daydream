@@ -6,19 +6,21 @@
 //  Copyright © 2018 Raymond Kim. All rights reserved.
 //
 
-import UIKit
 import GoogleMaps
 import GooglePlacesSwift
 import SnapKit
+import SwiftUI
+import UIKit
 
-// swiftlint:disable type_body_length
 final class MapViewController: UIViewController {
 
     private var place: Place
     private var dynamicMapView: GMSMapView?
     private var dynamicMarker: GMSMarker?
-    private var currentReviews: [GooglePlacesSwift.Review]?
-    private var currentReviewIndex = 0
+    /// Used to provide more accurate location when deeplinking to Google Maps
+    private var dynamicMarkerPlaceId: String?
+    /// Object that updates map review SwiftUI code
+    private var mapReviewContext = MapReviewContext(place: nil)
 
     /// Will automatically sync with system user interface style settings but can be overridden
     /// when the user taps the dark mode button. Note this must be called once `dynamicMapView` is set.
@@ -117,25 +119,9 @@ final class MapViewController: UIViewController {
         return button
     }()
 
-    private lazy var reviewCard: MapReviewCard = {
-        let card = MapReviewCard()
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(reviewCardTapped))
-        card.addGestureRecognizer(tapGesture)
-        return card
-    }()
-    
     init(place: Place) {
         self.place = place
         super.init(nibName: nil, bundle: nil)
-        
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(stopDisplayingReviews),
-                                               name: UIApplication.didEnterBackgroundNotification,
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(restartDisplayingCurrentReviews),
-                                               name: UIApplication.willEnterForegroundNotification,
-                                               object: nil)
     }
     
     required init?(coder: NSCoder) {
@@ -155,11 +141,6 @@ final class MapViewController: UIViewController {
         })
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        stopDisplayingReviews()
-    }
-
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
@@ -175,15 +156,25 @@ final class MapViewController: UIViewController {
         containerView.addSubview(closeButton)
         containerView.addSubview(darkModeButton)
         containerView.addSubview(aboutButton)
-
-        view.addSubview(reviewCard)
+        
+        let iPadOffset = UIDevice.current.userInterfaceIdiom == .pad ? 12 : 0
+        
+        let reviewsCarouselVC = UIHostingController(rootView: MapReviewsCarousel(context: mapReviewContext))
+        addChild(reviewsCarouselVC)
+        view.addSubview(reviewsCarouselVC.view)
+        reviewsCarouselVC.view.backgroundColor = .clear
+        reviewsCarouselVC.didMove(toParent: self)
+        
+        reviewsCarouselVC.view.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(iPadOffset)
+            make.height.equalTo(200)
+        }
 
         containerView.snp.makeConstraints { make in
             make.leading.top.trailing.equalToSuperview()
             make.height.equalTo(68)
         }
-
-        let iPadOffset = UIDevice.current.userInterfaceIdiom == .pad ? 12 : 0
         
         closeButton.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(16 + iPadOffset)
@@ -211,19 +202,6 @@ final class MapViewController: UIViewController {
             } else {
                 make.trailing.equalToSuperview().inset(8)
             }
-        }
-
-
-        reviewCard.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(12 + iPadOffset)
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(12 + iPadOffset)
-            make.height.equalTo(MapReviewCard.height)
-        }
-        
-        if let summary = place.reviewSummary {
-            reviewCard.configureWithSummary(summary)
-        } else {
-            reviewCard.isHidden = true
         }
     }
 
@@ -268,7 +246,8 @@ final class MapViewController: UIViewController {
 
     private func addOrUpdateMarkerAndReviews(for placeId: String, name: String, location: CLLocationCoordinate2D, in mapView: GMSMapView) {
         if let marker = dynamicMarker {
-            marker.map = nil // clears prev marker
+            marker.map = nil // removes previous marker from map
+            marker.appearAnimation = .pop
             marker.title = name
             marker.map = mapView
             marker.position = location
@@ -281,6 +260,8 @@ final class MapViewController: UIViewController {
 
             dynamicMarker = marker
         }
+
+        dynamicMarkerPlaceId = placeId
 
         guard let dynamicMarker = dynamicMarker else {
             return
@@ -298,83 +279,8 @@ final class MapViewController: UIViewController {
             dynamicMarker.snippet = result.formattedAddress
             dynamicMarker.tracksInfoWindowChanges = false
             place = result
-            await MainActor.run {
-                if let summary = result.reviewSummary {
-                    reviewCard.configureWithSummary(summary)
-                } else {
-                    displayReviews(result.reviews, index: 0)
-                }
-            }
+            mapReviewContext.place = result
         }
-    }
-
-    // MARK: - Review-specific methods
-
-    private func displayReviews(_ reviews: [GooglePlacesSwift.Review]?, index: Int) {
-        guard let reviews = reviews, !reviews.isEmpty else {
-            return
-        }
-        currentReviews = reviews
-        currentReviewIndex = index
-        loadReviewContent(reviews[index])
-        reviewCard.isHidden = false
-        reviewCard.alpha = 1
-
-        startDisplayingReviews(reviews, index: index + 1)
-    }
-
-    private func startDisplayingReviews(_ reviews: [GooglePlacesSwift.Review], index: Int) {
-        if index < reviews.count - 1 {
-            UIView.animate(withDuration: 0.7, animations: {
-                self.reviewCard.alpha = 1
-            }, completion: { finished in
-                if finished {
-                    // Bug fix: In order for the map review card to be tappable and
-                    // animatable, we need to wrap the animate function in a timeout
-                    // function. Adding a delay to the animate function will not work
-                    // because the view's frame changes as soon as the animation begins
-                    // and ignores the delay. The tap gesture recognizer needs the frame
-                    // to actually execute.
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 6) {
-                        UIView.animate(withDuration: 0.7, animations: {
-                            self.reviewCard.alpha = 0
-                        }, completion: { [weak self] finished in
-                            if let strongSelf = self, finished {
-                                strongSelf.currentReviewIndex = index
-                                strongSelf.loadReviewContent(reviews[index])
-                                strongSelf.startDisplayingReviews(reviews, index: index + 1)
-                            }
-                        })
-                    }
-                }
-            })
-        } else {
-            UIView.animate(withDuration: 0.8, animations: {
-                self.reviewCard.alpha = 0
-            }, completion: { [weak self] _ in
-                self?.reviewCard.isHidden = true
-            })
-        }
-    }
-
-    @objc
-    private func restartDisplayingCurrentReviews() {
-        guard let reviews = currentReviews else {
-            return
-        }
-        displayReviews(reviews, index: currentReviewIndex)
-    }
-
-    @objc
-    private func stopDisplayingReviews() {
-        reviewCard.subviews.forEach { $0.layer.removeAllAnimations() }
-        reviewCard.layer.removeAllAnimations()
-        reviewCard.alpha = 0
-        reviewCard.isHidden = true
-    }
-
-    private func loadReviewContent(_ review: GooglePlacesSwift.Review) {
-        reviewCard.configure(review)
     }
 
     // MARK: - Button selector methods
@@ -394,20 +300,37 @@ final class MapViewController: UIViewController {
         let openSourceMessage = GMSServices.openSourceLicenseInfo()
         presentInfoAlertModal(title: "About Google Maps", message: openSourceMessage)
     }
-
-    @objc
-    private func reviewCardTapped() {
-        guard let reviews = currentReviews, let authorUrl = reviews[currentReviewIndex].authorAttribution?.url else {
-            return
-        }
-        UIApplication.shared.open(authorUrl, options: [:])
-    }
 }
 
 extension MapViewController: GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, didTapPOIWithPlaceID placeID: String, name: String, location: CLLocationCoordinate2D) {
-        stopDisplayingReviews()
         addOrUpdateMapView(for: placeID, name: name, location: location)
+    }
+    
+    func mapView(_ mapView: GMSMapView, didTapInfoWindowOf marker: GMSMarker) {
+        var components = URLComponents()
+        components.scheme = "https"
+        components.host = "www.google.com"
+        components.path = "/maps/search/"
+        components.queryItems = [URLQueryItem(name: "api", value: "1")]
+        
+        // placeId is most accurate but can fallback with coordinate
+        // Google Map URLs must always contain a query, which can consist of a name, address, or comma-separated
+        // lat/lon coordinates. Strings must be URL-encoded so make sure to convert chars like commas.
+        if let placeId = dynamicMarkerPlaceId {
+            components.queryItems?.append(URLQueryItem(name: "query_place_id", value: placeId))
+            components.queryItems?.append(URLQueryItem(name: "query", value: marker.title))
+        } else {
+            var query = "\(marker.position.latitude), \(marker.position.longitude)"
+            if let name = marker.title {
+                query = name + " " + query
+            }
+            components.queryItems?.append(URLQueryItem(name: "query", value: query))
+        }
+        
+        if let url = components.url {
+            UIApplication.shared.open(url)
+        }
     }
 }
 

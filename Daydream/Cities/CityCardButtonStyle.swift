@@ -22,7 +22,7 @@ struct CityCardButtonStyle: ButtonStyle {
             .tint(.primary)
             .frame(maxWidth: .infinity)
             .frame(height: height)
-            .clipShape(RoundedRectangle(cornerRadius: 24))
+            .clipShape(RoundedRectangle(cornerRadius: 32))
             .offset(y: configuration.isPressed ? pressedOffset : 0)
             .animation(.easeInOut(duration: 0.15), value: configuration.isPressed)
     }

@@ -14,6 +14,7 @@ struct RandomCityButton: View {
     let onFetch: ((Place, UIImage) -> Void)
     
     @State private var showLoadingSpinner = false
+    @State private var showErrorAlert = false
     
     var body: some View {
         Button {
@@ -25,6 +26,7 @@ struct RandomCityButton: View {
                     onFetch(place, image)
                 } catch {
                     showLoadingSpinner = false
+                    showErrorAlert = true
                 }
             }
         } label: {
@@ -37,5 +39,6 @@ struct RandomCityButton: View {
             }
         }
         .modifier(SearchActionStyle(shape: .capsule))
+        .alert("Drats, something went wrong. Try again later!", isPresented: $showErrorAlert, presenting: nil) {}
     }
 }

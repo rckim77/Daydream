@@ -8,21 +8,19 @@
 
 import SwiftUI
 import GooglePlacesSwift
+import TipKit
 
 struct CitiesView: View {
     
-    @State private var cityNames: [(String, String)] = []
+    @State private var cities: [RandomCity] = []
     @State private var selectedCity: CityRoute?
-    @State private var showFeedbackAlert = false
+    @State private var showFeedbackModal = false
 
-    @Environment(\.openURL) private var openURL
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Namespace private var zoomNS
     
-    private var cityCount: Int {
-        horizontalSizeClass == .compact  ? 4 : 5
-    }
-    
+    private let cityCount = 5
+
     private var scrollViewHorizontalPadding: CGFloat {
         horizontalSizeClass == .compact ? 0 : 96
     }
@@ -39,28 +37,22 @@ struct CitiesView: View {
                     .multilineTextAlignment(.center)
                     .padding(.vertical, 32)
                     .padding(.horizontal, 16)
-                    .scrollTransition { content, phase in
-                        content
-                            .opacity(phase == .identity || phase == .bottomTrailing ? 1 : 0)
-                            .scaleEffect(phase == .identity || phase == .bottomTrailing ? 1 : 0.75)
-                    }
-                VStack(spacing: -38) {
-                    ForEach(cityNames, id: \.0) { name in
-                        CityCardView(name: name) { place, image in
+                    .modifier(TopScrollTransition())
+                TipView(GettingStartedTip())
+                    .modifier(TopScrollTransition())
+                VStack(spacing: -60) {
+                    ForEach(cities, id: \.city) { city in
+                        CityCardView(city: city) { place, image in
                             guard let place, let image else {
                                 return
                             }
-                            selectedCity = CityRoute(name: name.0, place: place, image: image)
+                            selectedCity = CityRoute(name: city.city, place: place, image: image)
                         }
-                        .matchedTransitionSource(id: name.0, in: zoomNS) { source in
+                        .matchedTransitionSource(id: city.city, in: zoomNS) { source in
                             source
-                                .clipShape(RoundedRectangle(cornerRadius: 24))
+                                .clipShape(RoundedRectangle(cornerRadius: 32))
                         }
-                        .scrollTransition { content, phase in
-                            content
-                                .opacity(phase == .identity || phase == .bottomTrailing ? 1 : 0)
-                                .scaleEffect(phase == .identity || phase == .bottomTrailing ? 1 : 0.75)
-                        }
+                        .modifier(TopScrollTransition())
                     }
                 }
             }
@@ -73,7 +65,7 @@ struct CitiesView: View {
                     selectedCity = CityRoute(name: place.description, place: place, image: image)
                 } additionalViews: {
                     FeedbackButton {
-                        showFeedbackAlert = true
+                        showFeedbackModal = true
                     }
                 }
             }
@@ -82,19 +74,20 @@ struct CitiesView: View {
                     .navigationTransition(.zoom(sourceID: item.name, in: zoomNS))
             }
         }
-        .feedbackAlert(showAlert: $showFeedbackAlert, onEmailButtonPress: { url in
-            openURL(url)
-        })
+        .sheet(isPresented: $showFeedbackModal) {
+            FeedbackSheet()
+                .presentationDetents([.medium])
+        }
         .task {
-            var cities = [(String, String)]()
+            var selectedCities = [RandomCity]()
             
-            while cities.count < cityCount {
-                if let city = getRandomCity(), !cities.contains(where: { $0.0 == city.0 }) {
-                    cities.append(city)
+            while selectedCities.count < cityCount {
+                if let city = getRandomCity(), !selectedCities.contains(where: { $0.city == city.city }) {
+                    selectedCities.append(city)
                 }
             }
 
-            cityNames = cities
+            cities = selectedCities
         }
     }
 }

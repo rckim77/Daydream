@@ -13,19 +13,17 @@ struct PlacesCarouselView: View {
     
     let places: [Place]
     @Binding var tappedPlace: IdentifiablePlace?
+    
+    private var placeholderCount: Int {
+        isIpad ? 9 : 4
+    }
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack(spacing: 16) {
                 if places.isEmpty {
-                    if isIpad {
-                        ForEach(0..<10) {_ in
-                            PlaceCardView(place: nil, tappedPlace: $tappedPlace)
-                        }
-                    } else {
-                        ForEach(0..<3) {_ in
-                            PlaceCardView(place: nil, tappedPlace: $tappedPlace)
-                        }
+                    ForEach(1...placeholderCount, id: \.self) { _ in
+                        PlaceCardView(place: nil, tappedPlace: $tappedPlace)
                     }
                 } else {
                     ForEach(places, id: \.placeID) { place in

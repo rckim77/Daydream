@@ -8,6 +8,7 @@
 
 import UIKit
 
+/// Uses `Photo` hashValue as hash key (converted from `Int` to `String`).
 final class ImageCache {
     static let shared = ImageCache()
     
@@ -21,5 +22,9 @@ final class ImageCache {
     
     func get(forKey key: String) -> UIImage? {
         return cache.object(forKey: key as NSString)
+    }
+    
+    func clear() -> Void {
+        cache.removeAllObjects()
     }
 }
