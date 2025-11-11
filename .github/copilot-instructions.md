@@ -1,6 +1,6 @@
 # Daydream iOS App
 
-Daydream is an iOS app written in Swift that helps users explore cities around the world. The app integrates with Google Maps/Places, Yelp, and NY Times APIs to provide location-based information and experiences.
+Daydream is an iOS app written in Swift and SwiftUI that helps users explore cities around the world. The app integrates with Google Maps and Google Places APIs to provide location-based information and city exploration experiences.
 
 Always reference these instructions first and fallback to search or bash commands only when you encounter unexpected information that does not match the info here.
 
@@ -13,14 +13,14 @@ Always reference these instructions first and fallback to search or bash command
 - Install SwiftLint for code quality: `brew install swiftlint`
 
 ### Bootstrap and Build Process
-- **IMPORTANT**: The README mentions CocoaPods but this project actually uses Swift Package Manager (SPM)
+- **IMPORTANT**: This project uses Swift Package Manager (SPM) for dependencies
 - Open `Daydream.xcodeproj` (NOT .xcworkspace as there isn't one)
 - Dependencies are managed via SPM and will be resolved automatically by Xcode
 - **API Keys Setup (REQUIRED)**: 
-  - Create `Daydream/Shared/apiKeys.plist` with your actual API keys:
-    - Google API key (with Maps SDK and Places API enabled)
-    - Yelp Fusion API key
-    - NY Times Article Search API key
+  - Create `Daydream/apiKeys.plist` with your actual API keys (note: not in Shared/ directory)
+  - Required API keys:
+    - Google API key (for Maps SDK)
+    - Google Places New API key (for Places Swift SDK)
   - Format should match exactly:
   ```xml
   <?xml version="1.0" encoding="UTF-8"?>
@@ -29,10 +29,8 @@ Always reference these instructions first and fallback to search or bash command
   <dict>
       <key>googleAPI</key>
       <string>YOUR_GOOGLE_API_KEY</string>
-      <key>yelpAPI</key>
-      <string>YOUR_YELP_API_KEY</string>
-      <key>nyTimesAPI</key>
-      <string>YOUR_NY_TIMES_API_KEY</string>
+      <key>placesNewAPI</key>
+      <string>YOUR_GOOGLE_PLACES_NEW_API_KEY</string>
   </dict>
   </plist>
   ```
@@ -48,10 +46,10 @@ Always reference these instructions first and fallback to search or bash command
 
 ### Running the App
 - Open `Daydream.xcodeproj` in Xcode
-- Select a simulator (iPhone 15 Pro recommended)
+- Select a simulator (iPhone 15 Pro or newer recommended)
 - Press Cmd+R or click the Run button
-- **First launch**: App will show search interface for exploring cities
-- **Without API keys**: App will launch but location-based features will not work
+- **First launch**: App will show CitiesView with random cities and search functionality
+- **Without API keys**: App will launch but location-based features and city data will not work
 
 ### Code Quality
 - **Linting**: `swiftlint` -- Takes 30-60 seconds. Always run before committing.
@@ -71,67 +69,112 @@ Always reference these instructions first and fallback to search or bash command
 
 ### Manual Testing Scenarios
 After making changes, ALWAYS test these core user scenarios:
-1. **Search Flow**: Launch app → Search for "Tokyo" → Select city from autocomplete → Verify city detail screen loads with map
-2. **Random City**: Launch app → Tap random city button → Verify random city loads correctly  
-3. **Map Interaction**: Navigate to city detail → Tap on a sight → Verify map opens with location details
-4. **Review Display**: On map screen → Verify review cards cycle through automatically
-5. **Dark Mode**: Toggle dark mode button on map → Verify UI updates correctly
+1. **Cities View Flow**: Launch app → View random cities → Tap on a city card → Verify city detail screen loads
+2. **Search Flow**: Launch app → Tap search bar → Search for "Tokyo" → Select city from autocomplete → Verify city detail screen loads
+3. **Random City**: Launch app → Tap random city button (dice icon) → Verify random city loads correctly
+4. **Map Interaction**: On city detail → Tap "Get Directions" on a place card → Verify MapViewController opens with location
+5. **Place Cards**: On city detail → Scroll through sights and eateries carousels → Verify place cards display correctly
+6. **Feedback**: Tap feedback button → Verify feedback sheet appears with options
+7. **Navigation**: Test back navigation and home button functionality
 
 ### Build Validation
 - Always run `swiftlint` before committing changes
 - Always build successfully before creating PR
-- UI tests should pass (but are currently commented out in test file)
+- Test on both iPhone and iPad simulators when making UI changes
 
 ### API Key Testing
 - Without proper API keys, the app launches but location features fail silently
 - Test with valid Google API key to ensure map functionality works
-- Test with valid Yelp API key to ensure restaurant data loads
-- Test with valid NY Times API key to ensure article search works
+- Test with valid Google Places New API key to ensure city data and place searches work
 
 ## Common Tasks
 
 ### Project Structure
 ```
 Daydream/
-├── AppDelegate.swift              # App initialization and API key loading
-├── SearchViewController.swift     # Main search interface
-├── SearchDetailViewController.swift # City detail screen
-├── MapViewController.swift        # Map view with reviews
-├── Models/                        # Data models (Place, Eatery, Review, etc.)
-├── Networking/                    # API clients (Google, Yelp, NY Times)
-├── CardCells/                     # UI components for city details
-├── Search/                        # Search-related view controllers
-├── Shared/                        # Utilities, extensions, constants
-│   ├── randomCitiesJSON.json     # Predefined cities for random selection
-│   ├── style.json                # Google Maps dark mode styling
-│   ├── apiKeys.plist             # API keys (you must create this)
-│   └── Extensions.swift          # UI and utility extensions
+├── AppDelegate.swift              # App initialization, API key loading, TipKit setup
+├── SceneDelegate.swift            # Scene setup, sets SearchViewController as root
+├── Cities/                        # Main cities browsing interface (SwiftUI)
+│   ├── CitiesView.swift          # Main view showing random cities
+│   ├── CityCardView.swift        # Individual city card component
+│   ├── CityCardButtonStyle.swift # Button styling for city cards
+│   ├── SearchToolbar.swift       # Search bar and toolbar
+│   ├── SearchViewController.swift # UIKit wrapper for CitiesView
+│   ├── FeedbackSheet.swift       # Feedback modal
+│   ├── FeedbackButton.swift      # Feedback button component
+│   └── GettingStartedTip.swift   # TipKit getting started tip
+├── CityDetail/                    # City detail and map views (SwiftUI)
+│   ├── CityDetailView.swift      # Detail view for a selected city
+│   ├── MapViewController.swift   # UIKit map view with Google Maps
+│   ├── MapViewControllerRepresentable.swift # SwiftUI wrapper for MapViewController
+│   ├── MapCardView.swift         # Map card component
+│   ├── MapReviewContext.swift    # Context for map review state
+│   ├── PlaceCardCarousel/        # Carousel of place cards
+│   │   ├── PlacesCarouselView.swift # Main carousel view
+│   │   ├── PlaceCardView.swift   # Individual place card
+│   │   └── PriceLevelView.swift  # Price level indicator
+│   └── Map Reviews/              # Map review components
+│       ├── MapReviewsCarousel.swift # Review carousel
+│       ├── ReviewCard.swift      # Individual review card
+│       ├── ReviewStars.swift     # Star rating component
+│       └── ReviewSummaryCard.swift # Review summary
+├── Models/                        # Data models
+│   ├── RandomCity.swift          # Random city model
+│   ├── CityRoute.swift           # City route navigation model
+│   └── IdentifiablePlace.swift  # Wrapper for Google Places
+├── Networking/                    # API client layer
+│   ├── API.swift                 # API namespace
+│   ├── API+PlaceSearch.swift     # Google Places API integration
+│   └── JSONCustomDecoder.swift   # Custom JSON decoder
+├── Shared/                        # Shared utilities and components
+│   ├── randomCitiesJSON.json     # Predefined random cities data
+│   ├── Extensions/               # Swift extensions
+│   │   ├── Extensions.swift      # General Swift extensions
+│   │   ├── GoogleExtensions.swift # Google SDK extensions
+│   │   └── View+Extensions.swift # SwiftUI view extensions
+│   ├── Buttons/                  # Reusable button components
+│   │   ├── RandomCityButton.swift # Random city button
+│   │   └── HomeButton.swift      # Home navigation button
+│   ├── ExpiringCache.swift       # Generic expiring cache
+│   ├── ImageCache.swift          # Image caching
+│   ├── PlacesCache.swift         # Places data caching
+│   ├── Protocols.swift           # Common protocols
+│   ├── ShadowView.swift          # Shadow view component
+│   ├── SearchActionStyle.swift   # Search action styling
+│   ├── TopScrollTransition.swift # Scroll transition modifier
+│   └── UIDevice+Helpers.swift    # UIDevice extensions
 └── Assets.xcassets               # Images and app icons
 ```
 
 ### Key Dependencies (Swift Package Manager)
-- **Google Maps SDK** (8.4.0): Map display and interaction
-- **Google Places SDK** (8.5.0): Location search and autocomplete  
-- **SnapKit** (5.7.1): Auto Layout DSL for UI constraints
+- **Google Maps SDK** (ios-maps-sdk): Map display and interaction
+- **Google Places Swift SDK** (ios-places-sdk/GooglePlacesSwift): Location search, autocomplete, and place details
+- **SnapKit** (5.7.1): Auto Layout DSL for UI constraints (used in UIKit components)
 
 ### Important Files for Common Changes
-- **Search logic**: `SearchViewController.swift`, `SearchDetailViewController.swift`
-- **Map functionality**: `MapViewController.swift`
-- **API integration**: Files in `Networking/` directory
+- **Cities browsing**: `Cities/CitiesView.swift`, `Cities/CityCardView.swift`
+- **Search functionality**: `Cities/SearchToolbar.swift`, `Cities/SearchViewController.swift`
+- **City details**: `CityDetail/CityDetailView.swift`, `CityDetail/PlaceCardCarousel/PlacesCarouselView.swift`
+- **Map functionality**: `CityDetail/MapViewController.swift`, `CityDetail/MapViewControllerRepresentable.swift`
+- **Map reviews**: Files in `CityDetail/Map Reviews/` directory
+- **API integration**: `Networking/API+PlaceSearch.swift`
 - **Data models**: Files in `Models/` directory
-- **UI components**: Files in `CardCells/` directory
-- **App configuration**: `Info.plist`, `AppDelegate.swift`
+- **Shared components**: Files in `Shared/Buttons/`, `Shared/Extensions/`
+- **App configuration**: `Info.plist`, `AppDelegate.swift`, `SceneDelegate.swift`
 
 ### Debugging Tips
 - Check Console for API key related errors if location features don't work
-- Use Xcode's View Debugger for UI layout issues
+- Use Xcode's View Debugger for SwiftUI layout issues
 - Enable Network logging to debug API calls
-- UI test code is commented out but available in `DaydreamUITests.swift` for reference
+- Use SwiftUI preview for rapid UI iteration (where available)
+- Check `randomCitiesJSON.json` if random city feature isn't working
 
 ### Performance Considerations
-- App uses image caching (`ExpiringCache.swift`) for performance
-- Review cards have automatic cycling disabled during UI tests
+- App uses image caching (`ImageCache.swift`, `ExpiringCache.swift`) for performance
+- Places data is cached (`PlacesCache.swift`) to reduce API calls
 - App supports both light and dark mode with automatic switching
+- UI adapts to horizontal size class for iPad support
+- Random cities are preloaded from JSON for instant display
 
 ## Environment Limitations
 
@@ -157,55 +200,68 @@ Daydream/
 
 ### Networking Layer
 When modifying API integrations, always check these files:
-- `Networking/API.swift` - Main API namespace and common types
-- `Networking/PlaceSearch/` - Google Places API integration
-- `Networking/EaterySearch/` - Yelp API integration  
-- `Networking/ArticleSearch/` - NY Times API integration
-- Each API directory contains Routes and implementation files
+- `Networking/API.swift` - Main API namespace
+- `Networking/API+PlaceSearch.swift` - Google Places API integration (search, details, nearby, photos)
+- `Networking/JSONCustomDecoder.swift` - Custom JSON decoding utilities
+- The app uses Google Places Swift SDK which provides Place objects directly
+- API calls are cached where appropriate to reduce network usage
 
-### View Controller Relationships
-- `SearchViewController` → `SearchDetailViewController` → `MapViewController`
-- Always check delegate patterns when modifying view transitions
-- Search uses Google Places autocomplete
-- Detail view loads place data and displays in cards
-- Map view shows location with cycling review cards
+### View Architecture
+- **CitiesView** (SwiftUI): Main entry point showing random cities in cards
+- **CityDetailView** (SwiftUI): Shows city details with place carousels
+- **MapViewController** (UIKit/GoogleMaps): Map view wrapped in SwiftUI via MapViewControllerRepresentable
+- Navigation uses SwiftUI NavigationStack for modern navigation
+- Mix of SwiftUI and UIKit where Google Maps requires UIKit
+- SearchViewController wraps CitiesView for compatibility with SceneDelegate
 
 ### Data Flow
-1. **Search**: User input → Google Places autocomplete → Place selection
-2. **Detail**: Place data → API calls for sights/eateries → Display in cards
-3. **Map**: Place selection → Map display → Review cycling → User interaction
+1. **Random Cities**: CitiesView loads RandomCity objects from `randomCitiesJSON.json` → User taps card → Navigates to CityDetailView
+2. **Search**: User taps search → SearchToolbar appears → Google Places autocomplete → User selects → Navigates to CityDetailView
+3. **City Details**: CityDetailView receives Place → Fetches nearby sights and eateries → Displays in PlacesCarouselView
+4. **Map View**: User taps place card → MapViewController presented → Shows place on map with reviews
 
 ### Memory Management
-- Uses `ExpiringCache` for image caching (1 hour default)
+- Uses `ExpiringCache` and `ImageCache` for caching with expiration
+- PlacesCache for Google Places SDK data caching
 - Implements weak references in closures to prevent retain cycles
-- Timer-based cleanup for cached data
+- SwiftUI manages view lifecycle automatically
+- Timer-based cleanup for cached data where needed
 
 ### UI Patterns
-- Uses SnapKit for Auto Layout constraints
-- Custom card-based UI with `ShadowView` and `GradientView`
-- Supports dynamic type and accessibility
-- Dark mode support throughout
+- **SwiftUI First**: Primary UI is built with SwiftUI (CitiesView, CityDetailView, all cards and components)
+- **UIKit Interop**: MapViewController uses UIKit for Google Maps SDK, wrapped with UIViewControllerRepresentable
+- **SnapKit**: Used for Auto Layout in UIKit components (MapViewController)
+- **Custom Components**: ShadowView, TopScrollTransition modifier, custom button styles
+- **Responsive Design**: Adapts to horizontal size class for iPad (different padding, spacing, card sizes)
+- **TipKit Integration**: Uses iOS 17+ TipKit for onboarding tips (GettingStartedTip)
+- **Dark Mode**: Full support throughout app with automatic switching
+- **Navigation**: SwiftUI NavigationStack with programmatic navigation via CityRoute
 
 ### Common Gotchas
-- API keys must be in exact format in `apiKeys.plist`
-- UI tests are currently commented out but code exists
-- Review card cycling is disabled during UI testing
-- Image loading uses custom cache with expiration
-- App uses programmatic UI (no storyboards except LaunchScreen)
+- API keys must be in `apiKeys.plist` in root Daydream/ directory (NOT in Shared/)
+- API keys use different key names: `googleAPI` and `placesNewAPI`
+- App uses Google Places Swift SDK (newer SDK) not the older GooglePlaces
+- MapViewController is UIKit wrapped in SwiftUI - coordinate changes carefully
+- Random cities JSON must have valid lat/lng coordinates for proper loading
+- SwiftUI previews may not work for views requiring API keys
+- Image loading uses custom cache with expiration - clear cache if images don't update
+- TipKit requires iOS 17+ - check availability when modifying tips
+- SearchViewController is a UIKit wrapper for SwiftUI CitiesView for SceneDelegate compatibility
 
 ## Troubleshooting
 
 ### Build Issues
 - **"Package resolution failed"**: Clean DerivedData and restart Xcode
 - **"Command CodeSign failed"**: Check provisioning profiles and certificates
-- **"Missing API keys"**: Verify `apiKeys.plist` exists in `Daydream/Shared/`
+- **"Missing API keys"**: Verify `apiKeys.plist` exists in `Daydream/` directory
 - **SPM timeout**: Network issues - retry after checking connection
 
 ### Runtime Issues  
-- **App launches but no map**: Check Google API key and enable Maps SDK
-- **No search results**: Check Google Places API key and enable Places API
-- **No restaurant data**: Check Yelp API key format and permissions
-- **No article data**: Check NY Times API key format
+- **App launches but no cities load**: Check Google Places New API key and permissions
+- **No map display**: Check Google API key and enable Maps SDK for iOS
+- **No search results**: Check Google Places New API key and Places API permissions
+- **Random city feature fails**: Verify `randomCitiesJSON.json` exists and has valid data
+- **Feedback sheet not working**: Check iOS version compatibility (requires iOS 15+ for sheet modifiers)
 
 ### Common Command Sequences
 ```bash
@@ -224,8 +280,10 @@ xcodebuild -project Daydream.xcodeproj -list
 
 ### Files to Check First When Debugging
 - Console output for runtime errors
-- `AppDelegate.swift` for API key loading issues  
-- Network layer files for API call failures
-- `ExpiringCache.swift` for image loading issuesg UI testing
-- Image loading uses custom cache with expiration
-- App uses programmatic UI (no storyboards except LaunchScreen)
+- `AppDelegate.swift` for API key loading issues and TipKit initialization
+- `Networking/API+PlaceSearch.swift` for API call failures
+- `PlacesCache.swift` and caching files for data loading issues
+- `randomCitiesJSON.json` for random city feature issues
+- `CityDetailView.swift` for city detail display issues
+- `MapViewController.swift` for map-related issues
+- SwiftUI view modifiers for UI layout problems
