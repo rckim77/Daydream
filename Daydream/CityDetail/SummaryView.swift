@@ -47,20 +47,23 @@ struct SummaryView: View {
     private func streamSummary() async {
         let instructions = """
             Answer concisely–the output must be no more than 2 short sentences. Do not output lists nor bullet points.
-            Your tone should be informative and impassioned. Always be factual.
+            Do not include any newlines. Your tone should be informative and impassioned. Always be factual. If you cannot
+            fulfill the request, do not output anything in the response.
         """
         let session = LanguageModelSession(instructions: instructions)
         let prompt = """
-         You are a tour guide for the city \(cityText). Tell me what makes this city unique and great for tourists in 2 sentences or fewer. Focus on its specific highlights. When referring to the city or its country, simply refer to it as "it" to avoid repetition.
+            You are a tour guide for the city \(cityText). Tell me what makes this city unique and great for tourists in 2 
+            sentences or fewer. Focus on its specific highlights. When referring to the city or its country, simply refer 
+            to it as "it" to avoid repetition.
         """
         
         let stream = session.streamResponse(to: prompt)
         
         do {
             for try await chunk in stream {
-                // `chunk.content` is the *entire* partial snapshot so far,
-                // so we just replace the text each time, but animate the
-                // layout change so everything below slides down smoothly.
+                // chunk.content is the entire partial snapshot so far,
+                // so we just replace the text each time; animate so that
+                // the height of this view grows smoothly
                 await MainActor.run {
                     withAnimation(.easeInOut(duration: 0.6)) {
                         summary = chunk.content
