@@ -11,6 +11,7 @@ import SwiftUI
 
 /// Displays streamed summary text from Apple Intelligence if available.
 struct SummaryView: View {
+    
     let cityText: String
     
     @State private var summary = ""
@@ -23,7 +24,7 @@ struct SummaryView: View {
                         Text(summary)
                             .transition(.opacity)
                     } else {
-                        Text("This is placeholder text this is placeholder text placeholder text")
+                        Text("This is placeholder text this is placeholder text placeholder text placeholder")
                             .redacted(reason: .placeholder)
                             .opacity(summary.isEmpty ? 1 : 0)
                             .animation(.easeInOut, value: summary.isEmpty)
@@ -34,7 +35,8 @@ struct SummaryView: View {
                 .padding(.bottom, 4)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .animation(.easeInOut, value: summary.count)
-                .task {
+                .task(id: cityText) {
+                    summary = ""
                     await streamSummary()
                 }
             }
@@ -43,10 +45,13 @@ struct SummaryView: View {
     
     @available(iOS 26, *)
     private func streamSummary() async {
-        let instructions = "Answer concisely–the output should be no more than 2 short sentences."
+        let instructions = """
+            Answer concisely–the output must be no more than 2 short sentences. Do not output lists nor bullet points.
+            Your tone should be informative and impassioned. Always be factual.
+        """
         let session = LanguageModelSession(instructions: instructions)
         let prompt = """
-         You are a tour guide for the city \(cityText). Tell me what makes this city unique and great for tourists in 2 sentences or fewer. Focus on its specific highlights.
+         You are a tour guide for the city \(cityText). Tell me what makes this city unique and great for tourists in 2 sentences or fewer. Focus on its specific highlights. When referring to the city or its country, simply refer to it as "it" to avoid repetition.
         """
         
         let stream = session.streamResponse(to: prompt)
@@ -57,7 +62,7 @@ struct SummaryView: View {
                 // so we just replace the text each time, but animate the
                 // layout change so everything below slides down smoothly.
                 await MainActor.run {
-                    withAnimation(.easeOut(duration: 0.2)) {
+                    withAnimation(.easeInOut(duration: 0.6)) {
                         summary = chunk.content
                     }
                 }
