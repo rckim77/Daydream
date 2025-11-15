@@ -48,6 +48,7 @@ struct CityDetailView: View {
                     .font(.largeTitle)
                     .padding(.top, 24)
                     .padding(.horizontal, 24)
+                SummaryView(cityText: cityText)
                 MapCardView(mapPosition: $mapPosition, place: place)
                 Text("Top Sights")
                     .font(.title)
