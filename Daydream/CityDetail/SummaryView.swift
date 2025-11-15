@@ -28,6 +28,7 @@ struct SummaryView: View {
                             .redacted(reason: .placeholder)
                             .opacity(summary.isEmpty ? 1 : 0)
                             .animation(.easeInOut, value: summary.isEmpty)
+                            .shimmer()
                     }
                 }
                 .padding(.horizontal, 24)

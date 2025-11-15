@@ -21,4 +21,8 @@ extension View {
         }
         return message ?? ""
     }
+    
+    func shimmer() -> some View {
+        modifier(ShimmerEffect())
+    }
 }
