@@ -8,17 +8,19 @@
 
 import CoreLocation
 import Foundation
+import Observation
 
-//extension CLLocationCoordinate2D: @retroactive Equatable {
-//    public static func == (lhs: CLLocationCoordinate2D, rhs: CLLocationCoordinate2D) -> Bool {
-//        lhs.latitude == rhs.latitude && lhs.longitude == rhs.longitude
-//    }
-//}
+extension CLLocationCoordinate2D: @retroactive Equatable {
+    public static func == (lhs: CLLocationCoordinate2D, rhs: CLLocationCoordinate2D) -> Bool {
+        lhs.latitude == rhs.latitude && lhs.longitude == rhs.longitude
+    }
+}
 
-final class CurrentLocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
+@Observable
+final class CurrentLocationManager: NSObject, CLLocationManagerDelegate {
 
     private var authStatus: CLAuthorizationStatus = .notDetermined
-    @Published var location: CLLocationCoordinate2D?
+    var location: CLLocationCoordinate2D?
     
     private let manager = CLLocationManager()
     

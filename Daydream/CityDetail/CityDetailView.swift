@@ -26,7 +26,7 @@ struct CityDetailView: View {
     /// This ensures navigation to current location city is gated behind user interaction.
     @State private var currentLocationButtonTapped = false
     @State private var showLocationDeniedModal = false
-    @StateObject private var locationManager = CurrentLocationManager()
+    @State private var locationManager = CurrentLocationManager()
     
     // MARK: - Environment vars
     @Environment(\.dismiss) var dismiss
@@ -113,7 +113,7 @@ struct CityDetailView: View {
         .sheet(item: $tappedCardPlace) { identifiablePlace in
             MapViewControllerRepresentable(place: identifiablePlace.place)
         }
-        .onReceive(locationManager.$location) { currentLocation in
+        .onChange(of: locationManager.location) { _ , currentLocation in
             if let currentLocation = currentLocation, currentLocationButtonTapped {
                 Task {
                     if let (currentPlace, currentImage) = try? await API.PlaceSearch.fetchCurrentCityBy(currentLocation) {

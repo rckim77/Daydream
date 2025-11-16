@@ -19,7 +19,7 @@ struct CitiesView: View {
     /// This ensures navigation to current location city is gated behind user interaction.
     @State private var currentLocationButtonTapped = false
     @State private var showDeniedLocationAlert = false
-    @StateObject private var locationManager = CurrentLocationManager()
+    @State private var locationManager = CurrentLocationManager()
 
     // MARK: - Layout/Animation vars
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
@@ -103,7 +103,7 @@ struct CitiesView: View {
 
             cities = selectedCities
         }
-        .onReceive(locationManager.$location) { currentLocation in
+        .onChange(of: locationManager.location) { _ , currentLocation in
             if let currentLocation = currentLocation, currentLocationButtonTapped {
                 Task {
                     if let (place, image) = try? await API.PlaceSearch.fetchCurrentCityBy(currentLocation) {
