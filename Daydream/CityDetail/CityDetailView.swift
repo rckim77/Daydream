@@ -12,7 +12,7 @@ import MapKit
 
 struct CityDetailView: View {
 
-    // MARK: - State and StateObject vars
+    // MARK: - State vars
     @State var place: Place
     @State var image: UIImage?
 
@@ -26,10 +26,10 @@ struct CityDetailView: View {
     /// This ensures navigation to current location city is gated behind user interaction.
     @State private var currentLocationButtonTapped = false
     @State private var showLocationDeniedModal = false
-    @State private var locationManager = CurrentLocationManager()
     
     // MARK: - Environment vars
     @Environment(\.dismiss) var dismiss
+    @Environment(CurrentLocationManager.self) private var locationManager
     
     // MARK: - Computed vars
     /// Appends country flag to city name if available

@@ -12,14 +12,14 @@ import TipKit
 
 struct CitiesView: View {
     
-    // MARK: - State and StateObject vars
+    // MARK: - State vars
     @State private var cities: [RandomCity] = []
     @State private var selectedCity: CityRoute?
     @State private var showFeedbackModal = false
     /// This ensures navigation to current location city is gated behind user interaction.
     @State private var currentLocationButtonTapped = false
     @State private var showDeniedLocationAlert = false
-    @State private var locationManager = CurrentLocationManager()
+    @Environment(CurrentLocationManager.self) private var locationManager
 
     // MARK: - Layout/Animation vars
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
@@ -107,6 +107,8 @@ struct CitiesView: View {
             if let currentLocation = currentLocation, currentLocationButtonTapped {
                 Task {
                     if let (place, image) = try? await API.PlaceSearch.fetchCurrentCityBy(currentLocation) {
+                        // this resets so that tapping current location on detail view doesn't fire this again
+                        currentLocationButtonTapped = false
                         selectedCity = CityRoute(name: place.description, place: place, image: image)
                     } else {
                         // show error modal

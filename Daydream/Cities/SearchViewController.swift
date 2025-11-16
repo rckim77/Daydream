@@ -16,7 +16,8 @@ final class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let citiesVC = UIHostingController(rootView: CitiesView())
+        let locationManager = CurrentLocationManager()
+        let citiesVC = UIHostingController(rootView: CitiesView().environment(locationManager))
         addChild(citiesVC)
         view.addSubview(citiesVC.view)
         citiesVC.didMove(toParent: self)
