@@ -12,10 +12,10 @@ import MapKit
 
 struct CityDetailView: View {
 
+    // MARK: - State and StateObject vars
     @State var place: Place
     @State var image: UIImage?
-    
-    @Environment(\.dismiss) var dismiss
+
     @State private var showAutocompleteWidget = false
     @State private var sights = [Place]()
     @State private var eateries = [Place]()
@@ -28,6 +28,10 @@ struct CityDetailView: View {
     @State private var showLocationDeniedModal = false
     @StateObject private var locationManager = CurrentLocationManager()
     
+    // MARK: - Environment vars
+    @Environment(\.dismiss) var dismiss
+    
+    // MARK: - Computed vars
     /// Appends country flag to city name if available
     private var cityText: String {
         var text = place.displayName ?? ""
@@ -127,7 +131,6 @@ struct CityDetailView: View {
                 print("current location is nil")
             }
         }
-        .deniedLocationAlert(isPresented: $showLocationDeniedModal)
     }
     
     private func fetchSightsAndEateries(_ city: Place) async -> Void {

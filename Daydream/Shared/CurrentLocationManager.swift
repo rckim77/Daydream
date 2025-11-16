@@ -9,9 +9,15 @@
 import CoreLocation
 import Foundation
 
+//extension CLLocationCoordinate2D: @retroactive Equatable {
+//    public static func == (lhs: CLLocationCoordinate2D, rhs: CLLocationCoordinate2D) -> Bool {
+//        lhs.latitude == rhs.latitude && lhs.longitude == rhs.longitude
+//    }
+//}
+
 final class CurrentLocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
-    
-    @Published var authStatus: CLAuthorizationStatus = .notDetermined
+
+    private var authStatus: CLAuthorizationStatus = .notDetermined
     @Published var location: CLLocationCoordinate2D?
     
     private let manager = CLLocationManager()
@@ -44,6 +50,7 @@ final class CurrentLocationManager: NSObject, ObservableObject, CLLocationManage
     }
     
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        authStatus = manager.authorizationStatus
         if manager.authorizationStatus == .authorizedWhenInUse {
             // when the user authorizes for use, immediately request location
             _ = requestCurrentLocation()
@@ -52,6 +59,7 @@ final class CurrentLocationManager: NSObject, ObservableObject, CLLocationManage
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         location = locations.last?.coordinate
+        print("updated location")
     }
     
     // Common errors: kCLErrorDomain code=0 (location unknown), code=1 (denied), code=2 (network)

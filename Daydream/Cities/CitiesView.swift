@@ -12,6 +12,7 @@ import TipKit
 
 struct CitiesView: View {
     
+    // MARK: - State and StateObject vars
     @State private var cities: [RandomCity] = []
     @State private var selectedCity: CityRoute?
     @State private var showFeedbackModal = false
@@ -20,9 +21,11 @@ struct CitiesView: View {
     @State private var showDeniedLocationAlert = false
     @StateObject private var locationManager = CurrentLocationManager()
 
+    // MARK: - Layout/Animation vars
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Namespace private var zoomNS
     
+    // MARK: - Private constants and computed vars
     private let cityCount = 5
 
     private var scrollViewHorizontalPadding: CGFloat {
