@@ -17,6 +17,7 @@ struct CitiesView: View {
     @State private var showFeedbackModal = false
     /// This ensures navigation to current location city is gated behind user interaction.
     @State private var currentLocationButtonTapped = false
+    @State private var showDeniedLocationAlert = false
     @StateObject private var locationManager = CurrentLocationManager()
 
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
@@ -68,7 +69,10 @@ struct CitiesView: View {
                     selectedCity = CityRoute(name: place.description, place: place, image: image)
                 } currentLocationTapped: {
                     currentLocationButtonTapped = true
-                    locationManager.requestCurrentLocation()
+                    let authStatus = locationManager.requestCurrentLocation()
+                    if authStatus == .denied {
+                        showDeniedLocationAlert = true
+                    }
                 } additionalViews: {
                     FeedbackButton {
                         showFeedbackModal = true
@@ -84,6 +88,7 @@ struct CitiesView: View {
             FeedbackSheet()
                 .presentationDetents([.medium])
         }
+        .deniedLocationAlert(isPresented: $showDeniedLocationAlert)
         .task {
             var selectedCities = [RandomCity]()
             

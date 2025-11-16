@@ -25,6 +25,7 @@ struct CityDetailView: View {
     @State private var tappedCardPlace: IdentifiablePlace?
     /// This ensures navigation to current location city is gated behind user interaction.
     @State private var currentLocationButtonTapped = false
+    @State private var showLocationDeniedModal = false
     @StateObject private var locationManager = CurrentLocationManager()
     
     /// Appends country flag to city name if available
@@ -89,7 +90,10 @@ struct CityDetailView: View {
                 }
             } currentLocationTapped: {
                 currentLocationButtonTapped = true
-                locationManager.requestCurrentLocation()
+                let authStatus = locationManager.requestCurrentLocation()
+                if authStatus == .denied {
+                    showLocationDeniedModal = true
+                }
             } additionalViews: {
                 Spacer()
                     .frame(width: 2)
@@ -123,6 +127,7 @@ struct CityDetailView: View {
                 print("current location is nil")
             }
         }
+        .deniedLocationAlert(isPresented: $showLocationDeniedModal)
     }
     
     private func fetchSightsAndEateries(_ city: Place) async -> Void {

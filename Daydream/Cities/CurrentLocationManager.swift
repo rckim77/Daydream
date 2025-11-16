@@ -27,7 +27,7 @@ final class CurrentLocationManager: NSObject, ObservableObject, CLLocationManage
         manager.requestWhenInUseAuthorization()
     }
     
-    func requestCurrentLocation() {
+    func requestCurrentLocation() -> CLAuthorizationStatus {
         let status = manager.authorizationStatus
         authStatus = status
 
@@ -36,15 +36,17 @@ final class CurrentLocationManager: NSObject, ObservableObject, CLLocationManage
             manager.requestLocation()
         case .notDetermined:
             requestAuth()
-        default: // could not get location for a variety of reasons
+        default: // could not get location for a variety of other reasons
             break
         }
+        
+        return status
     }
     
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         if manager.authorizationStatus == .authorizedWhenInUse {
             // when the user authorizes for use, immediately request location
-            requestCurrentLocation()
+            _ = requestCurrentLocation()
         }
     }
     
