@@ -15,6 +15,8 @@ struct CitiesView: View {
     @State private var cities: [RandomCity] = []
     @State private var selectedCity: CityRoute?
     @State private var showFeedbackModal = false
+    /// This ensures navigation to current location city is gated behind user interaction.
+    @State private var currentLocationButtonTapped = false
     @StateObject private var locationManager = CurrentLocationManager()
 
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
@@ -65,6 +67,7 @@ struct CitiesView: View {
                 } randomCityReceived: { place, image in
                     selectedCity = CityRoute(name: place.description, place: place, image: image)
                 } currentLocationTapped: {
+                    currentLocationButtonTapped = true
                     locationManager.requestCurrentLocation()
                 } additionalViews: {
                     FeedbackButton {
@@ -92,17 +95,17 @@ struct CitiesView: View {
 
             cities = selectedCities
         }
-        .onReceive(locationManager.$location) { output in
-            if let currLocation = output {
+        .onReceive(locationManager.$location) { currentLocation in
+            if let currentLocation = currentLocation, currentLocationButtonTapped {
                 Task {
-                    if let (place, image) = try? await API.PlaceSearch.fetchCurrentCityBy(currLocation) {
+                    if let (place, image) = try? await API.PlaceSearch.fetchCurrentCityBy(currentLocation) {
                         selectedCity = CityRoute(name: place.description, place: place, image: image)
                     } else {
                         // show error modal
                     }
                 }
             } else {
-                print("couldn't get locationManager.location")
+                print("currentLocation is nil")
             }
         }
     }

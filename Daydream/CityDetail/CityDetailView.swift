@@ -23,6 +23,9 @@ struct CityDetailView: View {
     @State private var mapPosition: MapCameraPosition = .automatic
     @State private var showingMapDetailViewController = false
     @State private var tappedCardPlace: IdentifiablePlace?
+    /// This ensures navigation to current location city is gated behind user interaction.
+    @State private var currentLocationButtonTapped = false
+    @StateObject private var locationManager = CurrentLocationManager()
     
     /// Appends country flag to city name if available
     private var cityText: String {
@@ -85,7 +88,8 @@ struct CityDetailView: View {
                     await fetchSightsAndEateries(place)
                 }
             } currentLocationTapped: {
-                // todo
+                currentLocationButtonTapped = true
+                locationManager.requestCurrentLocation()
             } additionalViews: {
                 Spacer()
                     .frame(width: 2)
@@ -100,6 +104,24 @@ struct CityDetailView: View {
         }
         .sheet(item: $tappedCardPlace) { identifiablePlace in
             MapViewControllerRepresentable(place: identifiablePlace.place)
+        }
+        .onReceive(locationManager.$location) { currentLocation in
+            if let currentLocation = currentLocation, currentLocationButtonTapped {
+                Task {
+                    if let (currentPlace, currentImage) = try? await API.PlaceSearch.fetchCurrentCityBy(currentLocation) {
+                        place = currentPlace
+                        image = currentImage
+                        mapPosition = createMapPosition(place.location)
+                        Task {
+                            await fetchSightsAndEateries(place)
+                        }
+                    } else {
+                        // show error modal
+                    }
+                }
+            } else {
+                print("current location is nil")
+            }
         }
     }
     
