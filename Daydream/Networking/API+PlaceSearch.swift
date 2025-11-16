@@ -15,6 +15,7 @@ import SwiftUI
 enum APIError: Error {
     case biasError
     case bundleError
+    case fetchCurrentCityError
     case fetchPhotoError
     case imageDataError
     case missingViewport
@@ -50,6 +51,31 @@ extension API {
                 return (place, image)
             } else {
                 throw APIError.placeMissingPhotos
+            }
+        }
+
+        static func fetchCurrentCityBy(_ coordinate: CLLocationCoordinate2D) async throws -> (Place, UIImage) {
+            let center = CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)
+            let restriction = CircularCoordinateRegion(center: center, radius: 1000)
+            let placeProps: [PlaceProperty] = [.displayName, .formattedAddress, .coordinate, .photos, .placeID, .addressComponents]
+            let request = SearchNearbyRequest(
+                locationRestriction: restriction,
+                placeProperties: placeProps,
+                includedPrimaryTypes: [.locality],
+                maxResultCount: 2
+            )
+
+            switch await PlacesClient.shared.searchNearby(with: request) {
+            case .success(let places):
+                if let place = places.first, let photo = place.photos?.first {
+                    let image = try await API.PlaceSearch.fetchImageBy(photo: photo)
+                    return (place, image)
+                } else {
+                    throw APIError.placeMissingPhotos
+                }
+            case .failure(let error):
+                print("=== fetchCurrentCityBy(coordinate:) call failed: \(error.localizedDescription)")
+                throw APIError.fetchCurrentCityError
             }
         }
         

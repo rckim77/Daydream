@@ -13,6 +13,8 @@ struct SearchToolbar<Content: View>: View {
     
     var autocompleteTapped: (Place, UIImage?) -> Void
     var randomCityReceived: (Place, UIImage) -> Void
+    var currentLocationTapped: () -> Void
+
     @ViewBuilder let additionalViews: Content
 
     @State private var showAutocompleteWidget = false
@@ -41,6 +43,12 @@ struct SearchToolbar<Content: View>: View {
             RandomCityButton { place, image in
                 randomCityReceived(place, image)
             }
+            Button {
+                currentLocationTapped()
+            } label: {
+                Image(systemName: "location.fill")
+            }
+            .modifier(SearchActionStyle(shape: .circle))
             additionalViews
         }
         .padding(.bottom, 8)

@@ -84,6 +84,8 @@ struct CityDetailView: View {
                 Task {
                     await fetchSightsAndEateries(place)
                 }
+            } currentLocationTapped: {
+                // todo
             } additionalViews: {
                 Spacer()
                     .frame(width: 2)

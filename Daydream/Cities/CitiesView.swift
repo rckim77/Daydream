@@ -15,6 +15,7 @@ struct CitiesView: View {
     @State private var cities: [RandomCity] = []
     @State private var selectedCity: CityRoute?
     @State private var showFeedbackModal = false
+    @StateObject private var locationManager = CurrentLocationManager()
 
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Namespace private var zoomNS
@@ -63,6 +64,8 @@ struct CitiesView: View {
                     selectedCity = CityRoute(name: place.description, place: place, image: image)
                 } randomCityReceived: { place, image in
                     selectedCity = CityRoute(name: place.description, place: place, image: image)
+                } currentLocationTapped: {
+                    locationManager.requestCurrentLocation()
                 } additionalViews: {
                     FeedbackButton {
                         showFeedbackModal = true
@@ -88,6 +91,19 @@ struct CitiesView: View {
             }
 
             cities = selectedCities
+        }
+        .onReceive(locationManager.$location) { output in
+            if let currLocation = output {
+                Task {
+                    if let (place, image) = try? await API.PlaceSearch.fetchCurrentCityBy(currLocation) {
+                        selectedCity = CityRoute(name: place.description, place: place, image: image)
+                    } else {
+                        // show error modal
+                    }
+                }
+            } else {
+                print("couldn't get locationManager.location")
+            }
         }
     }
 }
