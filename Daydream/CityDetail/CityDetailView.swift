@@ -12,10 +12,10 @@ import MapKit
 
 struct CityDetailView: View {
 
+    // MARK: - State vars
     @State var place: Place
     @State var image: UIImage?
-    
-    @Environment(\.dismiss) var dismiss
+
     @State private var showAutocompleteWidget = false
     @State private var sights = [Place]()
     @State private var eateries = [Place]()
@@ -23,7 +23,16 @@ struct CityDetailView: View {
     @State private var mapPosition: MapCameraPosition = .automatic
     @State private var showingMapDetailViewController = false
     @State private var tappedCardPlace: IdentifiablePlace?
+    @State private var showErrorAlert = false
+    /// This ensures navigation to current location city is gated behind user interaction.
+    @State private var currentLocationButtonTapped = false
+    @State private var prevCurrentLocation: CLLocationCoordinate2D?
     
+    // MARK: - Environment vars
+    @Environment(\.dismiss) var dismiss
+    @Environment(CurrentLocationManager.self) private var locationManager
+    
+    // MARK: - Computed vars
     /// Appends country flag to city name if available
     private var cityText: String {
         var text = place.displayName ?? ""
@@ -84,6 +93,20 @@ struct CityDetailView: View {
                 Task {
                     await fetchSightsAndEateries(place)
                 }
+            } currentLocationTapped: {
+                currentLocationButtonTapped = true
+                guard let prevCurrentLocation = prevCurrentLocation,
+                      locationManager.location == prevCurrentLocation else {
+                    // the .onChange(of:) will be triggered and programmatically navigate
+                    return
+                }
+                Task {
+                    do {
+                        try await updateToCurrentCity(prevCurrentLocation)
+                    } catch {
+                        showErrorAlert = true
+                    }
+                }
             } additionalViews: {
                 Spacer()
                     .frame(width: 2)
@@ -95,9 +118,27 @@ struct CityDetailView: View {
         .task {
             mapPosition = createMapPosition(place.location)
             await fetchSightsAndEateries(place)
+
+            // seed prevCurrentLocation
+            prevCurrentLocation = locationManager.location
         }
         .sheet(item: $tappedCardPlace) { identifiablePlace in
             MapViewControllerRepresentable(place: identifiablePlace.place)
+        }
+        .errorAlert(isPresented: $showErrorAlert)
+        .onChange(of: locationManager.location) { _ , currentLocation in
+            if let currentLocation = currentLocation, currentLocationButtonTapped {
+                prevCurrentLocation = currentLocation
+                Task {
+                    do {
+                        try await updateToCurrentCity(currentLocation)
+                    } catch {
+                        showErrorAlert = true
+                    }
+                }
+            } else {
+                print("current location is nil")
+            }
         }
     }
     
@@ -110,6 +151,14 @@ struct CityDetailView: View {
         } catch {
             return
         }
+    }
+    
+    private func updateToCurrentCity(_ location: CLLocationCoordinate2D) async throws -> Void {
+        let (currentPlace, currentImage) = try await API.PlaceSearch.fetchCurrentCityBy(location)
+        place = currentPlace
+        image = currentImage
+        mapPosition = createMapPosition(place.location)
+        await fetchSightsAndEateries(place)
     }
     
     private func createMapPosition(_ location: CLLocationCoordinate2D) -> MapCameraPosition {

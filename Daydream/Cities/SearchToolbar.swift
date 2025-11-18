@@ -13,10 +13,14 @@ struct SearchToolbar<Content: View>: View {
     
     var autocompleteTapped: (Place, UIImage?) -> Void
     var randomCityReceived: (Place, UIImage) -> Void
+    var currentLocationTapped: () -> Void
+
     @ViewBuilder let additionalViews: Content
 
     @State private var showAutocompleteWidget = false
     @State private var showLoadingSpinnerForRandomCityButton = false
+    @State private var showDeniedLocationAlert = false
+    @Environment(CurrentLocationManager.self) private var locationManager
     
     var body: some View {
         HStack {
@@ -24,6 +28,7 @@ struct SearchToolbar<Content: View>: View {
                 showAutocompleteWidget.toggle()
             } label: {
                 Label("Search", systemImage: "magnifyingglass")
+                    .padding(.horizontal, 12)
             }
             .modifier(SearchActionStyle(shape: .capsule))
             .placeAutocomplete(filter: AutocompleteFilter(types: [.cities]), show: $showAutocompleteWidget) { suggestion, _ in
@@ -38,11 +43,23 @@ struct SearchToolbar<Content: View>: View {
             } onError: { error in
                 print(error.localizedDescription)
             }
+            .padding(.trailing, 4)
             RandomCityButton { place, image in
                 randomCityReceived(place, image)
             }
+            Button {
+                let authStatus = locationManager.requestCurrentLocation()
+                if authStatus == .denied {
+                    showDeniedLocationAlert = true
+                }
+                currentLocationTapped()
+            } label: {
+                Image(systemName: "location.fill")
+            }
+            .modifier(SearchActionStyle(shape: .circle))
             additionalViews
         }
         .padding(.bottom, 8)
+        .deniedLocationAlert(isPresented: $showDeniedLocationAlert)
     }
 }

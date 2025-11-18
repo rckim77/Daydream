@@ -6,19 +6,30 @@
 //  Copyright © 2025 Raymond Kim. All rights reserved.
 //
 
+import CoreLocation
 import SwiftUI
 import GooglePlacesSwift
 import TipKit
 
 struct CitiesView: View {
     
+    // MARK: - State vars
     @State private var cities: [RandomCity] = []
     @State private var selectedCity: CityRoute?
     @State private var showFeedbackModal = false
+    @State private var showErrorAlert = false
+    
+    // MARK: - Current Location
+    /// This ensures navigation to current location city is gated behind user interaction.
+    @State private var currentLocationButtonTapped = false
+    @Environment(CurrentLocationManager.self) private var locationManager
+    @State private var prevCurrentLocation: CLLocationCoordinate2D?
 
+    // MARK: - Layout/Animation vars
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Namespace private var zoomNS
     
+    // MARK: - Private constants and computed vars
     private let cityCount = 5
 
     private var scrollViewHorizontalPadding: CGFloat {
@@ -63,6 +74,20 @@ struct CitiesView: View {
                     selectedCity = CityRoute(name: place.description, place: place, image: image)
                 } randomCityReceived: { place, image in
                     selectedCity = CityRoute(name: place.description, place: place, image: image)
+                } currentLocationTapped: {
+                    currentLocationButtonTapped = true
+                    guard let prevCurrentLocation = prevCurrentLocation,
+                          locationManager.location == prevCurrentLocation else {
+                        // the .onChange(of:) will be triggered and programmatically navigate
+                        return
+                    }
+                    Task {
+                        do {
+                            selectedCity = try await fetchCityRoute(prevCurrentLocation)
+                        } catch {
+                            showErrorAlert = true
+                        }
+                    }
                 } additionalViews: {
                     FeedbackButton {
                         showFeedbackModal = true
@@ -78,6 +103,7 @@ struct CitiesView: View {
             FeedbackSheet()
                 .presentationDetents([.medium])
         }
+        .errorAlert(isPresented: $showErrorAlert)
         .task {
             var selectedCities = [RandomCity]()
             
@@ -88,7 +114,29 @@ struct CitiesView: View {
             }
 
             cities = selectedCities
+            
+            // seed prevCurrentLocation
+            prevCurrentLocation = locationManager.location
         }
+        .onChange(of: locationManager.location) { _ , currentLocation in
+            if let currentLocation = currentLocation, currentLocationButtonTapped {
+                prevCurrentLocation = currentLocation
+                Task {
+                    do {
+                        selectedCity = try await fetchCityRoute(currentLocation)
+                    } catch {
+                        showErrorAlert = true
+                    }
+                }
+            } else {
+                print("currentLocation is nil")
+            }
+        }
+    }
+    
+    private func fetchCityRoute(_ location: CLLocationCoordinate2D) async throws -> CityRoute {
+        let (place, image) = try await API.PlaceSearch.fetchCurrentCityBy(location)
+        return CityRoute(name: place.description, place: place, image: image)
     }
 }
 
