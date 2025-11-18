@@ -23,6 +23,7 @@ struct CityDetailView: View {
     @State private var mapPosition: MapCameraPosition = .automatic
     @State private var showingMapDetailViewController = false
     @State private var tappedCardPlace: IdentifiablePlace?
+    @State private var showErrorAlert = false
     /// This ensures navigation to current location city is gated behind user interaction.
     @State private var currentLocationButtonTapped = false
     @State private var prevCurrentLocation: CLLocationCoordinate2D?
@@ -103,7 +104,7 @@ struct CityDetailView: View {
                     do {
                         try await updateToCurrentCity(prevCurrentLocation)
                     } catch {
-                        // handle error
+                        showErrorAlert = true
                     }
                 }
             } additionalViews: {
@@ -124,6 +125,7 @@ struct CityDetailView: View {
         .sheet(item: $tappedCardPlace) { identifiablePlace in
             MapViewControllerRepresentable(place: identifiablePlace.place)
         }
+        .errorAlert(isPresented: $showErrorAlert)
         .onChange(of: locationManager.location) { _ , currentLocation in
             if let currentLocation = currentLocation, currentLocationButtonTapped {
                 prevCurrentLocation = currentLocation
@@ -131,7 +133,7 @@ struct CityDetailView: View {
                     do {
                         try await updateToCurrentCity(currentLocation)
                     } catch {
-                        // handle error
+                        showErrorAlert = true
                     }
                 }
             } else {

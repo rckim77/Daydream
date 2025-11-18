@@ -17,6 +17,7 @@ struct CitiesView: View {
     @State private var cities: [RandomCity] = []
     @State private var selectedCity: CityRoute?
     @State private var showFeedbackModal = false
+    @State private var showErrorAlert = false
     
     // MARK: - Current Location
     /// This ensures navigation to current location city is gated behind user interaction.
@@ -84,7 +85,7 @@ struct CitiesView: View {
                         do {
                             selectedCity = try await fetchCityRoute(prevCurrentLocation)
                         } catch {
-                            // handle error
+                            showErrorAlert = true
                         }
                     }
                 } additionalViews: {
@@ -102,6 +103,7 @@ struct CitiesView: View {
             FeedbackSheet()
                 .presentationDetents([.medium])
         }
+        .errorAlert(isPresented: $showErrorAlert)
         .task {
             var selectedCities = [RandomCity]()
             
@@ -123,7 +125,7 @@ struct CitiesView: View {
                     do {
                         selectedCity = try await fetchCityRoute(currentLocation)
                     } catch {
-                        // handle error
+                        showErrorAlert = true
                     }
                 }
             } else {

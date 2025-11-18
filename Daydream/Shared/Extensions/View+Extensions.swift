@@ -39,4 +39,9 @@ extension View {
                 }
             }
     }
+    
+    func errorAlert(isPresented: Binding<Bool>) -> some View {
+        self
+            .alert("Sorry, something went wrong! Try again later.", isPresented: isPresented, actions: {})
+    }
 }
