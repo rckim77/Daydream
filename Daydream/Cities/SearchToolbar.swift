@@ -19,6 +19,8 @@ struct SearchToolbar<Content: View>: View {
 
     @State private var showAutocompleteWidget = false
     @State private var showLoadingSpinnerForRandomCityButton = false
+    @State private var showDeniedLocationAlert = false
+    @Environment(CurrentLocationManager.self) private var locationManager
     
     var body: some View {
         HStack {
@@ -44,6 +46,10 @@ struct SearchToolbar<Content: View>: View {
                 randomCityReceived(place, image)
             }
             Button {
+                let authStatus = locationManager.requestCurrentLocation()
+                if authStatus == .denied {
+                    showDeniedLocationAlert = true
+                }
                 currentLocationTapped()
             } label: {
                 Image(systemName: "location.fill")
@@ -52,5 +58,6 @@ struct SearchToolbar<Content: View>: View {
             additionalViews
         }
         .padding(.bottom, 8)
+        .deniedLocationAlert(isPresented: $showDeniedLocationAlert)
     }
 }

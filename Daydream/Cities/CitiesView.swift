@@ -6,6 +6,7 @@
 //  Copyright © 2025 Raymond Kim. All rights reserved.
 //
 
+import CoreLocation
 import SwiftUI
 import GooglePlacesSwift
 import TipKit
@@ -16,10 +17,12 @@ struct CitiesView: View {
     @State private var cities: [RandomCity] = []
     @State private var selectedCity: CityRoute?
     @State private var showFeedbackModal = false
+    
+    // MARK: - Current Location
     /// This ensures navigation to current location city is gated behind user interaction.
     @State private var currentLocationButtonTapped = false
-    @State private var showDeniedLocationAlert = false
     @Environment(CurrentLocationManager.self) private var locationManager
+    @State private var prevCurrentLocation: CLLocationCoordinate2D?
 
     // MARK: - Layout/Animation vars
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
@@ -72,9 +75,17 @@ struct CitiesView: View {
                     selectedCity = CityRoute(name: place.description, place: place, image: image)
                 } currentLocationTapped: {
                     currentLocationButtonTapped = true
-                    let authStatus = locationManager.requestCurrentLocation()
-                    if authStatus == .denied {
-                        showDeniedLocationAlert = true
+                    guard let prevCurrentLocation = prevCurrentLocation,
+                          locationManager.location == prevCurrentLocation else {
+                        // the .onChange(of:) will be triggered and programmatically navigate
+                        return
+                    }
+                    Task {
+                        do {
+                            selectedCity = try await fetchCityRoute(prevCurrentLocation)
+                        } catch {
+                            // handle error
+                        }
                     }
                 } additionalViews: {
                     FeedbackButton {
@@ -91,7 +102,6 @@ struct CitiesView: View {
             FeedbackSheet()
                 .presentationDetents([.medium])
         }
-        .deniedLocationAlert(isPresented: $showDeniedLocationAlert)
         .task {
             var selectedCities = [RandomCity]()
             
@@ -102,22 +112,29 @@ struct CitiesView: View {
             }
 
             cities = selectedCities
+            
+            // seed prevCurrentLocation
+            prevCurrentLocation = locationManager.location
         }
         .onChange(of: locationManager.location) { _ , currentLocation in
             if let currentLocation = currentLocation, currentLocationButtonTapped {
+                prevCurrentLocation = currentLocation
                 Task {
-                    if let (place, image) = try? await API.PlaceSearch.fetchCurrentCityBy(currentLocation) {
-                        // this resets so that tapping current location on detail view doesn't fire this again
-                        currentLocationButtonTapped = false
-                        selectedCity = CityRoute(name: place.description, place: place, image: image)
-                    } else {
-                        // show error modal
+                    do {
+                        selectedCity = try await fetchCityRoute(currentLocation)
+                    } catch {
+                        // handle error
                     }
                 }
             } else {
                 print("currentLocation is nil")
             }
         }
+    }
+    
+    private func fetchCityRoute(_ location: CLLocationCoordinate2D) async throws -> CityRoute {
+        let (place, image) = try await API.PlaceSearch.fetchCurrentCityBy(location)
+        return CityRoute(name: place.description, place: place, image: image)
     }
 }
 

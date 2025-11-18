@@ -25,7 +25,7 @@ struct CityDetailView: View {
     @State private var tappedCardPlace: IdentifiablePlace?
     /// This ensures navigation to current location city is gated behind user interaction.
     @State private var currentLocationButtonTapped = false
-    @State private var showLocationDeniedModal = false
+    @State private var prevCurrentLocation: CLLocationCoordinate2D?
     
     // MARK: - Environment vars
     @Environment(\.dismiss) var dismiss
@@ -94,9 +94,17 @@ struct CityDetailView: View {
                 }
             } currentLocationTapped: {
                 currentLocationButtonTapped = true
-                let authStatus = locationManager.requestCurrentLocation()
-                if authStatus == .denied {
-                    showLocationDeniedModal = true
+                guard let prevCurrentLocation = prevCurrentLocation,
+                      locationManager.location == prevCurrentLocation else {
+                    // the .onChange(of:) will be triggered and programmatically navigate
+                    return
+                }
+                Task {
+                    do {
+                        try await updateToCurrentCity(prevCurrentLocation)
+                    } catch {
+                        // handle error
+                    }
                 }
             } additionalViews: {
                 Spacer()
@@ -109,22 +117,22 @@ struct CityDetailView: View {
         .task {
             mapPosition = createMapPosition(place.location)
             await fetchSightsAndEateries(place)
+
+            // seed prevCurrentLocation
+            prevCurrentLocation = locationManager.location
         }
         .sheet(item: $tappedCardPlace) { identifiablePlace in
             MapViewControllerRepresentable(place: identifiablePlace.place)
         }
         .onChange(of: locationManager.location) { _ , currentLocation in
             if let currentLocation = currentLocation, currentLocationButtonTapped {
+                prevCurrentLocation = currentLocation
                 Task {
-                    if let (currentPlace, currentImage) = try? await API.PlaceSearch.fetchCurrentCityBy(currentLocation) {
-                        place = currentPlace
-                        image = currentImage
-                        mapPosition = createMapPosition(place.location)
-                        Task {
-                            await fetchSightsAndEateries(place)
-                        }
-                    } else {
-                        // show error modal
+                    do {
+                        try await updateToCurrentCity(currentLocation)
+                        await fetchSightsAndEateries(place)
+                    } catch {
+                        // handle error
                     }
                 }
             } else {
@@ -142,6 +150,13 @@ struct CityDetailView: View {
         } catch {
             return
         }
+    }
+    
+    private func updateToCurrentCity(_ location: CLLocationCoordinate2D) async throws -> Void {
+        let (currentPlace, currentImage) = try await API.PlaceSearch.fetchCurrentCityBy(location)
+        place = currentPlace
+        image = currentImage
+        mapPosition = createMapPosition(place.location)
     }
     
     private func createMapPosition(_ location: CLLocationCoordinate2D) -> MapCameraPosition {
