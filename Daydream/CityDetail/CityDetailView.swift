@@ -130,7 +130,6 @@ struct CityDetailView: View {
                 Task {
                     do {
                         try await updateToCurrentCity(currentLocation)
-                        await fetchSightsAndEateries(place)
                     } catch {
                         // handle error
                     }
@@ -157,6 +156,7 @@ struct CityDetailView: View {
         place = currentPlace
         image = currentImage
         mapPosition = createMapPosition(place.location)
+        await fetchSightsAndEateries(place)
     }
     
     private func createMapPosition(_ location: CLLocationCoordinate2D) -> MapCameraPosition {

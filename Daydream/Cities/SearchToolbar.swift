@@ -28,6 +28,7 @@ struct SearchToolbar<Content: View>: View {
                 showAutocompleteWidget.toggle()
             } label: {
                 Label("Search", systemImage: "magnifyingglass")
+                    .padding(.horizontal, 12)
             }
             .modifier(SearchActionStyle(shape: .capsule))
             .placeAutocomplete(filter: AutocompleteFilter(types: [.cities]), show: $showAutocompleteWidget) { suggestion, _ in
@@ -42,6 +43,7 @@ struct SearchToolbar<Content: View>: View {
             } onError: { error in
                 print(error.localizedDescription)
             }
+            .padding(.trailing, 4)
             RandomCityButton { place, image in
                 randomCityReceived(place, image)
             }
