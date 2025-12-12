@@ -9,6 +9,7 @@
 import SwiftUI
 import GooglePlacesSwift
 import MapKit
+import StoreKit
 
 struct CityDetailView: View {
 
@@ -28,9 +29,11 @@ struct CityDetailView: View {
     @State private var currentLocationButtonTapped = false
     @State private var prevCurrentLocation: CLLocationCoordinate2D?
     
-    // MARK: - Environment vars
+    // MARK: - Environment and AppStorage vars
     @Environment(\.dismiss) var dismiss
+    @Environment(\.requestReview) var requestReview
     @Environment(CurrentLocationManager.self) private var locationManager
+    @AppStorage("reviewsViewedCount") private var reviewsViewedCount: Int = 0
     
     // MARK: - Computed vars
     /// Appends country flag to city name if available
@@ -138,6 +141,11 @@ struct CityDetailView: View {
                 }
             } else {
                 print("current location is nil")
+            }
+        }
+        .onAppear {
+            if reviewsViewedCount > 1 {
+                requestReview()
             }
         }
     }
