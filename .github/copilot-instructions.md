@@ -105,6 +105,7 @@ Daydream/
 │   └── GettingStartedTip.swift   # TipKit getting started tip
 ├── CityDetail/                    # City detail and map views (SwiftUI)
 │   ├── CityDetailView.swift      # Detail view for a selected city
+│   ├── SummaryView.swift         # AI-generated city summary (iOS 26+)
 │   ├── MapViewController.swift   # UIKit map view with Google Maps
 │   ├── MapViewControllerRepresentable.swift # SwiftUI wrapper for MapViewController
 │   ├── MapCardView.swift         # Map card component
@@ -136,10 +137,12 @@ Daydream/
 │   │   ├── RandomCityButton.swift # Random city button
 │   │   └── HomeButton.swift      # Home navigation button
 │   ├── ExpiringCache.swift       # Generic expiring cache
-│   ├── ImageCache.swift          # Image caching
-│   ├── PlacesCache.swift         # Places data caching
+│   ├── ImageCache.swift          # Image caching with Mutex for thread-safety
+│   ├── PlacesCache.swift         # Places data caching with Mutex for thread-safety
 │   ├── Protocols.swift           # Common protocols
 │   ├── ShadowView.swift          # Shadow view component
+│   ├── ShimmerEffect.swift       # Shimmer animation effect
+│   ├── CurrentLocationManager.swift # Core Location manager for user location
 │   ├── SearchActionStyle.swift   # Search action styling
 │   ├── TopScrollTransition.swift # Scroll transition modifier
 │   └── UIDevice+Helpers.swift    # UIDevice extensions
@@ -154,12 +157,14 @@ Daydream/
 ### Important Files for Common Changes
 - **Cities browsing**: `Cities/CitiesView.swift`, `Cities/CityCardView.swift`
 - **Search functionality**: `Cities/SearchToolbar.swift`, `Cities/SearchViewController.swift`
-- **City details**: `CityDetail/CityDetailView.swift`, `CityDetail/PlaceCardCarousel/PlacesCarouselView.swift`
+- **City details**: `CityDetail/CityDetailView.swift`, `CityDetail/SummaryView.swift`, `CityDetail/PlaceCardCarousel/PlacesCarouselView.swift`
 - **Map functionality**: `CityDetail/MapViewController.swift`, `CityDetail/MapViewControllerRepresentable.swift`
 - **Map reviews**: Files in `CityDetail/Map Reviews/` directory
 - **API integration**: `Networking/API+PlaceSearch.swift`
 - **Data models**: Files in `Models/` directory
 - **Shared components**: Files in `Shared/Buttons/`, `Shared/Extensions/`
+- **Caching**: `Shared/ImageCache.swift`, `Shared/PlacesCache.swift` (thread-safe with Mutex)
+- **Location services**: `Shared/CurrentLocationManager.swift`
 - **App configuration**: `Info.plist`, `AppDelegate.swift`, `SceneDelegate.swift`
 
 ### Debugging Tips
@@ -172,9 +177,11 @@ Daydream/
 ### Performance Considerations
 - App uses image caching (`ImageCache.swift`, `ExpiringCache.swift`) for performance
 - Places data is cached (`PlacesCache.swift`) to reduce API calls
+- **Thread-Safe Caching**: Both `ImageCache` and `PlacesCache` use Swift's `Mutex` primitive to wrap `NSCache` for thread-safe access across multiple threads
 - App supports both light and dark mode with automatic switching
 - UI adapts to horizontal size class for iPad support
 - Random cities are preloaded from JSON for instant display
+- AI-powered city summaries available on iOS 26+ using Apple Intelligence
 
 ## Environment Limitations
 
@@ -223,6 +230,7 @@ When modifying API integrations, always check these files:
 ### Memory Management
 - Uses `ExpiringCache` and `ImageCache` for caching with expiration
 - PlacesCache for Google Places SDK data caching
+- **Thread-Safe Cache Implementation**: Both `ImageCache` and `PlacesCache` wrap `NSCache` with Swift's `Mutex` primitive using `withLock` for all cache operations (set, get, clear)
 - Implements weak references in closures to prevent retain cycles
 - SwiftUI manages view lifecycle automatically
 - Timer-based cleanup for cached data where needed
@@ -231,11 +239,13 @@ When modifying API integrations, always check these files:
 - **SwiftUI First**: Primary UI is built with SwiftUI (CitiesView, CityDetailView, all cards and components)
 - **UIKit Interop**: MapViewController uses UIKit for Google Maps SDK, wrapped with UIViewControllerRepresentable
 - **SnapKit**: Used for Auto Layout in UIKit components (MapViewController)
-- **Custom Components**: ShadowView, TopScrollTransition modifier, custom button styles
+- **Custom Components**: ShadowView, ShimmerEffect modifier, TopScrollTransition modifier, custom button styles
 - **Responsive Design**: Adapts to horizontal size class for iPad (different padding, spacing, card sizes)
 - **TipKit Integration**: Uses iOS 17+ TipKit for onboarding tips (GettingStartedTip)
+- **Apple Intelligence**: SummaryView uses iOS 26+ FoundationModels for AI-generated city summaries
 - **Dark Mode**: Full support throughout app with automatic switching
 - **Navigation**: SwiftUI NavigationStack with programmatic navigation via CityRoute
+- **Location Services**: CurrentLocationManager handles Core Location authorization and updates
 
 ### Common Gotchas
 - API keys must be in `apiKeys.plist` in root Daydream/ directory (NOT in Shared/)
@@ -244,9 +254,12 @@ When modifying API integrations, always check these files:
 - MapViewController is UIKit wrapped in SwiftUI - coordinate changes carefully
 - Random cities JSON must have valid lat/lng coordinates for proper loading
 - SwiftUI previews may not work for views requiring API keys
+- **Cache thread-safety**: `ImageCache` and `PlacesCache` use `Mutex` wrapper around `NSCache` for thread-safe access
 - Image loading uses custom cache with expiration - clear cache if images don't update
 - TipKit requires iOS 17+ - check availability when modifying tips
+- Apple Intelligence features (SummaryView) require iOS 26+ and FoundationModels framework
 - SearchViewController is a UIKit wrapper for SwiftUI CitiesView for SceneDelegate compatibility
+- CurrentLocationManager handles location permissions - ensure Info.plist has location usage descriptions
 
 ## Troubleshooting
 
@@ -282,8 +295,10 @@ xcodebuild -project Daydream.xcodeproj -list
 - Console output for runtime errors
 - `AppDelegate.swift` for API key loading issues and TipKit initialization
 - `Networking/API+PlaceSearch.swift` for API call failures
-- `PlacesCache.swift` and caching files for data loading issues
+- `ImageCache.swift` and `PlacesCache.swift` for thread-safe caching issues
 - `randomCitiesJSON.json` for random city feature issues
 - `CityDetailView.swift` for city detail display issues
+- `SummaryView.swift` for Apple Intelligence summary issues
+- `CurrentLocationManager.swift` for location permission and update issues
 - `MapViewController.swift` for map-related issues
 - SwiftUI view modifiers for UI layout problems
