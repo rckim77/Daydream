@@ -19,10 +19,7 @@ final class PlaceObject: NSObject {
     }
 }
 
-/// Uses `placeId` String as hash key.
-/// The cache uses a `Mutex` primitive to ensure safe access to the cache across
-/// threads without the overhead of an actor. Whereas an actor shines when adopting
-/// an asynchronous process, mutexes work better for synchronous, immediate access.
+/// Uses `placeId` String as hash key and `NSCache` to manage thread safety.
 final class PlacesCache {
     static let shared = PlacesCache()
     
