@@ -31,6 +31,7 @@ struct CitiesView: View {
     
     // MARK: - Private constants and computed vars
     private let cityCount = 5
+    private let feedbackButtonTransitionID = "feedbackButton"
 
     private var scrollViewHorizontalPadding: CGFloat {
         horizontalSizeClass == .compact ? 0 : 96
@@ -92,6 +93,7 @@ struct CitiesView: View {
                     FeedbackButton {
                         showFeedbackModal = true
                     }
+                    .matchedTransitionSource(id: feedbackButtonTransitionID, in: zoomNS)
                 }
             }
             .fullScreenCover(item: $selectedCity) { item in
@@ -102,6 +104,7 @@ struct CitiesView: View {
         .sheet(isPresented: $showFeedbackModal) {
             FeedbackSheet()
                 .presentationDetents([.medium])
+                .navigationTransition(.zoom(sourceID: feedbackButtonTransitionID, in: zoomNS))
         }
         .errorAlert(isPresented: $showErrorAlert)
         .task {

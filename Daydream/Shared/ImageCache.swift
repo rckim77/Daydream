@@ -30,5 +30,3 @@ final class ImageCache {
         cache.removeAllObjects()
     }
 }
-
-
