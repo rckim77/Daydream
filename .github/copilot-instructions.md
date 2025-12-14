@@ -74,8 +74,9 @@ After making changes, ALWAYS test these core user scenarios:
 3. **Random City**: Launch app → Tap random city button (dice icon) → Verify random city loads correctly
 4. **Map Interaction**: On city detail → Tap "Get Directions" on a place card → Verify MapViewController opens with location
 5. **Place Cards**: On city detail → Scroll through sights and eateries carousels → Verify place cards display correctly
-6. **Feedback**: Tap feedback button → Verify feedback sheet appears with options
+6. **Feedback**: Tap feedback button → Verify feedback sheet appears with options and uses zoom transition
 7. **Navigation**: Test back navigation and home button functionality
+8. **App Review**: View reviews on MapCardView (view at least 2 reviews) → Return to city detail → Verify app review modal appears (only once per app version)
 
 ### Build Validation
 - Always run `swiftlint` before committing changes
@@ -135,9 +136,12 @@ Daydream/
 │   ├── Buttons/                  # Reusable button components
 │   │   ├── RandomCityButton.swift # Random city button
 │   │   └── HomeButton.swift      # Home navigation button
-│   ├── ExpiringCache.swift       # Generic expiring cache
-│   ├── ImageCache.swift          # Image caching
-│   ├── PlacesCache.swift         # Places data caching
+│   ├── ImageCache.swift          # Image caching (NSCache-based)
+│   ├── PlacesCache.swift         # Places data caching (NSCache-based)
+│   ├── Unused Caches/            # Reference implementations (not in use)
+│   │   ├── ExpiringCache.swift   # Generic expiring cache (legacy)
+│   │   ├── ImageMutexCache.swift # Mutex-based image cache (reference)
+│   │   └── PlacesMutexCache.swift # Mutex-based places cache (reference)
 │   ├── Protocols.swift           # Common protocols
 │   ├── ShadowView.swift          # Shadow view component
 │   ├── SearchActionStyle.swift   # Search action styling
@@ -156,10 +160,13 @@ Daydream/
 - **Search functionality**: `Cities/SearchToolbar.swift`, `Cities/SearchViewController.swift`
 - **City details**: `CityDetail/CityDetailView.swift`, `CityDetail/PlaceCardCarousel/PlacesCarouselView.swift`
 - **Map functionality**: `CityDetail/MapViewController.swift`, `CityDetail/MapViewControllerRepresentable.swift`
-- **Map reviews**: Files in `CityDetail/Map Reviews/` directory
+- **Map reviews**: Files in `CityDetail/Map Reviews/` directory, `CityDetail/MapCardView.swift`
+- **App review logic**: `CityDetail/CityDetailView.swift` (requestReviewIfApplicable), `CityDetail/MapCardView.swift` (reviewsViewedCount tracking)
+- **Navigation transitions**: `Cities/CitiesView.swift` (feedback button zoom transition)
 - **API integration**: `Networking/API+PlaceSearch.swift`
 - **Data models**: Files in `Models/` directory
 - **Shared components**: Files in `Shared/Buttons/`, `Shared/Extensions/`
+- **Caching implementations**: `Shared/ImageCache.swift`, `Shared/PlacesCache.swift`, reference implementations in `Shared/Unused Caches/`
 - **App configuration**: `Info.plist`, `AppDelegate.swift`, `SceneDelegate.swift`
 
 ### Debugging Tips
@@ -170,8 +177,10 @@ Daydream/
 - Check `randomCitiesJSON.json` if random city feature isn't working
 
 ### Performance Considerations
-- App uses image caching (`ImageCache.swift`, `ExpiringCache.swift`) for performance
-- Places data is cached (`PlacesCache.swift`) to reduce API calls
+- App uses image caching (`ImageCache.swift`) with NSCache for performance
+- Places data is cached (`PlacesCache.swift`) with NSCache to reduce API calls
+- NSCache is thread-safe by default, no additional synchronization needed
+- Reference Mutex implementations available in `Shared/Unused Caches/` for educational purposes
 - App supports both light and dark mode with automatic switching
 - UI adapts to horizontal size class for iPad support
 - Random cities are preloaded from JSON for instant display
@@ -219,13 +228,14 @@ When modifying API integrations, always check these files:
 2. **Search**: User taps search → SearchToolbar appears → Google Places autocomplete → User selects → Navigates to CityDetailView
 3. **City Details**: CityDetailView receives Place → Fetches nearby sights and eateries → Displays in PlacesCarouselView
 4. **Map View**: User taps place card → MapViewController presented → Shows place on map with reviews
+5. **App Review Flow**: MapCardView tracks review views via `@AppStorage("reviewsViewedCount")` → After 2+ views, CityDetailView triggers StoreKit review request (once per app version via `@AppStorage("lastReviewedAppVersion")`)
 
 ### Memory Management
-- Uses `ExpiringCache` and `ImageCache` for caching with expiration
-- PlacesCache for Google Places SDK data caching
+- Uses `ImageCache` and `PlacesCache` for caching (both use NSCache which is thread-safe)
+- NSCache automatically handles memory pressure and evicts objects when needed
+- Reference Mutex cache implementations in `Shared/Unused Caches/` (not currently used)
 - Implements weak references in closures to prevent retain cycles
 - SwiftUI manages view lifecycle automatically
-- Timer-based cleanup for cached data where needed
 
 ### UI Patterns
 - **SwiftUI First**: Primary UI is built with SwiftUI (CitiesView, CityDetailView, all cards and components)
@@ -236,6 +246,8 @@ When modifying API integrations, always check these files:
 - **TipKit Integration**: Uses iOS 17+ TipKit for onboarding tips (GettingStartedTip)
 - **Dark Mode**: Full support throughout app with automatic switching
 - **Navigation**: SwiftUI NavigationStack with programmatic navigation via CityRoute
+- **Navigation Transitions**: Custom zoom transition for feedback modal using `matchedTransitionSource` and `navigationTransition`
+- **StoreKit Integration**: App review requests triggered after viewing 2+ reviews, once per app version
 
 ### Common Gotchas
 - API keys must be in `apiKeys.plist` in root Daydream/ directory (NOT in Shared/)
@@ -244,9 +256,12 @@ When modifying API integrations, always check these files:
 - MapViewController is UIKit wrapped in SwiftUI - coordinate changes carefully
 - Random cities JSON must have valid lat/lng coordinates for proper loading
 - SwiftUI previews may not work for views requiring API keys
-- Image loading uses custom cache with expiration - clear cache if images don't update
+- NSCache is used for image and places caching (thread-safe by default, no additional locking needed)
+- Mutex cache implementations in `Shared/Unused Caches/` are reference implementations only
 - TipKit requires iOS 17+ - check availability when modifying tips
 - SearchViewController is a UIKit wrapper for SwiftUI CitiesView for SceneDelegate compatibility
+- App review tracking uses `@AppStorage` for `reviewsViewedCount` and `lastReviewedAppVersion`
+- Zoom transitions require `@Namespace` and matching transition IDs
 
 ## Troubleshooting
 
