@@ -14,6 +14,7 @@ struct MapCardView: View {
     
     @Binding var mapPosition: MapCameraPosition
     let place: Place
+    @AppStorage("reviewsViewedCount") private var reviewsViewedCount: Int = 0
     
     private var placeLocation: CLLocation {
         CLLocation(latitude: place.location.latitude, longitude: place.location.longitude)
@@ -49,5 +50,8 @@ struct MapCardView: View {
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .padding(.horizontal, 24)
         .padding(.vertical, 16)
+        .onAppear {
+            reviewsViewedCount += 1
+        }
     }
 }

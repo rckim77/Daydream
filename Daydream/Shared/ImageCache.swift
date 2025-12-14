@@ -6,9 +6,11 @@
 //  Copyright © 2024 Raymond Kim. All rights reserved.
 //
 
+import Synchronization
 import UIKit
 
-/// Uses `Photo` hashValue as hash key (converted from `Int` to `String`).
+/// Uses `Photo` hashValue as hash key (converted from `Int` to `String`) and
+/// `NSCache` to manage thread safety.
 final class ImageCache {
     static let shared = ImageCache()
     

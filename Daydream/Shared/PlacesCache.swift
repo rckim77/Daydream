@@ -8,6 +8,7 @@
 
 import Foundation
 import GooglePlacesSwift
+import Synchronization
 
 /// Reference type wrapper for `Place` object, used in `PlacesCache`
 final class PlaceObject: NSObject {
@@ -18,27 +19,33 @@ final class PlaceObject: NSObject {
     }
 }
 
-/// Uses `placeId` String as hash key.
+/// Uses `placeId` String as hash key and `NSCache` to manage thread safety.
 final class PlacesCache {
     static let shared = PlacesCache()
     
-    private let cache = NSCache<NSString, PlaceObject>()
+    private let cache = Mutex<NSCache<NSString, PlaceObject>>(NSCache<NSString, PlaceObject>())
     
     private init() {}
     
     func set(_ place: Place, forKey key: String) {
         let placeObject = PlaceObject(place: place)
-        cache.setObject(placeObject, forKey: key as NSString)
+        cache.withLock { cache in
+            cache.setObject(placeObject, forKey: key as NSString)
+        }
     }
     
     func get(forKey key: String) -> Place? {
-        guard let object = cache.object(forKey: key as NSString) else {
-            return nil
+        cache.withLock { cache in
+            guard let object = cache.object(forKey: key as NSString) else {
+                return nil
+            }
+            return object.place
         }
-        return object.place
     }
     
     func clear() -> Void {
-        cache.removeAllObjects()
+        cache.withLock { cache in
+            cache.removeAllObjects()
+        }
     }
 }

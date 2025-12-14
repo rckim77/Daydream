@@ -9,6 +9,7 @@
 import SwiftUI
 import GooglePlacesSwift
 import MapKit
+import StoreKit
 
 struct CityDetailView: View {
 
@@ -28,9 +29,12 @@ struct CityDetailView: View {
     @State private var currentLocationButtonTapped = false
     @State private var prevCurrentLocation: CLLocationCoordinate2D?
     
-    // MARK: - Environment vars
+    // MARK: - Environment and AppStorage vars
     @Environment(\.dismiss) var dismiss
+    @Environment(\.requestReview) var requestReview
     @Environment(CurrentLocationManager.self) private var locationManager
+    @AppStorage("reviewsViewedCount") private var reviewsViewedCount: Int = 0
+    @AppStorage("lastReviewedAppVersion") private var lastReviewedAppVersion: String = ""
     
     // MARK: - Computed vars
     /// Appends country flag to city name if available
@@ -139,6 +143,22 @@ struct CityDetailView: View {
             } else {
                 print("current location is nil")
             }
+        }
+        .onAppear {
+            requestReviewIfApplicable()
+        }
+    }
+
+    /// Note: We only want to request an app review if the user hasn't already reviewed this app version and
+    /// has viewed at least 2 reviews from MapCardView.
+    private func requestReviewIfApplicable() {
+        if let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String,
+            appVersion != lastReviewedAppVersion && reviewsViewedCount > 1 {
+            requestReview()
+            print("requested review, storing last reviewed app version: \(appVersion)")
+            lastReviewedAppVersion = appVersion
+        } else {
+            print("review request not applicable")
         }
     }
     
