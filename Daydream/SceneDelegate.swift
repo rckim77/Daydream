@@ -9,6 +9,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 		let window = UIWindow(windowScene: windowScene)
 		if isRunningTests {
+            // fixes CI crash due to SearchViewController
 			window.rootViewController = UIViewController()
 		} else {
 			window.rootViewController = SearchViewController()
