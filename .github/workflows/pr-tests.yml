@@ -1,26 +1,81 @@
-name: PR Tests
+name: Run Tests
 
 on:
   pull_request:
-    branches:
-      - "**"
+    types: [opened, synchronize, reopened, ready_for_review]
+    branches: [ main ]
+
+permissions:
+  contents: read
+  actions: read       # needed to look up the artifact download URL
+  pull-requests: write
 
 jobs:
-  test:
-    runs-on: macos-latest
+  unit_tests:
+    name: Unit Tests
+    runs-on: macos-15
+    timeout-minutes: 30
+    env:
+      DERIVED_DATA_PATH: ${{ github.workspace }}/.derived_data
+      IPHONE_DEST: "platform=iOS Simulator,name=iPhone 17 Pro,OS=26.1,arch=arm64"
+      XCODE_VERSION: "26.1"
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-      - name: Show Xcode version
-        run: xcodebuild -version
+    # To find available Xcode versions for current mac runner, see here: https://github.com/actions/runner-images/tree/main/images/macos
+      
+    - name: Select Xcode Version
+      run: sudo xcode-select -s /Applications/Xcode_${{ env.XCODE_VERSION }}.app/Contents/Developer
 
-      - name: Build and run unit tests
-        run: |
-          xcodebuild test \
-            -project Daydream.xcodeproj \
-            -scheme Daydream \
-            -testPlan Daydream \
-            -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=latest' \
-            CODE_SIGNING_ALLOWED=NO
+    - name: Cache SPM dependencies
+      uses: actions/cache@v4
+      with:
+        path: |
+          ${{ env.DERIVED_DATA_PATH }}/SourcePackages
+          ~/Library/Caches/org.swift.swiftpm
+        key: ${{ runner.os }}-spm-xcode-${{ env.XCODE_VERSION }}-${{ hashFiles('**/Package.resolved') }}
+        restore-keys: |
+          ${{ runner.os }}-spm-xcode-${{ env.XCODE_VERSION }}-
+          ${{ runner.os }}-spm-
+
+    # Uncomment below for debugging
+    # - name: Show available simulators
+    #   run: xcrun simctl list devices available
+
+    - name: Resolve Swift Package dependencies
+      shell: bash
+      run: >
+        xcodebuild
+        -project Daydream.xcodeproj
+        -scheme Daydream
+        -resolvePackageDependencies
+        -derivedDataPath "${DERIVED_DATA_PATH}"
+
+    - name: Set dynamic env
+      run: |
+        echo "UNIT_XCRESULT=$RUNNER_TEMP/UnitTests.xcresult" >> "$GITHUB_ENV"
+
+    - name: Build and run unit tests
+      id: unit_tests
+      continue-on-error: true
+      run: |
+        set -o pipefail
+        xcodebuild test \
+          -project Daydream.xcodeproj \
+          -scheme Daydream \
+          -testPlan unittests \
+          -destination "${IPHONE_DEST}" \
+          -configuration Debug \
+          -resultBundlePath "${UNIT_XCRESULT}" \
+          CODE_SIGNING_ALLOWED=NO
+
+    - name: Upload unit test .xcresult bundle
+      if: steps.unit_tests.outcome == 'failure'
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ github.run_id }}.xcresult
+        path: ${{ env.UNIT_XCRESULT }}
+        if-no-files-found: error
+        retention-days: 14

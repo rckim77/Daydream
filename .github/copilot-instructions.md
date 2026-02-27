@@ -41,8 +41,8 @@ Always reference these instructions first and fallback to search or bash command
 - **Build for simulator**: `xcodebuild -project Daydream.xcodeproj -scheme Daydream -sdk iphonesimulator build` -- NEVER CANCEL: Takes 3-5 minutes. Set timeout to 10+ minutes.
 
 ### Testing
-- **Automated tests**: `DaydreamTests` uses Swift Testing and runs through `Daydream.xctestplan`.
-- **Run tests**: `xcodebuild test -project Daydream.xcodeproj -scheme Daydream -testPlan Daydream -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.1' CODE_SIGNING_ALLOWED=NO`
+- **Automated tests**: `DaydreamTests` uses Swift Testing and runs through `unittests.xctestplan`.
+- **Run tests**: `xcodebuild test -project Daydream.xcodeproj -scheme Daydream -testPlan unittests -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.1' CODE_SIGNING_ALLOWED=NO`
 - **Verification approach**: Use both automated tests and focused manual simulator validation for behavior/UI changes.
 
 ### Running the App
@@ -81,7 +81,7 @@ After making changes, ALWAYS test these core user scenarios:
 ### Build Validation
 - Always run `swiftlint` before committing changes
 - Always build successfully before creating PR
-- Run `Daydream.xctestplan` locally when touching core logic/data flow
+- Run `unittests.xctestplan` locally when touching core logic/data flow
 - Test on both iPhone and iPad simulators when making UI changes
 
 ### API Key Testing
@@ -186,7 +186,7 @@ Daydream/
 ### What Works on macOS Only
 - Building and running the app (requires Xcode)
 - Manual simulator validation
-- Running `Daydream.xctestplan` with `xcodebuild test`
+- Running `unittests.xctestplan` with `xcodebuild test`
 - Debugging with Xcode tools
 - Installing dependencies via SPM
 
@@ -274,7 +274,7 @@ When modifying API integrations, always check these files:
 # Full validation workflow
 swiftlint
 xcodebuild -project Daydream.xcodeproj -scheme Daydream clean build
-xcodebuild test -project Daydream.xcodeproj -scheme Daydream -testPlan Daydream -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.1' CODE_SIGNING_ALLOWED=NO
+xcodebuild test -project Daydream.xcodeproj -scheme Daydream -testPlan unittests -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.1' CODE_SIGNING_ALLOWED=NO
 # Launch in Xcode and test manually
 
 # Clean build after dependency changes

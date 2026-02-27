@@ -11,7 +11,6 @@
 		EC1D58F62B54B3470068D03A /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = EC1D58F52B54B3470068D03A /* SnapKit */; };
 		EC2098AF2E9DCC680023CC1A /* GooglePlaces in Frameworks */ = {isa = PBXBuildFile; productRef = EC2098AE2E9DCC680023CC1A /* GooglePlaces */; };
 		EC2098B12E9DCC680023CC1A /* GooglePlacesSwift in Frameworks */ = {isa = PBXBuildFile; productRef = EC2098B02E9DCC680023CC1A /* GooglePlacesSwift */; };
-		F0A1B2C3D4E5F60000000001 /* CityDetailViewStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A1B2C3D4E5F60000000003 /* CityDetailViewStateTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -27,8 +26,7 @@
 /* Begin PBXFileReference section */
 		94380AC4203BAE1D00684863 /* Daydream.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Daydream.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0A1B2C3D4E5F60000000002 /* DaydreamTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DaydreamTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		F0A1B2C3D4E5F60000000003 /* CityDetailViewStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityDetailViewStateTests.swift; sourceTree = "<group>"; };
-		F0A1B2C3D4E5F60000000004 /* Daydream.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Daydream.xctestplan; sourceTree = "<group>"; };
+		F0A1B2C3D4E5F60000000004 /* unittests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = unittests.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -43,6 +41,7 @@
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		EC8DD7C82EB3F583006A20BE /* Daydream */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (EC8DD7F12EB3F584006A20BE /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Daydream; sourceTree = "<group>"; };
+		F0A1B2C3D4E5F60000000006 /* DaydreamTests */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (); explicitFileTypes = {}; explicitFolders = (); path = DaydreamTests; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,7 +71,7 @@
 			children = (
 				EC8DD7C82EB3F583006A20BE /* Daydream */,
 				F0A1B2C3D4E5F60000000006 /* DaydreamTests */,
-				F0A1B2C3D4E5F60000000004 /* Daydream.xctestplan */,
+				F0A1B2C3D4E5F60000000004 /* unittests.xctestplan */,
 				94380AC5203BAE1D00684863 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -84,14 +83,6 @@
 				F0A1B2C3D4E5F60000000002 /* DaydreamTests.xctest */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		F0A1B2C3D4E5F60000000006 /* DaydreamTests */ = {
-			isa = PBXGroup;
-			children = (
-				F0A1B2C3D4E5F60000000003 /* CityDetailViewStateTests.swift */,
-			);
-			path = DaydreamTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -135,6 +126,9 @@
 			);
 			dependencies = (
 				F0A1B2C3D4E5F60000000011 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				F0A1B2C3D4E5F60000000006 /* DaydreamTests */,
 			);
 			name = DaydreamTests;
 			packageProductDependencies = (
@@ -217,7 +211,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F0A1B2C3D4E5F60000000001 /* CityDetailViewStateTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

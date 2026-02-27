@@ -20,10 +20,10 @@ xcodebuild -project Daydream.xcodeproj -scheme Daydream -destination 'platform=i
 ```
 
 ## Tests (Swift Testing + xctestplan)
-The project includes a shared test plan at `Daydream.xctestplan` and a Swift Testing target `DaydreamTests`.
+The project includes a shared test plan at `unittests.xctestplan` and a Swift Testing target `DaydreamTests`.
 
 ```bash
-xcodebuild test -project Daydream.xcodeproj -scheme Daydream -testPlan Daydream -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.1' CODE_SIGNING_ALLOWED=NO
+xcodebuild test -project Daydream.xcodeproj -scheme Daydream -testPlan unittests -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.1' CODE_SIGNING_ALLOWED=NO
 ```
 
 ## CI

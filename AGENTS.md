@@ -40,7 +40,7 @@ xcodebuild -project Daydream.xcodeproj -scheme Daydream -configuration Debug -de
 Run the shared Swift Testing plan:
 
 ```bash
-xcodebuild test -project Daydream.xcodeproj -scheme Daydream -testPlan Daydream -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.1' CODE_SIGNING_ALLOWED=NO
+xcodebuild test -project Daydream.xcodeproj -scheme Daydream -testPlan unittests -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.1' CODE_SIGNING_ALLOWED=NO
 ```
 
 Optional lint (if installed locally):
@@ -89,8 +89,8 @@ Lint config: `.swiftlint.yml` (notably relaxed for identifier length, nesting, b
 - Default verification settings: use project `Daydream.xcodeproj`, scheme `Daydream`, and simulator destination `platform=iOS Simulator,name=iPhone 17 Pro,OS=26.1` unless the prompt says otherwise.
 - Preferred commands:
   - Build on simulator: `xcodebuild -project Daydream.xcodeproj -scheme Daydream -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.1' build`
-  - Run full tests (xctestplan): `xcodebuild test -project Daydream.xcodeproj -scheme Daydream -testPlan Daydream -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.1' CODE_SIGNING_ALLOWED=NO`
-  - Run one test suite: `xcodebuild test -project Daydream.xcodeproj -scheme Daydream -testPlan Daydream -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.1' -only-testing:DaydreamTests/CoreFeaturesTests CODE_SIGNING_ALLOWED=NO`
+  - Run full tests (xctestplan): `xcodebuild test -project Daydream.xcodeproj -scheme Daydream -testPlan unittests -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.1' CODE_SIGNING_ALLOWED=NO`
+  - Run one test suite: `xcodebuild test -project Daydream.xcodeproj -scheme Daydream -testPlan unittests -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.1' -only-testing:DaydreamTests/CoreFeaturesTests CODE_SIGNING_ALLOWED=NO`
   - Discover targets/schemes quickly: `xcodebuild -list -project Daydream.xcodeproj`
 - Device commands (when requested):
   - Build for Ray K's device: `xcodebuild -project Daydream.xcodeproj -scheme Daydream -destination 'id=00008150-000E2CA1110A401C' build`
@@ -105,6 +105,7 @@ Lint config: `.swiftlint.yml` (notably relaxed for identifier length, nesting, b
   - After committing that TestFlight version/build bump, push the branch so the repo reflects the uploaded build metadata.
 - When removing files or refactoring structure, run a quick build immediately to catch missing references.
 - Keep the Xcode project folder-based (no groups); use filesystem-synchronized folders only.
+- In Xcode, do not create groups. Always create buildable folders (filesystem-synchronized folders) for new source directories/targets.
 - For device builds, use Ray K’s iPhone device ID `00008150-000E2CA1110A401C` for `xcodebuild -destination` and `xcrun devicectl` install/launch when needed.
 - If I ask to build and run on device, do not build for the simulator first. Make it as fast as possible.
 - When adding unit tests, prefer Swift Testing (`import Testing`, `@Test`, `#expect`) over XCTest where possible.
