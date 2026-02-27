@@ -15,6 +15,10 @@ import TipKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+		if isRunningTests {
+			return true
+		}
+
 		if let keys = AppDelegate.getAPIKeys() {
 			_ = PlacesClient.provideAPIKey(keys.placesNewAPI)
 			GMSServices.provideAPIKey(keys.googleAPI)
@@ -38,6 +42,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 				return nil
 		}
 		return keys
+	}
+
+	private var isRunningTests: Bool {
+		ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
 	}
 }
 

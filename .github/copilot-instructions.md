@@ -41,8 +41,9 @@ Always reference these instructions first and fallback to search or bash command
 - **Build for simulator**: `xcodebuild -project Daydream.xcodeproj -scheme Daydream -sdk iphonesimulator build` -- NEVER CANCEL: Takes 3-5 minutes. Set timeout to 10+ minutes.
 
 ### Testing
-- **Run UI Tests**: `xcodebuild -project Daydream.xcodeproj -scheme DaydreamUITests -destination 'platform=iOS Simulator,name=iPhone 15 Pro' test` -- NEVER CANCEL: Takes 5-10 minutes. Set timeout to 20+ minutes.
-- **Unit Tests**: This project primarily uses UI tests. No separate unit test target found.
+- **Automated tests**: `DaydreamTests` uses Swift Testing and runs through `unittests.xctestplan`.
+- **Run tests**: `xcodebuild test -project Daydream.xcodeproj -scheme Daydream -testPlan unittests -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.1' CODE_SIGNING_ALLOWED=NO`
+- **Verification approach**: Use both automated tests and focused manual simulator validation for behavior/UI changes.
 
 ### Running the App
 - Open `Daydream.xcodeproj` in Xcode
@@ -64,7 +65,7 @@ Always reference these instructions first and fallback to search or bash command
 - **Initial build**: 5-8 minutes for clean build -- NEVER CANCEL: Set timeout to 15+ minutes
 - **Incremental builds**: 1-3 minutes -- NEVER CANCEL: Set timeout to 10+ minutes  
 - **SPM dependency resolution**: 2-5 minutes first time -- NEVER CANCEL: Set timeout to 10+ minutes
-- **UI tests**: 5-10 minutes full suite -- NEVER CANCEL: Set timeout to 20+ minutes
+- **Swift Testing test plan**: 2-6 minutes depending on simulator boot/build cache
 - **SwiftLint**: 30-60 seconds for full project scan
 
 ### Manual Testing Scenarios
@@ -72,7 +73,7 @@ After making changes, ALWAYS test these core user scenarios:
 1. **Cities View Flow**: Launch app → View random cities → Tap on a city card → Verify city detail screen loads
 2. **Search Flow**: Launch app → Tap search bar → Search for "Tokyo" → Select city from autocomplete → Verify city detail screen loads
 3. **Random City**: Launch app → Tap random city button (dice icon) → Verify random city loads correctly
-4. **Map Interaction**: On city detail → Tap "Get Directions" on a place card → Verify MapViewController opens with location
+4. **Map Interaction**: On city detail → Tap a place card → Verify `MapViewController` sheet opens with location and reviews
 5. **Place Cards**: On city detail → Scroll through sights and eateries carousels → Verify place cards display correctly
 6. **Feedback**: Tap feedback button → Verify feedback sheet appears with options
 7. **Navigation**: Test back navigation and home button functionality
@@ -80,6 +81,7 @@ After making changes, ALWAYS test these core user scenarios:
 ### Build Validation
 - Always run `swiftlint` before committing changes
 - Always build successfully before creating PR
+- Run `unittests.xctestplan` locally when touching core logic/data flow
 - Test on both iPhone and iPad simulators when making UI changes
 
 ### API Key Testing
@@ -135,9 +137,12 @@ Daydream/
 │   ├── Buttons/                  # Reusable button components
 │   │   ├── RandomCityButton.swift # Random city button
 │   │   └── HomeButton.swift      # Home navigation button
-│   ├── ExpiringCache.swift       # Generic expiring cache
 │   ├── ImageCache.swift          # Image caching
 │   ├── PlacesCache.swift         # Places data caching
+│   ├── Unused Caches/            # Legacy cache experiments (currently unused)
+│   │   ├── ExpiringCache.swift
+│   │   ├── ImageMutexCache.swift
+│   │   └── PlacesMutexCache.swift
 │   ├── Protocols.swift           # Common protocols
 │   ├── ShadowView.swift          # Shadow view component
 │   ├── SearchActionStyle.swift   # Search action styling
@@ -170,8 +175,8 @@ Daydream/
 - Check `randomCitiesJSON.json` if random city feature isn't working
 
 ### Performance Considerations
-- App uses image caching (`ImageCache.swift`, `ExpiringCache.swift`) for performance
-- Places data is cached (`PlacesCache.swift`) to reduce API calls
+- App uses in-memory caching (`ImageCache.swift`, `PlacesCache.swift`) to reduce repeated API/photo work
+- `Shared/Unused Caches/` contains older cache implementations that are not currently used
 - App supports both light and dark mode with automatic switching
 - UI adapts to horizontal size class for iPad support
 - Random cities are preloaded from JSON for instant display
@@ -180,7 +185,8 @@ Daydream/
 
 ### What Works on macOS Only
 - Building and running the app (requires Xcode)
-- UI testing in simulator
+- Manual simulator validation
+- Running `unittests.xctestplan` with `xcodebuild test`
 - Debugging with Xcode tools
 - Installing dependencies via SPM
 
@@ -221,11 +227,11 @@ When modifying API integrations, always check these files:
 4. **Map View**: User taps place card → MapViewController presented → Shows place on map with reviews
 
 ### Memory Management
-- Uses `ExpiringCache` and `ImageCache` for caching with expiration
-- PlacesCache for Google Places SDK data caching
+- Uses `ImageCache` and `PlacesCache` (`NSCache`-backed) for in-memory caching
+- `ExpiringCache` exists under `Shared/Unused Caches/` and is currently unused
 - Implements weak references in closures to prevent retain cycles
 - SwiftUI manages view lifecycle automatically
-- Timer-based cleanup for cached data where needed
+- `NSCache` handles memory pressure-driven eviction
 
 ### UI Patterns
 - **SwiftUI First**: Primary UI is built with SwiftUI (CitiesView, CityDetailView, all cards and components)
@@ -244,7 +250,7 @@ When modifying API integrations, always check these files:
 - MapViewController is UIKit wrapped in SwiftUI - coordinate changes carefully
 - Random cities JSON must have valid lat/lng coordinates for proper loading
 - SwiftUI previews may not work for views requiring API keys
-- Image loading uses custom cache with expiration - clear cache if images don't update
+- Image loading uses in-memory `NSCache` keyed by photo hash/place ID
 - TipKit requires iOS 17+ - check availability when modifying tips
 - SearchViewController is a UIKit wrapper for SwiftUI CitiesView for SceneDelegate compatibility
 
@@ -268,6 +274,7 @@ When modifying API integrations, always check these files:
 # Full validation workflow
 swiftlint
 xcodebuild -project Daydream.xcodeproj -scheme Daydream clean build
+xcodebuild test -project Daydream.xcodeproj -scheme Daydream -testPlan unittests -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.1' CODE_SIGNING_ALLOWED=NO
 # Launch in Xcode and test manually
 
 # Clean build after dependency changes

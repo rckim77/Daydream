@@ -6,9 +6,9 @@
 //  Copyright © 2025 Raymond Kim. All rights reserved.
 //
 
+import CoreLocation
 import SwiftUI
 import GooglePlacesSwift
-import MapKit
 import StoreKit
 
 struct CityDetailView: View {
@@ -16,44 +16,23 @@ struct CityDetailView: View {
     // MARK: - State vars
     @State var place: Place
     @State var image: UIImage?
+    @State private var viewState = CityDetailViewState()
 
-    @State private var showAutocompleteWidget = false
-    @State private var sights = [Place]()
-    @State private var eateries = [Place]()
-    @State private var showLoadingSpinnerForRandomCityButton = false
-    @State private var mapPosition: MapCameraPosition = .automatic
-    @State private var showingMapDetailViewController = false
-    @State private var tappedCardPlace: IdentifiablePlace?
-    @State private var showErrorAlert = false
-    /// This ensures navigation to current location city is gated behind user interaction.
-    @State private var currentLocationButtonTapped = false
-    @State private var prevCurrentLocation: CLLocationCoordinate2D?
-    
     // MARK: - Environment and AppStorage vars
     @Environment(\.dismiss) var dismiss
     @Environment(\.requestReview) var requestReview
     @Environment(CurrentLocationManager.self) private var locationManager
     @AppStorage("reviewsViewedCount") private var reviewsViewedCount: Int = 0
     @AppStorage("lastReviewedAppVersion") private var lastReviewedAppVersion: String = ""
-    
+
     // MARK: - Computed vars
-    /// Appends country flag to city name if available
     private var cityText: String {
-        var text = place.displayName ?? ""
-        if let countryCodeComponent = place.addressComponents?.first(where: { $0.types.contains(.country) }),
-           let countryCode = countryCodeComponent.shortName {
-            let base = 127397
-            var usv = String.UnicodeScalarView()
-            for scalar in countryCode.uppercased().unicodeScalars {
-                if let offsetScalar = Unicode.Scalar(base + Int(scalar.value)) {
-                    usv.append(offsetScalar)
-                }
-            }
-            text += " " + String(usv)
-        }
-        return text
+        let countryCode = place.addressComponents?
+            .first(where: { $0.types.contains(.country) })?
+            .shortName
+        return viewState.cityText(displayName: place.displayName, countryCode: countryCode)
     }
-    
+
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(alignment: .leading, spacing: 4) {
@@ -62,20 +41,20 @@ struct CityDetailView: View {
                     .padding(.top, 24)
                     .padding(.horizontal, 24)
                 SummaryView(cityText: cityText)
-                MapCardView(mapPosition: $mapPosition, place: place)
+                MapCardView(mapPosition: $viewState.mapPosition, place: place)
                 Text("Top Sights")
                     .font(.title)
                     .padding(.horizontal, 24)
-                PlacesCarouselView(places: sights, tappedPlace: $tappedCardPlace)
+                PlacesCarouselView(places: viewState.sights, tappedPlace: $viewState.tappedCardPlace)
                 Text("Top Eateries")
                     .font(.title)
                     .padding(.horizontal, 24)
-                PlacesCarouselView(places: eateries, tappedPlace: $tappedCardPlace)
+                PlacesCarouselView(places: viewState.eateries, tappedPlace: $viewState.tappedCardPlace)
             }
             .frame(maxWidth: .infinity)
         }
         .background(content: {
-            if let image = image {
+            if let image {
                 Image(uiImage: image)
                     .resizable()
                     .scaledToFill()
@@ -86,29 +65,28 @@ struct CityDetailView: View {
             SearchToolbar { autocompletePlace, autocompleteImage in
                 place = autocompletePlace
                 image = autocompleteImage
-                mapPosition = createMapPosition(place.location)
+                viewState.applySelectedCity(place)
                 Task {
                     await fetchSightsAndEateries(place)
                 }
             } randomCityReceived: { randomPlace, randomImage in
                 place = randomPlace
                 image = randomImage
-                mapPosition = createMapPosition(place.location)
+                viewState.applySelectedCity(place)
                 Task {
                     await fetchSightsAndEateries(place)
                 }
             } currentLocationTapped: {
-                currentLocationButtonTapped = true
-                guard let prevCurrentLocation = prevCurrentLocation,
-                      locationManager.location == prevCurrentLocation else {
+                viewState.markCurrentLocationTapped()
+                guard let currentLocation = viewState.currentLocationToLoadImmediately(currentLocation: locationManager.location) else {
                     // the .onChange(of:) will be triggered and programmatically navigate
                     return
                 }
                 Task {
                     do {
-                        try await updateToCurrentCity(prevCurrentLocation)
+                        try await updateToCurrentCity(currentLocation)
                     } catch {
-                        showErrorAlert = true
+                        viewState.showErrorAlert = true
                     }
                 }
             } additionalViews: {
@@ -120,24 +98,24 @@ struct CityDetailView: View {
             }
         }
         .task {
-            mapPosition = createMapPosition(place.location)
+            viewState.applySelectedCity(place)
             await fetchSightsAndEateries(place)
-
-            // seed prevCurrentLocation
-            prevCurrentLocation = locationManager.location
+            viewState.seedPreviousCurrentLocation(locationManager.location)
         }
-        .sheet(item: $tappedCardPlace) { identifiablePlace in
+        .sheet(item: $viewState.tappedCardPlace) { identifiablePlace in
             MapViewControllerRepresentable(place: identifiablePlace.place)
         }
-        .errorAlert(isPresented: $showErrorAlert)
-        .onChange(of: locationManager.location) { _ , currentLocation in
-            if let currentLocation = currentLocation, currentLocationButtonTapped {
-                prevCurrentLocation = currentLocation
-                Task {
-                    do {
-                        try await updateToCurrentCity(currentLocation)
-                    } catch {
-                        showErrorAlert = true
+        .errorAlert(isPresented: $viewState.showErrorAlert)
+        .onChange(of: locationManager.location) { _, currentLocation in
+            if viewState.shouldHandleLocationChange(currentLocation) {
+                viewState.seedPreviousCurrentLocation(currentLocation)
+                if let currentLocation {
+                    Task {
+                        do {
+                            try await updateToCurrentCity(currentLocation)
+                        } catch {
+                            viewState.showErrorAlert = true
+                        }
                     }
                 }
             } else {
@@ -152,36 +130,37 @@ struct CityDetailView: View {
     /// Note: We only want to request an app review if the user hasn't already reviewed this app version and
     /// has viewed at least 2 reviews from MapCardView.
     private func requestReviewIfApplicable() {
-        if let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String,
-            appVersion != lastReviewedAppVersion && reviewsViewedCount > 1 {
+        let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
+        let decision = viewState.makeReviewRequestDecision(
+            appVersion: appVersion,
+            reviewsViewedCount: reviewsViewedCount,
+            lastReviewedAppVersion: lastReviewedAppVersion
+        )
+
+        if decision.shouldRequestReview,
+           let reviewedVersion = decision.updatedLastReviewedAppVersion {
             requestReview()
-            print("requested review, storing last reviewed app version: \(appVersion)")
-            lastReviewedAppVersion = appVersion
+            print("requested review, storing last reviewed app version: \(reviewedVersion)")
+            lastReviewedAppVersion = reviewedVersion
         } else {
             print("review request not applicable")
         }
     }
-    
-    private func fetchSightsAndEateries(_ city: Place) async -> Void {
-        guard let placeId = city.placeID else { return }
-        do {
-            let isIpad = UIDevice.current.userInterfaceIdiom == .pad
-            sights = try await API.PlaceSearch.fetchPlacesFor(placeId: placeId, type: .sights, maxResultCount: isIpad ? 12 : 7)
-            eateries = try await API.PlaceSearch.fetchPlacesFor(placeId: placeId, type: .eateries, maxResultCount: isIpad ? 12 : 7)
-        } catch {
-            return
+
+    private func fetchSightsAndEateries(_ city: Place) async {
+        await viewState.loadSightsAndEateries(
+            placeId: city.placeID,
+            idiom: UIDevice.current.userInterfaceIdiom
+        ) { placeId, type, maxResultCount in
+            try await API.PlaceSearch.fetchPlacesFor(placeId: placeId, type: type, maxResultCount: maxResultCount)
         }
     }
-    
-    private func updateToCurrentCity(_ location: CLLocationCoordinate2D) async throws -> Void {
+
+    private func updateToCurrentCity(_ location: CLLocationCoordinate2D) async throws {
         let (currentPlace, currentImage) = try await API.PlaceSearch.fetchCurrentCityBy(location)
         place = currentPlace
         image = currentImage
-        mapPosition = createMapPosition(place.location)
+        viewState.applySelectedCity(place)
         await fetchSightsAndEateries(place)
-    }
-    
-    private func createMapPosition(_ location: CLLocationCoordinate2D) -> MapCameraPosition {
-        .region(MKCoordinateRegion(center: place.location, span: .init(latitudeDelta: 0.07, longitudeDelta: 0.07)))
     }
 }
