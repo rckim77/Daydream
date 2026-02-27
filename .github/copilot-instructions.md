@@ -41,8 +41,9 @@ Always reference these instructions first and fallback to search or bash command
 - **Build for simulator**: `xcodebuild -project Daydream.xcodeproj -scheme Daydream -sdk iphonesimulator build` -- NEVER CANCEL: Takes 3-5 minutes. Set timeout to 10+ minutes.
 
 ### Testing
-- **Automated tests**: No UI/unit test targets are currently configured in the shared scheme (`Daydream`).
-- **Verification approach**: Use build + manual simulator validation for behavior changes.
+- **Automated tests**: `DaydreamTests` uses Swift Testing and runs through `Daydream.xctestplan`.
+- **Run tests**: `xcodebuild test -project Daydream.xcodeproj -scheme Daydream -testPlan Daydream -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.1' CODE_SIGNING_ALLOWED=NO`
+- **Verification approach**: Use both automated tests and focused manual simulator validation for behavior/UI changes.
 
 ### Running the App
 - Open `Daydream.xcodeproj` in Xcode
@@ -64,6 +65,7 @@ Always reference these instructions first and fallback to search or bash command
 - **Initial build**: 5-8 minutes for clean build -- NEVER CANCEL: Set timeout to 15+ minutes
 - **Incremental builds**: 1-3 minutes -- NEVER CANCEL: Set timeout to 10+ minutes  
 - **SPM dependency resolution**: 2-5 minutes first time -- NEVER CANCEL: Set timeout to 10+ minutes
+- **Swift Testing test plan**: 2-6 minutes depending on simulator boot/build cache
 - **SwiftLint**: 30-60 seconds for full project scan
 
 ### Manual Testing Scenarios
@@ -79,6 +81,7 @@ After making changes, ALWAYS test these core user scenarios:
 ### Build Validation
 - Always run `swiftlint` before committing changes
 - Always build successfully before creating PR
+- Run `Daydream.xctestplan` locally when touching core logic/data flow
 - Test on both iPhone and iPad simulators when making UI changes
 
 ### API Key Testing
@@ -183,6 +186,7 @@ Daydream/
 ### What Works on macOS Only
 - Building and running the app (requires Xcode)
 - Manual simulator validation
+- Running `Daydream.xctestplan` with `xcodebuild test`
 - Debugging with Xcode tools
 - Installing dependencies via SPM
 
@@ -270,6 +274,7 @@ When modifying API integrations, always check these files:
 # Full validation workflow
 swiftlint
 xcodebuild -project Daydream.xcodeproj -scheme Daydream clean build
+xcodebuild test -project Daydream.xcodeproj -scheme Daydream -testPlan Daydream -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.1' CODE_SIGNING_ALLOWED=NO
 # Launch in Xcode and test manually
 
 # Clean build after dependency changes

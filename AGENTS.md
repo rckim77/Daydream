@@ -37,7 +37,11 @@ Use these from repo root:
 xcodebuild -project Daydream.xcodeproj -scheme Daydream -configuration Debug -destination 'platform=iOS Simulator,name=iPhone 17 Pro' build
 ```
 
-There is currently no configured test target in the shared scheme (`Testables` is empty). For validation, prefer build + focused manual checks.
+Run the shared Swift Testing plan:
+
+```bash
+xcodebuild test -project Daydream.xcodeproj -scheme Daydream -testPlan Daydream -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.1' CODE_SIGNING_ALLOWED=NO
+```
 
 Optional lint (if installed locally):
 
@@ -85,8 +89,8 @@ Lint config: `.swiftlint.yml` (notably relaxed for identifier length, nesting, b
 - Default verification settings: use project `Daydream.xcodeproj`, scheme `Daydream`, and simulator destination `platform=iOS Simulator,name=iPhone 17 Pro,OS=26.1` unless the prompt says otherwise.
 - Preferred commands:
   - Build on simulator: `xcodebuild -project Daydream.xcodeproj -scheme Daydream -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.1' build`
-  - Run full tests: `xcodebuild -project Daydream.xcodeproj -scheme Daydream -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.1' test`
-  - Run one test suite: `xcodebuild -project Daydream.xcodeproj -scheme Daydream -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.1' -only-testing:DaydreamTests/ExampleViewStateTests test`
+  - Run full tests (xctestplan): `xcodebuild test -project Daydream.xcodeproj -scheme Daydream -testPlan Daydream -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.1' CODE_SIGNING_ALLOWED=NO`
+  - Run one test suite: `xcodebuild test -project Daydream.xcodeproj -scheme Daydream -testPlan Daydream -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.1' -only-testing:DaydreamTests/CoreFeaturesTests CODE_SIGNING_ALLOWED=NO`
   - Discover targets/schemes quickly: `xcodebuild -list -project Daydream.xcodeproj`
 - Device commands (when requested):
   - Build for Ray K's device: `xcodebuild -project Daydream.xcodeproj -scheme Daydream -destination 'id=00008150-000E2CA1110A401C' build`
