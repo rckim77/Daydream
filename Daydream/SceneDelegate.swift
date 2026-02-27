@@ -8,8 +8,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		guard let windowScene = scene as? UIWindowScene else { return }
 
 		let window = UIWindow(windowScene: windowScene)
-		window.rootViewController = SearchViewController()
+		if isRunningTests {
+			window.rootViewController = UIViewController()
+		} else {
+			window.rootViewController = SearchViewController()
+		}
 		self.window = window
 		window.makeKeyAndVisible()
+	}
+
+	private var isRunningTests: Bool {
+		ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
 	}
 }
