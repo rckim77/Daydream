@@ -17,8 +17,8 @@ jobs:
     timeout-minutes: 30
     env:
       DERIVED_DATA_PATH: ${{ github.workspace }}/.derived_data
-      IPHONE_DEST: "platform=iOS Simulator,name=iPhone 17 Pro,OS=26.1,arch=arm64"
-      XCODE_VERSION: "26.1"
+      IPHONE_DEST: "platform=iOS Simulator,name=iPhone 17 Pro,OS=26.2,arch=arm64"
+      XCODE_VERSION: "26.2"
 
     steps:
     - name: Checkout code
@@ -79,3 +79,9 @@ jobs:
         path: ${{ env.UNIT_XCRESULT }}
         if-no-files-found: error
         retention-days: 14
+
+    - name: Fail job when unit tests fail
+      if: steps.unit_tests.outcome == 'failure'
+      run: |
+        echo "Unit tests failed. See uploaded xcresult artifact."
+        exit 1
