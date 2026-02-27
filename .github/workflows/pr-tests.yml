@@ -17,8 +17,8 @@ jobs:
     timeout-minutes: 30
     env:
       DERIVED_DATA_PATH: ${{ github.workspace }}/.derived_data
-      IPHONE_DEST: "platform=iOS Simulator,name=iPhone 17 Pro,OS=26.2,arch=arm64"
-      XCODE_VERSION: "26.2"
+      IPHONE_DEST: "platform=iOS Simulator,name=iPhone 17 Pro,OS=26.1,arch=arm64"
+      XCODE_VERSION: "26.1"
 
     steps:
     - name: Checkout code
