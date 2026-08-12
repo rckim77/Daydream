@@ -27,15 +27,7 @@ struct MapCardView: View {
             }
             Button {
                 if let address = place.displayName {
-                    let item: MKMapItem
-                    
-                    if #available(iOS 26, *) {
-                        item = MKMapItem(location: placeLocation, address: nil)
-                    } else {
-                        let placemark = MKPlacemark(coordinate: place.location)
-                        item = MKMapItem(placemark: placemark)
-                    }
-                    
+                    let item = MKMapItem(location: placeLocation, address: nil)
                     item.name = address
                     MKMapItem.openMaps(with: [item])
                 }

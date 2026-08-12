@@ -6,6 +6,8 @@ Explore cities around the world
 [Privacy Policy](https://rckim77.github.io/Daydream-Site/)
 
 ## Local Setup
+Minimum deployment target: iOS 26.0.
+
 Open `Daydream.xcodeproj` in Xcode 26.1.0+ to resolve Swift packages.
 
 Create `Daydream/apiKeys.plist` with:
