@@ -14,15 +14,9 @@ struct PriceLevelView: View {
     let priceLevel: PriceLevel
     
     var body: some View {
-        if #available(iOS 26, *) {
-            dollarView
-                .glassEffect()
-                .clipShape(Capsule())
-        } else {
-            dollarView
-                .background(.ultraThinMaterial)
-                .clipShape(Capsule())
-        }
+        dollarView
+            .glassEffect()
+            .clipShape(Capsule())
     }
     
     private var dollarView: some View {
