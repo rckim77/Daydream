@@ -38,7 +38,7 @@ struct CitiesView: View {
     }
     
     private var cityContentHorizontalPadding: CGFloat {
-        UIDevice.current.userInterfaceIdiom == .phone ? 8 : 0
+        horizontalSizeClass == .compact ? 16 : 0
     }
 
     private var cityCardsVerticalSpacing: CGFloat {
