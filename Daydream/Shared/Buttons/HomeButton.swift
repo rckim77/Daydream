@@ -17,6 +17,7 @@ struct HomeButton: View {
             buttonTapped()
         } label: {
             Image(systemName: "house.fill")
+                .frame(width: 24, height: 24)
         }
         .modifier(SearchActionStyle(shape: .circle))
     }

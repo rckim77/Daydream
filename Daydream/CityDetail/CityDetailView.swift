@@ -90,8 +90,6 @@ struct CityDetailView: View {
                     }
                 }
             } additionalViews: {
-                Spacer()
-                    .frame(width: 2)
                 HomeButton {
                     dismiss()
                 }

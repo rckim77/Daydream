@@ -30,13 +30,16 @@ struct RandomCityButton: View {
                 }
             }
         } label: {
-            if showLoadingSpinner {
-                ProgressView()
-                    .controlSize(.regular)
-                    .tint(.primary)
-            } else {
+            ZStack {
                 Image(systemName: "shuffle")
+                    .opacity(showLoadingSpinner ? 0 : 1)
+                if showLoadingSpinner {
+                    ProgressView()
+                        .controlSize(.regular)
+                        .tint(.primary)
+                }
             }
+            .frame(width: 24, height: 24)
         }
         .modifier(SearchActionStyle(shape: .capsule))
         .alert("Drats, something went wrong. Try again later!", isPresented: $showErrorAlert, presenting: nil) {}
