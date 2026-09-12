@@ -37,6 +37,10 @@ struct CitiesView: View {
         horizontalSizeClass == .compact ? 0 : 96
     }
     
+    private var cityContentHorizontalPadding: CGFloat {
+        UIDevice.current.userInterfaceIdiom == .phone ? 8 : 0
+    }
+
     private var cityCardsVerticalSpacing: CGFloat {
         horizontalSizeClass == .compact ? -38 : -48
     }
@@ -51,6 +55,7 @@ struct CitiesView: View {
                     .padding(.horizontal, 16)
                     .modifier(TopScrollTransition())
                 TipView(GettingStartedTip())
+                    .padding(.horizontal, cityContentHorizontalPadding)
                     .modifier(TopScrollTransition())
                 VStack(spacing: -60) {
                     ForEach(cities, id: \.city) { city in
@@ -67,6 +72,7 @@ struct CitiesView: View {
                         .modifier(TopScrollTransition())
                     }
                 }
+                .padding(.horizontal, cityContentHorizontalPadding)
             }
             .scrollIndicators(.never)
             .padding(.horizontal, scrollViewHorizontalPadding)
