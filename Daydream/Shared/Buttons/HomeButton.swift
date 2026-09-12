@@ -20,5 +20,6 @@ struct HomeButton: View {
                 .frame(width: 24, height: 24)
         }
         .modifier(SearchActionStyle(shape: .circle))
+        .frame(width: 54)
     }
 }
