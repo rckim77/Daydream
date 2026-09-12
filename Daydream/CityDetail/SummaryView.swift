@@ -17,34 +17,31 @@ struct SummaryView: View {
     @State private var summary = ""
     
     var body: some View {
-        if #available(iOS 26, *) {
-            if SystemLanguageModel.default.isAvailable {
-                Group {
-                    if !summary.isEmpty {
-                        Text(summary)
-                            .transition(.opacity)
-                    } else {
-                        Text("This is placeholder text this is placeholder text placeholder text placeholder")
-                            .redacted(reason: .placeholder)
-                            .opacity(summary.isEmpty ? 1 : 0)
-                            .animation(.easeInOut, value: summary.isEmpty)
-                            .shimmer()
-                    }
+        if SystemLanguageModel.default.isAvailable {
+            Group {
+                if !summary.isEmpty {
+                    Text(summary)
+                        .transition(.opacity)
+                } else {
+                    Text("This is placeholder text this is placeholder text placeholder text placeholder")
+                        .redacted(reason: .placeholder)
+                        .opacity(summary.isEmpty ? 1 : 0)
+                        .animation(.easeInOut, value: summary.isEmpty)
+                        .shimmer()
                 }
-                .padding(.horizontal, 24)
-                .padding(.top, 8)
-                .padding(.bottom, 4)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .animation(.easeInOut, value: summary.count)
-                .task(id: cityText) {
-                    summary = ""
-                    await streamSummary()
-                }
+            }
+            .padding(.horizontal, 24)
+            .padding(.top, 8)
+            .padding(.bottom, 4)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .animation(.easeInOut, value: summary.count)
+            .task(id: cityText) {
+                summary = ""
+                await streamSummary()
             }
         }
     }
     
-    @available(iOS 26, *)
     private func streamSummary() async {
         let instructions = """
             Answer concisely–the output must be no more than 2 short sentences. Do not output lists nor bullet points.
