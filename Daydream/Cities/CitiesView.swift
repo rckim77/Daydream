@@ -38,7 +38,7 @@ struct CitiesView: View {
     }
     
     private var cityContentHorizontalPadding: CGFloat {
-        horizontalSizeClass == .compact ? 16 : 0
+        horizontalSizeClass == .compact ? 12 : 0
     }
 
     private var cityCardsVerticalSpacing: CGFloat {
@@ -56,6 +56,7 @@ struct CitiesView: View {
                     .modifier(TopScrollTransition())
                 TipView(GettingStartedTip())
                     .padding(.horizontal, cityContentHorizontalPadding)
+                    .padding(.bottom, 4)
                     .modifier(TopScrollTransition())
                 VStack(spacing: -60) {
                     ForEach(cities, id: \.city) { city in
