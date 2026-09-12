@@ -65,9 +65,9 @@ extension API {
                 maxResultCount: 2
             )
 
-            switch await PlacesClient.shared.searchNearby(with: request) {
-            case .success(let places):
-                if let place = places.first, let photo = place.photos?.first {
+            switch await PlacesClient.shared.responseForSearchNearby(with: request) {
+            case .success(let response):
+                if let place = response.places?.first, let photo = place.photos?.first {
                     let image = try await API.PlaceSearch.fetchImageBy(photo: photo)
                     return (place, image)
                 } else {
@@ -163,9 +163,9 @@ extension API {
                 maxResultCount: 2
             )
 
-            switch await PlacesClient.shared.searchNearby(with: request) {
-            case .success(let places):
-                return places.first
+            switch await PlacesClient.shared.responseForSearchNearby(with: request) {
+            case .success(let response):
+                return response.places?.first
             case .failure(let error):
                 print("=== fetchCityBy(name:) call failed: \(error.localizedDescription)")
                 return nil
@@ -236,9 +236,9 @@ extension API {
                     excludedTypes: excludedTypes,
                     maxResultCount: maxResultCount
                 )
-                switch await PlacesClient.shared.searchNearby(with: request) {
-                case .success(let places):
-                    return places
+                switch await PlacesClient.shared.responseForSearchNearby(with: request) {
+                case .success(let response):
+                    return response.places ?? []
                 case .failure(let error):
                     print(error.localizedDescription)
                     throw error

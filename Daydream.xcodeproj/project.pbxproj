@@ -40,8 +40,27 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		EC8DD7C82EB3F583006A20BE /* Daydream */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (EC8DD7F12EB3F584006A20BE /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Daydream; sourceTree = "<group>"; };
-		F0A1B2C3D4E5F60000000006 /* DaydreamTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = DaydreamTests; sourceTree = "<group>"; };
+		EC8DD7C82EB3F583006A20BE /* Daydream */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				EC8DD7F12EB3F584006A20BE /* PBXFileSystemSynchronizedBuildFileExceptionSet */,
+			);
+			explicitFileTypes = {
+			};
+			explicitFolders = (
+			);
+			path = Daydream;
+			sourceTree = "<group>";
+		};
+		F0A1B2C3D4E5F60000000006 /* DaydreamTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			explicitFileTypes = {
+			};
+			explicitFolders = (
+			);
+			path = DaydreamTests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -367,7 +386,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.5.1;
+				MARKETING_VERSION = 5.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rckim.Daydream;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -389,7 +408,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.5.1;
+				MARKETING_VERSION = 5.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rckim.Daydream;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -482,7 +501,7 @@
 			repositoryURL = "https://github.com/googlemaps/ios-maps-sdk";
 			requirement = {
 				kind = exactVersion;
-				version = 10.10.0;
+				version = 11.1.0;
 			};
 		};
 		EC1D58F42B54B3470068D03A /* XCRemoteSwiftPackageReference "SnapKit" */ = {
@@ -490,7 +509,7 @@
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 5.7.0;
+				minimumVersion = 6.0.0;
 			};
 		};
 		EC2098AD2E9DCC680023CC1A /* XCRemoteSwiftPackageReference "ios-places-sdk" */ = {
@@ -498,7 +517,7 @@
 			repositoryURL = "https://github.com/googlemaps/ios-places-sdk";
 			requirement = {
 				kind = exactVersion;
-				version = 10.10.0;
+				version = 10.15.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
