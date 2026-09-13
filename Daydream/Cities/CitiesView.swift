@@ -116,7 +116,15 @@ struct CitiesView: View {
         .errorAlert(isPresented: $showErrorAlert)
         .task {
             var selectedCities = [RandomCity]()
-            
+            #if DEBUG
+            if let names = ProcessInfo.processInfo.environment["DAYDREAM_UI_CAPTURE_CITIES"]?.components(separatedBy: "|"),
+               let url = Bundle.main.url(forResource: "randomCitiesJSON", withExtension: "json"),
+               let data = try? Data(contentsOf: url),
+               let available = try? JSONDecoder().decode([RandomCity].self, from: data) {
+                selectedCities = names.prefix(cityCount).compactMap { name in available.first { $0.city == name } }
+            }
+            #endif
+
             while selectedCities.count < cityCount {
                 if let city = getRandomCity(), !selectedCities.contains(where: { $0.city == city.city }) {
                     selectedCities.append(city)

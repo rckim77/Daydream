@@ -54,6 +54,7 @@ extension API {
             }
         }
 
+        @MainActor
         static func fetchCurrentCityBy(_ coordinate: CLLocationCoordinate2D) async throws -> (Place, UIImage) {
             let center = CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)
             let restriction = CircularCoordinateRegion(center: center, radius: 1000)
@@ -108,6 +109,7 @@ extension API {
         }
         
         /// Fetches Place and Image for `placeId`, using `PlacesCache` and `ImageCache` if cached.
+        @MainActor
         static func fetchPlaceAndImageBy(placeId: String) async throws -> (Place, UIImage) {
             if let cachedPlace = PlacesCache.shared.get(forKey: placeId),
                 let photo = cachedPlace.photos?.first {
@@ -152,6 +154,8 @@ extension API {
             }
         }
         
+        // Keep the SDK request lifetime on the main actor, including teardown after awaiting its response.
+        @MainActor
         static func fetchCityBy(_ city: RandomCity) async -> Place? {
             let center = CLLocationCoordinate2D(latitude: city.latitude, longitude: city.longitude)
             let restriction = CircularCoordinateRegion(center: center, radius: city.radius * 1000)
@@ -172,6 +176,7 @@ extension API {
             }
         }
         
+        @MainActor
         static func fetchPlaceWithReviewsBy(placeId: String) async -> Place? {
             let fetchPlaceRequest = FetchPlaceRequest(
                 placeID: placeId,
@@ -188,6 +193,7 @@ extension API {
         }
         
         /// Uses UIImage cache to fetch by photo hash value, otherwise calls Places SDK and adds to cache
+        @MainActor
         static func fetchImageBy(photo: Photo, horizontalSizeClass: UserInterfaceSizeClass? = nil) async throws -> UIImage {
             let hashKey = String(photo.hashValue)
             if let cachedImage = ImageCache.shared.get(forKey: hashKey) {
@@ -207,6 +213,7 @@ extension API {
             }
         }
         
+        @MainActor
         static func fetchPlacesFor(placeId: String, type: PlaceSearch.PlaceSearchType, maxResultCount: Int) async throws -> [Place] {
             let fetchPlaceRequest = FetchPlaceRequest(
                 placeID: placeId,

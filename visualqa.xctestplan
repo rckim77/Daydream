@@ -1,0 +1,27 @@
+{
+  "configurations": [
+    {
+      "id": "316A157D-C209-4E71-A6D0-9F017C3602D2",
+      "name": "Default",
+      "options": {}
+    }
+  ],
+  "defaultOptions": {
+    "targetForVariableExpansion": {
+      "containerPath": "container:Daydream.xcodeproj",
+      "identifier": "94380AC3203BAE1D00684863",
+      "name": "Daydream"
+    }
+  },
+  "testTargets": [
+    {
+      "parallelizable": false,
+      "target": {
+        "containerPath": "container:Daydream.xcodeproj",
+        "identifier": "ECF7177C3056098000800BB4",
+        "name": "DaydreamUITests"
+      }
+    }
+  ],
+  "version": 1
+}

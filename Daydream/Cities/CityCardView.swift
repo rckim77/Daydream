@@ -60,6 +60,7 @@ struct CityCardView: View {
                 }
             }
         }
+        .accessibilityIdentifier("city-\(image == nil ? "loading" : "loaded")-\(city.city)")
         .buttonStyle(CityCardButtonStyle(height: height, horizontalSizeClass: horizontalSizeClass))
         .task {
             await loadResults()

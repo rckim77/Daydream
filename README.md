@@ -35,3 +35,7 @@ CI currently uses Xcode 26.2 and iOS 26.2, independently of local Xcode 27 RC ve
 - `.github/workflows/pr-tests.yml`
 
 ![Simulator Screen Recording - iPhone 16 Pro - 2025-11-10 at 21 10 26](https://github.com/user-attachments/assets/09f30ccc-917e-4d54-9ffc-237525e0d656)
+
+## Visual QA
+
+The opt-in [Visual QA suite](visual-qa/README.md) uses the shared private `app-visual-qa-tool` with required base and additional configurations: four iOS 27 main-screen captures for quick checks, then six additional captures covering iOS 26 and landscape iPad mini. Only the SE is dark. Its dedicated `VisualQA` scheme stays separate from regular unit tests.
