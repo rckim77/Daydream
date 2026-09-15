@@ -23,11 +23,12 @@ struct SearchToolbar<Content: View>: View {
     @Environment(CurrentLocationManager.self) private var locationManager
     
     var body: some View {
-        HStack {
+        HStack(spacing: 8) {
             Button {
                 showAutocompleteWidget.toggle()
             } label: {
                 Label("Search", systemImage: "magnifyingglass")
+                    .frame(height: 24)
                     .padding(.horizontal, 12)
             }
             .modifier(SearchActionStyle(shape: .capsule))
@@ -43,7 +44,6 @@ struct SearchToolbar<Content: View>: View {
             } onError: { error in
                 print(error.localizedDescription)
             }
-            .padding(.trailing, 4)
             RandomCityButton { place, image in
                 randomCityReceived(place, image)
             }
@@ -55,8 +55,10 @@ struct SearchToolbar<Content: View>: View {
                 currentLocationTapped()
             } label: {
                 Image(systemName: "location.fill")
+                    .frame(width: 24, height: 24)
             }
             .modifier(SearchActionStyle(shape: .circle))
+            .frame(width: 54)
             additionalViews
         }
         .padding(.bottom, 8)

@@ -28,15 +28,8 @@ final class MapViewController: UIViewController {
         didSet {
             dynamicMapView?.configureMapStyle(isDark: isViewingDarkMode)
 
-            if #available(iOS 26, *) {
-                let imageName = isViewingDarkMode ? "sun.max" : "moon"
-                darkModeButton.setImage(UIImage(systemName: imageName), for: .normal)
-            } else {
-                let imageName = isViewingDarkMode ? "sun.max.fill" : "moon.fill"
-                var newConfig = UIButton.Configuration.plain()
-                newConfig.configureForIcon(imageName)
-                darkModeButton.configuration = newConfig
-            }
+            let imageName = isViewingDarkMode ? "sun.max" : "moon"
+            darkModeButton.setImage(UIImage(systemName: imageName), for: .normal)
         }
     }
 
@@ -53,18 +46,9 @@ final class MapViewController: UIViewController {
     }()
 
     private lazy var closeButton: UIButton = {
-        let button: UIButton
-
-        if #available(iOS 26, *) {
-            var config = UIButton.Configuration.glass()
-            config.configureForIcon("xmark")
-            button = UIButton(configuration: config)
-        } else {
-            var config = UIButton.Configuration.plain()
-            config.configureForIcon("xmark.circle.fill")
-            button = UIButton(configuration: config)
-            button.addDropShadow()
-        }
+        var config = UIButton.Configuration.glass()
+        config.configureForIcon("xmark")
+        let button = UIButton(configuration: config)
         
         button.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
         button.accessibilityLabel = "map-close-button"
@@ -76,18 +60,9 @@ final class MapViewController: UIViewController {
     }()
 
     private lazy var darkModeButton: UIButton = {
-        let button: UIButton
-
-        if #available(iOS 26, *) {
-            var config = UIButton.Configuration.glass()
-            config.configureForIcon("moon")
-            button = UIButton(configuration: config)
-        } else {
-            var config = UIButton.Configuration.plain()
-            config.configureForIcon("moon.fill")
-            button = UIButton(configuration: config)
-            button.addDropShadow()
-        }
+        var config = UIButton.Configuration.glass()
+        config.configureForIcon("moon")
+        let button = UIButton(configuration: config)
         
         button.addTarget(self, action: #selector(darkModeButtonTapped), for: .touchUpInside)
         button.accessibilityLabel = "dark mode toggle"
@@ -98,18 +73,9 @@ final class MapViewController: UIViewController {
     }()
 
     private lazy var aboutButton: UIButton = {
-        let button: UIButton
-
-        if #available(iOS 26, *) {
-            var config = UIButton.Configuration.glass()
-            config.configureForIcon("info")
-            button = UIButton(configuration: config)
-        } else {
-            var config = UIButton.Configuration.plain()
-            config.configureForIcon("info.circle.fill")
-            button = UIButton(configuration: config)
-            button.addDropShadow()
-        }
+        var config = UIButton.Configuration.glass()
+        config.configureForIcon("info")
+        let button = UIButton(configuration: config)
         
         button.addTarget(self, action: #selector(aboutButtonTapped), for: .touchUpInside)
         button.accessibilityLabel = "info button"
@@ -178,11 +144,7 @@ final class MapViewController: UIViewController {
         
         closeButton.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(16 + iPadOffset)
-            if #available(iOS 26, *) {
-                make.leading.equalToSuperview().inset(16)
-            } else {
-                make.leading.equalToSuperview().inset(8)
-            }
+            make.leading.equalToSuperview().inset(16)
         }
 
         darkModeButton.snp.makeConstraints { make in
@@ -190,18 +152,9 @@ final class MapViewController: UIViewController {
         }
 
         aboutButton.snp.makeConstraints { make in
-            if #available(iOS 26, *) {
-                make.leading.equalTo(darkModeButton.snp.trailing).offset(12)
-            } else {
-                make.leading.equalTo(darkModeButton.snp.trailing)
-            }
+            make.leading.equalTo(darkModeButton.snp.trailing).offset(12)
             make.top.equalToSuperview().inset(16 + iPadOffset)
-
-            if #available(iOS 26, *) {
-                make.trailing.equalToSuperview().inset(16)
-            } else {
-                make.trailing.equalToSuperview().inset(8)
-            }
+            make.trailing.equalToSuperview().inset(16)
         }
     }
 

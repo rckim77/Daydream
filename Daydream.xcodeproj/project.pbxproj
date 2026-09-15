@@ -14,6 +14,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		ECF717FD30560A2100800BB4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 94380ABC203BAE1D00684863 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 94380AC3203BAE1D00684863;
+			remoteInfo = Daydream;
+		};
 		F0A1B2C3D4E5F60000000010 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 94380ABC203BAE1D00684863 /* Project object */;
@@ -25,6 +32,7 @@
 
 /* Begin PBXFileReference section */
 		94380AC4203BAE1D00684863 /* Daydream.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Daydream.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		ECF7177D3056098000800BB4 /* DaydreamUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DaydreamUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0A1B2C3D4E5F60000000002 /* DaydreamTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DaydreamTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0A1B2C3D4E5F60000000004 /* unittests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = unittests.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -41,6 +49,7 @@
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		EC8DD7C82EB3F583006A20BE /* Daydream */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (EC8DD7F12EB3F584006A20BE /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Daydream; sourceTree = "<group>"; };
+		ECF7177E3056098000800BB4 /* DaydreamUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = DaydreamUITests; sourceTree = "<group>"; };
 		F0A1B2C3D4E5F60000000006 /* DaydreamTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = DaydreamTests; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
@@ -53,6 +62,13 @@
 				EC1D58F62B54B3470068D03A /* SnapKit in Frameworks */,
 				EC1D58EA2B546EB90068D03A /* GoogleMaps in Frameworks */,
 				EC2098B12E9DCC680023CC1A /* GooglePlacesSwift in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ECF7177A3056098000800BB4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -72,6 +88,7 @@
 				EC8DD7C82EB3F583006A20BE /* Daydream */,
 				F0A1B2C3D4E5F60000000006 /* DaydreamTests */,
 				F0A1B2C3D4E5F60000000004 /* unittests.xctestplan */,
+				ECF7177E3056098000800BB4 /* DaydreamUITests */,
 				94380AC5203BAE1D00684863 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -81,6 +98,7 @@
 			children = (
 				94380AC4203BAE1D00684863 /* Daydream.app */,
 				F0A1B2C3D4E5F60000000002 /* DaydreamTests.xctest */,
+				ECF7177D3056098000800BB4 /* DaydreamUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -114,6 +132,29 @@
 			productReference = 94380AC4203BAE1D00684863 /* Daydream.app */;
 			productType = "com.apple.product-type.application";
 		};
+		ECF7177C3056098000800BB4 /* DaydreamUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = ECF717833056098000800BB4 /* Build configuration list for PBXNativeTarget "DaydreamUITests" */;
+			buildPhases = (
+				ECF717793056098000800BB4 /* Sources */,
+				ECF7177A3056098000800BB4 /* Frameworks */,
+				ECF7177B3056098000800BB4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				87F065BC5240FAD794D0936F /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				ECF7177E3056098000800BB4 /* DaydreamUITests */,
+			);
+			name = DaydreamUITests;
+			packageProductDependencies = (
+			);
+			productName = DaydreamUITests;
+			productReference = ECF7177D3056098000800BB4 /* DaydreamUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		F0A1B2C3D4E5F60000000007 /* DaydreamTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = F0A1B2C3D4E5F60000000014 /* Build configuration list for PBXNativeTarget "DaydreamTests" */;
@@ -144,13 +185,16 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastSwiftUpdateCheck = 1130;
+				LastSwiftUpdateCheck = 2700;
 				LastUpgradeCheck = 2610;
 				ORGANIZATIONNAME = "Raymond Kim";
 				TargetAttributes = {
 					94380AC3203BAE1D00684863 = {
 						CreatedOnToolsVersion = 9.2;
 						LastSwiftMigration = 1140;
+					};
+					ECF7177C3056098000800BB4 = {
+						CreatedOnToolsVersion = 27.0;
 					};
 					F0A1B2C3D4E5F60000000007 = {
 						CreatedOnToolsVersion = 16.1;
@@ -178,12 +222,20 @@
 			targets = (
 				94380AC3203BAE1D00684863 /* Daydream */,
 				F0A1B2C3D4E5F60000000007 /* DaydreamTests */,
+				ECF7177C3056098000800BB4 /* DaydreamUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		94380AC2203BAE1D00684863 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ECF7177B3056098000800BB4 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -207,6 +259,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		ECF717793056098000800BB4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F0A1B2C3D4E5F60000000009 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -217,6 +276,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		87F065BC5240FAD794D0936F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 94380AC3203BAE1D00684863 /* Daydream */;
+			targetProxy = ECF717FD30560A2100800BB4 /* PBXContainerItemProxy */;
+		};
 		F0A1B2C3D4E5F60000000011 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 94380AC3203BAE1D00684863 /* Daydream */;
@@ -280,7 +344,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -341,7 +405,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -359,15 +423,15 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 30;
+				CURRENT_PROJECT_VERSION = 31;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				INFOPLIST_FILE = Daydream/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.5.1;
+				MARKETING_VERSION = 5.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rckim.Daydream;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -382,19 +446,79 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 30;
+				CURRENT_PROJECT_VERSION = 31;
 				INFOPLIST_FILE = Daydream/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.5.1;
+				MARKETING_VERSION = 5.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rckim.Daydream;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		ECF717813056098000800BB4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.6;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rckim.Daydream.DaydreamUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Daydream;
+				XROS_DEPLOYMENT_TARGET = 27.0;
+			};
+			name = Debug;
+		};
+		ECF717823056098000800BB4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.6;
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rckim.Daydream.DaydreamUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Daydream;
+				XROS_DEPLOYMENT_TARGET = 27.0;
 			};
 			name = Release;
 		};
@@ -406,7 +530,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 49BZEB79BF;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -429,7 +553,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 49BZEB79BF;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -465,6 +589,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		ECF717833056098000800BB4 /* Build configuration list for PBXNativeTarget "DaydreamUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				ECF717813056098000800BB4 /* Debug */,
+				ECF717823056098000800BB4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		F0A1B2C3D4E5F60000000014 /* Build configuration list for PBXNativeTarget "DaydreamTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -482,7 +615,7 @@
 			repositoryURL = "https://github.com/googlemaps/ios-maps-sdk";
 			requirement = {
 				kind = exactVersion;
-				version = 10.10.0;
+				version = 11.1.0;
 			};
 		};
 		EC1D58F42B54B3470068D03A /* XCRemoteSwiftPackageReference "SnapKit" */ = {
@@ -490,7 +623,7 @@
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 5.7.0;
+				minimumVersion = 6.0.0;
 			};
 		};
 		EC2098AD2E9DCC680023CC1A /* XCRemoteSwiftPackageReference "ios-places-sdk" */ = {
@@ -498,7 +631,7 @@
 			repositoryURL = "https://github.com/googlemaps/ios-places-sdk";
 			requirement = {
 				kind = exactVersion;
-				version = 10.10.0;
+				version = 10.15.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

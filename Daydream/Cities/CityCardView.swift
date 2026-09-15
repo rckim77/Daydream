@@ -32,11 +32,7 @@ struct CityCardView: View {
             onTap(place, image)
         } label: {
             ZStack(alignment: .topLeading) {
-                backgroundView
-                    .frame(maxWidth: .infinity)
-                    .frame(height: height)
-                    .clipShape(RoundedRectangle(cornerRadius: 32))
-                    .contentShape(RoundedRectangle(cornerRadius: 32))
+                CityCardBackground(image: image, height: height)
                 VStack(spacing: 0) {
                     Text(city.city)
                         .font(.largeTitle).bold()
@@ -64,23 +60,13 @@ struct CityCardView: View {
                 }
             }
         }
+        .accessibilityIdentifier("city-\(image == nil ? "loading" : "loaded")-\(city.city)")
         .buttonStyle(CityCardButtonStyle(height: height, horizontalSizeClass: horizontalSizeClass))
         .task {
             await loadResults()
         }
     }
 
-    @ViewBuilder
-    private var backgroundView: some View {
-        if let image = image {
-            Image(uiImage: image)
-                .resizable()
-                .scaledToFill()
-        } else {
-            Color(.lightGray)
-        }
-    }
-    
     private func loadResults() async -> Void {
         do {
             showErrorView = false

@@ -6,8 +6,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/googlemaps/ios-maps-sdk",
       "state" : {
-        "revision" : "037b29b55ee9ac4d93b6a686b292e75ba4c50fe5",
-        "version" : "10.10.0"
+        "revision" : "bb35529d3660739497b35d5de53dc7e6c5942198",
+        "version" : "11.1.0"
       }
     },
     {
@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/googlemaps/ios-places-sdk",
       "state" : {
-        "revision" : "2960dc2278a84e1daf1f16b417c978a96920ecdd",
-        "version" : "10.10.0"
+        "revision" : "a6ac7dfeba7df305dca7ff89dfc485c41c35c4dc",
+        "version" : "10.15.0"
       }
     },
     {
@@ -24,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/SnapKit/SnapKit.git",
       "state" : {
-        "revision" : "2842e6e84e82eb9a8dac0100ca90d9444b0307f4",
-        "version" : "5.7.1"
+        "revision" : "e27a338a03a5f388de759da63f9baf7988ed9e00",
+        "version" : "6.0.0"
       }
     }
   ],

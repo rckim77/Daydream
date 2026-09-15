@@ -1,0 +1,48 @@
+{
+  "version": 2,
+  "projectRoot": "..",
+  "appName": "Daydream",
+  "project": "Daydream.xcodeproj",
+  "scheme": "VisualQA",
+  "target": "Daydream",
+  "bundleId": "com.rckim.Daydream",
+  "testPlan": "visualqa",
+  "testClass": "DaydreamUITests/DaydreamUITests",
+  "configPrefix": "daydream-visualqa-config",
+  "configEnvironment": "DAYDREAM_VISUAL_QA_CONFIG_PATH",
+  "screens": {
+    "home": "Main Screen"
+  },
+  "defaults": {
+    "VISUAL_QA_CONSOLIDATED_TEST_PORTRAIT": "testCaptureMainScreen",
+    "VISUAL_QA_CONSOLIDATED_TEST_LANDSCAPE": "testCaptureMainScreen",
+    "VISUAL_QA_SHUTDOWN_AFTER_CAPTURE": "1",
+    "VISUAL_QA_SUPPRESS_CRASH_DIALOGS": "0",
+    "VISUAL_QA_MAX_PARALLEL": "1"
+  },
+  "base": {
+    "ios": [
+      "27"
+    ],
+    "language": {
+      "id": "en",
+      "locale": "en_US",
+      "title": "English"
+    }
+  },
+  "additional": {
+    "ios": [
+      "26"
+    ],
+    "languages": {},
+    "devices": [
+      {
+        "id": "ipad-mini",
+        "title": "iPad mini",
+        "name": "iPad mini (A17 Pro)",
+        "orientation": "landscape",
+        "appearance": "light"
+      }
+    ]
+  }
+}

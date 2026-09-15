@@ -37,7 +37,7 @@ class ShadowView: UIView {
                                         byRoundingCorners: .allCorners,
                                         cornerRadii: size).cgPath
         layer.shouldRasterize = true
-        layer.rasterizationScale = UIScreen.main.scale
+        layer.rasterizationScale = traitCollection.displayScale
     }
 
 }

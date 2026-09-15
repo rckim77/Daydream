@@ -33,11 +33,6 @@ extension UIView {
 }
 
 extension UIViewController {
-    
-    var isSmallDevice: Bool {
-        // swiftlint:disable discouraged_direct_init
-        UIDevice().isSmallDevice
-    }
 
     func openUrl(_ url: String) {
         guard let url = URL(string: url) else {
@@ -73,28 +68,10 @@ extension String {
     }
 }
 
-extension UIButton {
-    func addDropShadow() {
-        layer.shadowColor = UIColor.black.cgColor
-        layer.shadowOffset = CGSize(width: 0, height: 1)
-        layer.shadowRadius = 0.5
-        layer.shadowOpacity = 1
-    }
-}
-
 extension UIButton.Configuration {
     mutating func configureForIcon(_ name: String) {
-        if #available(iOS 26, *) {
-            image = UIImage(systemName: name)
-            imagePadding = 4
-        } else {
-            let heavyConfig = UIImage.SymbolConfiguration(weight: .heavy)
-            let textStyle: UIFont.TextStyle = .body
-            let scalingConfig = UIImage.SymbolConfiguration(font: .preferredFont(forTextStyle: textStyle), scale: .large)
-            let symbolConfig = scalingConfig.applying(heavyConfig)
-            image = UIImage(systemName: name, withConfiguration: symbolConfig)
-            baseForegroundColor = .white
-        }
+        image = UIImage(systemName: name)
+        imagePadding = 4
     }
 }
 

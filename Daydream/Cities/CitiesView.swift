@@ -37,6 +37,10 @@ struct CitiesView: View {
         horizontalSizeClass == .compact ? 0 : 96
     }
     
+    private var cityContentHorizontalPadding: CGFloat {
+        horizontalSizeClass == .compact ? 12 : 0
+    }
+
     private var cityCardsVerticalSpacing: CGFloat {
         horizontalSizeClass == .compact ? -38 : -48
     }
@@ -51,6 +55,8 @@ struct CitiesView: View {
                     .padding(.horizontal, 16)
                     .modifier(TopScrollTransition())
                 TipView(GettingStartedTip())
+                    .padding(.horizontal, cityContentHorizontalPadding)
+                    .padding(.bottom, 4)
                     .modifier(TopScrollTransition())
                 VStack(spacing: -60) {
                     ForEach(cities, id: \.city) { city in
@@ -67,6 +73,7 @@ struct CitiesView: View {
                         .modifier(TopScrollTransition())
                     }
                 }
+                .padding(.horizontal, cityContentHorizontalPadding)
             }
             .scrollIndicators(.never)
             .padding(.horizontal, scrollViewHorizontalPadding)
@@ -109,7 +116,15 @@ struct CitiesView: View {
         .errorAlert(isPresented: $showErrorAlert)
         .task {
             var selectedCities = [RandomCity]()
-            
+            #if DEBUG
+            if let names = ProcessInfo.processInfo.environment["DAYDREAM_UI_CAPTURE_CITIES"]?.components(separatedBy: "|"),
+               let url = Bundle.main.url(forResource: "randomCitiesJSON", withExtension: "json"),
+               let data = try? Data(contentsOf: url),
+               let available = try? JSONDecoder().decode([RandomCity].self, from: data) {
+                selectedCities = names.prefix(cityCount).compactMap { name in available.first { $0.city == name } }
+            }
+            #endif
+
             while selectedCities.count < cityCount {
                 if let city = getRandomCity(), !selectedCities.contains(where: { $0.city == city.city }) {
                     selectedCities.append(city)

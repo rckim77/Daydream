@@ -6,8 +6,8 @@ This file guides coding agents working in this repository.
 - App: **Daydream** (iOS)
 - Purpose: explore cities worldwide, view city details, nearby sights/eateries, and map/reviews.
 - Stack: Swift, SwiftUI + UIKit interoperability, Google Places SDK (Swift), Google Maps SDK, SnapKit, TipKit.
-- Xcode: `26.1.0` (per `README.md`).
-- Minimum deployment target in project: iOS 18.0 for main app target.
+- Local release verification uses Xcode 27 RC (`27A266a`) and the iOS 27 SDK. Read current build settings and package pins when compatibility matters.
+- Minimum deployment target in project: iOS 26.0 across all app and test configurations.
 
 ## Repository Map
 - `Daydream/` app source
@@ -19,37 +19,12 @@ This file guides coding agents working in this repository.
 - `Daydream/Shared/randomCitiesJSON.json` seed city dataset used for random city flows
 - `Daydream.xcodeproj/` project/scheme/package resolution
 
-## Local Setup Requirements
-1. Open `Daydream.xcodeproj` in Xcode 26.1.0+ to resolve Swift packages.
-2. Provide local API keys file at:
-   - `Daydream/apiKeys.plist`
-3. `apiKeys.plist` must decode to:
-   - `placesNewAPI` (String)
-   - `googleAPI` (String)
-4. Ensure location permission strings remain present in `Info.plist` for location-based features.
-
-If keys are missing, app launch continues but Places/Maps calls will fail or return no useful data.
-
-## Build, Run, Validate
-Use these from repo root:
-
-```bash
-xcodebuild -project Daydream.xcodeproj -scheme Daydream -configuration Debug -destination 'platform=iOS Simulator,name=iPhone 17 Pro' build
-```
-
-Run the shared Swift Testing plan:
-
-```bash
-xcodebuild test -project Daydream.xcodeproj -scheme Daydream -testPlan unittests -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.1' CODE_SIGNING_ALLOWED=NO
-```
-
-Optional lint (if installed locally):
-
-```bash
-swiftlint
-```
-
-Lint config: `.swiftlint.yml` (notably relaxed for identifier length, nesting, body length, and trailing whitespace).
+## Setup and validation
+- See `README.md` for API key setup and build/test commands. Default local destination: `platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0`, project `Daydream.xcodeproj`, scheme `Daydream`, test plan `unittests`.
+- Missing `Daydream/Shared/apiKeys.plist` lets the app launch but prevents useful Maps/Places results. Keep the `googleAPI` and `placesNewAPI` keys local and untracked.
+- Match verification to the change. Compile code and dependency changes, run relevant existing tests, and inspect affected UI flows. Documentation-only edits need instruction/link checks.
+- For SDK or release validation, exercise the full regression scenarios below on iOS 27 and a supported iOS 26 runtime. Report unavailable runtimes and unverified paths explicitly; a build does not prove runtime behavior.
+- SwiftLint is optional when installed; use `.swiftlint.yml`.
 
 ## Architecture Notes
 - App launches through `AppDelegate`/`SceneDelegate` (UIKit lifecycle), with `SearchViewController` embedding SwiftUI (`UIHostingController`).
@@ -65,7 +40,7 @@ Lint config: `.swiftlint.yml` (notably relaxed for identifier length, nesting, b
 - Preserve existing file organization; place new code in the nearest existing feature folder.
 - Keep `API` namespace pattern for new network/data calls (`API+Feature.swift` style extensions).
 - Prefer existing shared utilities/extensions over duplicating logic.
-- Maintain iOS availability fallbacks where used (for example iOS 26 button style branches).
+- Preserve availability handling for APIs newer than the minimum deployment target; do not reintroduce unreachable pre-iOS 26 branches.
 - Avoid introducing new third-party dependencies unless explicitly requested.
 - Keep changes scoped; do not refactor unrelated modules in the same patch.
 
@@ -74,7 +49,8 @@ Lint config: `.swiftlint.yml` (notably relaxed for identifier length, nesting, b
 - Do not modify `GoogleService-Info.plist` or signing/bundle settings unless requested.
 - Avoid changing `Info.plist` permission text unless the feature requires it.
 
-## Manual Regression Checklist (when UI/behavior changes)
+## Regression scenarios
+Select affected scenarios for focused changes; use the full set for dependency or release validation.
 1. Launch app to `CitiesView` without crash.
 2. Search a city and open `CityDetailView`.
 3. Verify Top Sights / Top Eateries load.
@@ -85,16 +61,9 @@ Lint config: `.swiftlint.yml` (notably relaxed for identifier length, nesting, b
 ## Agent Workflow Expectations
 - If you cannot run validation locally, state that clearly and list unverified paths.
 - After adding or changing code, build/compile the app when feasible and proactively fix any compiler issues. If it's a trivial code change (e.g., change SF symbol icon) or a change you have extremely high confidence that it will compile, you can skip building.
-- Prefer explicit build commands for reliability (e.g., `xcodebuild -project Daydream.xcodeproj -scheme Daydream -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.1'`).
-- Default verification settings: use project `Daydream.xcodeproj`, scheme `Daydream`, and simulator destination `platform=iOS Simulator,name=iPhone 17 Pro,OS=26.1` unless the prompt says otherwise.
-- Preferred commands:
-  - Build on simulator: `xcodebuild -project Daydream.xcodeproj -scheme Daydream -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.1' build`
-  - Run full tests (xctestplan): `xcodebuild test -project Daydream.xcodeproj -scheme Daydream -testPlan unittests -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.1' CODE_SIGNING_ALLOWED=NO`
-  - Run one test suite: `xcodebuild test -project Daydream.xcodeproj -scheme Daydream -testPlan unittests -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.1' -only-testing:DaydreamTests/CoreFeaturesTests CODE_SIGNING_ALLOWED=NO`
-  - Discover targets/schemes quickly: `xcodebuild -list -project Daydream.xcodeproj`
 - Device commands (when requested):
   - Build for Ray K's device: `xcodebuild -project Daydream.xcodeproj -scheme Daydream -destination 'id=00008150-000E2CA1110A401C' build`
-  - Install/launch with `xcrun devicectl` using bundle identifier `com.daydream.app` after a successful device build.
+  - Install/launch with `xcrun devicectl` using the built app’s bundle identifier (`com.rckim.Daydream` in the current project) after a successful device build.
 - TestFlight/App Store Connect upload guidance:
   - Always use scheme `Daydream`, configuration `Release`, and destination `generic/platform=iOS` (Any iOS Device, arm64) for archives intended for upload.
   - Increment build version (`CURRENT_PROJECT_VERSION` / `CFBundleVersion`) before upload. Only bump marketing version (`MARKETING_VERSION` / `CFBundleShortVersionString`) when explicitly needed for release planning.
@@ -105,8 +74,6 @@ Lint config: `.swiftlint.yml` (notably relaxed for identifier length, nesting, b
   - After committing that TestFlight version/build bump, push the branch so the repo reflects the uploaded build metadata.
 - When removing files or refactoring structure, run a quick build immediately to catch missing references.
 - Keep the Xcode project folder-based (no groups); use filesystem-synchronized folders only.
-- In Xcode, do not create groups. Always create buildable folders (filesystem-synchronized folders) for new source directories/targets.
-- For device builds, use Ray K’s iPhone device ID `00008150-000E2CA1110A401C` for `xcodebuild -destination` and `xcrun devicectl` install/launch when needed.
 - If I ask to build and run on device, do not build for the simulator first. Make it as fast as possible.
 - When adding unit tests, prefer Swift Testing (`import Testing`, `@Test`, `#expect`) over XCTest where possible.
 - When code changes are covered by existing unit tests, run the relevant unit tests before finishing.
@@ -115,10 +82,16 @@ Lint config: `.swiftlint.yml` (notably relaxed for identifier length, nesting, b
 - Prefer one main SwiftUI view type (`struct ...: View`) per Swift file.
 - If a SwiftUI view grows beyond a manageable size and contains composable subviews, extract those subviews into separate SwiftUI files instead of keeping multiple main view types in one file.
 - For SwiftUI view state objects, prefer modern Observation (`@MainActor` + `@Observable` final class) over plain structs/legacy observable patterns.
-- When a SwiftUI view has a corresponding view state object (for example, `AssetDetailPageView` and `AssetDetailPageViewState`), add new view `@State` values to the view state object when that ownership model still makes sense.
+- When a SwiftUI view has a corresponding view state object (for example, `CityDetailView` and `CityDetailViewState`), add new view `@State` values to the view state object when that ownership model still makes sense.
 - Whenever adding a new view state object, also add a corresponding `...ViewStateTests.swift` suite using Swift Testing and run that suite to verify the new tests pass before completing the task.
 - Keep accessibility support practical and simple: add clear labels/identifiers for interactive UI, but avoid over-engineering fine-grained conditional label logic (for example, separate singular/plural variants) unless explicitly needed.
 - For sufficiently complex code paths, add a short human-readable code comment that explains intent and flow.
 
 ## Documentation Sync
-- Whenever you make feature changes that may affect documentation in this repo, quickly check markdown files to ensure they're updated as well. For example, if changing SDK versions makes the README.md information out of date, update it. Same goes for other markdown files like AGENTS.md and copilot-instructions.md. Do not check for very minor changes.
+- Keep affected documentation aligned with feature and SDK changes, including `README.md` and `AGENTS.md`. Minor edits do not require a documentation sweep.
+
+## Context and skills
+- User instructions take precedence over skill guidelines. Continue authorized work using repository context for routine choices; ask only when missing information materially affects the result.
+- Read skill references for the feature or failure being addressed. Prefer current Apple guidance for SDK-specific behavior when available; examples do not authorize unrelated modernization.
+- If a skill blocks completion or requires confirmation, identify the exact instruction and explain why it applies.
+- `Daydream/CityDetail/SummaryView.swift` prompts Apple's on-device Foundation Models. Astra guidance applies to coding instructions; changes to that product prompt need their own on-device evaluation.
