@@ -8,7 +8,9 @@ Explore cities around the world
 ## Local Setup
 Minimum deployment target: iOS 26.0.
 
-Local release verification uses Xcode 27 RC (`27A266a`) with the iOS 27 SDK. Open `Daydream.xcodeproj` to resolve Swift packages. Use `DEVELOPER_DIR=/Applications/Xcode_27RC.app/Contents/Developer` when multiple Xcode installations are present.
+Local verification uses Xcode 27.1 RC (`27A9275`) with the iOS 27.1 SDK. Open `Daydream.xcodeproj` to resolve Swift packages. Use `DEVELOPER_DIR=/Applications/Xcode_27.1RC.app/Contents/Developer` when multiple Xcode installations are present.
+
+Swift package dependencies: Google Maps 11.2.0, Google Places (including GooglePlacesSwift) 11.2.0, and SnapKit 6.0.0. Google SDK versions are pinned exactly in the project; commit the shared `Package.resolved` alongside dependency updates.
 
 Create `Daydream/Shared/apiKeys.plist` with:
 - `googleAPI`
@@ -31,7 +33,7 @@ xcodebuild test -project Daydream.xcodeproj -scheme Daydream -testPlan unittests
 For iOS 26 compatibility, also run the plan on an available iOS 26 simulator (locally: `iPhone 17 Pro,OS=26.5`). To target the existing suite, append `-only-testing:DaydreamTests/CityDetailViewStateTests`.
 
 ## CI
-CI currently uses Xcode 26.2 and iOS 26.2, independently of local Xcode 27 RC verification. Pull requests run tests on GitHub Actions via:
+CI currently uses Xcode 26.2 and iOS 26.2, independently of local Xcode 27.1 verification. Pull requests run tests on GitHub Actions via:
 - `.github/workflows/pr-tests.yml`
 
 ![Simulator Screen Recording - iPhone 16 Pro - 2025-11-10 at 21 10 26](https://github.com/user-attachments/assets/09f30ccc-917e-4d54-9ffc-237525e0d656)

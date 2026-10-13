@@ -6,7 +6,7 @@ This file guides coding agents working in this repository.
 - App: **Daydream** (iOS)
 - Purpose: explore cities worldwide, view city details, nearby sights/eateries, and map/reviews.
 - Stack: Swift, SwiftUI + UIKit interoperability, Google Places SDK (Swift), Google Maps SDK, SnapKit, TipKit.
-- Local release verification uses Xcode 27 RC (`27A266a`) and the iOS 27 SDK. Read current build settings and package pins when compatibility matters.
+- Local verification uses Xcode 27.1 RC (`27A9275`) and the iOS 27.1 SDK. Read current build settings and package pins when compatibility matters.
 - Minimum deployment target in project: iOS 26.0 across all app and test configurations.
 
 ## Repository Map
