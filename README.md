@@ -39,3 +39,11 @@ CI currently uses Xcode 26.2 and iOS 26.2, independently of local Xcode 27 RC ve
 ## Visual QA
 
 The opt-in [Visual QA suite](visual-qa/README.md) uses the shared private `app-visual-qa-tool` with required base and additional configurations: four iOS 27 main-screen captures for quick checks, then six additional captures covering iOS 26 and landscape iPad mini. Only the SE is dark. Its dedicated `VisualQA` scheme stays separate from regular unit tests.
+
+## Adaptive layouts
+
+Discovery uses two columns at window widths of 640 points and above. City details place the overview and map beside sights/eateries at 760 points and above. Accessibility text sizes use a single column. Content widths are capped for readability on larger windows; the same view instances remain in place during resizing to preserve photos, the map camera, and streamed summaries.
+
+Map sheets use Auto Layout and local safe areas on every device. iPhone supports both landscape orientations. Nearby results have a consistent limit of 12 so folding does not replace the data set or trigger a new request.
+
+For iPhone Duo validation, exercise home, city detail, and an open map/reviews sheet while folding and unfolding, then rotate and repeat. Also check compact iPhone and large text. Reuse existing simulators and preserve their app data; static screenshots alone do not verify a fold transition.

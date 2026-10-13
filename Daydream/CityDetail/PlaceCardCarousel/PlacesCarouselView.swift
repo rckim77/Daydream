@@ -13,9 +13,10 @@ struct PlacesCarouselView: View {
     
     let places: [Place]
     @Binding var tappedPlace: IdentifiablePlace?
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     
     private var placeholderCount: Int {
-        isIpad ? 9 : 4
+        horizontalSizeClass == .regular ? 9 : 4
     }
 
     var body: some View {

@@ -56,14 +56,6 @@ struct CityDetailViewStateTests {
         #expect(shouldReview.updatedLastReviewedAppVersion == "4.5.1")
     }
 
-    @Test("max result count adapts to idiom")
-    func maxResultCountByDeviceIdiom() {
-        let viewState = CityDetailViewState()
-
-        #expect(viewState.maxResultCount(for: .phone) == 7)
-        #expect(viewState.maxResultCount(for: .pad) == 12)
-    }
-
     @Test("current location immediate update is gated by previous coordinate equality")
     func currentLocationImmediateUpdateGating() {
         let viewState = CityDetailViewState()
@@ -76,12 +68,12 @@ struct CityDetailViewStateTests {
         #expect(viewState.currentLocationToLoadImmediately(currentLocation: different) == nil)
     }
 
-    @Test("loads both sights and eateries with idiom-specific max count")
+    @Test("loads both sights and eateries with a consistent max count")
     func loadSightsAndEateriesRequestsBothTypes() async {
         let viewState = CityDetailViewState()
         let recorder = PlaceFetchRecorder()
 
-        await viewState.loadSightsAndEateries(placeId: "place-123", idiom: .pad) { placeId, type, maxCount in
+        await viewState.loadSightsAndEateries(placeId: "place-123") { placeId, type, maxCount in
             recorder.calls.append((placeId: placeId, type: type, maxCount: maxCount))
             return []
         }
@@ -101,7 +93,7 @@ struct CityDetailViewStateTests {
         let viewState = CityDetailViewState()
         let recorder = PlaceFetchRecorder()
 
-        await viewState.loadSightsAndEateries(placeId: nil, idiom: .phone) { placeId, type, maxCount in
+        await viewState.loadSightsAndEateries(placeId: nil) { placeId, type, maxCount in
             recorder.calls.append((placeId: placeId, type: type, maxCount: maxCount))
             return []
         }

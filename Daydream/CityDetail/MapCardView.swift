@@ -14,6 +14,7 @@ struct MapCardView: View {
     
     @Binding var mapPosition: MapCameraPosition
     let place: Place
+    var height: CGFloat = 190
     @AppStorage("reviewsViewedCount") private var reviewsViewedCount: Int = 0
     
     private var placeLocation: CLLocation {
@@ -34,11 +35,13 @@ struct MapCardView: View {
             } label: {
                 Image(systemName: "arrow.up.right.circle")
             }
+            .accessibilityLabel("Open in Maps")
+            .frame(minWidth: 44, minHeight: 44)
             .foregroundStyle(.primary)
             .padding(8)
         }
         .frame(maxWidth: .infinity)
-        .frame(height: 190)
+        .frame(height: height)
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .padding(.horizontal, 24)
         .padding(.vertical, 16)

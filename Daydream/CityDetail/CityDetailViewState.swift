@@ -56,10 +56,6 @@ final class CityDetailViewState {
         return ReviewRequestDecision(shouldRequestReview: true, updatedLastReviewedAppVersion: appVersion)
     }
 
-    func maxResultCount(for idiom: UIUserInterfaceIdiom) -> Int {
-        idiom == .pad ? 12 : 7
-    }
-
     func createMapPosition(_ location: CLLocationCoordinate2D) -> MapCameraPosition {
         .region(MKCoordinateRegion(center: location, span: .init(latitudeDelta: 0.07, longitudeDelta: 0.07)))
     }
@@ -91,14 +87,14 @@ final class CityDetailViewState {
 
     func loadSightsAndEateries(
         placeId: String?,
-        idiom: UIUserInterfaceIdiom,
         fetchPlaces: (String, API.PlaceSearch.PlaceSearchType, Int) async throws -> [Place]
     ) async {
         guard let placeId else {
             return
         }
 
-        let maxResultCount = maxResultCount(for: idiom)
+        // Keep the same results when folding; presentation width must not change the data set.
+        let maxResultCount = 12
 
         do {
             sights = try await fetchPlaces(placeId, .sights, maxResultCount)

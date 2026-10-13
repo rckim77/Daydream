@@ -17,6 +17,7 @@ final class MapViewController: UIViewController {
     private var place: Place
     private var dynamicMapView: GMSMapView?
     private var dynamicMarker: GMSMarker?
+    private weak var reviewsView: UIView?
     /// Used to provide more accurate location when deeplinking to Google Maps
     private var dynamicMarkerPlaceId: String?
     /// Object that updates map review SwiftUI code
@@ -111,6 +112,16 @@ final class MapViewController: UIViewController {
         super.viewDidLayoutSubviews()
 
         gradientLayer.frame = containerView.bounds
+        if let dynamicMapView, let reviewsView {
+            // Move the camera's visible center above the reviews after every resize.
+            // Safe areas are already included in these measured overlay frames.
+            dynamicMapView.padding = UIEdgeInsets(
+                top: containerView.frame.maxY,
+                left: view.safeAreaInsets.left,
+                bottom: max(view.safeAreaInsets.bottom, view.bounds.maxY - reviewsView.frame.minY),
+                right: view.safeAreaInsets.right
+            )
+        }
     }
 
     private func addProgrammaticViews() {
@@ -123,38 +134,37 @@ final class MapViewController: UIViewController {
         containerView.addSubview(darkModeButton)
         containerView.addSubview(aboutButton)
         
-        let iPadOffset = UIDevice.current.userInterfaceIdiom == .pad ? 12 : 0
-        
         let reviewsCarouselVC = UIHostingController(rootView: MapReviewsCarousel(context: mapReviewContext))
         addChild(reviewsCarouselVC)
         view.addSubview(reviewsCarouselVC.view)
+        reviewsView = reviewsCarouselVC.view
         reviewsCarouselVC.view.backgroundColor = .clear
         reviewsCarouselVC.didMove(toParent: self)
         
         reviewsCarouselVC.view.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview()
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(iPadOffset)
+            make.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(12)
             make.height.equalTo(200)
         }
 
         containerView.snp.makeConstraints { make in
             make.leading.top.trailing.equalToSuperview()
-            make.height.equalTo(68)
+            make.bottom.equalTo(closeButton.snp.bottom).offset(16)
         }
         
         closeButton.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(16 + iPadOffset)
-            make.leading.equalToSuperview().inset(16)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(16)
+            make.leading.equalTo(view.safeAreaLayoutGuide.snp.leading).offset(16)
         }
 
         darkModeButton.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(16 + iPadOffset)
+            make.top.equalTo(closeButton)
         }
 
         aboutButton.snp.makeConstraints { make in
             make.leading.equalTo(darkModeButton.snp.trailing).offset(12)
-            make.top.equalToSuperview().inset(16 + iPadOffset)
-            make.trailing.equalToSuperview().inset(16)
+            make.top.equalTo(closeButton)
+            make.trailing.equalTo(view.safeAreaLayoutGuide.snp.trailing).inset(16)
         }
     }
 
@@ -179,17 +189,14 @@ final class MapViewController: UIViewController {
             guard let dynamicMapView = dynamicMapView else {
                 return
             }
+            dynamicMapView.paddingAdjustmentBehavior = .never
             dynamicMapView.delegate = self
             view.addSubview(dynamicMapView)
             view.sendSubviewToBack(dynamicMapView)
             
-            // fixes issue where map wasn't centered on iPad (but doesn't work on iPhone due to safe area)
-            if UIDevice().userInterfaceIdiom == .pad {
-                dynamicMapView.snp.makeConstraints { make in
-                    make.edges.equalToSuperview()
-                }
-            } else {
-                dynamicMapView.frame = view.frame
+            // Keep the map full bleed as the window resizes; its controls respect the local safe area.
+            dynamicMapView.snp.makeConstraints { make in
+                make.edges.equalToSuperview()
             }
 
             addOrUpdateMarkerAndReviews(for: placeId, name: name, location: location, in: dynamicMapView)

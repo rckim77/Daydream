@@ -34,25 +34,7 @@ struct CityDetailView: View {
     }
 
     var body: some View {
-        ScrollView(showsIndicators: false) {
-            VStack(alignment: .leading, spacing: 4) {
-                Text(cityText)
-                    .font(.largeTitle)
-                    .padding(.top, 24)
-                    .padding(.horizontal, 24)
-                SummaryView(cityText: cityText)
-                MapCardView(mapPosition: $viewState.mapPosition, place: place)
-                Text("Top Sights")
-                    .font(.title)
-                    .padding(.horizontal, 24)
-                PlacesCarouselView(places: viewState.sights, tappedPlace: $viewState.tappedCardPlace)
-                Text("Top Eateries")
-                    .font(.title)
-                    .padding(.horizontal, 24)
-                PlacesCarouselView(places: viewState.eateries, tappedPlace: $viewState.tappedCardPlace)
-            }
-            .frame(maxWidth: .infinity)
-        }
+        CityDetailContentView(place: place, cityText: cityText, viewState: viewState)
         .background(content: {
             if let image {
                 Image(uiImage: image)
@@ -147,8 +129,7 @@ struct CityDetailView: View {
 
     private func fetchSightsAndEateries(_ city: Place) async {
         await viewState.loadSightsAndEateries(
-            placeId: city.placeID,
-            idiom: UIDevice.current.userInterfaceIdiom
+            placeId: city.placeID
         ) { placeId, type, maxResultCount in
             try await API.PlaceSearch.fetchPlacesFor(placeId: placeId, type: type, maxResultCount: maxResultCount)
         }

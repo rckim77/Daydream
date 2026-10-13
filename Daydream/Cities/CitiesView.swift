@@ -26,57 +26,51 @@ struct CitiesView: View {
     @State private var prevCurrentLocation: CLLocationCoordinate2D?
 
     // MARK: - Layout/Animation vars
-    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.layoutDirection) private var layoutDirection
     @Namespace private var zoomNS
     
     // MARK: - Private constants and computed vars
     private let cityCount = 5
     private let feedbackButtonTransitionID = "feedbackButton"
 
-    private var scrollViewHorizontalPadding: CGFloat {
-        horizontalSizeClass == .compact ? 0 : 96
-    }
-    
-    private var cityContentHorizontalPadding: CGFloat {
-        horizontalSizeClass == .compact ? 12 : 0
-    }
-
-    private var cityCardsVerticalSpacing: CGFloat {
-        horizontalSizeClass == .compact ? -38 : -48
-    }
-    
     var body: some View {
         NavigationStack {
-            ScrollView {
-                Text("Where do you want to go?")
-                    .font(.largeTitle)
-                    .multilineTextAlignment(.center)
-                    .padding(.vertical, 32)
-                    .padding(.horizontal, 16)
-                    .modifier(TopScrollTransition())
-                TipView(GettingStartedTip())
-                    .padding(.horizontal, cityContentHorizontalPadding)
-                    .padding(.bottom, 4)
-                    .modifier(TopScrollTransition())
-                VStack(spacing: -60) {
-                    ForEach(cities, id: \.city) { city in
-                        CityCardView(city: city) { place, image in
-                            guard let place, let image else {
-                                return
-                            }
-                            selectedCity = CityRoute(name: city.city, place: place, image: image)
-                        }
-                        .matchedTransitionSource(id: city.city, in: zoomNS) { source in
-                            source
-                                .clipShape(RoundedRectangle(cornerRadius: 32))
-                        }
+            GeometryReader { geometry in
+                let width = min(geometry.size.width, 1100)
+                let columns = width >= 640 && !dynamicTypeSize.isAccessibilitySize ? 2 : 1
+                ScrollView {
+                    Text("Where do you want to go?")
+                        .font(.largeTitle)
+                        .multilineTextAlignment(.center)
+                        .padding(.vertical, 32)
+                        .padding(.horizontal, 16)
                         .modifier(TopScrollTransition())
+                    TipView(GettingStartedTip())
+                        .padding(.horizontal, 16)
+                        .padding(.bottom, 4)
+                        .modifier(TopScrollTransition())
+                    CityCardsLayout(columns: columns, spacing: columns == 1 && !dynamicTypeSize.isAccessibilitySize ? -60 : 20, layoutDirection: layoutDirection) {
+                        ForEach(cities, id: \.city) { city in
+                            CityCardView(city: city, height: columns == 1 ? 220 : 260) { place, image in
+                                guard let place, let image else {
+                                    return
+                                }
+                                selectedCity = CityRoute(name: city.city, place: place, image: image)
+                            }
+                            .matchedTransitionSource(id: city.city, in: zoomNS) { source in
+                                source
+                                    .clipShape(RoundedRectangle(cornerRadius: 32))
+                            }
+                            .modifier(TopScrollTransition())
+                        }
                     }
+                    .padding(.horizontal, 16)
                 }
-                .padding(.horizontal, cityContentHorizontalPadding)
+                .scrollIndicators(.never)
+                .frame(width: width)
+                .frame(maxWidth: .infinity)
             }
-            .scrollIndicators(.never)
-            .padding(.horizontal, scrollViewHorizontalPadding)
             .safeAreaInset(edge: .bottom, alignment: .center) {
                 SearchToolbar { place, image in
                     selectedCity = CityRoute(name: place.description, place: place, image: image)
@@ -115,6 +109,7 @@ struct CitiesView: View {
         }
         .errorAlert(isPresented: $showErrorAlert)
         .task {
+            guard cities.isEmpty else { return }
             var selectedCities = [RandomCity]()
             #if DEBUG
             if let names = ProcessInfo.processInfo.environment["DAYDREAM_UI_CAPTURE_CITIES"]?.components(separatedBy: "|"),
