@@ -13,13 +13,9 @@ struct HomeButton: View {
     let buttonTapped: () -> Void
     
     var body: some View {
-        Button {
+        Button("Home", systemImage: "house.fill") {
             buttonTapped()
-        } label: {
-            Image(systemName: "house.fill")
-                .frame(width: 24, height: 24)
         }
-        .modifier(SearchActionStyle(shape: .circle))
-        .frame(width: 54)
+        .accessibilityIdentifier("home-button")
     }
 }

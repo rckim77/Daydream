@@ -34,62 +34,37 @@ struct CityDetailView: View {
     }
 
     var body: some View {
-        CityDetailContentView(place: place, cityText: cityText, viewState: viewState)
-        .background(content: {
-            if let image {
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFill()
-                    .blur(radius: 36)
-            }
-        })
-        .safeAreaInset(edge: .bottom, alignment: .center) {
-            SearchToolbar { autocompletePlace, autocompleteImage in
-                place = autocompletePlace
-                image = autocompleteImage
-                viewState.applySelectedCity(place)
-                Task {
-                    await fetchSightsAndEateries(place)
+        NavigationStack {
+            CityDetailContentView(place: place, cityText: cityText, viewState: viewState)
+            .background(content: {
+                if let image {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFill()
+                        .blur(radius: 36)
                 }
-            } randomCityReceived: { randomPlace, randomImage in
-                place = randomPlace
-                image = randomImage
-                viewState.applySelectedCity(place)
-                Task {
-                    await fetchSightsAndEateries(place)
-                }
-            } currentLocationTapped: {
-                viewState.markCurrentLocationTapped()
-                guard let currentLocation = viewState.currentLocationToLoadImmediately(currentLocation: locationManager.location) else {
-                    // the .onChange(of:) will be triggered and programmatically navigate
-                    return
-                }
-                Task {
-                    do {
-                        try await updateToCurrentCity(currentLocation)
-                    } catch {
-                        viewState.showErrorAlert = true
+            })
+            .toolbar {
+                SearchToolbar { autocompletePlace, autocompleteImage in
+                    place = autocompletePlace
+                    image = autocompleteImage
+                    viewState.applySelectedCity(place)
+                    Task {
+                        await fetchSightsAndEateries(place)
                     }
-                }
-            } additionalViews: {
-                HomeButton {
-                    dismiss()
-                }
-            }
-        }
-        .task {
-            viewState.applySelectedCity(place)
-            await fetchSightsAndEateries(place)
-            viewState.seedPreviousCurrentLocation(locationManager.location)
-        }
-        .sheet(item: $viewState.tappedCardPlace) { identifiablePlace in
-            MapViewControllerRepresentable(place: identifiablePlace.place)
-        }
-        .errorAlert(isPresented: $viewState.showErrorAlert)
-        .onChange(of: locationManager.location) { _, currentLocation in
-            if viewState.shouldHandleLocationChange(currentLocation) {
-                viewState.seedPreviousCurrentLocation(currentLocation)
-                if let currentLocation {
+                } randomCityReceived: { randomPlace, randomImage in
+                    place = randomPlace
+                    image = randomImage
+                    viewState.applySelectedCity(place)
+                    Task {
+                        await fetchSightsAndEateries(place)
+                    }
+                } currentLocationTapped: {
+                    viewState.markCurrentLocationTapped()
+                    guard let currentLocation = viewState.currentLocationToLoadImmediately(currentLocation: locationManager.location) else {
+                        // the .onChange(of:) will be triggered and programmatically navigate
+                        return
+                    }
                     Task {
                         do {
                             try await updateToCurrentCity(currentLocation)
@@ -97,13 +72,42 @@ struct CityDetailView: View {
                             viewState.showErrorAlert = true
                         }
                     }
+                } additionalViews: {
+                    ToolbarItem(placement: .bottomBar) {
+                        HomeButton {
+                            dismiss()
+                        }
+                    }
                 }
-            } else {
-                print("current location is nil")
             }
-        }
-        .onAppear {
-            requestReviewIfApplicable()
+            .task {
+                viewState.applySelectedCity(place)
+                await fetchSightsAndEateries(place)
+                viewState.seedPreviousCurrentLocation(locationManager.location)
+            }
+            .sheet(item: $viewState.tappedCardPlace) { identifiablePlace in
+                MapViewControllerRepresentable(place: identifiablePlace.place)
+            }
+            .errorAlert(isPresented: $viewState.showErrorAlert)
+            .onChange(of: locationManager.location) { _, currentLocation in
+                if viewState.shouldHandleLocationChange(currentLocation) {
+                    viewState.seedPreviousCurrentLocation(currentLocation)
+                    if let currentLocation {
+                        Task {
+                            do {
+                                try await updateToCurrentCity(currentLocation)
+                            } catch {
+                                viewState.showErrorAlert = true
+                            }
+                        }
+                    }
+                } else {
+                    print("current location is nil")
+                }
+            }
+            .onAppear {
+                requestReviewIfApplicable()
+            }
         }
     }
 

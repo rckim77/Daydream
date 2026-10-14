@@ -33,7 +33,7 @@ xcodebuild test -project Daydream.xcodeproj -scheme Daydream -testPlan unittests
 For iOS 26 compatibility, also run the plan on an available iOS 26 simulator (locally: `iPhone 17 Pro,OS=26.5`). To target the existing suite, append `-only-testing:DaydreamTests/CityDetailViewStateTests`.
 
 ## CI
-CI currently uses Xcode 26.2 and iOS 26.2, independently of local Xcode 27.1 verification. Pull requests run tests on GitHub Actions via:
+CI uses the GitHub Actions `xcode-27` runner with Xcode 27.1 and an iPhone 18 Pro running iOS 27.0. Pull requests run tests on GitHub Actions via:
 - `.github/workflows/pr-tests.yml`
 
 ![Simulator Screen Recording - iPhone 16 Pro - 2025-11-10 at 21 10 26](https://github.com/user-attachments/assets/09f30ccc-917e-4d54-9ffc-237525e0d656)
@@ -47,5 +47,9 @@ The opt-in [Visual QA suite](visual-qa/README.md) uses the shared private `app-v
 Discovery uses two columns at window widths of 640 points and above. City details place the overview and map beside sights/eateries at 760 points and above. Accessibility text sizes use a single column. Content widths are capped for readability on larger windows; the same view instances remain in place during resizing to preserve photos, the map camera, and streamed summaries.
 
 Map sheets use Auto Layout and local safe areas on every device. iPhone supports both landscape orientations. Nearby results have a consistent limit of 12 so folding does not replace the data set or trigger a new request.
+
+Discovery and city details use system bottom toolbar items for search, random city, current location, and help/home. On iOS 27.1, these items participate in iPhone Duo's vertical toolbar layout; Search hides its text when `toolbarVerticalEdge` is set. On earlier supported releases, Search retains its icon and text in the horizontal toolbar.
+
+The Duo-specific adapters require the Xcode 27.1 SDK. Runtime availability checks retain the horizontal fallback on iOS 26 and iOS 27.0.
 
 For iPhone Duo validation, exercise home, city detail, and an open map/reviews sheet while folding and unfolding, then rotate and repeat. Also check compact iPhone and large text. Reuse existing simulators and preserve their app data; static screenshots alone do not verify a fold transition.

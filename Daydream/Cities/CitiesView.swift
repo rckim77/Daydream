@@ -71,7 +71,7 @@ struct CitiesView: View {
                 .frame(width: width)
                 .frame(maxWidth: .infinity)
             }
-            .safeAreaInset(edge: .bottom, alignment: .center) {
+            .toolbar {
                 SearchToolbar { place, image in
                     selectedCity = CityRoute(name: place.description, place: place, image: image)
                 } randomCityReceived: { place, image in
@@ -91,8 +91,10 @@ struct CitiesView: View {
                         }
                     }
                 } additionalViews: {
-                    FeedbackButton {
-                        showFeedbackModal = true
+                    ToolbarItem(placement: .bottomBar) {
+                        FeedbackButton {
+                            showFeedbackModal = true
+                        }
                     }
                     .matchedTransitionSource(id: feedbackButtonTransitionID, in: zoomNS)
                 }

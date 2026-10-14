@@ -14,12 +14,12 @@ jobs:
   unit_tests:
     name: Unit Tests
     if: github.event.pull_request.draft == false
-    runs-on: macos-15
+    runs-on: xcode-27
     timeout-minutes: 30
     env:
       DERIVED_DATA_PATH: ${{ github.workspace }}/.derived_data
-      IPHONE_DEST: "platform=iOS Simulator,name=iPhone 17 Pro,OS=26.2,arch=arm64"
-      XCODE_VERSION: "26.2"
+      IPHONE_DEST: "platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0,arch=arm64"
+      XCODE_VERSION: "27.1"
 
     steps:
     - name: Checkout code
@@ -28,7 +28,10 @@ jobs:
     # To find available Xcode versions for current mac runner, see here: https://github.com/actions/runner-images/tree/main/images/macos
       
     - name: Select Xcode Version
-      run: sudo xcode-select -s /Applications/Xcode_${{ env.XCODE_VERSION }}.app/Contents/Developer
+      run: |
+        sudo xcode-select -s /Applications/Xcode_${{ env.XCODE_VERSION }}.app/Contents/Developer
+        xcodebuild -version
+        xcrun --sdk iphonesimulator --show-sdk-version
 
     - name: Cache SPM dependencies
       uses: actions/cache@v4
@@ -69,6 +72,8 @@ jobs:
           -testPlan unittests \
           -destination "${IPHONE_DEST}" \
           -configuration Debug \
+          -derivedDataPath "${DERIVED_DATA_PATH}" \
+          -parallel-testing-enabled NO \
           -resultBundlePath "${UNIT_XCRESULT}" \
           CODE_SIGNING_ALLOWED=NO
 

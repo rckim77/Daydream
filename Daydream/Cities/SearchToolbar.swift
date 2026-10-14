@@ -9,59 +9,41 @@
 import SwiftUI
 import GooglePlacesSwift
 
-struct SearchToolbar<Content: View>: View {
+struct SearchToolbar<Content: ToolbarContent>: ToolbarContent {
     
     var autocompleteTapped: (Place, UIImage?) -> Void
     var randomCityReceived: (Place, UIImage) -> Void
     var currentLocationTapped: () -> Void
 
-    @ViewBuilder let additionalViews: Content
-
-    @State private var showAutocompleteWidget = false
-    @State private var showLoadingSpinnerForRandomCityButton = false
-    @State private var showDeniedLocationAlert = false
-    @Environment(CurrentLocationManager.self) private var locationManager
+    @ToolbarContentBuilder let additionalViews: Content
     
-    var body: some View {
-        HStack(spacing: 8) {
-            Button {
-                showAutocompleteWidget.toggle()
-            } label: {
-                Label("Search", systemImage: "magnifyingglass")
-                    .frame(height: 24)
-                    .padding(.horizontal, 12)
-            }
-            .modifier(SearchActionStyle(shape: .capsule))
-            .placeAutocomplete(filter: AutocompleteFilter(types: [.cities]), show: $showAutocompleteWidget) { suggestion, _ in
-                Task {
-                    do {
-                        let result = try await API.PlaceSearch.fetchPlaceAndImageBy(placeId: suggestion.placeID)
-                        autocompleteTapped(result.0, result.1)
-                    } catch {
-                        print(error.localizedDescription)
-                    }
-                }
-            } onError: { error in
-                print(error.localizedDescription)
-            }
+    var body: some ToolbarContent {
+        ToolbarItem(placement: .bottomBar) {
+            CitySearchButton(autocompleteTapped: autocompleteTapped)
+        }
+        .adaptsToVerticalToolbar()
+        ToolbarSpacer(.fixed, placement: .bottomBar)
+        ToolbarItem(placement: .bottomBar) {
             RandomCityButton { place, image in
                 randomCityReceived(place, image)
             }
-            Button {
-                let authStatus = locationManager.requestCurrentLocation()
-                if authStatus == .denied {
-                    showDeniedLocationAlert = true
-                }
-                currentLocationTapped()
-            } label: {
-                Image(systemName: "location.fill")
-                    .frame(width: 24, height: 24)
-            }
-            .modifier(SearchActionStyle(shape: .circle))
-            .frame(width: 54)
-            additionalViews
         }
-        .padding(.bottom, 8)
-        .deniedLocationAlert(isPresented: $showDeniedLocationAlert)
+        .adaptsToVerticalToolbar()
+        ToolbarItem(placement: .bottomBar) {
+            CurrentCityButton(currentLocationTapped: currentLocationTapped)
+        }
+        additionalViews
+    }
+}
+
+extension ToolbarContent {
+    @ToolbarContentBuilder
+    func adaptsToVerticalToolbar() -> some ToolbarContent {
+        // Custom search labels and loading indicators fit either axis; opt them into the Duo bar.
+        if #available(iOS 27.1, *) {
+            self.axisBehavior(.verticalPreferred)
+        } else {
+            self
+        }
     }
 }
