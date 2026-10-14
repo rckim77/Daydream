@@ -26,6 +26,7 @@ final class CityDetailViewState {
     var eateries = [Place]()
     var mapPosition: MapCameraPosition = .automatic
     var tappedCardPlace: IdentifiablePlace?
+    var tappedSheetPlace: IdentifiablePlace?
     var showErrorAlert = false
 
     /// This ensures navigation to current location city is gated behind user interaction.
@@ -62,6 +63,12 @@ final class CityDetailViewState {
 
     func applySelectedCity(_ place: Place) {
         mapPosition = createMapPosition(place.location)
+    }
+
+    func presentMap(_ place: IdentifiablePlace?, asSheet: Bool) {
+        // Capture the route at selection so resizing does not replace an open map presentation.
+        tappedSheetPlace = asSheet ? place : nil
+        tappedCardPlace = asSheet ? nil : place
     }
 
     func markCurrentLocationTapped() {

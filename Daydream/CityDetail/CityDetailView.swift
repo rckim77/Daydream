@@ -85,8 +85,22 @@ struct CityDetailView: View {
                 await fetchSightsAndEateries(place)
                 viewState.seedPreviousCurrentLocation(locationManager.location)
             }
-            .sheet(item: $viewState.tappedCardPlace) { identifiablePlace in
+            .sheet(item: $viewState.tappedSheetPlace) { identifiablePlace in
+                Group {
+                    if #available(iOS 27.0, *) {
+                        MapViewControllerRepresentable(place: identifiablePlace.place)
+                            .presentationPlacement(.center)
+                    } else {
+                        MapViewControllerRepresentable(place: identifiablePlace.place)
+                    }
+                }
+                .ignoresSafeArea(.container, edges: .bottom)
+                .presentationSizing(.form)
+                .presentationCompactAdaptation(.sheet)
+            }
+            .fullScreenCover(item: $viewState.tappedCardPlace) { identifiablePlace in
                 MapViewControllerRepresentable(place: identifiablePlace.place)
+                    .ignoresSafeArea(.container, edges: .vertical)
             }
             .errorAlert(isPresented: $viewState.showErrorAlert)
             .onChange(of: locationManager.location) { _, currentLocation in

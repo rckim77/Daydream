@@ -23,16 +23,27 @@ struct CityDetailContentView: View {
                             .font(.largeTitle)
                             .padding(.horizontal, 24)
                         SummaryView(cityText: cityText)
-                        MapCardView(mapPosition: $viewState.mapPosition, place: place, height: expanded ? 340 : 190)
+                        MapCardView(mapPosition: $viewState.mapPosition, place: place, height: expanded ? nil : 190)
                     }
                     .frame(width: expanded ? width * 0.44 : width)
+                    .frame(maxHeight: expanded ? .infinity : nil, alignment: .top)
 
-                    CityDiscoveriesView(sights: viewState.sights, eateries: viewState.eateries, tappedPlace: $viewState.tappedCardPlace)
+                    CityDiscoveriesView(
+                        sights: viewState.sights,
+                        eateries: viewState.eateries,
+                        tappedPlace: Binding(
+                            get: { viewState.tappedSheetPlace ?? viewState.tappedCardPlace },
+                            set: { viewState.presentMap($0, asSheet: geometry.size.width > geometry.size.height) }
+                        ),
+                        fadesLeadingEdge: geometry.size.width > geometry.size.height
+                    )
                         .frame(width: expanded ? width * 0.56 : width)
+                        .frame(maxHeight: expanded ? .infinity : nil, alignment: .bottom)
                 }
                 .padding(.top, 24)
                 .padding(.bottom, 16)
             }
+            .scrollClipDisabled()
             .frame(width: width)
             .frame(maxWidth: .infinity)
         }

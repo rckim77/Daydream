@@ -100,6 +100,7 @@ final class MapViewController: UIViewController {
 
         addOrUpdateMapView(for: place.placeID, name: place.displayName, location: place.location)
         addProgrammaticViews()
+        view.backgroundColor = .systemBackground
         
         registerForTraitChanges([UITraitUserInterfaceStyle.self], handler: { (self: Self, previousTraitCollection: UITraitCollection) in
             if self.traitCollection.userInterfaceStyle != previousTraitCollection.userInterfaceStyle {
@@ -114,12 +115,14 @@ final class MapViewController: UIViewController {
         gradientLayer.frame = containerView.bounds
         if let dynamicMapView, let reviewsView {
             // Move the camera's visible center above the reviews after every resize.
-            // Safe areas are already included in these measured overlay frames.
+            // Measure overlays in map coordinates because the map now excludes the side safe areas.
+            let headerFrame = dynamicMapView.convert(containerView.bounds, from: containerView)
+            let reviewsFrame = dynamicMapView.convert(reviewsView.bounds, from: reviewsView)
             dynamicMapView.padding = UIEdgeInsets(
-                top: containerView.frame.maxY,
-                left: view.safeAreaInsets.left,
-                bottom: max(view.safeAreaInsets.bottom, view.bounds.maxY - reviewsView.frame.minY),
-                right: view.safeAreaInsets.right
+                top: max(0, headerFrame.maxY - dynamicMapView.bounds.minY),
+                left: dynamicMapView.safeAreaInsets.left,
+                bottom: max(dynamicMapView.safeAreaInsets.bottom, dynamicMapView.bounds.maxY - reviewsFrame.minY),
+                right: dynamicMapView.safeAreaInsets.right
             )
         }
     }
@@ -148,7 +151,8 @@ final class MapViewController: UIViewController {
         }
 
         containerView.snp.makeConstraints { make in
-            make.leading.top.trailing.equalToSuperview()
+            make.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+            make.top.equalToSuperview()
             make.bottom.equalTo(closeButton.snp.bottom).offset(16)
         }
         
@@ -190,13 +194,15 @@ final class MapViewController: UIViewController {
                 return
             }
             dynamicMapView.paddingAdjustmentBehavior = .never
+            dynamicMapView.clipsToBounds = true
             dynamicMapView.delegate = self
             view.addSubview(dynamicMapView)
             view.sendSubviewToBack(dynamicMapView)
             
-            // Keep the map full bleed as the window resizes; its controls respect the local safe area.
+            // Keep the map clear of a vertical toolbar on either side as the window resizes.
             dynamicMapView.snp.makeConstraints { make in
-                make.edges.equalToSuperview()
+                make.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+                make.top.bottom.equalToSuperview()
             }
 
             addOrUpdateMarkerAndReviews(for: placeId, name: name, location: location, in: dynamicMapView)
