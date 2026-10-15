@@ -44,11 +44,11 @@ The opt-in [Visual QA suite](visual-qa/README.md) uses the shared private `app-v
 
 ## Adaptive layouts
 
-Discovery uses two columns at window widths of 640 points and above. City details place the overview and map beside sights/eateries at 760 points and above. Accessibility text sizes use a single column. Content widths are capped for readability on larger windows; the same view instances remain in place during resizing to preserve photos, the map camera, and streamed summaries.
+Discovery uses two columns at window widths of 640 points and above. City details place the overview and map beside sights/eateries when the available space is wider than tall and at least 760 points wide; portrait layouts stack the map above the carousels. Accessibility text sizes use a single column. Content widths are capped for readability on larger windows; the same view instances remain in place during resizing to preserve photos, the map camera, and streamed summaries.
 
-Map sheets use Auto Layout and local safe areas on every device. iPhone supports both landscape orientations. Nearby results have a consistent limit of 12 so folding does not replace the data set or trigger a new request.
+Map details fill their presentation edge to edge, with reviews and map content kept clear of local safe areas. Close, map appearance, and Google Maps information use native toolbar items that adapt to iPhone Duo's vertical toolbar. Landscape maps use a centered form sheet on iOS 27 and the system form sheet on iOS 26. iPhone supports both landscape orientations. Nearby results have a consistent limit of 12 so folding does not replace the data set or trigger a new request.
 
-Discovery and city details use system bottom toolbar items for search, random city, current location, and help/home. On iOS 27.1, these items participate in iPhone Duo's vertical toolbar layout; Search hides its text when `toolbarVerticalEdge` is set. On earlier supported releases, Search retains its icon and text in the horizontal toolbar.
+Discovery and city details use system toolbar items for search, random city, current location, and help/home. Search is a native icon-only button on every supported release. On iOS 27.1, the toolbar adapts to iPhone Duo's vertical layout.
 
 The Duo-specific adapters require the Xcode 27.1 SDK. Runtime availability checks retain the horizontal fallback on iOS 26 and iOS 27.0.
 

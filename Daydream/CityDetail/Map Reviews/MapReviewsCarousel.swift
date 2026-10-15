@@ -37,6 +37,7 @@ struct MapReviewsCarousel: View {
         .background(.clear)
         .contentMargins(contentMarginOffset)
         .scrollIndicators(.hidden)
+        .scrollClipDisabled()
         .scrollDisabled(scrollDisabled)
         .scrollTargetBehavior(.viewAligned)
     }

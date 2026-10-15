@@ -88,19 +88,17 @@ struct CityDetailView: View {
             .sheet(item: $viewState.tappedSheetPlace) { identifiablePlace in
                 Group {
                     if #available(iOS 27.0, *) {
-                        MapViewControllerRepresentable(place: identifiablePlace.place)
+                        MapDetailView(place: identifiablePlace.place)
                             .presentationPlacement(.center)
                     } else {
-                        MapViewControllerRepresentable(place: identifiablePlace.place)
+                        MapDetailView(place: identifiablePlace.place)
                     }
                 }
-                .ignoresSafeArea(.container, edges: .bottom)
                 .presentationSizing(.form)
                 .presentationCompactAdaptation(.sheet)
             }
             .fullScreenCover(item: $viewState.tappedCardPlace) { identifiablePlace in
-                MapViewControllerRepresentable(place: identifiablePlace.place)
-                    .ignoresSafeArea(.container, edges: .vertical)
+                MapDetailView(place: identifiablePlace.place)
             }
             .errorAlert(isPresented: $viewState.showErrorAlert)
             .onChange(of: locationManager.location) { _, currentLocation in

@@ -14,6 +14,8 @@ import UIKit
 
 final class MapViewController: UIViewController {
 
+    // Reserve room for Google's selected-marker callout on short landscape maps.
+    private static let markerInfoWindowHeadroom: CGFloat = 80
     private var place: Place
     private var dynamicMapView: GMSMapView?
     private var dynamicMarker: GMSMarker?
@@ -23,71 +25,16 @@ final class MapViewController: UIViewController {
     /// Object that updates map review SwiftUI code
     private var mapReviewContext = MapReviewContext(place: nil)
 
-    /// Will automatically sync with system user interface style settings but can be overridden
-    /// when the user taps the dark mode button. Note this must be called once `dynamicMapView` is set.
-    private var isViewingDarkMode = false {
+    var isViewingDarkMode: Bool {
         didSet {
+            guard isViewingDarkMode != oldValue else { return }
             dynamicMapView?.configureMapStyle(isDark: isViewingDarkMode)
-
-            let imageName = isViewingDarkMode ? "sun.max" : "moon"
-            darkModeButton.setImage(UIImage(systemName: imageName), for: .normal)
         }
     }
 
-    // contains close and dark mode buttons (and creates frame for gradient)
-    private lazy var containerView: UIView = {
-        let view = UIView()
-        return view
-    }()
-
-    private lazy var gradientLayer: CAGradientLayer = {
-        let layer = CAGradientLayer()
-        layer.colors = [UIColor.black.withAlphaComponent(0.5).cgColor, UIColor.clear.cgColor]
-        return layer
-    }()
-
-    private lazy var closeButton: UIButton = {
-        var config = UIButton.Configuration.glass()
-        config.configureForIcon("xmark")
-        let button = UIButton(configuration: config)
-        
-        button.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
-        button.accessibilityLabel = "map-close-button"
-        button.pointerStyleProvider = buttonProvider
-        button.isSymbolAnimationEnabled = true
-        button.adjustsImageSizeForAccessibilityContentSizeCategory = true
-        
-        return button
-    }()
-
-    private lazy var darkModeButton: UIButton = {
-        var config = UIButton.Configuration.glass()
-        config.configureForIcon("moon")
-        let button = UIButton(configuration: config)
-        
-        button.addTarget(self, action: #selector(darkModeButtonTapped), for: .touchUpInside)
-        button.accessibilityLabel = "dark mode toggle"
-        button.pointerStyleProvider = buttonProvider
-        button.isSymbolAnimationEnabled = true
-        button.adjustsImageSizeForAccessibilityContentSizeCategory = true
-        return button
-    }()
-
-    private lazy var aboutButton: UIButton = {
-        var config = UIButton.Configuration.glass()
-        config.configureForIcon("info")
-        let button = UIButton(configuration: config)
-        
-        button.addTarget(self, action: #selector(aboutButtonTapped), for: .touchUpInside)
-        button.accessibilityLabel = "info button"
-        button.pointerStyleProvider = buttonProvider
-        button.isSymbolAnimationEnabled = true
-        button.adjustsImageSizeForAccessibilityContentSizeCategory = true
-        return button
-    }()
-
-    init(place: Place) {
+    init(place: Place, isViewingDarkMode: Bool) {
         self.place = place
+        self.isViewingDarkMode = isViewingDarkMode
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -101,25 +48,16 @@ final class MapViewController: UIViewController {
         addOrUpdateMapView(for: place.placeID, name: place.displayName, location: place.location)
         addProgrammaticViews()
         view.backgroundColor = .systemBackground
-        
-        registerForTraitChanges([UITraitUserInterfaceStyle.self], handler: { (self: Self, previousTraitCollection: UITraitCollection) in
-            if self.traitCollection.userInterfaceStyle != previousTraitCollection.userInterfaceStyle {
-                self.isViewingDarkMode = self.traitCollection.userInterfaceStyle == .dark
-            }
-        })
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        gradientLayer.frame = containerView.bounds
         if let dynamicMapView, let reviewsView {
             // Move the camera's visible center above the reviews after every resize.
-            // Measure overlays in map coordinates because the map now excludes the side safe areas.
-            let headerFrame = dynamicMapView.convert(containerView.bounds, from: containerView)
             let reviewsFrame = dynamicMapView.convert(reviewsView.bounds, from: reviewsView)
             dynamicMapView.padding = UIEdgeInsets(
-                top: max(0, headerFrame.maxY - dynamicMapView.bounds.minY),
+                top: max(dynamicMapView.safeAreaInsets.top, Self.markerInfoWindowHeadroom),
                 left: dynamicMapView.safeAreaInsets.left,
                 bottom: max(dynamicMapView.safeAreaInsets.bottom, dynamicMapView.bounds.maxY - reviewsFrame.minY),
                 right: dynamicMapView.safeAreaInsets.right
@@ -127,16 +65,12 @@ final class MapViewController: UIViewController {
         }
     }
 
-    private func addProgrammaticViews() {
-        view.addSubview(containerView)
+    override func viewSafeAreaInsetsDidChange() {
+        super.viewSafeAreaInsetsDidChange()
+        view.setNeedsLayout()
+    }
 
-        // Map header includes a gradient so that buttons are easier to see and creates a pannable section above
-        // the map view so users can dismiss.
-        containerView.layer.addSublayer(gradientLayer)
-        containerView.addSubview(closeButton)
-        containerView.addSubview(darkModeButton)
-        containerView.addSubview(aboutButton)
-        
+    private func addProgrammaticViews() {
         let reviewsCarouselVC = UIHostingController(rootView: MapReviewsCarousel(context: mapReviewContext))
         addChild(reviewsCarouselVC)
         view.addSubview(reviewsCarouselVC.view)
@@ -148,27 +82,6 @@ final class MapViewController: UIViewController {
             make.leading.trailing.equalTo(view.safeAreaLayoutGuide)
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(12)
             make.height.equalTo(200)
-        }
-
-        containerView.snp.makeConstraints { make in
-            make.leading.trailing.equalTo(view.safeAreaLayoutGuide)
-            make.top.equalToSuperview()
-            make.bottom.equalTo(closeButton.snp.bottom).offset(16)
-        }
-        
-        closeButton.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(16)
-            make.leading.equalTo(view.safeAreaLayoutGuide.snp.leading).offset(16)
-        }
-
-        darkModeButton.snp.makeConstraints { make in
-            make.top.equalTo(closeButton)
-        }
-
-        aboutButton.snp.makeConstraints { make in
-            make.leading.equalTo(darkModeButton.snp.trailing).offset(12)
-            make.top.equalTo(closeButton)
-            make.trailing.equalTo(view.safeAreaLayoutGuide.snp.trailing).inset(16)
         }
     }
 
@@ -198,16 +111,14 @@ final class MapViewController: UIViewController {
             dynamicMapView.delegate = self
             view.addSubview(dynamicMapView)
             view.sendSubviewToBack(dynamicMapView)
-            
-            // Keep the map clear of a vertical toolbar on either side as the window resizes.
+
             dynamicMapView.snp.makeConstraints { make in
-                make.leading.trailing.equalTo(view.safeAreaLayoutGuide)
-                make.top.bottom.equalToSuperview()
+                make.edges.equalToSuperview()
             }
 
             addOrUpdateMarkerAndReviews(for: placeId, name: name, location: location, in: dynamicMapView)
         }
-        isViewingDarkMode = traitCollection.userInterfaceStyle == .dark
+        dynamicMapView?.configureMapStyle(isDark: isViewingDarkMode)
     }
 
     private func addOrUpdateMarkerAndReviews(for placeId: String, name: String, location: CLLocationCoordinate2D, in mapView: GMSMapView) {
@@ -249,23 +160,6 @@ final class MapViewController: UIViewController {
         }
     }
 
-    // MARK: - Button selector methods
-
-    @objc
-    private func closeButtonTapped() {
-        dismiss(animated: true, completion: nil)
-    }
-
-    @objc
-    private func darkModeButtonTapped() {
-        isViewingDarkMode.toggle()
-    }
-
-    @objc
-    private func aboutButtonTapped() {
-        let openSourceMessage = GMSServices.openSourceLicenseInfo()
-        presentInfoAlertModal(title: "About Google Maps", message: openSourceMessage)
-    }
 }
 
 extension MapViewController: GMSMapViewDelegate {
@@ -299,5 +193,3 @@ extension MapViewController: GMSMapViewDelegate {
         }
     }
 }
-
-extension MapViewController: ImageViewFadeable {}
