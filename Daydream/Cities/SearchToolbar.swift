@@ -16,12 +16,28 @@ struct SearchToolbar<Content: ToolbarContent>: ToolbarContent {
     var currentLocationTapped: () -> Void
 
     @ToolbarContentBuilder let additionalViews: Content
+    @State private var showAutocompleteWidget = false
     
     var body: some ToolbarContent {
         ToolbarItem(placement: .bottomBar) {
-            CitySearchButton(autocompleteTapped: autocompleteTapped)
+            Button("Search", systemImage: "magnifyingglass") {
+                showAutocompleteWidget = true
+            }
+            .labelStyle(.iconOnly)
+            .accessibilityIdentifier("city-search-button")
+            .placeAutocomplete(filter: AutocompleteFilter(types: [.cities]), show: $showAutocompleteWidget) { suggestion, _ in
+                Task {
+                    do {
+                        let result = try await API.PlaceSearch.fetchPlaceAndImageBy(placeId: suggestion.placeID)
+                        autocompleteTapped(result.0, result.1)
+                    } catch {
+                        print(error.localizedDescription)
+                    }
+                }
+            } onError: { error in
+                print(error.localizedDescription)
+            }
         }
-        .adaptsToVerticalToolbar()
         ToolbarSpacer(.fixed, placement: .bottomBar)
         ToolbarItem(placement: .bottomBar) {
             RandomCityButton { place, image in
@@ -39,7 +55,7 @@ struct SearchToolbar<Content: ToolbarContent>: ToolbarContent {
 extension ToolbarContent {
     @ToolbarContentBuilder
     func adaptsToVerticalToolbar() -> some ToolbarContent {
-        // Custom search labels and loading indicators fit either axis; opt them into the Duo bar.
+        // Allow the custom loading button to join the Duo's vertical toolbar.
         if #available(iOS 27.1, *) {
             self.axisBehavior(.verticalPreferred)
         } else {

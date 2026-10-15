@@ -6,11 +6,13 @@ struct CityDetailContentView: View {
     let cityText: String
     @Bindable var viewState: CityDetailViewState
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
 
     var body: some View {
         GeometryReader { geometry in
             let width = min(geometry.size.width, 1200)
-            let expanded = width >= 760 && !dynamicTypeSize.isAccessibilitySize
+            let isLandscape = geometry.size.width > geometry.size.height
+            let expanded = isLandscape && width >= 760 && !dynamicTypeSize.isAccessibilitySize
             // Change only the layout, preserving map camera, summary, and carousel identity across a fold.
             let layout = expanded
                 ? AnyLayout(HStackLayout(alignment: .top, spacing: 0))
@@ -33,19 +35,20 @@ struct CityDetailContentView: View {
                         eateries: viewState.eateries,
                         tappedPlace: Binding(
                             get: { viewState.tappedSheetPlace ?? viewState.tappedCardPlace },
-                            set: { viewState.presentMap($0, asSheet: geometry.size.width > geometry.size.height) }
+                            set: { viewState.presentMap($0, asSheet: isLandscape) }
                         ),
-                        fadesLeadingEdge: geometry.size.width > geometry.size.height
+                        fadesLeadingEdge: isLandscape
                     )
                         .frame(width: expanded ? width * 0.56 : width)
                         .frame(maxHeight: expanded ? .infinity : nil, alignment: .bottom)
                 }
-                .padding(.top, 24)
+                .padding(.top, verticalSizeClass == .compact ? 8 : 24)
                 .padding(.bottom, 16)
             }
             .scrollClipDisabled()
             .frame(width: width)
             .frame(maxWidth: .infinity)
         }
+        .toolbarVisibility(verticalSizeClass == .compact ? .hidden : .automatic, for: .navigationBar)
     }
 }
