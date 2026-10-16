@@ -18,6 +18,8 @@ Create `Daydream/Shared/apiKeys.plist` with:
 
 These keys are required for Google Maps/Places powered features.
 
+For App Store Connect, run `ASC_BYPASS_KEYCHAIN=1 asc ...` from the repo root. Local `.asc/config.json` is ignored by Git and selects Daydream (`1366747814`) using the existing shared API key outside the repo. Repos without a local configuration use `~/.asc/config.json`; specify their app ID explicitly. API keys and credential configurations must stay untracked.
+
 ## Build
 ```bash
 xcodebuild -project Daydream.xcodeproj -scheme Daydream -destination 'platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0' build

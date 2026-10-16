@@ -65,6 +65,7 @@ Select affected scenarios for focused changes; use the full set for dependency o
   - Build for Ray K's device: `xcodebuild -project Daydream.xcodeproj -scheme Daydream -destination 'id=00008150-000E2CA1110A401C' build`
   - Install/launch with `xcrun devicectl` using the built app’s bundle identifier (`com.rckim.Daydream` in the current project) after a successful device build.
 - TestFlight/App Store Connect upload guidance:
+  - Run `ASC_BYPASS_KEYCHAIN=1 asc ...` from the repo root. The ignored `.asc/config.json` contains this app's ID and references the existing shared API key outside the repo; this avoids local Keychain enumeration failures. Global credentials in `~/.asc/config.json` provide a fallback for repos without local configuration. Never commit either credential configuration or `.p8` keys.
   - Always use scheme `Daydream`, configuration `Release`, and destination `generic/platform=iOS` (Any iOS Device, arm64) for archives intended for upload.
   - Increment build version (`CURRENT_PROJECT_VERSION` / `CFBundleVersion`) before upload. Only bump marketing version (`MARKETING_VERSION` / `CFBundleShortVersionString`) when explicitly needed for release planning.
   - Preferred archive command: `xcodebuild -project Daydream.xcodeproj -scheme Daydream -configuration Release -destination 'generic/platform=iOS' -archivePath build/AppStore/Daydream.xcarchive archive`
