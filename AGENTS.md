@@ -89,6 +89,8 @@ Select affected scenarios for focused changes; use the full set for dependency o
 - For sufficiently complex code paths, add a short human-readable code comment that explains intent and flow.
 
 ## Documentation Sync
+
+- App Store slides use `app-store-slides/configs/` and `scripts/app_store_slides.sh`. Read `app-store-slides/README.md` before changing slides. Local inputs and outputs live under `~/Desktop/Screenshots/DaydreamAppStore`; preserve the Picasso originals and user-replaced inputs. Rendering does not authorize uploading screenshots.
 - Keep affected documentation aligned with feature and SDK changes, including `README.md` and `AGENTS.md`. Minor edits do not require a documentation sweep.
 
 ## Context and skills

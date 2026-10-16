@@ -1,0 +1,83 @@
+{
+  "name": "Daydream",
+  "version": "v5.1.0",
+  "defaultLocale": "en_US",
+  "outputRoot": "/Users/raykim/Desktop/Screenshots/DaydreamAppStore",
+  "background": {
+    "color": "#FEB609"
+  },
+  "caption": {
+    "fontName": "ArialRoundedMTBold",
+    "fontSize": 160,
+    "color": "#FFFFFF",
+    "topPadding": 100,
+    "bottomPadding": 60,
+    "horizontalPadding": 145,
+    "lineHeight": 1.16,
+    "maxLines": 2
+  },
+  "devices": {
+    "iphone": {
+      "appStorePreset": "iphone-6.9",
+      "canvas": {
+        "width": 1290,
+        "height": 2796
+      },
+      "screenshotRoot": "/Users/raykim/Desktop/Screenshots/DaydreamAppStore/_inputs/iphone/en_US",
+      "frame": {
+        "image": "/Users/raykim/Desktop/Screenshots/DaydreamAppStore/_assets/iPhone 17 Pro - Deep Blue - Portrait.png",
+        "screen": {
+          "x": 72,
+          "y": 69,
+          "width": 1206,
+          "height": 2622
+        },
+        "screenCornerRadius": 68,
+        "scale": 0.88,
+        "top": 535
+      }
+    }
+  },
+  "slides": [
+    {
+      "id": "01-explore-cities",
+      "screenshot": "01-explore-cities.png",
+      "captions": {
+        "en_US": "Explore\ncities"
+      },
+      "captionPositions": {
+        "iphone": "top"
+      }
+    },
+    {
+      "id": "02-browse-top-sights",
+      "screenshot": "02-browse-top-sights.png",
+      "captions": {
+        "en_US": "Browse\ntop sights"
+      },
+      "captionPositions": {
+        "iphone": "bottom"
+      }
+    },
+    {
+      "id": "03-dark-mode",
+      "screenshot": "03-dark-mode.png",
+      "captions": {
+        "en_US": "Dark\nmode"
+      },
+      "captionPositions": {
+        "iphone": "top"
+      }
+    },
+    {
+      "id": "04-ai-powered-reviews",
+      "screenshot": "04-ai-powered-reviews.png",
+      "captions": {
+        "en_US": "AI-powered\nreviews"
+      },
+      "captionPositions": {
+        "iphone": "bottom"
+      }
+    }
+  ]
+}

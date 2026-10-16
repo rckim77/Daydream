@@ -1,0 +1,49 @@
+{
+  "device": "iphone",
+  "locale": "en_US",
+  "version": "v5.1.0",
+  "source": "user-provided app captures",
+  "comparison": "/Users/raykim/Desktop/Screenshots/DaydreamAppStore/_comparison/iphone-before-refresh",
+  "inputs": [
+    {
+      "slide": "01-explore-cities",
+      "source": "/Users/raykim/Desktop/Screenshots/01-explore-cities.png",
+      "destination": "/Users/raykim/Desktop/Screenshots/DaydreamAppStore/_inputs/iphone/en_US/01-explore-cities.png",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "sha256": "3cb08c2c6e386b96388319690da6a15393c3f95938ff433ae3c4b6dd96b77659"
+    },
+    {
+      "slide": "02-browse-top-sights",
+      "source": "/Users/raykim/Desktop/Screenshots/02-browse-top-sights.png",
+      "destination": "/Users/raykim/Desktop/Screenshots/DaydreamAppStore/_inputs/iphone/en_US/02-browse-top-sights.png",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "sha256": "87a5c4e8286fc8450028bf3761c802f8f0697452651cb4fa120dd3fb8e7a5bea"
+    },
+    {
+      "slide": "03-dark-mode",
+      "source": "/Users/raykim/Desktop/Screenshots/03-dark-mode.png",
+      "destination": "/Users/raykim/Desktop/Screenshots/DaydreamAppStore/_inputs/iphone/en_US/03-dark-mode.png",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "sha256": "0de18eb238e4850a2093b38aa2c3f6366a38a4bb32a686fc4dd811e994630d92"
+    },
+    {
+      "slide": "04-ai-powered-reviews",
+      "source": "/Users/raykim/Desktop/Screenshots/04-ai-powered-reviews.png",
+      "destination": "/Users/raykim/Desktop/Screenshots/DaydreamAppStore/_inputs/iphone/en_US/04-ai-powered-reviews.png",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "sha256": "bdbe41c92ae4a966cdfe9d562421743f304078c1289cef4ebb4fb44786b9fd0d"
+    }
+  ]
+}

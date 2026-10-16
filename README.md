@@ -42,6 +42,8 @@ CI uses the GitHub Actions `xcode-27` runner with Xcode 27.1 and an iPhone 18 Pr
 
 ## Visual QA
 
+App Store marketing slides use the [App Store Slides workflow](app-store-slides/README.md), with editable iPhone and landscape iPad configs and replaceable local screenshot inputs. Run `scripts/app_store_slides.sh render` to generate slides or `scripts/app_store_slides.sh editor` to edit them.
+
 The opt-in [Visual QA suite](visual-qa/README.md) uses the shared private `app-visual-qa-tool` with required base and additional configurations: four iOS 27 main-screen captures for quick checks, then six additional captures covering iOS 26 and landscape iPad mini. Only the SE is dark. Its dedicated `VisualQA` scheme stays separate from regular unit tests.
 
 ## Adaptive layouts
