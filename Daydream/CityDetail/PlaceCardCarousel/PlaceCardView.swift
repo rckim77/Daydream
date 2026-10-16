@@ -35,32 +35,36 @@ struct PlaceCardView: View {
         } label: {
             Color(.lightGray)
                 .aspectRatio(width / Self.minimumHeight, contentMode: .fit)
+                .overlay {
+                    if let image {
+                        Image(uiImage: image)
+                            .resizable()
+                            .scaledToFill()
+                    }
+                }
                 .overlay(alignment: .bottom) {
-                    if let place = place, let image = image {
-                        ZStack(alignment: .bottom) {
-                            Image(uiImage: image)
-                                .resizable()
-                                .scaledToFill()
-                            VStack(alignment: .leading) {
-                                if shouldShowPriceLevel {
-                                    PriceLevelView(priceLevel: place.priceLevel)
-                                        .padding(6)
-                                    Spacer()
-                                }
-                                Text(place.displayName ?? "?")
-                                    .frame(maxWidth: .infinity)
-                                    .font(.subheadline).bold()
-                                    .lineLimit(3)
-                                    .padding(.horizontal, 6)
-                                    .padding(.vertical, 12)
-                                    .background(
-                                        LinearGradient(colors: [Color.clear,
-                                                                Color(.systemBackground).opacity(0.5),
-                                                                Color(.systemBackground).opacity(0.7)],
-                                                       startPoint: .top,
-                                                       endPoint: .bottom)
-                                    )
+                    if let place, image != nil {
+                        VStack(alignment: .leading) {
+                            if shouldShowPriceLevel {
+                                PriceLevelView(priceLevel: place.priceLevel)
+                                    .padding(6)
+                                Spacer()
                             }
+                            Text(place.displayName ?? "?")
+                                .font(.subheadline).bold()
+                                .lineLimit(3)
+                                .multilineTextAlignment(.center)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .frame(maxWidth: .infinity)
+                                .padding(.horizontal, 6)
+                                .padding(.vertical, 12)
+                                .background(
+                                    LinearGradient(colors: [Color.clear,
+                                                            Color(.systemBackground).opacity(0.5),
+                                                            Color(.systemBackground).opacity(0.7)],
+                                                   startPoint: .top,
+                                                   endPoint: .bottom)
+                                )
                         }
                     }
                 }
