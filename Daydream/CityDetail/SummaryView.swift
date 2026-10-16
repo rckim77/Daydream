@@ -15,18 +15,17 @@ struct SummaryView: View {
     let cityText: String
     
     @State private var summary = ""
+    @State private var isLoading = true
     
     var body: some View {
-        if SystemLanguageModel.default.isAvailable {
+        if SystemLanguageModel.default.availability == .available {
             Group {
                 if !summary.isEmpty {
                     Text(summary)
                         .transition(.opacity)
-                } else {
+                } else if isLoading {
                     Text("This is placeholder text this is placeholder text placeholder text placeholder")
                         .redacted(reason: .placeholder)
-                        .opacity(summary.isEmpty ? 1 : 0)
-                        .animation(.easeInOut, value: summary.isEmpty)
                         .shimmer()
                 }
             }
@@ -37,6 +36,17 @@ struct SummaryView: View {
             .animation(.easeInOut, value: summary.count)
             .task(id: cityText) {
                 summary = ""
+                guard SystemLanguageModel.default.availability == .available else {
+                    isLoading = false
+                    return
+                }
+                isLoading = true
+                // Empty responses and generation errors must not leave a permanent shimmer.
+                defer {
+                    if !Task.isCancelled {
+                        isLoading = false
+                    }
+                }
                 await streamSummary()
             }
         }
@@ -59,6 +69,7 @@ struct SummaryView: View {
         
         do {
             for try await chunk in stream {
+                try Task.checkCancellation()
                 // chunk.content is the entire partial snapshot so far,
                 // so we just replace the text each time; animate so that
                 // the height of this view grows smoothly
@@ -68,6 +79,8 @@ struct SummaryView: View {
                     }
                 }
             }
+        } catch is CancellationError {
+            // SwiftUI cancels generation when this city is no longer visible.
         } catch {
             print("error handling streaming: \(error)")
         }
