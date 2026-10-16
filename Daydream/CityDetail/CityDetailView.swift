@@ -36,14 +36,20 @@ struct CityDetailView: View {
     var body: some View {
         NavigationStack {
             CityDetailContentView(place: place, cityText: cityText, viewState: viewState)
-            .background(content: {
-                if let image {
-                    Image(uiImage: image)
-                        .resizable()
-                        .scaledToFill()
-                        .blur(radius: 36)
-                }
-            })
+            .background {
+                Rectangle()
+                    .fill(.regularMaterial)
+                    .background {
+                        if let image {
+                            Image(uiImage: image)
+                                .resizable()
+                                .scaledToFill()
+                                .blur(radius: 36, opaque: true)
+                        }
+                    }
+                    .clipped()
+                    .ignoresSafeArea()
+            }
             .toolbar {
                 SearchToolbar { autocompletePlace, autocompleteImage in
                     place = autocompletePlace

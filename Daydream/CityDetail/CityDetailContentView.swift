@@ -13,6 +13,12 @@ struct CityDetailContentView: View {
             let width = min(geometry.size.width, 1200)
             let isLandscape = geometry.size.width > geometry.size.height
             let expanded = isLandscape && width >= 760 && !dynamicTypeSize.isAccessibilitySize
+            // Keep the overview inset while letting landscape carousels reach the trailing edge.
+            let leadingInset = (geometry.size.width - width) / 2
+            let contentWidth = expanded ? geometry.size.width - leadingInset : width
+            let fillsLandscapeHeight = expanded && verticalSizeClass == .regular
+            let topPadding: CGFloat = verticalSizeClass == .compact ? 8 : 24
+            let bottomPadding: CGFloat = 16
             // Change only the layout, preserving map camera, summary, and carousel identity across a fold.
             let layout = expanded
                 ? AnyLayout(HStackLayout(alignment: .top, spacing: 0))
@@ -37,17 +43,20 @@ struct CityDetailContentView: View {
                             get: { viewState.tappedSheetPlace ?? viewState.tappedCardPlace },
                             set: { viewState.presentMap($0, asSheet: isLandscape) }
                         ),
-                        fadesLeadingEdge: isLandscape
+                        fadesLeadingEdge: isLandscape,
+                        expandsCards: fillsLandscapeHeight
                     )
-                        .frame(width: expanded ? width * 0.56 : width)
+                        .frame(width: expanded ? contentWidth - width * 0.44 : width)
+                        // Fill spare height, but allow taller content to scroll without shrinking the cards.
+                        .frame(minHeight: fillsLandscapeHeight ? max(0, geometry.size.height - topPadding - bottomPadding) : nil)
                         .frame(maxHeight: expanded ? .infinity : nil, alignment: .bottom)
                 }
-                .padding(.top, verticalSizeClass == .compact ? 8 : 24)
-                .padding(.bottom, 16)
+                .padding(.top, topPadding)
+                .padding(.bottom, bottomPadding)
             }
             .scrollClipDisabled()
-            .frame(width: width)
-            .frame(maxWidth: .infinity)
+            .frame(width: contentWidth)
+            .frame(maxWidth: .infinity, alignment: expanded ? .trailing : .center)
         }
         .toolbarVisibility(verticalSizeClass == .compact ? .hidden : .automatic, for: .navigationBar)
     }
