@@ -1,10 +1,15 @@
 import XCTest
 
-/// Opt-in, live-service regression coverage. Uses dedicated simulators and keeps captures out of Git.
+/// Opt-in, live-service regression coverage. Use dedicated simulators; keep captures out of Git.
 final class PlacesRegressionUITests: XCTestCase {
     @MainActor
     func testPlacesRegression() throws {
         continueAfterFailure = false
+        addUIInterruptionMonitor(withDescription: "App Store review prompt") { alert in
+            guard alert.buttons["Not Now"].exists else { return false }
+            alert.buttons["Not Now"].tap()
+            return true
+        }
         let udid = ProcessInfo.processInfo.environment["SIMULATOR_UDID"] ?? ""
         let configURL = URL(fileURLWithPath: "/tmp/daydream-places-qa-\(udid).json")
         guard let data = try? Data(contentsOf: configURL) else {
@@ -20,8 +25,12 @@ final class PlacesRegressionUITests: XCTestCase {
         if config.largeText { app.launchArguments += ["-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"] }
         XCUIDevice.shared.orientation = config.landscape ? .landscapeLeft : .portrait
         app.launch()
-        defer { app.terminate(); XCUIDevice.shared.orientation = .portrait }
+        defer {
+            app.terminate()
+            XCUIDevice.shared.orientation = .portrait
+        }
         func capture(_ name: String) throws {
+            if app.buttons["Not Now"].exists { app.buttons["Not Now"].tap() }
             // Allow presentation/rotation and keyboard animations to finish before judging layout.
             Thread.sleep(forTimeInterval: 1.5)
             try XCUIScreen.main.screenshot().pngRepresentation.write(to: output.appendingPathComponent("\(name).png"))
@@ -32,7 +41,7 @@ final class PlacesRegressionUITests: XCTestCase {
         app.buttons["city-search-button"].tap()
         XCTAssertTrue(app.textFields.firstMatch.waitForExistence(timeout: 10))
         app.textFields.firstMatch.tap()
-        try capture("search-keyboard")
+        try capture("search-focused")
         app.textFields.firstMatch.typeText("zzzxqvnonexistentcity123456789")
         Thread.sleep(forTimeInterval: 3)
         XCTAssertFalse(app.buttons["AutocompleteWidgetSuggestionButton0"].exists)
@@ -82,6 +91,11 @@ final class PlacesRegressionUITests: XCTestCase {
                 try capture("location-denied")
                 app.buttons["Cancel"].tap()
             } else {
+                let permission = XCUIApplication(bundleIdentifier: "com.apple.springboard").buttons["Allow While Using App"]
+                if permission.waitForExistence(timeout: 3) {
+                    try capture("location-permission")
+                    permission.tap()
+                }
                 XCTAssertTrue(app.buttons["home-button"].waitForExistence(timeout: 90))
                 try capture("current-city")
             }
