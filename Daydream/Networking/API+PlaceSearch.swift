@@ -110,8 +110,10 @@ extension API {
         
         /// Fetches Place and Image for `placeId`, using `PlacesCache` and `ImageCache` if cached.
         @MainActor
-        static func fetchPlaceAndImageBy(placeId: String) async throws -> (Place, UIImage) {
-            if let cachedPlace = PlacesCache.shared.get(forKey: placeId),
+        static func fetchPlaceAndImageBy(placeId: String, sessionToken: AutocompleteSessionToken? = nil) async throws -> (Place, UIImage) {
+            // A widget selection must finish its autocomplete session with a matching Details request.
+            // Continue reusing cached photos, and retain place-cache hits outside autocomplete.
+            if sessionToken == nil, let cachedPlace = PlacesCache.shared.get(forKey: placeId),
                 let photo = cachedPlace.photos?.first {
                 let image: UIImage
                 if let cachedImage = ImageCache.shared.get(forKey: String(photo.hashValue)) {
@@ -126,7 +128,8 @@ extension API {
             } else {
                 let fetchPlaceRequest = FetchPlaceRequest(
                     placeID: placeId,
-                    placeProperties: [.placeID, .coordinate, .photos, .displayName, .reviewSummary]
+                    placeProperties: [.placeID, .coordinate, .photos, .displayName, .reviewSummary],
+                    sessionToken: sessionToken
                 )
 
                 switch await PlacesClient.shared.fetchPlace(with: fetchPlaceRequest) {

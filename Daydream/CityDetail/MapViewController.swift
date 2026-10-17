@@ -149,7 +149,8 @@ final class MapViewController: UIViewController {
         dynamicMarker.tracksInfoWindowChanges = true
 
         Task {
-            guard let result = await API.PlaceSearch.fetchPlaceWithReviewsBy(placeId: placeId) else {
+            guard let result = await API.PlaceSearch.fetchPlaceWithReviewsBy(placeId: placeId),
+                  dynamicMarkerPlaceId == placeId else {
                 return
             }
 

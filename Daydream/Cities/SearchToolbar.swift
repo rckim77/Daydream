@@ -25,10 +25,10 @@ struct SearchToolbar<Content: ToolbarContent>: ToolbarContent {
             }
             .labelStyle(.iconOnly)
             .accessibilityIdentifier("city-search-button")
-            .placeAutocomplete(filter: AutocompleteFilter(types: [.cities]), show: $showAutocompleteWidget) { suggestion, _ in
+            .placeAutocomplete(filter: AutocompleteFilter(types: [.cities]), show: $showAutocompleteWidget) { suggestion, sessionToken in
                 Task {
                     do {
-                        let result = try await API.PlaceSearch.fetchPlaceAndImageBy(placeId: suggestion.placeID)
+                        let result = try await API.PlaceSearch.fetchPlaceAndImageBy(placeId: suggestion.placeID, sessionToken: sessionToken)
                         autocompleteTapped(result.0, result.1)
                     } catch {
                         print(error.localizedDescription)

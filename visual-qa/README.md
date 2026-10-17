@@ -22,3 +22,12 @@ Both configurations are required in `config.json`. Base device definitions live 
 Capture runs serially. For a focused check, set `VISUAL_QA_DEVICE_PROFILES='configured-device-id:Dedicated Simulator Name'`. Capture reinstalls the app by default; use dedicated simulators to preserve personal app state. `--suite base --clean` deletes only base artifacts; `--suite additional --refresh-dashboard` rebuilds the additional report without capturing.
 
 The dedicated `VisualQA` scheme and `visualqa.xctestplan` keep captures separate from regular unit tests. The capture test supplies a fixed city order through an opt-in Debug launch environment. Tips are not reset. Images use the real Places/cache path, and the test waits for all five photos. Provide the existing ignored `Daydream/Shared/apiKeys.plist` locally. City detail and map screens are outside this suite.
+
+The opt-in `PlacesRegressionUITests/testPlacesRegression` also exercises empty autocomplete results, city selection, nearby cards, map/reviews, rotation, appearance, and random city navigation. It reads `/tmp/daydream-places-qa-<SIMULATOR_UDID>.json` with `outputDirectory` (absolute path), `expiresAt` (future Unix timestamp), `landscape` and `largeText` (booleans). Optional `locationMode` is `denied` or `allowed`; prepare that simulator's app permission and simulated location before running it. No API keys are supplied by this configuration. Screenshots and hierarchy dumps go to `outputDirectory`.
+
+```bash
+xcodebuild test -project Daydream.xcodeproj -scheme VisualQA -testPlan visualqa \
+  -destination 'platform=iOS Simulator,id=<SIMULATOR_UDID>' \
+  -only-testing:DaydreamUITests/PlacesRegressionUITests \
+  -parallel-testing-enabled NO CODE_SIGNING_ALLOWED=NO
+```

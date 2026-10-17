@@ -16,6 +16,7 @@ struct ReviewSummaryCard: View {
     var body: some View {
         VStack {
             Text(summary.text ?? "No review text!")
+                .accessibilityIdentifier("map-review-summary")
                 .font(.subheadline)
                 .foregroundStyle(.black)
                 .minimumScaleFactor(0.9)

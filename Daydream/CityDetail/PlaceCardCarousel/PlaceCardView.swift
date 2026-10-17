@@ -72,6 +72,8 @@ struct PlaceCardView: View {
             .frame(width: expandsToFillHeight ? nil : width, height: expandsToFillHeight ? nil : Self.minimumHeight)
             .clipShape(RoundedRectangle(cornerRadius: 16))
         }
+        .accessibilityLabel(place?.displayName ?? "Loading place")
+        .accessibilityIdentifier("place-card-\(place?.placeID ?? "loading")")
         .task {
             guard let photo = place?.photos?.first else {
                 return

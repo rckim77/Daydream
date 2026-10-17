@@ -57,6 +57,7 @@ struct ReviewCard: View {
             }
             .padding(.horizontal, 12)
         }
+        .accessibilityIdentifier("map-review-card")
         .buttonStyle(.plain)
         .background {
             RoundedRectangle(cornerRadius: 16)
