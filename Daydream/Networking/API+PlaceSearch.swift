@@ -29,6 +29,23 @@ extension API {
         enum PlaceSearchType {
             case sights, eateries
         }
+
+        @MainActor private static let nearbyRequests = PlacesRequestQueue()
+
+        @MainActor
+        private static func searchNearby(
+            makeRequest: () -> SearchNearbyRequest
+        ) async -> Result<SearchNearbyResponse, PlacesError> {
+            do {
+                return try await nearbyRequests.run {
+                    // Construct, await, and release each SDK request before admitting the next one.
+                    let request = makeRequest()
+                    return await PlacesClient.shared.responseForSearchNearby(with: request)
+                }
+            } catch {
+                return .failure(.internal("Nearby search cancelled."))
+            }
+        }
         
         /// Convenience function that will pick a random city, fetch `Place` data, and also return
         /// a `UIImage` representation of the first photo.
@@ -59,14 +76,16 @@ extension API {
             let center = CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)
             let restriction = CircularCoordinateRegion(center: center, radius: 1000)
             let placeProps: [PlaceProperty] = [.displayName, .formattedAddress, .coordinate, .photos, .placeID, .addressComponents]
-            let request = SearchNearbyRequest(
-                locationRestriction: restriction,
-                placeProperties: placeProps,
-                includedPrimaryTypes: [.locality],
-                maxResultCount: 2
-            )
+            let result = await searchNearby {
+                SearchNearbyRequest(
+                    locationRestriction: restriction,
+                    placeProperties: placeProps,
+                    includedPrimaryTypes: [.locality],
+                    maxResultCount: 2
+                )
+            }
 
-            switch await PlacesClient.shared.responseForSearchNearby(with: request) {
+            switch result {
             case .success(let response):
                 if let place = response.places?.first, let photo = place.photos?.first {
                     let image = try await API.PlaceSearch.fetchImageBy(photo: photo)
@@ -110,7 +129,7 @@ extension API {
         
         /// Fetches Place and Image for `placeId`, using `PlacesCache` and `ImageCache` if cached.
         @MainActor
-        static func fetchPlaceAndImageBy(placeId: String) async throws -> (Place, UIImage) {
+        static func fetchPlaceAndImageBy(placeId: String, sessionToken: AutocompleteSessionToken? = nil) async throws -> (Place, UIImage) {
             if let cachedPlace = PlacesCache.shared.get(forKey: placeId),
                 let photo = cachedPlace.photos?.first {
                 let image: UIImage
@@ -126,7 +145,8 @@ extension API {
             } else {
                 let fetchPlaceRequest = FetchPlaceRequest(
                     placeID: placeId,
-                    placeProperties: [.placeID, .coordinate, .photos, .displayName, .reviewSummary]
+                    placeProperties: [.placeID, .coordinate, .photos, .displayName, .reviewSummary],
+                    sessionToken: sessionToken
                 )
 
                 switch await PlacesClient.shared.fetchPlace(with: fetchPlaceRequest) {
@@ -160,14 +180,16 @@ extension API {
             let center = CLLocationCoordinate2D(latitude: city.latitude, longitude: city.longitude)
             let restriction = CircularCoordinateRegion(center: center, radius: city.radius * 1000)
             let placeProps: [PlaceProperty] = [.displayName, .formattedAddress, .coordinate, .photos, .placeID, .addressComponents]
-            let request = SearchNearbyRequest(
-                locationRestriction: restriction,
-                placeProperties: placeProps,
-                includedPrimaryTypes: [.locality],
-                maxResultCount: 2
-            )
+            let result = await searchNearby {
+                SearchNearbyRequest(
+                    locationRestriction: restriction,
+                    placeProperties: placeProps,
+                    includedPrimaryTypes: [.locality],
+                    maxResultCount: 2
+                )
+            }
 
-            switch await PlacesClient.shared.responseForSearchNearby(with: request) {
+            switch result {
             case .success(let response):
                 return response.places?.first
             case .failure(let error):
@@ -236,14 +258,16 @@ extension API {
                     includedTypes = [.restaurant, .bar, .bakery]
                     excludedTypes = [.touristAttraction, .park, .museum, .stadium]
                 }
-                let request = SearchNearbyRequest(
-                    locationRestriction: restriction,
-                    placeProperties: placeProps,
-                    includedTypes: includedTypes,
-                    excludedTypes: excludedTypes,
-                    maxResultCount: maxResultCount
-                )
-                switch await PlacesClient.shared.responseForSearchNearby(with: request) {
+                let result = await searchNearby {
+                    SearchNearbyRequest(
+                        locationRestriction: restriction,
+                        placeProperties: placeProps,
+                        includedTypes: includedTypes,
+                        excludedTypes: excludedTypes,
+                        maxResultCount: maxResultCount
+                    )
+                }
+                switch result {
                 case .success(let response):
                     return response.places ?? []
                 case .failure(let error):
