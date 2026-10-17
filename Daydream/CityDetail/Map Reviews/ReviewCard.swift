@@ -12,6 +12,8 @@ import SwiftUI
 struct ReviewCard: View {
     
     let review: Review
+    var showsFullText = false
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     
     @Environment(\.openURL) private var openURL
     
@@ -22,35 +24,40 @@ struct ReviewCard: View {
             }
         } label: {
             VStack {
-                HStack {
-                    AsyncImage(url: review.authorAttribution?.photoUrl) { image in
-                        image
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 32, height: 32)
-                    } placeholder: {
-                        ProgressView()
-                    }
-                    VStack(alignment: .leading, spacing: 0) {
-                        Text(review.authorAttribution?.displayName ?? "Author")
-                            .font(.subheadline).bold()
-                            .foregroundStyle(.black)
-                            .minimumScaleFactor(0.9)
-                        if let dateText = review.relativePublishDateDescription {
-                            Text(dateText)
-                                .font(.caption).italic()
+                let headerLayout = dynamicTypeSize.isAccessibilitySize
+                    ? AnyLayout(VStackLayout(alignment: .leading, spacing: 8))
+                    : AnyLayout(HStackLayout())
+                headerLayout {
+                    HStack(alignment: .top) {
+                        AsyncImage(url: review.authorAttribution?.photoUrl) { image in
+                            image
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 32, height: 32)
+                        } placeholder: {
+                            ProgressView()
+                        }
+                        VStack(alignment: .leading, spacing: 0) {
+                            Text(review.authorAttribution?.displayName ?? "Author")
+                                .font(.subheadline).bold()
                                 .foregroundStyle(.black)
+                                .fixedSize(horizontal: false, vertical: true)
+                            if let dateText = review.relativePublishDateDescription {
+                                Text(dateText)
+                                    .font(.caption).italic()
+                                    .foregroundStyle(.black)
+                            }
                         }
                     }
-                    Spacer()
+                    if !dynamicTypeSize.isAccessibilitySize { Spacer() }
                     ReviewStars(rating: review.rating)
                 }
                 .padding(.top, 12)
                 Text(review.text ?? "Sorry, couldn't load review!")
                     .font(.subheadline)
                     .foregroundStyle(.black)
-                    .minimumScaleFactor(0.9)
-                    .lineLimit(5)
+                    .lineLimit(showsFullText ? nil : 5)
+                    .fixedSize(horizontal: false, vertical: showsFullText)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.top, 2)
                     .padding(.bottom, 14)
@@ -65,7 +72,6 @@ struct ReviewCard: View {
                 .shadow(radius: 2)
         }
         .padding(.horizontal, 4)
-        .containerRelativeFrame(.horizontal)
     }
 }
 

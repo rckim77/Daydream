@@ -56,18 +56,6 @@ struct CityDetailViewStateTests {
         #expect(shouldReview.updatedLastReviewedAppVersion == "4.5.1")
     }
 
-    @Test("current location immediate update is gated by previous coordinate equality")
-    func currentLocationImmediateUpdateGating() {
-        let viewState = CityDetailViewState()
-        let current = CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194)
-
-        viewState.seedPreviousCurrentLocation(current)
-        #expect(viewState.currentLocationToLoadImmediately(currentLocation: current) == current)
-
-        let different = CLLocationCoordinate2D(latitude: 34.0522, longitude: -118.2437)
-        #expect(viewState.currentLocationToLoadImmediately(currentLocation: different) == nil)
-    }
-
     @Test("loads both sights and eateries with a consistent max count")
     func loadSightsAndEateriesRequestsBothTypes() async {
         let viewState = CityDetailViewState()

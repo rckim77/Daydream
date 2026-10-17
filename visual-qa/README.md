@@ -33,3 +33,9 @@ xcodebuild test -project Daydream.xcodeproj -scheme VisualQA -testPlan visualqa 
 ```
 
 `PlacesRequestStressUITests/testRepeatedCityLoading` reproduces initial city loading across repeated launches. It is also opt-in: provide `/tmp/daydream-places-stress-<SIMULATOR_UDID>.json` with `outputDirectory`, `expiresAt`, `iterations` (1–10), and `largeText`. Each launch waits for six city photos and writes a screenshot; no live requests run without an unexpired local configuration.
+
+The Places regression can capture additional states using optional booleans: `simulateReviewFailure` (fail the first map details load locally, then retry the live request), `forceReviewFallback` (display the real individual reviews instead of the available AI summary), `skipAutocomplete`, `mapOnly`, and `allRotations`. The first two are Debug-only presentation hooks; they do not change network/cloud settings or release behavior. The suite asserts a visible software keyboard, checks the search field above the rotated keyboard, and scrolls accessibility details to the final Maps action.
+
+For an opt-in UI Kit authentication comparison, provide `/tmp/daydream-places-auth-probe-<SIMULATOR_UDID>.json` with `outputDirectory` and `expiresAt`, then run `-only-testing:DaydreamTests/PlacesUIKitAuthenticationTests` with the `Daydream` scheme / `unittests` plan. It registers the existing Places key, performs a raw Place Details control and mounts the supported UI Kit component with the same place ID. It writes sanitized status/domain/code metadata and fails if UI Kit authentication fails. The test skips without a current local configuration; it does not supply keys, create credentials or change any cloud setting.
+
+Stress configuration may also set `enableZombies: true` for a local lifetime diagnostic. Zombies change object lifetimes, so a passing run is not evidence of a production fix. Leave this off for the normal before/after stress comparison.

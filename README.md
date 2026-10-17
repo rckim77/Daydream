@@ -10,7 +10,7 @@ Minimum deployment target: iOS 26.0.
 
 Local verification uses Xcode 27.1 RC (`27A9275`) with the iOS 27.1 SDK. Open `Daydream.xcodeproj` to resolve Swift packages. Use `DEVELOPER_DIR=/Applications/Xcode_27.1.app/Contents/Developer` when multiple Xcode installations are present.
 
-Swift package dependencies: Google Maps 11.2.0, Google Places (including GooglePlacesSwift) 11.2.0, and SnapKit 6.0.0. Google SDK versions are pinned exactly in the project; commit the shared `Package.resolved` alongside dependency updates. Autocomplete selections pass the widget’s session token to Place Details when a network fetch is needed; existing place and image cache hits are preserved. Nearby requests are scheduled one at a time to reduce overlapping SDK request teardown; photo fetching remains concurrent.
+Swift package dependencies: Google Maps 11.2.0, Google Places (including GooglePlacesSwift) 11.2.0, and SnapKit 6.0.0. Google SDK versions are pinned exactly in the project; commit the shared `Package.resolved` alongside dependency updates. Autocomplete selections pass the widget’s session token to Place Details when a network fetch is needed; existing place and image cache hits are preserved. Nearby requests are scheduled one at a time to reduce overlapping SDK request teardown; photo fetching remains concurrent. Current Location consumes a fresh delivery event even when its coordinates repeat, and stops waiting after one result or an error. At accessibility text sizes, place-card labels expand and the map opens full details in a scrolling sheet. Compact review text scrolls while its disclosure remains visible.
 
 Create `Daydream/Shared/apiKeys.plist` with:
 - `googleAPI`

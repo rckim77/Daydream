@@ -72,4 +72,51 @@ struct PlacesRequestQueueTests {
         #expect(!cancelledOperationRan)
         #expect(try await successor.value == 42)
     }
+    @Test("A burst of cancelled waiters drains in order and leaves the queue usable")
+    func cancellationBurst() async throws {
+        let queue = PlacesRequestQueue()
+        let (started, signal) = AsyncStream<Void>.makeStream()
+        var releaseFirst: CheckedContinuation<Void, Never>?
+        var completed: [Int] = []
+        var arrivalOrder: [Int] = []
+        let first = Task {
+            try await queue.run {
+                await withCheckedContinuation { continuation in
+                    releaseFirst = continuation
+                    signal.yield(())
+                }
+            }
+        }
+        var startedIterator = started.makeAsyncIterator()
+        await startedIterator.next()
+        let (queued, queuedSignal) = AsyncStream<Void>.makeStream()
+        let jobs = (1...20).map { index in
+            Task {
+                arrivalOrder.append(index)
+                queuedSignal.yield(())
+                return try await queue.run {
+                    completed.append(index)
+                    return index
+                }
+            }
+        }
+        var queuedIterator = queued.makeAsyncIterator()
+        for _ in jobs { await queuedIterator.next() }
+        for (index, job) in jobs.enumerated() where index.isMultiple(of: 2) { job.cancel() }
+        releaseFirst?.resume()
+        try await first.value
+        for (index, job) in jobs.enumerated() {
+            do {
+                let value = try await job.value
+                #expect(!index.isMultiple(of: 2))
+                #expect(value == index + 1)
+            } catch {
+                #expect(index.isMultiple(of: 2))
+                #expect(error is CancellationError)
+            }
+        }
+        #expect(completed == arrivalOrder.filter { $0.isMultiple(of: 2) })
+        #expect(try await queue.run { 42 } == 42)
+    }
+
 }

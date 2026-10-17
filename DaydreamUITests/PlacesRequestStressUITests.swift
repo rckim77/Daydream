@@ -14,6 +14,7 @@ final class PlacesRequestStressUITests: XCTestCase {
         guard (1...10).contains(config.iterations) else { throw XCTSkip("Choose 1–10 stress iterations.") }
         let app = XCUIApplication(bundleIdentifier: "com.rckim.Daydream")
         app.launchEnvironment["DAYDREAM_UI_CAPTURE_CITIES"] = "Tokyo|Paris|New York City|Hong Kong|Rome|London"
+        if config.enableZombies == true { app.launchEnvironment["NSZombieEnabled"] = "YES" }
         if config.largeText {
             app.launchArguments = ["-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"]
         }
@@ -35,4 +36,5 @@ private struct Configuration: Decodable {
     let outputDirectory: String
     let iterations: Int
     let largeText: Bool
+    let enableZombies: Bool?
 }
