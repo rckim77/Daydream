@@ -110,7 +110,7 @@ extension API {
         
         /// Fetches Place and Image for `placeId`, using `PlacesCache` and `ImageCache` if cached.
         @MainActor
-        static func fetchPlaceAndImageBy(placeId: String, sessionToken: AutocompleteSessionToken? = nil) async throws -> (Place, UIImage) {
+        static func fetchPlaceAndImageBy(placeId: String) async throws -> (Place, UIImage) {
             if let cachedPlace = PlacesCache.shared.get(forKey: placeId),
                 let photo = cachedPlace.photos?.first {
                 let image: UIImage
@@ -126,8 +126,7 @@ extension API {
             } else {
                 let fetchPlaceRequest = FetchPlaceRequest(
                     placeID: placeId,
-                    placeProperties: [.placeID, .coordinate, .photos, .displayName, .reviewSummary],
-                    sessionToken: sessionToken
+                    placeProperties: [.placeID, .coordinate, .photos, .displayName, .reviewSummary]
                 )
 
                 switch await PlacesClient.shared.fetchPlace(with: fetchPlaceRequest) {

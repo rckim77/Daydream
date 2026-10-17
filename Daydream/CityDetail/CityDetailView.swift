@@ -66,7 +66,18 @@ struct CityDetailView: View {
                         await fetchSightsAndEateries(place)
                     }
                 } currentLocationTapped: {
-                    viewState.currentCityRequest.begin()
+                    viewState.markCurrentLocationTapped()
+                    guard let currentLocation = viewState.currentLocationToLoadImmediately(currentLocation: locationManager.location) else {
+                        // the .onChange(of:) will be triggered and programmatically navigate
+                        return
+                    }
+                    Task {
+                        do {
+                            try await updateToCurrentCity(currentLocation)
+                        } catch {
+                            viewState.showErrorAlert = true
+                        }
+                    }
                 } additionalViews: {
                     ToolbarItem(placement: .bottomBar) {
                         HomeButton {
@@ -78,6 +89,7 @@ struct CityDetailView: View {
             .task {
                 viewState.applySelectedCity(place)
                 await fetchSightsAndEateries(place)
+                viewState.seedPreviousCurrentLocation(locationManager.location)
             }
             .sheet(item: $viewState.tappedSheetPlace) { identifiablePlace in
                 Group {
@@ -95,22 +107,20 @@ struct CityDetailView: View {
                 MapDetailView(place: identifiablePlace.place)
             }
             .errorAlert(isPresented: $viewState.showErrorAlert)
-            .onChange(of: locationManager.authStatus) { _, status in
-                if status == .denied || status == .restricted { viewState.currentCityRequest.cancel() }
-            }
-            .onChange(of: locationManager.requestFailureCount) { _, _ in
-                if viewState.currentCityRequest.cancel() { viewState.showErrorAlert = true }
-            }
-            .onDisappear { viewState.currentCityRequest.cancel() }
-            .onChange(of: locationManager.locationUpdateCount) { _, _ in
-                if let currentLocation = viewState.currentCityRequest.receive(locationManager.location) {
-                    Task {
-                        do {
-                            try await updateToCurrentCity(currentLocation)
-                        } catch {
-                            viewState.showErrorAlert = true
+            .onChange(of: locationManager.location) { _, currentLocation in
+                if viewState.shouldHandleLocationChange(currentLocation) {
+                    viewState.seedPreviousCurrentLocation(currentLocation)
+                    if let currentLocation {
+                        Task {
+                            do {
+                                try await updateToCurrentCity(currentLocation)
+                            } catch {
+                                viewState.showErrorAlert = true
+                            }
                         }
                     }
+                } else {
+                    print("current location is nil")
                 }
             }
             .onAppear {

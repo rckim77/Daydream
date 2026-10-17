@@ -1,42 +1,45 @@
+//
+//  MapReviewsCarousel.swift
+//  Daydream
+//
+//  Created by Ray Kim on 11/6/25.
+//  Copyright © 2025 Raymond Kim. All rights reserved.
+//
+
 import GooglePlacesSwift
 import SwiftUI
 
 struct MapReviewsCarousel: View {
+    
     @ObservedObject var context: MapReviewContext
-    var onRetry: () -> Void = {}
-    var onOpenMaps: () -> Void = {}
-    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-
+    
+    private var contentMarginOffset: CGFloat {
+        context.place?.reviewSummary != nil ? 0 : 12
+    }
+    
+    private var scrollDisabled: Bool {
+        context.place?.reviewSummary != nil
+    }
+    
     var body: some View {
-        if dynamicTypeSize.isAccessibilitySize {
-            MapAccessiblePlaceDetailsView(context: context, onRetry: onRetry, onOpenMaps: onOpenMaps)
-        } else if context.loadFailed {
-            VStack(spacing: 12) {
-                Text("Couldn't load place details.")
-                Button("Try Again", action: onRetry)
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(.background, in: RoundedRectangle(cornerRadius: 16))
-            .padding(12)
-        } else if let summary = context.displayedReviewSummary {
-            ReviewSummaryCard(summary: summary, scrollsText: true)
-        } else {
-            ScrollView(.horizontal) {
-                HStack(spacing: 4) {
-                    if let reviews = context.place?.reviews {
-                        ForEach(reviews, id: \.hashValue) { review in
-                            ReviewCard(review: review)
-                                .containerRelativeFrame(.horizontal)
-                        }
+        ScrollView(.horizontal) {
+            HStack(spacing: 4) {
+                if let reviewSummary = context.place?.reviewSummary {
+                    ReviewSummaryCard(summary: reviewSummary)
+                } else if let reviews = context.place?.reviews {
+                    ForEach(reviews, id: \.hashValue) { review in
+                        ReviewCard(review: review)
                     }
                 }
-                .scrollTargetLayout()
             }
-            .contentMargins(12)
-            .scrollIndicators(.hidden)
-            .scrollClipDisabled()
-            .scrollTargetBehavior(.viewAligned)
+            .scrollTargetLayout()
         }
+        .background(.clear)
+        .contentMargins(contentMarginOffset)
+        .scrollIndicators(.hidden)
+        .scrollClipDisabled()
+        .scrollDisabled(scrollDisabled)
+        .scrollTargetBehavior(.viewAligned)
     }
 }
 

@@ -7,14 +7,10 @@ struct CurrentCityButton: View {
 
     var body: some View {
         Button("Current Location", systemImage: "location.fill") {
-            switch locationManager.requestCurrentLocation() {
-            case .denied, .restricted:
+            if locationManager.requestCurrentLocation() == .denied {
                 showDeniedLocationAlert = true
-            case .authorizedWhenInUse, .authorizedAlways, .notDetermined:
-                currentLocationTapped()
-            @unknown default:
-                break
             }
+            currentLocationTapped()
         }
         .accessibilityIdentifier("current-city-button")
         .deniedLocationAlert(isPresented: $showDeniedLocationAlert)

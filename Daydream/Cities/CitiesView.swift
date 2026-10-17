@@ -20,8 +20,10 @@ struct CitiesView: View {
     @State private var showErrorAlert = false
     
     // MARK: - Current Location
-    @State private var currentCityRequest = CurrentCityRequestState()
+    /// This ensures navigation to current location city is gated behind user interaction.
+    @State private var currentLocationButtonTapped = false
     @Environment(CurrentLocationManager.self) private var locationManager
+    @State private var prevCurrentLocation: CLLocationCoordinate2D?
 
     // MARK: - Layout/Animation vars
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
@@ -75,7 +77,19 @@ struct CitiesView: View {
                 } randomCityReceived: { place, image in
                     selectedCity = CityRoute(name: place.description, place: place, image: image)
                 } currentLocationTapped: {
-                    currentCityRequest.begin()
+                    currentLocationButtonTapped = true
+                    guard let prevCurrentLocation = prevCurrentLocation,
+                          locationManager.location == prevCurrentLocation else {
+                        // the .onChange(of:) will be triggered and programmatically navigate
+                        return
+                    }
+                    Task {
+                        do {
+                            selectedCity = try await fetchCityRoute(prevCurrentLocation)
+                        } catch {
+                            showErrorAlert = true
+                        }
+                    }
                 } additionalViews: {
                     ToolbarItem(placement: .bottomBar) {
                         FeedbackButton {
@@ -115,16 +129,13 @@ struct CitiesView: View {
             }
 
             cities = selectedCities
+            
+            // seed prevCurrentLocation
+            prevCurrentLocation = locationManager.location
         }
-        .onChange(of: locationManager.authStatus) { _, status in
-            if status == .denied || status == .restricted { currentCityRequest.cancel() }
-        }
-        .onChange(of: locationManager.requestFailureCount) { _, _ in
-            if currentCityRequest.cancel() { showErrorAlert = true }
-        }
-        .onDisappear { currentCityRequest.cancel() }
-        .onChange(of: locationManager.locationUpdateCount) { _, _ in
-            if let currentLocation = currentCityRequest.receive(locationManager.location) {
+        .onChange(of: locationManager.location) { _ , currentLocation in
+            if let currentLocation = currentLocation, currentLocationButtonTapped {
+                prevCurrentLocation = currentLocation
                 Task {
                     do {
                         selectedCity = try await fetchCityRoute(currentLocation)
@@ -132,6 +143,8 @@ struct CitiesView: View {
                         showErrorAlert = true
                     }
                 }
+            } else {
+                print("currentLocation is nil")
             }
         }
     }

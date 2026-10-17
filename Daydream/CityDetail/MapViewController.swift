@@ -20,11 +20,6 @@ final class MapViewController: UIViewController {
     private var dynamicMapView: GMSMapView?
     private var dynamicMarker: GMSMarker?
     private weak var reviewsView: UIView?
-    private var reviewsHeightConstraint: Constraint?
-    private var usesAccessibleDetails = false
-    #if DEBUG
-    private var didSimulateReviewFailure = false
-    #endif
     /// Used to provide more accurate location when deeplinking to Google Maps
     private var dynamicMarkerPlaceId: String?
     /// Object that updates map review SwiftUI code
@@ -58,27 +53,15 @@ final class MapViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        let accessible = traitCollection.preferredContentSizeCategory.isAccessibilityCategory
-        let panelHeight = accessible ? min(180, max(100, view.bounds.height * 0.32)) : 200
-        if let reviewsView, abs(reviewsView.bounds.height - panelHeight) > 0.5 {
-            reviewsHeightConstraint?.update(offset: panelHeight)
-        }
-        if accessible != usesAccessibleDetails { updateMarkerPresentation() }
-
         if let dynamicMapView, let reviewsView {
             // Move the camera's visible center above the reviews after every resize.
             let reviewsFrame = dynamicMapView.convert(reviewsView.bounds, from: reviewsView)
-            let padding = UIEdgeInsets(
-                top: max(dynamicMapView.safeAreaInsets.top, accessible ? 56 : Self.markerInfoWindowHeadroom),
+            dynamicMapView.padding = UIEdgeInsets(
+                top: max(dynamicMapView.safeAreaInsets.top, Self.markerInfoWindowHeadroom),
                 left: dynamicMapView.safeAreaInsets.left,
                 bottom: max(dynamicMapView.safeAreaInsets.bottom, dynamicMapView.bounds.maxY - reviewsFrame.minY),
                 right: dynamicMapView.safeAreaInsets.right
             )
-            let previous = dynamicMapView.padding
-            if abs(previous.top - padding.top) > 0.5 || abs(previous.left - padding.left) > 0.5 ||
-                abs(previous.bottom - padding.bottom) > 0.5 || abs(previous.right - padding.right) > 0.5 {
-                dynamicMapView.padding = padding
-            }
         }
     }
 
@@ -88,11 +71,7 @@ final class MapViewController: UIViewController {
     }
 
     private func addProgrammaticViews() {
-        let reviewsCarouselVC = UIHostingController(rootView: MapReviewsCarousel(
-            context: mapReviewContext,
-            onRetry: { [weak self] in self?.retrySelectedPlace() },
-            onOpenMaps: { [weak self] in self?.openSelectedPlaceInMaps() }
-        ))
+        let reviewsCarouselVC = UIHostingController(rootView: MapReviewsCarousel(context: mapReviewContext))
         addChild(reviewsCarouselVC)
         view.addSubview(reviewsCarouselVC.view)
         reviewsView = reviewsCarouselVC.view
@@ -102,7 +81,7 @@ final class MapViewController: UIViewController {
         reviewsCarouselVC.view.snp.makeConstraints { make in
             make.leading.trailing.equalTo(view.safeAreaLayoutGuide)
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(12)
-            reviewsHeightConstraint = make.height.equalTo(200).constraint
+            make.height.equalTo(200)
         }
     }
 
@@ -165,66 +144,20 @@ final class MapViewController: UIViewController {
             return
         }
 
-        mapReviewContext.selectedName = name
-        mapReviewContext.place = nil
-        mapReviewContext.isLoading = true
-        mapReviewContext.loadFailed = false
-        updateMarkerPresentation()
+        mapView.selectedMarker = dynamicMarker
+
         dynamicMarker.tracksInfoWindowChanges = true
 
         Task {
-            // Stop per-frame info-window tracking on success, failure, and QA-injected errors.
-            defer {
-                if dynamicMarkerPlaceId == placeId { dynamicMarker.tracksInfoWindowChanges = false }
-            }
-            #if DEBUG
-            // Opt-in UI QA exercises recovery without changing the host network or cloud settings.
-            if !didSimulateReviewFailure && ProcessInfo.processInfo.environment["DAYDREAM_UI_CAPTURE_REVIEW_FAILURE"] == "1" {
-                didSimulateReviewFailure = true
-                mapReviewContext.isLoading = false
-                mapReviewContext.loadFailed = true
-                return
-            }
-            #endif
-            let result = await API.PlaceSearch.fetchPlaceWithReviewsBy(placeId: placeId)
-            guard dynamicMarkerPlaceId == placeId else { return }
-            mapReviewContext.isLoading = false
-            guard let result else {
-                mapReviewContext.loadFailed = true
+            guard let result = await API.PlaceSearch.fetchPlaceWithReviewsBy(placeId: placeId) else {
                 return
             }
 
             dynamicMarker.snippet = result.formattedAddress
+            dynamicMarker.tracksInfoWindowChanges = false
             place = result
             mapReviewContext.place = result
-            updateMarkerPresentation()
         }
-    }
-
-    private func updateMarkerPresentation() {
-        usesAccessibleDetails = traitCollection.preferredContentSizeCategory.isAccessibilityCategory
-        guard let marker = dynamicMarker, let map = dynamicMapView else { return }
-        // Google renders info windows as images: they cannot scroll to fit accessibility text.
-        let title = usesAccessibleDetails ? nil : mapReviewContext.selectedName
-        let snippet = usesAccessibleDetails ? nil : mapReviewContext.place?.formattedAddress
-        if marker.title != title { marker.title = title }
-        if marker.snippet != snippet { marker.snippet = snippet }
-        marker.accessibilityLabel = mapReviewContext.selectedName
-        if usesAccessibleDetails {
-            if map.selectedMarker != nil { map.selectedMarker = nil }
-        } else if map.selectedMarker !== marker {
-            map.selectedMarker = marker
-        }
-    }
-
-    private func retrySelectedPlace() {
-        guard let id = dynamicMarkerPlaceId, let marker = dynamicMarker, let map = dynamicMapView else { return }
-        addOrUpdateMarkerAndReviews(for: id, name: mapReviewContext.selectedName, location: marker.position, in: map)
-    }
-
-    private func openSelectedPlaceInMaps() {
-        guard let marker = dynamicMarker, let map = dynamicMapView else { return }
-        mapView(map, didTapInfoWindowOf: marker)
     }
 
 }
@@ -246,7 +179,7 @@ extension MapViewController: GMSMapViewDelegate {
         // lat/lon coordinates. Strings must be URL-encoded so make sure to convert chars like commas.
         if let placeId = dynamicMarkerPlaceId {
             components.queryItems?.append(URLQueryItem(name: "query_place_id", value: placeId))
-            components.queryItems?.append(URLQueryItem(name: "query", value: mapReviewContext.selectedName))
+            components.queryItems?.append(URLQueryItem(name: "query", value: marker.title))
         } else {
             var query = "\(marker.position.latitude), \(marker.position.longitude)"
             if let name = marker.title {

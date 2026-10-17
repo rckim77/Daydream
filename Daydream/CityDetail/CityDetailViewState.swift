@@ -29,7 +29,9 @@ final class CityDetailViewState {
     var tappedSheetPlace: IdentifiablePlace?
     var showErrorAlert = false
 
-    let currentCityRequest = CurrentCityRequestState()
+    /// This ensures navigation to current location city is gated behind user interaction.
+    var currentLocationButtonTapped = false
+    var prevCurrentLocation: CLLocationCoordinate2D?
 
     func cityText(displayName: String?, countryCode: String?) -> String {
         var text = displayName ?? ""
@@ -67,6 +69,27 @@ final class CityDetailViewState {
         // Capture the route at selection so resizing does not replace an open map presentation.
         tappedSheetPlace = asSheet ? place : nil
         tappedCardPlace = asSheet ? nil : place
+    }
+
+    func markCurrentLocationTapped() {
+        currentLocationButtonTapped = true
+    }
+
+    func seedPreviousCurrentLocation(_ location: CLLocationCoordinate2D?) {
+        prevCurrentLocation = location
+    }
+
+    func currentLocationToLoadImmediately(currentLocation: CLLocationCoordinate2D?) -> CLLocationCoordinate2D? {
+        guard let prevCurrentLocation,
+              currentLocation == prevCurrentLocation else {
+            return nil
+        }
+
+        return prevCurrentLocation
+    }
+
+    func shouldHandleLocationChange(_ currentLocation: CLLocationCoordinate2D?) -> Bool {
+        currentLocation != nil && currentLocationButtonTapped
     }
 
     func loadSightsAndEateries(
