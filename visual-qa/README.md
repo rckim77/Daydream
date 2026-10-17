@@ -31,3 +31,5 @@ xcodebuild test -project Daydream.xcodeproj -scheme VisualQA -testPlan visualqa 
   -only-testing:DaydreamUITests/PlacesRegressionUITests \
   -parallel-testing-enabled NO CODE_SIGNING_ALLOWED=NO
 ```
+
+`PlacesRequestStressUITests/testRepeatedCityLoading` reproduces initial city loading across repeated launches. It is also opt-in: provide `/tmp/daydream-places-stress-<SIMULATOR_UDID>.json` with `outputDirectory`, `expiresAt`, `iterations` (1–10), and `largeText`. Each launch waits for six city photos and writes a screenshot; no live requests run without an unexpired local configuration.

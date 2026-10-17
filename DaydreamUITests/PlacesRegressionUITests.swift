@@ -59,11 +59,14 @@ final class PlacesRegressionUITests: XCTestCase {
         XCTAssertTrue(card.waitForExistence(timeout: 60))
         // Duo/scroll transforms can report a visible card as not hittable. Use its observed frame,
         // then verify the tap by waiting for the map rather than trusting that accessibility flag.
-        for _ in 0..<5 {
+        for _ in 0..<10 {
             let tapY = card.frame.minY + card.frame.height * 0.3
             if tapY >= 80 && tapY <= app.frame.maxY - 100 { break }
             if tapY < 80 { app.swipeDown() } else { app.swipeUp() }
         }
+        let tapY = card.frame.minY + card.frame.height * 0.3
+        XCTAssertGreaterThanOrEqual(tapY, 80, "Scroll the place card below the status area before tapping")
+        XCTAssertLessThanOrEqual(tapY, app.frame.maxY - 100, "Scroll the place card above the toolbar before tapping")
         try capture("discoveries")
         card.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.3)).tap()
         XCTAssertTrue(app.buttons["map-close-button"].waitForExistence(timeout: 30))
