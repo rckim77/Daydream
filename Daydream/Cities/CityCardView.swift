@@ -12,6 +12,7 @@ import GooglePlacesSwift
 struct CityCardView: View {
 
     let city: RandomCity
+    var height: CGFloat = 220
     let onTap: (Place?, UIImage?) -> Void
     
     @State private var place: Place?
@@ -19,14 +20,6 @@ struct CityCardView: View {
     @State private var showErrorView = false
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     
-    private var height: CGFloat {
-        horizontalSizeClass == .compact ? 188 : 280
-    }
-    
-    private var cityTextVerticalPadding: CGFloat {
-        horizontalSizeClass == .compact ? 16 : 36
-    }
-
     var body: some View {
         Button {
             onTap(place, image)
@@ -36,10 +29,12 @@ struct CityCardView: View {
                 VStack(spacing: 0) {
                     Text(city.city)
                         .font(.largeTitle).bold()
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.75)
                         .multilineTextAlignment(.center)
                         .frame(maxWidth: .infinity)
                         .padding(.horizontal, 8)
-                        .padding(.vertical, cityTextVerticalPadding)
+                        .padding(.vertical, 20)
                         .background(
                             LinearGradient(colors: [Color(.systemBackground).opacity(0.85),
                                                     Color(.systemBackground).opacity(0.55),

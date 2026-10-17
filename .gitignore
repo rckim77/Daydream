@@ -4,6 +4,8 @@
 
 ## Sensitive Files
 Daydream/Shared/apiKeys.plist
+.asc/config.json
+*.p8
 
 ## Build generated
 build/

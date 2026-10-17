@@ -39,9 +39,9 @@ struct RandomCityButton: View {
                         .tint(.primary)
                 }
             }
-            .frame(width: 24, height: 24)
         }
-        .modifier(SearchActionStyle(shape: .capsule))
+        .accessibilityLabel("Random City")
+        .accessibilityIdentifier("random-city-button")
         .alert("Drats, something went wrong. Try again later!", isPresented: $showErrorAlert, presenting: nil) {}
     }
 }

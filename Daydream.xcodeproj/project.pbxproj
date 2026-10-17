@@ -423,7 +423,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 31;
+				CURRENT_PROJECT_VERSION = 35;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				INFOPLIST_FILE = Daydream/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
@@ -431,7 +431,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.0.0;
+				MARKETING_VERSION = 5.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rckim.Daydream;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -446,14 +446,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 31;
+				CURRENT_PROJECT_VERSION = 35;
 				INFOPLIST_FILE = Daydream/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.0.0;
+				MARKETING_VERSION = 5.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rckim.Daydream;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -615,7 +615,7 @@
 			repositoryURL = "https://github.com/googlemaps/ios-maps-sdk";
 			requirement = {
 				kind = exactVersion;
-				version = 11.1.0;
+				version = 11.2.0;
 			};
 		};
 		EC1D58F42B54B3470068D03A /* XCRemoteSwiftPackageReference "SnapKit" */ = {
@@ -631,7 +631,7 @@
 			repositoryURL = "https://github.com/googlemaps/ios-places-sdk";
 			requirement = {
 				kind = exactVersion;
-				version = 10.15.0;
+				version = 11.2.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

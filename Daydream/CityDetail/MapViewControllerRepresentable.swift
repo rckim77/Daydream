@@ -14,13 +14,14 @@ struct MapViewControllerRepresentable: UIViewControllerRepresentable {
     typealias UIViewControllerType = MapViewController
     
     let place: Place
+    let isViewingDarkMode: Bool
 
     func makeUIViewController(context: Context) -> MapViewController {
-        let vc = MapViewController(place: place)
+        let vc = MapViewController(place: place, isViewingDarkMode: isViewingDarkMode)
         return vc
     }
     
     func updateUIViewController(_ uiViewController: MapViewController, context: Context) {
-        //
+        uiViewController.isViewingDarkMode = isViewingDarkMode
     }
 }

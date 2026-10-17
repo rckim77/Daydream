@@ -26,6 +26,7 @@ final class CityDetailViewState {
     var eateries = [Place]()
     var mapPosition: MapCameraPosition = .automatic
     var tappedCardPlace: IdentifiablePlace?
+    var tappedSheetPlace: IdentifiablePlace?
     var showErrorAlert = false
 
     /// This ensures navigation to current location city is gated behind user interaction.
@@ -56,16 +57,18 @@ final class CityDetailViewState {
         return ReviewRequestDecision(shouldRequestReview: true, updatedLastReviewedAppVersion: appVersion)
     }
 
-    func maxResultCount(for idiom: UIUserInterfaceIdiom) -> Int {
-        idiom == .pad ? 12 : 7
-    }
-
     func createMapPosition(_ location: CLLocationCoordinate2D) -> MapCameraPosition {
         .region(MKCoordinateRegion(center: location, span: .init(latitudeDelta: 0.07, longitudeDelta: 0.07)))
     }
 
     func applySelectedCity(_ place: Place) {
         mapPosition = createMapPosition(place.location)
+    }
+
+    func presentMap(_ place: IdentifiablePlace?, asSheet: Bool) {
+        // Capture the route at selection so resizing does not replace an open map presentation.
+        tappedSheetPlace = asSheet ? place : nil
+        tappedCardPlace = asSheet ? nil : place
     }
 
     func markCurrentLocationTapped() {
@@ -91,14 +94,14 @@ final class CityDetailViewState {
 
     func loadSightsAndEateries(
         placeId: String?,
-        idiom: UIUserInterfaceIdiom,
         fetchPlaces: (String, API.PlaceSearch.PlaceSearchType, Int) async throws -> [Place]
     ) async {
         guard let placeId else {
             return
         }
 
-        let maxResultCount = maxResultCount(for: idiom)
+        // Keep the same results when folding; presentation width must not change the data set.
+        let maxResultCount = 12
 
         do {
             sights = try await fetchPlaces(placeId, .sights, maxResultCount)

@@ -13,13 +13,9 @@ struct FeedbackButton: View {
     let buttonTapped: () -> Void
     
     var body: some View {
-        Button {
+        Button("Help and Feedback", systemImage: "questionmark") {
             buttonTapped()
-        } label: {
-            Image(systemName: "questionmark")
-                .frame(width: 24, height: 24)
         }
-        .modifier(SearchActionStyle(shape: .circle))
-        .frame(width: 54)
+        .accessibilityIdentifier("feedback-button")
     }
 }

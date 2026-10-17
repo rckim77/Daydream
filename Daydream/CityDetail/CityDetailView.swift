@@ -34,80 +34,43 @@ struct CityDetailView: View {
     }
 
     var body: some View {
-        ScrollView(showsIndicators: false) {
-            VStack(alignment: .leading, spacing: 4) {
-                Text(cityText)
-                    .font(.largeTitle)
-                    .padding(.top, 24)
-                    .padding(.horizontal, 24)
-                SummaryView(cityText: cityText)
-                MapCardView(mapPosition: $viewState.mapPosition, place: place)
-                Text("Top Sights")
-                    .font(.title)
-                    .padding(.horizontal, 24)
-                PlacesCarouselView(places: viewState.sights, tappedPlace: $viewState.tappedCardPlace)
-                Text("Top Eateries")
-                    .font(.title)
-                    .padding(.horizontal, 24)
-                PlacesCarouselView(places: viewState.eateries, tappedPlace: $viewState.tappedCardPlace)
-            }
-            .frame(maxWidth: .infinity)
-        }
-        .background(content: {
-            if let image {
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFill()
-                    .blur(radius: 36)
-            }
-        })
-        .safeAreaInset(edge: .bottom, alignment: .center) {
-            SearchToolbar { autocompletePlace, autocompleteImage in
-                place = autocompletePlace
-                image = autocompleteImage
-                viewState.applySelectedCity(place)
-                Task {
-                    await fetchSightsAndEateries(place)
-                }
-            } randomCityReceived: { randomPlace, randomImage in
-                place = randomPlace
-                image = randomImage
-                viewState.applySelectedCity(place)
-                Task {
-                    await fetchSightsAndEateries(place)
-                }
-            } currentLocationTapped: {
-                viewState.markCurrentLocationTapped()
-                guard let currentLocation = viewState.currentLocationToLoadImmediately(currentLocation: locationManager.location) else {
-                    // the .onChange(of:) will be triggered and programmatically navigate
-                    return
-                }
-                Task {
-                    do {
-                        try await updateToCurrentCity(currentLocation)
-                    } catch {
-                        viewState.showErrorAlert = true
+        NavigationStack {
+            CityDetailContentView(place: place, cityText: cityText, viewState: viewState)
+            .background {
+                Rectangle()
+                    .fill(.regularMaterial)
+                    .background {
+                        if let image {
+                            Image(uiImage: image)
+                                .resizable()
+                                .scaledToFill()
+                                .blur(radius: 36, opaque: true)
+                        }
                     }
-                }
-            } additionalViews: {
-                HomeButton {
-                    dismiss()
-                }
+                    .clipped()
+                    .ignoresSafeArea()
             }
-        }
-        .task {
-            viewState.applySelectedCity(place)
-            await fetchSightsAndEateries(place)
-            viewState.seedPreviousCurrentLocation(locationManager.location)
-        }
-        .sheet(item: $viewState.tappedCardPlace) { identifiablePlace in
-            MapViewControllerRepresentable(place: identifiablePlace.place)
-        }
-        .errorAlert(isPresented: $viewState.showErrorAlert)
-        .onChange(of: locationManager.location) { _, currentLocation in
-            if viewState.shouldHandleLocationChange(currentLocation) {
-                viewState.seedPreviousCurrentLocation(currentLocation)
-                if let currentLocation {
+            .toolbar {
+                SearchToolbar { autocompletePlace, autocompleteImage in
+                    place = autocompletePlace
+                    image = autocompleteImage
+                    viewState.applySelectedCity(place)
+                    Task {
+                        await fetchSightsAndEateries(place)
+                    }
+                } randomCityReceived: { randomPlace, randomImage in
+                    place = randomPlace
+                    image = randomImage
+                    viewState.applySelectedCity(place)
+                    Task {
+                        await fetchSightsAndEateries(place)
+                    }
+                } currentLocationTapped: {
+                    viewState.markCurrentLocationTapped()
+                    guard let currentLocation = viewState.currentLocationToLoadImmediately(currentLocation: locationManager.location) else {
+                        // the .onChange(of:) will be triggered and programmatically navigate
+                        return
+                    }
                     Task {
                         do {
                             try await updateToCurrentCity(currentLocation)
@@ -115,13 +78,54 @@ struct CityDetailView: View {
                             viewState.showErrorAlert = true
                         }
                     }
+                } additionalViews: {
+                    ToolbarItem(placement: .bottomBar) {
+                        HomeButton {
+                            dismiss()
+                        }
+                    }
                 }
-            } else {
-                print("current location is nil")
             }
-        }
-        .onAppear {
-            requestReviewIfApplicable()
+            .task {
+                viewState.applySelectedCity(place)
+                await fetchSightsAndEateries(place)
+                viewState.seedPreviousCurrentLocation(locationManager.location)
+            }
+            .sheet(item: $viewState.tappedSheetPlace) { identifiablePlace in
+                Group {
+                    if #available(iOS 27.0, *) {
+                        MapDetailView(place: identifiablePlace.place)
+                            .presentationPlacement(.center)
+                    } else {
+                        MapDetailView(place: identifiablePlace.place)
+                    }
+                }
+                .presentationSizing(.form)
+                .presentationCompactAdaptation(.sheet)
+            }
+            .fullScreenCover(item: $viewState.tappedCardPlace) { identifiablePlace in
+                MapDetailView(place: identifiablePlace.place)
+            }
+            .errorAlert(isPresented: $viewState.showErrorAlert)
+            .onChange(of: locationManager.location) { _, currentLocation in
+                if viewState.shouldHandleLocationChange(currentLocation) {
+                    viewState.seedPreviousCurrentLocation(currentLocation)
+                    if let currentLocation {
+                        Task {
+                            do {
+                                try await updateToCurrentCity(currentLocation)
+                            } catch {
+                                viewState.showErrorAlert = true
+                            }
+                        }
+                    }
+                } else {
+                    print("current location is nil")
+                }
+            }
+            .onAppear {
+                requestReviewIfApplicable()
+            }
         }
     }
 
@@ -147,8 +151,7 @@ struct CityDetailView: View {
 
     private func fetchSightsAndEateries(_ city: Place) async {
         await viewState.loadSightsAndEateries(
-            placeId: city.placeID,
-            idiom: UIDevice.current.userInterfaceIdiom
+            placeId: city.placeID
         ) { placeId, type, maxResultCount in
             try await API.PlaceSearch.fetchPlacesFor(placeId: placeId, type: type, maxResultCount: maxResultCount)
         }

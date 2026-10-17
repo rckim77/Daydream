@@ -1,0 +1,83 @@
+{
+  "name": "Daydream",
+  "version": "v5.1.0",
+  "defaultLocale": "en_US",
+  "outputRoot": "/Users/raykim/Desktop/Screenshots/DaydreamAppStore",
+  "background": {
+    "color": "#FEB609"
+  },
+  "caption": {
+    "fontName": "ArialRoundedMTBold",
+    "fontSize": 160,
+    "color": "#FFFFFF",
+    "topPadding": 100,
+    "bottomPadding": 60,
+    "horizontalPadding": 145,
+    "lineHeight": 1.16,
+    "maxLines": 2
+  },
+  "devices": {
+    "ipad": {
+      "appStorePreset": "ipad-13",
+      "canvas": {
+        "width": 2732,
+        "height": 2048
+      },
+      "screenshotRoot": "/Users/raykim/Desktop/Screenshots/DaydreamAppStore/_inputs/ipad/en_US",
+      "frame": {
+        "image": "/Users/raykim/Desktop/Screenshots/DaydreamAppStore/_assets/iPad Pro 13 - M4 - Space Gray - Landscape.png",
+        "screen": {
+          "x": 124,
+          "y": 118,
+          "width": 2752,
+          "height": 2064
+        },
+        "screenCornerRadius": 48,
+        "scale": 0.83,
+        "top": 523
+      }
+    }
+  },
+  "slides": [
+    {
+      "id": "01-explore-cities",
+      "screenshot": "01-explore-cities.png",
+      "captions": {
+        "en_US": "Explore\ncities"
+      },
+      "captionPositions": {
+        "ipad": "top"
+      }
+    },
+    {
+      "id": "02-ai-powered-reviews",
+      "screenshot": "02-ai-powered-reviews.png",
+      "captions": {
+        "en_US": "AI-powered\nreviews"
+      },
+      "captionPositions": {
+        "ipad": "bottom"
+      }
+    },
+    {
+      "id": "03-browse-top-sights",
+      "screenshot": "03-browse-top-sights.png",
+      "captions": {
+        "en_US": "Browse\ntop sights"
+      },
+      "captionPositions": {
+        "ipad": "top"
+      }
+    },
+    {
+      "id": "04-dark-mode",
+      "screenshot": "04-dark-mode.png",
+      "captions": {
+        "en_US": "Dark mode"
+      },
+      "captionPositions": {
+        "ipad": "bottom"
+      }
+    }
+  ]
+}
