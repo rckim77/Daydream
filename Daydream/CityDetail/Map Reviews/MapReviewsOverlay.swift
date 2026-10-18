@@ -36,7 +36,7 @@ struct MapReviewsOverlay: View {
                     GooglePlacesSwift.PlaceDetailsView(
                         query: .constant(PlaceDetailsQuery(identifier: .placeID(placeID))),
                         configuration: PlaceDetailsConfiguration(
-                            content: [.name(), .reviews()],
+                            content: [.name(), .address(), .reviews()],
                             theme: PlacesMaterialTheme()
                         ),
                         placeDetailsCallback: { result in
