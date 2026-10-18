@@ -5,7 +5,7 @@ final class PlacesReviewsOverlayUITests: XCTestCase {
     @MainActor
     func testGoogleReviewsOverlay() throws {
         continueAfterFailure = false
-        print("Provided reviews overlay QA revision 4")
+        print("Provided reviews overlay QA revision 5")
         let udid = ProcessInfo.processInfo.environment["SIMULATOR_UDID"] ?? ""
         let configURL = URL(fileURLWithPath: "/tmp/daydream-reviews-ui-\(udid).json")
         guard let data = try? Data(contentsOf: configURL) else {
@@ -49,6 +49,11 @@ final class PlacesReviewsOverlayUITests: XCTestCase {
         }
         let visible = card.frame.intersection(CGRect(x: app.frame.minX, y: 80, width: app.frame.width, height: app.frame.height - 180))
         try capture("discoveries")
+        // StoreKit can present after the screenshot begins, outside XCTest's alert monitor.
+        if app.buttons["Not Now"].waitForExistence(timeout: 2) {
+            app.buttons["Not Now"].tap()
+            try capture("discoveries")
+        }
         XCTAssertFalse(visible.isNull)
         app.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(dx: visible.midX, dy: visible.midY)).tap()
         XCTAssertTrue(app.buttons["map-close-button"].waitForExistence(timeout: 30))
