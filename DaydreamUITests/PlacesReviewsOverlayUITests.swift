@@ -46,26 +46,37 @@ final class PlacesReviewsOverlayUITests: XCTestCase {
             XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: mediaLoaded, object: nil)], timeout: 40), .completed)
             XCTAssertTrue(app.images["PlaceDetailsCompactVerticalViewPhoto"].firstMatch.exists)
         }
-        for _ in 0..<10 {
-            let safe = CGRect(x: app.frame.minX, y: 80, width: app.frame.width, height: app.frame.height - 180)
-            let visible = card.frame.intersection(safe)
-            if !visible.isNull && visible.height >= min(100, card.frame.height * 0.5) { break }
-            let delta = card.frame.maxY > app.frame.maxY - 100
-                ? min(card.frame.maxY - (app.frame.maxY - 100) + 12, app.frame.height * 0.4)
-                : max(card.frame.minY - 92, -app.frame.height * 0.4)
-            let start = app.coordinate(withNormalizedOffset: .zero)
-                .withOffset(CGVector(dx: 12, dy: app.frame.height * (delta > 0 ? 0.7 : 0.3)))
-            start.press(forDuration: 0.1, thenDragTo: start.withOffset(CGVector(dx: 0, dy: -delta)), withVelocity: .slow, thenHoldForDuration: 0.2)
+        func reveal(_ target: XCUIElement, minimumVisibleHeight: CGFloat) {
+            for _ in 0..<30 {
+                if app.buttons["Not Now"].exists { app.buttons["Not Now"].tap() }
+                let safe = CGRect(x: app.frame.minX, y: app.frame.minY + 80,
+                                  width: app.frame.width, height: app.frame.height - 180)
+                let visible = target.frame.intersection(safe)
+                if !visible.isNull && visible.height >= min(minimumVisibleHeight, target.frame.height) { return }
+                let delta = target.frame.maxY > safe.maxY
+                    ? min(target.frame.maxY - safe.maxY + 12, app.frame.height * 0.4)
+                    : max(target.frame.minY - safe.minY - 12, -app.frame.height * 0.4)
+                let start = app.coordinate(withNormalizedOffset: .zero)
+                    .withOffset(CGVector(dx: 12, dy: app.frame.height * (delta > 0 ? 0.7 : 0.3)))
+                start.press(forDuration: 0.1, thenDragTo: start.withOffset(CGVector(dx: 0, dy: -delta)), withVelocity: .slow, thenHoldForDuration: 0.2)
+            }
         }
-        let visible = card.frame.intersection(CGRect(x: app.frame.minX, y: 80, width: app.frame.width, height: app.frame.height - 180))
+        if config.requirePhotos == true {
+            let placeID = String(card.identifier.dropFirst("place-card-".count))
+            let media = app.descendants(matching: .any).matching(identifier: "place-media-" + placeID).firstMatch
+            reveal(media, minimumVisibleHeight: 160)
+            try capture("nearby-photos")
+        }
+        reveal(card, minimumVisibleHeight: 100)
         try capture("discoveries")
         // StoreKit can present after the screenshot begins, outside XCTest's alert monitor.
-        if app.buttons["Not Now"].waitForExistence(timeout: 2) {
-            app.buttons["Not Now"].tap()
-            try capture("discoveries")
-        }
+        if app.buttons["Not Now"].waitForExistence(timeout: 2) { app.buttons["Not Now"].tap() }
+        // Streaming summary text may have changed the layout while taking the capture.
+        reveal(card, minimumVisibleHeight: 100)
+        let visible = card.frame.intersection(CGRect(x: app.frame.minX, y: app.frame.minY + 80,
+                                                   width: app.frame.width, height: app.frame.height - 180))
         XCTAssertFalse(visible.isNull)
-        app.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(dx: visible.midX, dy: visible.midY)).tap()
+        app.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(dx: visible.midX - app.frame.minX, dy: visible.midY - app.frame.minY)).tap()
         if !app.buttons["map-close-button"].waitForExistence(timeout: 5) {
             card.tap()
         }
