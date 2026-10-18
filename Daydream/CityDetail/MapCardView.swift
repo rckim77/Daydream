@@ -34,12 +34,17 @@ struct MapCardView: View {
                     MKMapItem.openMaps(with: [item])
                 }
             } label: {
-                Image(systemName: "arrow.up.right.circle")
+                Image(systemName: "arrow.up.right")
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundStyle(.primary)
+                    .frame(width: 36, height: 36)
+                    .glassEffect(.regular.interactive(), in: .circle)
+                    .frame(width: 44, height: 44)
+                    .contentShape(Circle())
             }
+            .buttonStyle(.plain)
             .accessibilityLabel("Open in Maps")
-            .frame(minWidth: 44, minHeight: 44)
-            .foregroundStyle(.primary)
-            .padding(8)
+            .padding(6)
         }
         .frame(maxWidth: .infinity)
         .frame(minHeight: height ?? 190, idealHeight: height ?? 340, maxHeight: height == nil ? .infinity : height)

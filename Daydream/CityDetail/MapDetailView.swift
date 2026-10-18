@@ -1,4 +1,3 @@
-import GoogleMaps
 import GooglePlacesSwift
 import SwiftUI
 
@@ -7,7 +6,6 @@ struct MapDetailView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.colorScheme) private var colorScheme
     @State private var mapAppearanceOverride: Bool?
-    @State private var showMapInfo = false
 
     var body: some View {
         let isViewingDarkMode = mapAppearanceOverride ?? (colorScheme == .dark)
@@ -30,19 +28,8 @@ struct MapDetailView: View {
                         }
                         .accessibilityIdentifier("map-appearance-button")
                     }
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button("About Google Maps", systemImage: "info") {
-                            showMapInfo = true
-                        }
-                        .accessibilityIdentifier("map-info-button")
-                    }
                 }
                 .labelStyle(.iconOnly)
-                .alert("About Google Maps", isPresented: $showMapInfo) {
-                    Button("Got it", role: .cancel) {}
-                } message: {
-                    Text(GMSServices.openSourceLicenseInfo())
-                }
                 .onChange(of: colorScheme) { _, _ in
                     mapAppearanceOverride = nil
                 }

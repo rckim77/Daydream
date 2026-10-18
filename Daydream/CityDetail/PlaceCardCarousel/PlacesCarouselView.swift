@@ -25,10 +25,10 @@ struct PlacesCarouselView: View {
     }
 
     var body: some View {
-        let available = max(180, viewportWidth - contentMargin * 2)
+        let available = max(210, viewportWidth - contentMargin * 2)
         let cardWidth = dynamicTypeSize.isAccessibilitySize
             ? min(420, available)
-            : expandsCards ? min(300, max(180, available * 0.5)) : 180
+            : expandsCards ? min(300, max(210, available * 0.55)) : 210
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack(alignment: .top, spacing: 16) {
                 if places.isEmpty {
