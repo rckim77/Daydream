@@ -89,7 +89,8 @@ final class MapViewController: UIViewController {
         let reviewsController = UIHostingController(rootView: MapReviewsOverlay(
             state: reviewsState,
             onPlaceLoaded: { [weak self] result in
-                guard let self, self.dynamicMarkerPlaceId == result.placeID else { return }
+                // The overlay validates request identity before delivering this callback.
+                guard let self else { return }
                 self.selectedAddress = result.formattedAddress
                 self.updateMarkerPresentation()
             }
