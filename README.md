@@ -10,13 +10,18 @@ Minimum deployment target: iOS 26.0.
 
 Local verification uses Xcode 27.1 RC (`27A9275`) with the iOS 27.1 SDK. Open `Daydream.xcodeproj` to resolve Swift packages. Use `DEVELOPER_DIR=/Applications/Xcode_27.1.app/Contents/Developer` when multiple Xcode installations are present.
 
-Swift package dependencies: Google Maps 11.2.0, Google Places (including GooglePlacesSwift) 11.2.0, and SnapKit 6.0.0. Google SDK versions are pinned exactly in the project; commit the shared `Package.resolved` alongside dependency updates. Autocomplete selections pass the widget’s session token to Place Details when a network fetch is needed; existing place and image cache hits are preserved. Nearby requests are scheduled one at a time to reduce overlapping SDK request teardown; photo fetching remains concurrent. Current Location consumes a fresh delivery event even when its coordinates repeat, and stops waiting after one result or an error. At accessibility text sizes, place-card labels expand and the map opens full details in a scrolling sheet. Compact review text scrolls while its disclosure remains visible.
+Swift package dependencies: Google Maps 11.2.0, Google Places (including GooglePlacesSwift) 11.2.0, and SnapKit 6.0.0. Google SDK versions are pinned exactly in the project; commit the shared `Package.resolved` alongside dependency updates. Autocomplete selections pass the widget’s session token to Place Details when a network fetch is needed; existing place and image cache hits are preserved. Nearby requests are scheduled one at a time to reduce overlapping SDK request teardown; photo fetching remains concurrent. Current Location consumes a fresh delivery event even when its coordinates repeat, and stops waiting after one result or an error. At accessibility text sizes, place-card labels expand. Map reviews use the provided overlay described below.
 
 Create `Daydream/Shared/apiKeys.plist` with:
 - `googleAPI`
 - `placesNewAPI`
 
 These keys are required for Google Maps/Places powered features.
+
+Map reviews use Google's `PlaceDetailsView` with name/review content in a scrolling overlay; custom `Review` cards and the raw review fetch are no longer used. Photos retain their existing API/cache path. The overlay keeps visible map space and Google attribution clear of local safe areas.
+
+For reviews, the project owning the existing Places key needs billing and **Places UI Kit API** (`placewidgets.googleapis.com`). Keep **Places API (New)** (`places.googleapis.com`) for the app's other place-data calls. If the key has API restrictions, inspect whether both required APIs are allowed; retain the iOS application restriction for `com.rckim.Daydream`. Follow Google's [UI Kit setup](https://developers.google.com/maps/documentation/places/ios-sdk/places-ui-kit-get-started) and [key restriction guidance](https://developers.google.com/maps/api-security-best-practices). Configuration must be checked by the project owner; an opaque authentication error does not identify the missing setting. No Cloud configuration is applied by this app or its tests.
+
 
 For App Store Connect, run `ASC_BYPASS_KEYCHAIN=1 asc ...` from the repo root. Local `.asc/config.json` is ignored by Git and selects Daydream (`1366747814`) using the existing shared API key outside the repo. Repos without a local configuration use `~/.asc/config.json`; specify their app ID explicitly. API keys and credential configurations must stay untracked.
 

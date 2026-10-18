@@ -23,8 +23,6 @@ final class PlacesRegressionUITests: XCTestCase {
         try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
         let app = XCUIApplication(bundleIdentifier: "com.rckim.Daydream")
         app.launchEnvironment["DAYDREAM_UI_CAPTURE_CITIES"] = "Tokyo|Paris|New York City|Hong Kong|Rome"
-        if config.simulateReviewFailure == true { app.launchEnvironment["DAYDREAM_UI_CAPTURE_REVIEW_FAILURE"] = "1" }
-        if config.forceReviewFallback == true { app.launchEnvironment["DAYDREAM_UI_CAPTURE_REVIEW_FALLBACK"] = "1" }
         app.launchArguments = ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
         if config.largeText { app.launchArguments += ["-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"] }
         XCUIDevice.shared.orientation = config.landscape ? .landscapeLeft : .portrait
@@ -89,57 +87,31 @@ final class PlacesRegressionUITests: XCTestCase {
         app.coordinate(withNormalizedOffset: .zero)
             .withOffset(CGVector(dx: visibleCard.midX - app.frame.minX, dy: visibleCard.midY - app.frame.minY)).tap()
         XCTAssertTrue(app.buttons["map-close-button"].waitForExistence(timeout: 30))
-        // Allow the selected place's review summary and map tiles to finish loading.
-        Thread.sleep(forTimeInterval: 6)
-        try capture("map")
-        if app.buttons["Try Again"].exists {
-            try capture("map-load-error")
-            app.buttons["Try Again"].tap()
-        }
+        let overlay = app.descendants(matching: .any).matching(identifier: "map-reviews-overlay").firstMatch
+        XCTAssertTrue(overlay.waitForExistence(timeout: 30))
         let reviewsReady = NSPredicate { _, _ in
-            app.staticTexts["map-review-summary"].exists || app.buttons["map-review-card"].exists || app.buttons["map-place-details-button"].exists
+            ["loaded", "unavailable"].contains(overlay.value as? String ?? "")
         }
-        XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: reviewsReady, object: nil)], timeout: 30), .completed)
+        XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: reviewsReady, object: nil)], timeout: 40), .completed)
         try capture("map-reviews")
-        if app.staticTexts["map-review-disclosure"].exists && !config.largeText {
-            XCTAssertTrue(app.staticTexts["map-review-disclosure"].isHittable)
-        }
-        if app.buttons["map-place-details-button"].exists {
-            app.buttons["map-place-details-button"].tap()
-            XCTAssertTrue(app.buttons["map-place-details-close"].waitForExistence(timeout: 10))
-            if app.buttons["Try Again"].exists {
-                try capture("accessible-place-details-error")
-                app.buttons["Try Again"].tap()
-                let recovered = NSPredicate { _, _ in app.staticTexts["map-review-summary"].exists || app.buttons["map-review-card"].exists }
-                XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: recovered, object: nil)], timeout: 30), .completed)
-            }
-            if config.forceReviewFallback == true { XCTAssertTrue(app.buttons["map-review-card"].firstMatch.waitForExistence(timeout: 30)) }
-            try capture("accessible-place-details")
-            let end = app.buttons["map-place-open-maps"]
-            for _ in 0..<40 {
-                if end.isHittable { break }
-                app.scrollViews["map-place-details-scroll"].swipeUp()
-            }
-            XCTAssertTrue(end.isHittable, "All place details and reviews must be reachable by scrolling")
-            try capture("accessible-place-details-end")
-            app.buttons["map-place-details-close"].tap()
+        if app.buttons["map-reviews-retry"].exists {
+            XCTAssertTrue(app.buttons["map-reviews-retry"].isHittable)
+            app.buttons["map-reviews-retry"].tap()
+            XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: reviewsReady, object: nil)], timeout: 40), .completed)
+            try capture("map-retry")
         }
         XCUIDevice.shared.orientation = config.landscape ? .portrait : .landscapeRight
         try capture("map-rotated")
-        XCTAssertTrue(app.buttons["map-close-button"].exists)
-        if app.buttons["map-place-details-button"].exists {
-            app.buttons["map-place-details-button"].tap()
-            XCTAssertTrue(app.buttons["map-place-details-close"].waitForExistence(timeout: 10))
-            try capture("accessible-place-details-rotated")
-            app.buttons["map-place-details-close"].tap()
-        }
+        XCTAssertTrue(app.buttons["map-close-button"].isHittable)
+        XCTAssertTrue(overlay.exists)
         if config.allRotations == true {
             for (name, orientation) in [("landscape-left", UIDeviceOrientation.landscapeLeft), ("landscape-right", .landscapeRight), ("upside-down", .portraitUpsideDown), ("portrait", .portrait)] {
                 XCUIDevice.shared.orientation = orientation
                 try capture("map-" + name)
-                XCTAssertTrue(app.buttons["map-close-button"].exists)
-                if app.staticTexts["map-review-disclosure"].exists && !config.largeText {
-                    XCTAssertTrue(app.staticTexts["map-review-disclosure"].isHittable)
+                XCTAssertTrue(app.buttons["map-close-button"].isHittable)
+                XCTAssertTrue(overlay.exists)
+                if app.buttons["map-reviews-retry"].exists {
+                    XCTAssertTrue(app.buttons["map-reviews-retry"].isHittable)
                 }
             }
         }
@@ -191,8 +163,6 @@ private struct Configuration: Decodable {
     let landscape: Bool
     let largeText: Bool
     let locationMode: String?
-    let simulateReviewFailure: Bool?
-    let forceReviewFallback: Bool?
     let skipAutocomplete: Bool?
     let mapOnly: Bool?
     let allRotations: Bool?
