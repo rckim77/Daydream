@@ -18,7 +18,7 @@ Create `Daydream/Shared/apiKeys.plist` with:
 
 These keys are required for Google Maps/Places powered features.
 
-Map reviews use Google's `PlaceDetailsView` with name/review content in a scrolling overlay; custom `Review` cards and the raw review fetch are no longer used. Photos retain their existing API/cache path. The overlay keeps visible map space and Google attribution clear of local safe areas.
+Map reviews use Google's `PlaceDetailsView` with name/address/review content in a scrolling overlay; custom `Review` cards and the raw review fetch are no longer used. Photos retain their existing API/cache path. The overlay keeps visible map space and Google attribution clear of local safe areas.
 
 For reviews, the project owning the existing Places key needs billing and **Places UI Kit API** (`placewidgets.googleapis.com`). Keep **Places API (New)** (`places.googleapis.com`) for the app's other place-data calls. If the key has API restrictions, inspect whether both required APIs are allowed; retain the iOS application restriction for `com.rckim.Daydream`. Follow Google's [UI Kit setup](https://developers.google.com/maps/documentation/places/ios-sdk/places-ui-kit-get-started) and [key restriction guidance](https://developers.google.com/maps/api-security-best-practices). Configuration must be checked by the project owner; an opaque authentication error does not identify the missing setting. No Cloud configuration is applied by this app or its tests.
 
