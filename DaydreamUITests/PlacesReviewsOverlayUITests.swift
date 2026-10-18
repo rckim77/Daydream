@@ -59,6 +59,9 @@ final class PlacesReviewsOverlayUITests: XCTestCase {
         }
         XCTAssertFalse(visible.isNull)
         app.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(dx: visible.midX, dy: visible.midY)).tap()
+        if !app.buttons["map-close-button"].waitForExistence(timeout: 5) {
+            card.tap()
+        }
         XCTAssertTrue(app.buttons["map-close-button"].waitForExistence(timeout: 30))
         try capture("map-initial")
         let overlay = app.descendants(matching: .any).matching(identifier: "map-reviews-overlay").firstMatch
