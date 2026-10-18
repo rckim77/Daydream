@@ -22,3 +22,9 @@ Both configurations are required in `config.json`. Base device definitions live 
 Capture runs serially. For a focused check, set `VISUAL_QA_DEVICE_PROFILES='configured-device-id:Dedicated Simulator Name'`. Capture reinstalls the app by default; use dedicated simulators to preserve personal app state. `--suite base --clean` deletes only base artifacts; `--suite additional --refresh-dashboard` rebuilds the additional report without capturing.
 
 The dedicated `VisualQA` scheme and `visualqa.xctestplan` keep captures separate from regular unit tests. The capture test supplies a fixed city order through an opt-in Debug launch environment. Tips are not reset. Images use the real Places/cache path, and the test waits for all five photos. Provide the existing ignored `Daydream/Shared/apiKeys.plist` locally. City detail and map screens are outside this suite.
+
+## Live Google photo and review components
+
+`PlacesReviewsOverlayUITests/testGoogleReviewsOverlay` is an opt-in English check of Nearby photos and the in-app map. Provide `/tmp/daydream-reviews-ui-<SIMULATOR_UDID>.json` with an absolute `outputDirectory`, an `expiresAt` future Unix timestamp, and `largeText` (boolean). Optional `requirePhotos: true` requires the selected place's provided media component to load and expose a photo. Optional `requireReviews: true` requires real review text, scrolls to Google's end disclosure and checks that it is reachable. Without a current configuration the test skips.
+
+The suite captures real SDK content, rotations, appearance, and error/Retry states when present. The long, unchanged Google license alert is excluded from this focused check. Use one dedicated simulator at a time with two build jobs and serial tests. Keep configuration, screenshots and result bundles outside Git. Existing local keys must permit Places UI Kit as described in the main README; no key or Cloud settings are changed by the test.
