@@ -19,8 +19,7 @@ final class MapViewController: UIViewController {
     private var place: Place
     private var dynamicMapView: GMSMapView?
     private var dynamicMarker: GMSMarker?
-    private weak var reviewsView: UIView?
-    private var reviewsHeightConstraint: Constraint?
+    private weak var placeDetailCardView: UIView?
     private var usesAccessibleDetails = false
     private var selectedAddress: String?
     /// Used to provide more accurate location when deeplinking to Google Maps
@@ -62,18 +61,13 @@ final class MapViewController: UIViewController {
             updateMarkerPresentation()
         }
 
-        if let dynamicMapView, let reviewsView {
-            let availableHeight = view.safeAreaLayoutGuide.layoutFrame.height
-            let height = min(420, max(120, availableHeight * 0.46))
-            if abs(reviewsView.bounds.height - height) > 0.5 {
-                reviewsHeightConstraint?.update(offset: height)
-            }
-            // Reserve visible map space and keep Google Maps attribution above the overlay.
-            let reviewsFrame = dynamicMapView.convert(reviewsView.bounds, from: reviewsView)
+        if let dynamicMapView, let placeDetailCardView {
+            // Keep map attribution and the selected place above the content-sized card.
+            let cardFrame = dynamicMapView.convert(placeDetailCardView.bounds, from: placeDetailCardView)
             let padding = UIEdgeInsets(
                 top: max(dynamicMapView.safeAreaInsets.top, usesAccessibleDetails ? 0 : Self.markerInfoWindowHeadroom),
                 left: dynamicMapView.safeAreaInsets.left,
-                bottom: max(dynamicMapView.safeAreaInsets.bottom, dynamicMapView.bounds.maxY - reviewsFrame.minY),
+                bottom: max(dynamicMapView.safeAreaInsets.bottom, dynamicMapView.bounds.maxY - cardFrame.minY),
                 right: dynamicMapView.safeAreaInsets.right
             )
             if dynamicMapView.padding != padding { dynamicMapView.padding = padding }
@@ -86,7 +80,7 @@ final class MapViewController: UIViewController {
     }
 
     private func addProgrammaticViews() {
-        let reviewsController = UIHostingController(rootView: MapReviewsOverlay(
+        let placeDetailCardController = UIHostingController(rootView: MapPlaceDetailCardView(
             state: reviewsState,
             onPlaceLoaded: { [weak self] result in
                 // The overlay validates request identity before delivering this callback.
@@ -95,20 +89,21 @@ final class MapViewController: UIViewController {
                 self.updateMarkerPresentation()
             }
         ))
-        addChild(reviewsController)
-        view.addSubview(reviewsController.view)
-        reviewsView = reviewsController.view
-        reviewsController.view.backgroundColor = .clear
-        reviewsController.didMove(toParent: self)
+        // UIKit positions the card inside its safe area; SwiftUI only measures the content.
+        placeDetailCardController.safeAreaRegions = []
+        placeDetailCardController.sizingOptions = .intrinsicContentSize
+        addChild(placeDetailCardController)
+        view.addSubview(placeDetailCardController.view)
+        placeDetailCardView = placeDetailCardController.view
+        placeDetailCardController.view.backgroundColor = .clear
+        placeDetailCardController.didMove(toParent: self)
 
-        reviewsController.view.snp.makeConstraints { make in
+        placeDetailCardController.view.snp.makeConstraints { make in
             make.centerX.equalTo(view.safeAreaLayoutGuide)
-            make.leading.greaterThanOrEqualTo(view.safeAreaLayoutGuide).offset(12)
-            make.trailing.lessThanOrEqualTo(view.safeAreaLayoutGuide).inset(12)
             make.width.equalTo(view.safeAreaLayoutGuide).offset(-24).priority(.high)
             make.width.lessThanOrEqualTo(450)
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(12)
-            reviewsHeightConstraint = make.height.equalTo(200).constraint
+            make.top.greaterThanOrEqualTo(view.safeAreaLayoutGuide).offset(12)
         }
     }
 

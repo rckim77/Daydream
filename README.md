@@ -18,7 +18,7 @@ Create `Daydream/Shared/apiKeys.plist` with:
 
 These keys are required for Google Maps/Places powered features.
 
-Map reviews use Google's `PlaceDetailsView` with name/address/review content in a scrolling overlay; custom `Review` cards and the raw review fetch are no longer used. Photos retain their existing API/cache path. The overlay keeps visible map space and Google attribution clear of local safe areas.
+Map place details use Google's horizontal `PlaceDetailsCompactView` with standard content. The card uses its content height, sits above the bottom safe area, and keeps map attribution clear. Custom `Review` cards and the raw review fetch are no longer used. City photos retain their existing API/cache path.
 
 Nearby sight/eatery cards use Google's compact Place Details component for photos, names, prices and attribution, with a separate **View map** button for Daydream's map/reviews. The component owns its photo loading and cache lifetime. Cards use explicit supported widths and grow for accessibility text. City-card images, city-photo caching and blurred city backgrounds keep their existing UIImage path; its photo APIs remain deprecated until a behavior-preserving image-data replacement is available.
 

@@ -1,8 +1,7 @@
 import GooglePlacesSwift
 import SwiftUI
 
-/// Google's full component owns review rendering, scrolling and attribution inside the map overlay.
-struct MapReviewsOverlay: View {
+struct MapPlaceDetailCardView: View {
     let state: MapReviewsViewState
     let onPlaceLoaded: (Place) -> Void
 
@@ -30,15 +29,16 @@ struct MapReviewsOverlay: View {
                                 .accessibilityIdentifier("map-reviews-retry")
                         }
                     }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .frame(maxWidth: .infinity)
                     .padding(16)
                 } else {
-                    GooglePlacesSwift.PlaceDetailsView(
+                    let compactConfig = PlaceDetailsCompactConfiguration(content: PlaceDetailsCompactView.standardContent,
+                                                                         preferTruncation: true,
+                                                                         theme: PlacesMaterialTheme())
+                    PlaceDetailsCompactView(
+                        orientation: .horizontal,
                         query: .constant(PlaceDetailsQuery(identifier: .placeID(placeID))),
-                        configuration: PlaceDetailsConfiguration(
-                            content: [.name(), .address(), .reviews()],
-                            theme: PlacesMaterialTheme()
-                        ),
+                        configuration: compactConfig,
                         placeDetailsCallback: { result in
                             if result.error != nil {
                                 state.complete(requestID: requestID, failed: true)
@@ -53,7 +53,7 @@ struct MapReviewsOverlay: View {
                 }
             }
             .background(.background)
-            .clipShape(RoundedRectangle(cornerRadius: 16))
+            .clipShape(RoundedRectangle(cornerRadius: 20))
             .shadow(color: .black.opacity(0.15), radius: 4, y: 2)
             .accessibilityElement(children: .contain)
             .accessibilityValue(state.loadFailed ? "unavailable" : state.hasLoaded ? "loaded" : "loading")
