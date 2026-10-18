@@ -82,6 +82,10 @@ final class PlacesRegressionUITests: XCTestCase {
             start.press(forDuration: 0.1, thenDragTo: start.withOffset(CGVector(dx: 0, dy: -delta)), withVelocity: .slow, thenHoldForDuration: 0.2)
         }
         try capture("discoveries")
+        if app.buttons["Not Now"].waitForExistence(timeout: 2) {
+            app.buttons["Not Now"].tap()
+            try capture("discoveries")
+        }
         let visibleCard = card.frame.intersection(CGRect(x: app.frame.minX, y: 80, width: app.frame.width, height: app.frame.height - 180))
         XCTAssertFalse(visibleCard.isNull, "Scroll the selected card into the visible content area")
         app.coordinate(withNormalizedOffset: .zero)
