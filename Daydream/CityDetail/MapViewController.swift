@@ -30,6 +30,7 @@ final class MapViewController: UIViewController {
     var isViewingDarkMode: Bool {
         didSet {
             guard isViewingDarkMode != oldValue else { return }
+            overrideUserInterfaceStyle = isViewingDarkMode ? .dark : .light
             dynamicMapView?.configureMapStyle(isDark: isViewingDarkMode)
         }
     }
@@ -38,6 +39,7 @@ final class MapViewController: UIViewController {
         self.place = place
         self.isViewingDarkMode = isViewingDarkMode
         super.init(nibName: nil, bundle: nil)
+        overrideUserInterfaceStyle = isViewingDarkMode ? .dark : .light
     }
     
     required init?(coder: NSCoder) {
