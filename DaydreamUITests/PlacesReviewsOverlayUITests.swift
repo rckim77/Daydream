@@ -93,6 +93,12 @@ final class PlacesReviewsOverlayUITests: XCTestCase {
             }
             XCTAssertTrue(disclosure.isHittable, "The end of Google's reviews must remain reachable")
             try capture("reviews-end")
+            for _ in 0..<40 {
+                if reviewsTab.isHittable { break }
+                content.swipeDown(velocity: .fast)
+            }
+            content.swipeUp(velocity: .slow)
+            try capture("reviews-reading")
         }
         if app.buttons["map-reviews-retry"].exists {
             app.buttons["map-reviews-retry"].tap()
