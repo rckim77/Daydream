@@ -16,6 +16,7 @@ final class PlacesReviewsOverlayUITests: XCTestCase {
         let output = URL(fileURLWithPath: config.outputDirectory, isDirectory: true)
         try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
         let app = XCUIApplication(bundleIdentifier: "com.rckim.Daydream")
+        app.launchArguments += ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
         app.launchEnvironment["DAYDREAM_UI_CAPTURE_CITIES"] = "Tokyo|Paris|New York City|Hong Kong|Rome"
         if config.largeText { app.launchArguments += ["-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"] }
         XCUIDevice.shared.orientation = .portrait
@@ -44,7 +45,7 @@ final class PlacesReviewsOverlayUITests: XCTestCase {
             let media = app.descendants(matching: .any).matching(identifier: "place-media-" + placeID).firstMatch
             let mediaLoaded = NSPredicate { _, _ in media.value as? String == "loaded" }
             XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: mediaLoaded, object: nil)], timeout: 40), .completed)
-            XCTAssertTrue(app.images["PlaceDetailsCompactVerticalViewPhoto"].firstMatch.exists)
+            XCTAssertTrue(media.images["PlaceDetailsCompactVerticalViewPhoto"].firstMatch.exists)
         }
         func reveal(_ target: XCUIElement, minimumVisibleHeight: CGFloat) {
             for _ in 0..<30 {
