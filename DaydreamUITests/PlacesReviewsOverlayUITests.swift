@@ -1,10 +1,11 @@
 import XCTest
 
 /// Opt-in live-service coverage for the provided reviews overlay; no credentials in configuration.
-final class ReviewsComponentUITests: XCTestCase {
+final class PlacesReviewsOverlayUITests: XCTestCase {
     @MainActor
-    func testReviewsOverlay() throws {
+    func testGoogleReviewsOverlay() throws {
         continueAfterFailure = false
+        print("Provided reviews overlay QA revision 2")
         let udid = ProcessInfo.processInfo.environment["SIMULATOR_UDID"] ?? ""
         let configURL = URL(fileURLWithPath: "/tmp/daydream-reviews-ui-\(udid).json")
         guard let data = try? Data(contentsOf: configURL) else {
@@ -51,7 +52,8 @@ final class ReviewsComponentUITests: XCTestCase {
         XCTAssertFalse(visible.isNull)
         app.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(dx: visible.midX, dy: visible.midY)).tap()
         XCTAssertTrue(app.buttons["map-close-button"].waitForExistence(timeout: 30))
-        let overlay = app.otherElements["map-reviews-overlay"].firstMatch
+        try capture("map-initial")
+        let overlay = app.descendants(matching: .any).matching(identifier: "map-reviews-overlay").firstMatch
         XCTAssertTrue(overlay.waitForExistence(timeout: 30))
         let completed = NSPredicate { _, _ in ["loaded", "unavailable"].contains(overlay.value as? String ?? "") }
         XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: completed, object: nil)], timeout: 40), .completed)
