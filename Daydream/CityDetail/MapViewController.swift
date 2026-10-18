@@ -16,6 +16,9 @@ final class MapViewController: UIViewController {
 
     // Reserve room for Google's selected-marker callout on short landscape maps.
     private static let markerInfoWindowHeadroom: CGFloat = 80
+    private static let defaultZoom: Float = 16
+    private static let buildingZoom: Float = 18
+    private var zoomBefore3D: Float?
     private var place: Place
     private var dynamicMapView: GMSMapView?
     private var dynamicMarker: GMSMarker?
@@ -35,9 +38,33 @@ final class MapViewController: UIViewController {
         }
     }
 
-    init(place: Place, isViewingDarkMode: Bool) {
+    var isViewing3D: Bool {
+        didSet {
+            guard isViewing3D != oldValue, let mapView = dynamicMapView else { return }
+            let camera = mapView.camera
+            let zoom: Float
+            if isViewing3D {
+                zoomBefore3D = camera.zoom
+                zoom = max(camera.zoom, Self.buildingZoom)
+            } else {
+                zoom = zoomBefore3D ?? Self.defaultZoom
+                zoomBefore3D = nil
+            }
+            mapView.isBuildingsEnabled = isViewing3D
+            // Animate zoom and tilt together while keeping the user's center and bearing.
+            mapView.animate(to: GMSCameraPosition(
+                target: camera.target,
+                zoom: zoom,
+                bearing: camera.bearing,
+                viewingAngle: isViewing3D ? 60 : 0
+            ))
+        }
+    }
+
+    init(place: Place, isViewingDarkMode: Bool, isViewing3D: Bool) {
         self.place = place
         self.isViewingDarkMode = isViewingDarkMode
+        self.isViewing3D = isViewing3D
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -113,9 +140,14 @@ final class MapViewController: UIViewController {
         guard let placeId = placeId, let name = name, let location = location else {
             return
         }
-        let camera = GMSCameraPosition.camera(withLatitude: location.latitude,
-                                              longitude: location.longitude,
-                                              zoom: 16.0)
+        zoomBefore3D = isViewing3D ? Self.defaultZoom : nil
+        let camera = GMSCameraPosition(
+            latitude: location.latitude,
+            longitude: location.longitude,
+            zoom: isViewing3D ? Self.buildingZoom : Self.defaultZoom,
+            bearing: 0,
+            viewingAngle: isViewing3D ? 60 : 0
+        )
 
         if let dynamicMapView = dynamicMapView {
             dynamicMapView.animate(to: camera)
@@ -125,6 +157,7 @@ final class MapViewController: UIViewController {
             options.camera = camera
             options.frame = .zero
             let mapViewNew = GMSMapView(options: options)
+            mapViewNew.isBuildingsEnabled = isViewing3D
             dynamicMapView = mapViewNew
 
             guard let dynamicMapView = dynamicMapView else {

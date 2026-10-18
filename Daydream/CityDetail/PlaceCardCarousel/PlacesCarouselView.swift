@@ -19,6 +19,7 @@ struct PlacesCarouselView: View {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var viewportWidth: CGFloat = 0
     private let contentMargin: CGFloat = 24
+    private let topContentMargin: CGFloat = 16
     
     private var placeholderCount: Int {
         horizontalSizeClass == .regular ? 9 : 4
@@ -43,9 +44,11 @@ struct PlacesCarouselView: View {
             }
         }
         .onGeometryChange(for: CGFloat.self, of: { $0.size.width }) { viewportWidth = $0 }
-        .contentMargins(contentMargin, for: .scrollContent)
+        .contentMargins(.horizontal, contentMargin, for: .scrollContent)
+        .contentMargins(.top, topContentMargin, for: .scrollContent)
+        .contentMargins(.bottom, contentMargin, for: .scrollContent)
         .frame(
-            minHeight: expandsCards ? PlaceCardView.minimumHeight + contentMargin * 2 : nil,
+            minHeight: expandsCards ? PlaceCardView.minimumHeight + topContentMargin + contentMargin : nil,
             maxHeight: expandsCards ? .infinity : nil
         )
         .mask {

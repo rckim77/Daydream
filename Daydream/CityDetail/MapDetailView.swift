@@ -6,12 +6,17 @@ struct MapDetailView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.colorScheme) private var colorScheme
     @State private var mapAppearanceOverride: Bool?
+    @State private var isViewing3D = true
 
     var body: some View {
         let isViewingDarkMode = mapAppearanceOverride ?? (colorScheme == .dark)
 
         NavigationStack {
-            MapViewControllerRepresentable(place: place, isViewingDarkMode: isViewingDarkMode)
+            MapViewControllerRepresentable(
+                place: place,
+                isViewingDarkMode: isViewingDarkMode,
+                isViewing3D: isViewing3D
+            )
                 .ignoresSafeArea(.container, edges: .all)
                 .toolbarTitleDisplayMode(.inline)
                 .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
@@ -22,11 +27,17 @@ struct MapDetailView: View {
                         }
                         .accessibilityIdentifier("map-close-button")
                     }
-                    ToolbarItem(placement: .topBarTrailing) {
+                    ToolbarItemGroup(placement: .topBarTrailing) {
                         Button("Map Appearance", systemImage: isViewingDarkMode ? "sun.max" : "moon") {
                             mapAppearanceOverride = !isViewingDarkMode
                         }
                         .accessibilityIdentifier("map-appearance-button")
+
+                        Button(isViewing3D ? "Show 2D map" : "Show 3D map",
+                               systemImage: isViewing3D ? "view.2d" : "view.3d") {
+                            isViewing3D.toggle()
+                        }
+                        .accessibilityIdentifier("map-dimension-button")
                     }
                 }
                 .labelStyle(.iconOnly)
