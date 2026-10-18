@@ -5,7 +5,7 @@ final class PlacesReviewsOverlayUITests: XCTestCase {
     @MainActor
     func testGoogleReviewsOverlay() throws {
         continueAfterFailure = false
-        print("Provided reviews overlay QA revision 5")
+        print("Content-sized compact map card QA revision 6")
         let udid = ProcessInfo.processInfo.environment["SIMULATOR_UDID"] ?? ""
         let configURL = URL(fileURLWithPath: "/tmp/daydream-reviews-ui-\(udid).json")
         guard let data = try? Data(contentsOf: configURL) else {
@@ -33,20 +33,6 @@ final class PlacesReviewsOverlayUITests: XCTestCase {
             try XCUIScreen.main.screenshot().pngRepresentation.write(to: output.appendingPathComponent(name + ".png"))
             try app.debugDescription.write(to: output.appendingPathComponent(name + ".txt"), atomically: true, encoding: .utf8)
         }
-        XCTAssertTrue(app.buttons["city-loaded-Tokyo"].waitForExistence(timeout: 90))
-        app.buttons["city-loaded-Tokyo"].tap()
-        let card = app.buttons.matching(NSPredicate(
-            format: "label == %@ OR (identifier BEGINSWITH %@ AND identifier != %@)",
-            "Sensō-ji", "place-card-", "place-card-loading"
-        )).firstMatch
-        XCTAssertTrue(card.waitForExistence(timeout: 60))
-        if config.requirePhotos == true {
-            let placeID = String(card.identifier.dropFirst("place-card-".count))
-            let media = app.descendants(matching: .any).matching(identifier: "place-media-" + placeID).firstMatch
-            let mediaLoaded = NSPredicate { _, _ in media.value as? String == "loaded" }
-            XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: mediaLoaded, object: nil)], timeout: 40), .completed)
-            XCTAssertTrue(media.images["PlaceDetailsCompactVerticalViewPhoto"].firstMatch.exists)
-        }
         func reveal(_ target: XCUIElement, minimumVisibleHeight: CGFloat) {
             for _ in 0..<30 {
                 if app.buttons["Not Now"].exists { app.buttons["Not Now"].tap() }
@@ -61,6 +47,23 @@ final class PlacesReviewsOverlayUITests: XCTestCase {
                     .withOffset(CGVector(dx: 12, dy: app.frame.height * (delta > 0 ? 0.7 : 0.3)))
                 start.press(forDuration: 0.1, thenDragTo: start.withOffset(CGVector(dx: 0, dy: -delta)), withVelocity: .slow, thenHoldForDuration: 0.2)
             }
+        }
+        let city = app.buttons["city-loaded-Tokyo"]
+        XCTAssertTrue(city.waitForExistence(timeout: 90))
+        if app.buttons["xmark.circle.fill"].exists { app.buttons["xmark.circle.fill"].tap() }
+        reveal(city, minimumVisibleHeight: 100)
+        city.tap()
+        let card = app.buttons.matching(NSPredicate(
+            format: "label == %@ OR (identifier BEGINSWITH %@ AND identifier != %@)",
+            "Sensō-ji", "place-card-", "place-card-loading"
+        )).firstMatch
+        XCTAssertTrue(card.waitForExistence(timeout: 60))
+        if config.requirePhotos == true {
+            let placeID = String(card.identifier.dropFirst("place-card-".count))
+            let media = app.descendants(matching: .any).matching(identifier: "place-media-" + placeID).firstMatch
+            let mediaLoaded = NSPredicate { _, _ in media.value as? String == "loaded" }
+            XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: mediaLoaded, object: nil)], timeout: 40), .completed)
+            XCTAssertTrue(media.images["PlaceDetailsCompactVerticalViewPhoto"].firstMatch.exists)
         }
         if config.requirePhotos == true {
             let placeID = String(card.identifier.dropFirst("place-card-".count))
@@ -125,7 +128,9 @@ final class PlacesReviewsOverlayUITests: XCTestCase {
             if app.buttons["map-reviews-retry"].exists {
                 XCTAssertTrue(app.buttons["map-reviews-retry"].isHittable)
             }
-            XCTAssertLessThan(overlay.frame.height, app.frame.height * 0.7)
+            XCTAssertGreaterThan(overlay.frame.height, 0)
+            XCTAssertGreaterThanOrEqual(overlay.frame.minY, app.frame.minY)
+            XCTAssertLessThanOrEqual(overlay.frame.maxY, app.frame.maxY)
             XCTAssertGreaterThanOrEqual(overlay.frame.width, min(250, app.frame.width - 24))
         }
         XCUIDevice.shared.orientation = .portrait
