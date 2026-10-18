@@ -212,11 +212,11 @@ extension API {
                 let excludedTypes: Set<PlaceType>
                 switch type {
                 case .sights:
-                    placeProps = [.photos, .displayName, .placeID, .coordinate, .reviewSummary]
+                    placeProps = [.displayName, .placeID, .coordinate]
                     includedTypes = [.touristAttraction, .park, .museum]
                     excludedTypes = [.restaurant, .bar, .cafe, .bakery]
                 case .eateries:
-                    placeProps = [.photos, .displayName, .placeID, .coordinate, .priceLevel, .reviewSummary]
+                    placeProps = [.displayName, .placeID, .coordinate, .priceLevel]
                     includedTypes = [.restaurant, .bar, .bakery]
                     excludedTypes = [.touristAttraction, .park, .museum, .stadium]
                 }

@@ -34,8 +34,18 @@ final class PlacesReviewsOverlayUITests: XCTestCase {
         }
         XCTAssertTrue(app.buttons["city-loaded-Tokyo"].waitForExistence(timeout: 90))
         app.buttons["city-loaded-Tokyo"].tap()
-        let card = app.buttons.containing(.staticText, identifier: "Sensō-ji").firstMatch
+        let card = app.buttons.matching(NSPredicate(
+            format: "label == %@ OR (identifier BEGINSWITH %@ AND identifier != %@)",
+            "Sensō-ji", "place-card-", "place-card-loading"
+        )).firstMatch
         XCTAssertTrue(card.waitForExistence(timeout: 60))
+        if config.requirePhotos == true {
+            let placeID = String(card.identifier.dropFirst("place-card-".count))
+            let media = app.descendants(matching: .any).matching(identifier: "place-media-" + placeID).firstMatch
+            let mediaLoaded = NSPredicate { _, _ in media.value as? String == "loaded" }
+            XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: mediaLoaded, object: nil)], timeout: 40), .completed)
+            XCTAssertTrue(app.images["PlaceDetailsCompactVerticalViewPhoto"].firstMatch.exists)
+        }
         for _ in 0..<10 {
             let safe = CGRect(x: app.frame.minX, y: 80, width: app.frame.width, height: app.frame.height - 180)
             let visible = card.frame.intersection(safe)
@@ -114,4 +124,5 @@ private struct Configuration: Decodable {
     let expiresAt: TimeInterval
     let largeText: Bool
     let requireReviews: Bool?
+    let requirePhotos: Bool?
 }
