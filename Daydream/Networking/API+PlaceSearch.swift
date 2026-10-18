@@ -176,22 +176,6 @@ extension API {
             }
         }
         
-        @MainActor
-        static func fetchPlaceWithReviewsBy(placeId: String) async -> Place? {
-            let fetchPlaceRequest = FetchPlaceRequest(
-                placeID: placeId,
-                placeProperties: [.placeID, .coordinate, .reviews, .reviewSummary, .formattedAddress, .displayName]
-            )
-            
-            switch await PlacesClient.shared.fetchPlace(with: fetchPlaceRequest) {
-            case .success(let place):
-                return place
-            case .failure(let error):
-                print("=== fetchPlaceWithReviewsBy(placeId:) call failed: \(error.localizedDescription)")
-                return nil
-            }
-        }
-        
         /// Uses UIImage cache to fetch by photo hash value, otherwise calls Places SDK and adds to cache
         @MainActor
         static func fetchImageBy(photo: Photo, horizontalSizeClass: UserInterfaceSizeClass? = nil) async throws -> UIImage {

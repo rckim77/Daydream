@@ -20,10 +20,11 @@ final class MapViewController: UIViewController {
     private var dynamicMapView: GMSMapView?
     private var dynamicMarker: GMSMarker?
     private weak var reviewsView: UIView?
+    private var reviewsHeightConstraint: Constraint?
     /// Used to provide more accurate location when deeplinking to Google Maps
     private var dynamicMarkerPlaceId: String?
     /// Object that updates map review SwiftUI code
-    private var mapReviewContext = MapReviewContext(place: nil)
+    private let reviewsState = MapReviewsViewState()
 
     var isViewingDarkMode: Bool {
         didSet {
@@ -54,14 +55,20 @@ final class MapViewController: UIViewController {
         super.viewDidLayoutSubviews()
 
         if let dynamicMapView, let reviewsView {
-            // Move the camera's visible center above the reviews after every resize.
+            let availableHeight = view.safeAreaLayoutGuide.layoutFrame.height
+            let height = min(420, max(120, availableHeight * 0.46))
+            if abs(reviewsView.bounds.height - height) > 0.5 {
+                reviewsHeightConstraint?.update(offset: height)
+            }
+            // Reserve visible map space and keep Google Maps attribution above the overlay.
             let reviewsFrame = dynamicMapView.convert(reviewsView.bounds, from: reviewsView)
-            dynamicMapView.padding = UIEdgeInsets(
+            let padding = UIEdgeInsets(
                 top: max(dynamicMapView.safeAreaInsets.top, Self.markerInfoWindowHeadroom),
                 left: dynamicMapView.safeAreaInsets.left,
                 bottom: max(dynamicMapView.safeAreaInsets.bottom, dynamicMapView.bounds.maxY - reviewsFrame.minY),
                 right: dynamicMapView.safeAreaInsets.right
             )
+            if dynamicMapView.padding != padding { dynamicMapView.padding = padding }
         }
     }
 
@@ -71,17 +78,27 @@ final class MapViewController: UIViewController {
     }
 
     private func addProgrammaticViews() {
-        let reviewsCarouselVC = UIHostingController(rootView: MapReviewsCarousel(context: mapReviewContext))
-        addChild(reviewsCarouselVC)
-        view.addSubview(reviewsCarouselVC.view)
-        reviewsView = reviewsCarouselVC.view
-        reviewsCarouselVC.view.backgroundColor = .clear
-        reviewsCarouselVC.didMove(toParent: self)
-        
-        reviewsCarouselVC.view.snp.makeConstraints { make in
-            make.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+        let reviewsController = UIHostingController(rootView: MapReviewsOverlay(
+            state: reviewsState,
+            onPlaceLoaded: { [weak self] result in
+                guard let self, self.dynamicMarkerPlaceId == result.placeID else { return }
+                self.dynamicMarker?.snippet = result.formattedAddress
+            }
+        ))
+        addChild(reviewsController)
+        view.addSubview(reviewsController.view)
+        reviewsView = reviewsController.view
+        reviewsController.view.backgroundColor = .clear
+        reviewsController.didMove(toParent: self)
+
+        reviewsController.view.snp.makeConstraints { make in
+            make.centerX.equalTo(view.safeAreaLayoutGuide)
+            make.leading.greaterThanOrEqualTo(view.safeAreaLayoutGuide).offset(12)
+            make.trailing.lessThanOrEqualTo(view.safeAreaLayoutGuide).inset(12)
+            make.width.equalTo(view.safeAreaLayoutGuide).offset(-24).priority(.high)
+            make.width.lessThanOrEqualTo(450)
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(12)
-            make.height.equalTo(200)
+            reviewsHeightConstraint = make.height.equalTo(200).constraint
         }
     }
 
@@ -146,18 +163,9 @@ final class MapViewController: UIViewController {
 
         mapView.selectedMarker = dynamicMarker
 
-        dynamicMarker.tracksInfoWindowChanges = true
-
-        Task {
-            guard let result = await API.PlaceSearch.fetchPlaceWithReviewsBy(placeId: placeId) else {
-                return
-            }
-
-            dynamicMarker.snippet = result.formattedAddress
-            dynamicMarker.tracksInfoWindowChanges = false
-            place = result
-            mapReviewContext.place = result
-        }
+        dynamicMarker.snippet = nil
+        dynamicMarker.accessibilityLabel = name
+        reviewsState.select(placeID: placeId, name: name)
     }
 
 }
