@@ -3,6 +3,7 @@ import SwiftUI
 
 struct MapPlaceDetailCardView: View {
     let state: MapReviewsViewState
+    var isViewingDarkMode: Bool
     let onPlaceLoaded: (Place) -> Void
 
     var body: some View {
@@ -33,7 +34,6 @@ struct MapPlaceDetailCardView: View {
                     .padding(16)
                 } else {
                     let compactConfig = PlaceDetailsCompactConfiguration(content: PlaceDetailsCompactView.standardContent,
-                                                                         preferTruncation: true,
                                                                          theme: PlacesMaterialTheme())
                     PlaceDetailsCompactView(
                         orientation: .horizontal,
@@ -58,6 +58,7 @@ struct MapPlaceDetailCardView: View {
             .accessibilityElement(children: .contain)
             .accessibilityValue(state.loadFailed ? "unavailable" : state.hasLoaded ? "loaded" : "loading")
             .accessibilityIdentifier("map-reviews-overlay")
+            .environment(\.colorScheme, isViewingDarkMode ? .dark : .light)
         }
     }
 }

@@ -19,7 +19,7 @@ final class MapViewController: UIViewController {
     private var place: Place
     private var dynamicMapView: GMSMapView?
     private var dynamicMarker: GMSMarker?
-    private weak var placeDetailCardView: UIView?
+    private var placeDetailCardController: UIHostingController<MapPlaceDetailCardView>?
     private var usesAccessibleDetails = false
     private var selectedAddress: String?
     /// Used to provide more accurate location when deeplinking to Google Maps
@@ -30,7 +30,7 @@ final class MapViewController: UIViewController {
     var isViewingDarkMode: Bool {
         didSet {
             guard isViewingDarkMode != oldValue else { return }
-            overrideUserInterfaceStyle = isViewingDarkMode ? .dark : .light
+            placeDetailCardController?.rootView.isViewingDarkMode = isViewingDarkMode
             dynamicMapView?.configureMapStyle(isDark: isViewingDarkMode)
         }
     }
@@ -39,7 +39,6 @@ final class MapViewController: UIViewController {
         self.place = place
         self.isViewingDarkMode = isViewingDarkMode
         super.init(nibName: nil, bundle: nil)
-        overrideUserInterfaceStyle = isViewingDarkMode ? .dark : .light
     }
     
     required init?(coder: NSCoder) {
@@ -63,7 +62,7 @@ final class MapViewController: UIViewController {
             updateMarkerPresentation()
         }
 
-        if let dynamicMapView, let placeDetailCardView {
+        if let dynamicMapView, let placeDetailCardView = placeDetailCardController?.view {
             // Keep map attribution and the selected place above the content-sized card.
             let cardFrame = dynamicMapView.convert(placeDetailCardView.bounds, from: placeDetailCardView)
             let padding = UIEdgeInsets(
@@ -84,6 +83,7 @@ final class MapViewController: UIViewController {
     private func addProgrammaticViews() {
         let placeDetailCardController = UIHostingController(rootView: MapPlaceDetailCardView(
             state: reviewsState,
+            isViewingDarkMode: isViewingDarkMode,
             onPlaceLoaded: { [weak self] result in
                 // The overlay validates request identity before delivering this callback.
                 guard let self else { return }
@@ -96,7 +96,7 @@ final class MapViewController: UIViewController {
         placeDetailCardController.sizingOptions = .intrinsicContentSize
         addChild(placeDetailCardController)
         view.addSubview(placeDetailCardController.view)
-        placeDetailCardView = placeDetailCardController.view
+        self.placeDetailCardController = placeDetailCardController
         placeDetailCardController.view.backgroundColor = .clear
         placeDetailCardController.didMove(toParent: self)
 

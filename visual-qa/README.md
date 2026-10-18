@@ -23,8 +23,8 @@ Capture runs serially. For a focused check, set `VISUAL_QA_DEVICE_PROFILES='conf
 
 The dedicated `VisualQA` scheme and `visualqa.xctestplan` keep captures separate from regular unit tests. The capture test supplies a fixed city order through an opt-in Debug launch environment. Tips are not reset. Images use the real Places/cache path, and the test waits for all five photos. Provide the existing ignored `Daydream/Shared/apiKeys.plist` locally. City detail and map screens are outside this suite.
 
-## Live Google photo and review components
+## Places overlay smoke test
 
-`PlacesReviewsOverlayUITests/testGoogleReviewsOverlay` is an opt-in English check of Nearby photos and the in-app map. Provide `/tmp/daydream-reviews-ui-<SIMULATOR_UDID>.json` with an absolute `outputDirectory`, an `expiresAt` future Unix timestamp, and `largeText` (boolean). Optional `requirePhotos: true` requires the selected place's provided media component to load and expose a photo. Optional `requireReviews: true` requires real review text, scrolls to Google's end disclosure and checks that it is reachable. Without a current configuration the test skips.
+`PlacesReviewsOverlayUITests/testGoogleReviewsOverlay` runs one live-service smoke check in portrait with standard text: open a place card, wait for it to load, and dismiss the map. Set `DAYDREAM_LIVE_PLACES_UI_TESTS=1` in the test runner's environment to enable it; otherwise it skips. Existing local keys must permit Places UI Kit.
 
-The suite captures real SDK content, rotations, appearance, and error/Retry states when present. The long, unchanged Google license alert is excluded from this focused check. Use one dedicated simulator at a time with two build jobs and serial tests. Keep configuration, screenshots and result bundles outside Git. Existing local keys must permit Places UI Kit as described in the main README; no key or Cloud settings are changed by the test.
+The check uses bounded waits and at most five edge swipes per navigation step. It does not capture screenshots, write files, sweep devices/orientations, or inspect Google's review/photo content. Use one dedicated simulator with two build jobs and serial tests. No credentials or Cloud settings are changed.
