@@ -16,6 +16,8 @@ struct PlacesCarouselView: View {
     let fadesLeadingEdge: Bool
     var expandsCards = false
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @State private var viewportWidth: CGFloat = 0
     private let contentMargin: CGFloat = 24
     
     private var placeholderCount: Int {
@@ -23,19 +25,24 @@ struct PlacesCarouselView: View {
     }
 
     var body: some View {
+        let available = max(180, viewportWidth - contentMargin * 2)
+        let cardWidth = dynamicTypeSize.isAccessibilitySize
+            ? min(420, available)
+            : expandsCards ? min(300, max(180, available * 0.5)) : 180
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack(alignment: .top, spacing: 16) {
                 if places.isEmpty {
                     ForEach(1...placeholderCount, id: \.self) { _ in
-                        PlaceCardView(place: nil, tappedPlace: $tappedPlace, expandsToFillHeight: expandsCards)
+                        PlaceCardView(place: nil, tappedPlace: $tappedPlace, width: cardWidth)
                     }
                 } else {
                     ForEach(places, id: \.placeID) { place in
-                        PlaceCardView(place: place, tappedPlace: $tappedPlace, expandsToFillHeight: expandsCards)
+                        PlaceCardView(place: place, tappedPlace: $tappedPlace, width: cardWidth)
                     }
                 }
             }
         }
+        .onGeometryChange(for: CGFloat.self, of: { $0.size.width }) { viewportWidth = $0 }
         .contentMargins(contentMargin, for: .scrollContent)
         .frame(
             minHeight: expandsCards ? PlaceCardView.minimumHeight + contentMargin * 2 : nil,
