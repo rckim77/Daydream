@@ -66,6 +66,24 @@ final class PlacesReviewsOverlayUITests: XCTestCase {
         let completed = NSPredicate { _, _ in ["loaded", "unavailable"].contains(overlay.value as? String ?? "") }
         XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: completed, object: nil)], timeout: 40), .completed)
         try capture("portrait")
+        if config.requireReviews == true {
+            XCTAssertEqual(overlay.value as? String, "loaded", "Live UI Kit authorization must succeed")
+            let reviewsTab = app.buttons["PlaceDetailsTabBarButtonReviews"]
+            XCTAssertTrue(reviewsTab.waitForExistence(timeout: 10))
+            reviewsTab.tap()
+            let reviewText = app.staticTexts.matching(identifier: "PlaceDetailsReviewsView").firstMatch
+            XCTAssertTrue(reviewText.waitForExistence(timeout: 20))
+            XCTAssertGreaterThan(reviewText.label.count, 20, "Require actual review text, not only a loaded overview")
+            try capture("reviews")
+            let disclosure = app.staticTexts["Reviews aren't verified"]
+            let content = app.scrollViews["map-reviews-component"]
+            for _ in 0..<40 {
+                if disclosure.isHittable { break }
+                content.swipeUp(velocity: .fast)
+            }
+            XCTAssertTrue(disclosure.isHittable, "The end of Google's reviews must remain reachable")
+            try capture("reviews-end")
+        }
         if app.buttons["map-reviews-retry"].exists {
             app.buttons["map-reviews-retry"].tap()
             XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: completed, object: nil)], timeout: 40), .completed)
@@ -95,4 +113,5 @@ private struct Configuration: Decodable {
     let outputDirectory: String
     let expiresAt: TimeInterval
     let largeText: Bool
+    let requireReviews: Bool?
 }
