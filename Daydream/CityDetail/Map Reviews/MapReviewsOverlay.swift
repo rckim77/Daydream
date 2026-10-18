@@ -11,21 +11,27 @@ struct MapReviewsOverlay: View {
             let requestID = state.requestID
             Group {
                 if state.loadFailed {
-                    ScrollView {
+                    ViewThatFits(in: .vertical) {
                         VStack(spacing: 12) {
-                            Text(state.placeName)
-                                .font(.headline)
-                                .accessibilityAddTraits(.isHeader)
-                            Text("Reviews are unavailable right now.")
+                            Label("Reviews unavailable", systemImage: "exclamationmark.bubble")
+                                .labelStyle(.titleAndIcon)
                                 .multilineTextAlignment(.center)
+                                .accessibilityLabel("Reviews for \(state.placeName) unavailable")
                             Button("Try Again") { state.retry() }
                                 .buttonStyle(.bordered)
                                 .accessibilityIdentifier("map-reviews-retry")
                         }
-                        .frame(maxWidth: .infinity)
-                        .padding(20)
+                        HStack(spacing: 12) {
+                            Image(systemName: "exclamationmark.bubble")
+                                .accessibilityHidden(true)
+                            Button("Try Again") { state.retry() }
+                                .buttonStyle(.bordered)
+                                .accessibilityLabel("Retry reviews for \(state.placeName)")
+                                .accessibilityIdentifier("map-reviews-retry")
+                        }
                     }
-                    .accessibilityIdentifier("map-reviews-error")
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .padding(16)
                 } else {
                     GooglePlacesSwift.PlaceDetailsView(
                         query: .constant(PlaceDetailsQuery(identifier: .placeID(placeID))),

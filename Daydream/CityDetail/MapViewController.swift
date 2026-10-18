@@ -21,6 +21,8 @@ final class MapViewController: UIViewController {
     private var dynamicMarker: GMSMarker?
     private weak var reviewsView: UIView?
     private var reviewsHeightConstraint: Constraint?
+    private var usesAccessibleDetails = false
+    private var selectedAddress: String?
     /// Used to provide more accurate location when deeplinking to Google Maps
     private var dynamicMarkerPlaceId: String?
     /// Object that updates map review SwiftUI code
@@ -54,6 +56,12 @@ final class MapViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
+        let accessibleDetails = traitCollection.preferredContentSizeCategory.isAccessibilityCategory
+        if usesAccessibleDetails != accessibleDetails {
+            usesAccessibleDetails = accessibleDetails
+            updateMarkerPresentation()
+        }
+
         if let dynamicMapView, let reviewsView {
             let availableHeight = view.safeAreaLayoutGuide.layoutFrame.height
             let height = min(420, max(120, availableHeight * 0.46))
@@ -63,7 +71,7 @@ final class MapViewController: UIViewController {
             // Reserve visible map space and keep Google Maps attribution above the overlay.
             let reviewsFrame = dynamicMapView.convert(reviewsView.bounds, from: reviewsView)
             let padding = UIEdgeInsets(
-                top: max(dynamicMapView.safeAreaInsets.top, Self.markerInfoWindowHeadroom),
+                top: max(dynamicMapView.safeAreaInsets.top, usesAccessibleDetails ? 0 : Self.markerInfoWindowHeadroom),
                 left: dynamicMapView.safeAreaInsets.left,
                 bottom: max(dynamicMapView.safeAreaInsets.bottom, dynamicMapView.bounds.maxY - reviewsFrame.minY),
                 right: dynamicMapView.safeAreaInsets.right
@@ -82,7 +90,8 @@ final class MapViewController: UIViewController {
             state: reviewsState,
             onPlaceLoaded: { [weak self] result in
                 guard let self, self.dynamicMarkerPlaceId == result.placeID else { return }
-                self.dynamicMarker?.snippet = result.formattedAddress
+                self.selectedAddress = result.formattedAddress
+                self.updateMarkerPresentation()
             }
         ))
         addChild(reviewsController)
@@ -157,17 +166,22 @@ final class MapViewController: UIViewController {
 
         dynamicMarkerPlaceId = placeId
 
-        guard let dynamicMarker = dynamicMarker else {
-            return
-        }
+        guard dynamicMarker != nil else { return }
 
-        mapView.selectedMarker = dynamicMarker
-
-        dynamicMarker.snippet = nil
-        dynamicMarker.accessibilityLabel = name
+        selectedAddress = nil
         reviewsState.select(placeID: placeId, name: name)
+        updateMarkerPresentation()
     }
 
+    /// The provided overlay carries place context at large accessibility sizes, where map callouts clip.
+    private func updateMarkerPresentation() {
+        guard let marker = dynamicMarker, let mapView = dynamicMapView else { return }
+        marker.title = usesAccessibleDetails ? nil : reviewsState.placeName
+        marker.snippet = usesAccessibleDetails ? nil : selectedAddress
+        marker.accessibilityLabel = reviewsState.placeName
+        let selectedMarker = usesAccessibleDetails ? nil : marker
+        if mapView.selectedMarker !== selectedMarker { mapView.selectedMarker = selectedMarker }
+    }
 }
 
 extension MapViewController: GMSMapViewDelegate {
@@ -187,7 +201,7 @@ extension MapViewController: GMSMapViewDelegate {
         // lat/lon coordinates. Strings must be URL-encoded so make sure to convert chars like commas.
         if let placeId = dynamicMarkerPlaceId {
             components.queryItems?.append(URLQueryItem(name: "query_place_id", value: placeId))
-            components.queryItems?.append(URLQueryItem(name: "query", value: marker.title))
+            components.queryItems?.append(URLQueryItem(name: "query", value: reviewsState.placeName))
         } else {
             var query = "\(marker.position.latitude), \(marker.position.longitude)"
             if let name = marker.title {

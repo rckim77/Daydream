@@ -5,7 +5,7 @@ final class PlacesReviewsOverlayUITests: XCTestCase {
     @MainActor
     func testGoogleReviewsOverlay() throws {
         continueAfterFailure = false
-        print("Provided reviews overlay QA revision 2")
+        print("Provided reviews overlay QA revision 3")
         let udid = ProcessInfo.processInfo.environment["SIMULATOR_UDID"] ?? ""
         let configURL = URL(fileURLWithPath: "/tmp/daydream-reviews-ui-\(udid).json")
         guard let data = try? Data(contentsOf: configURL) else {
@@ -68,6 +68,9 @@ final class PlacesReviewsOverlayUITests: XCTestCase {
             try capture(name)
             XCTAssertTrue(app.buttons["map-close-button"].isHittable)
             XCTAssertTrue(overlay.exists)
+            if app.buttons["map-reviews-retry"].exists {
+                XCTAssertTrue(app.buttons["map-reviews-retry"].isHittable)
+            }
             XCTAssertLessThan(overlay.frame.height, app.frame.height * 0.7)
             XCTAssertGreaterThanOrEqual(overlay.frame.width, min(250, app.frame.width - 24))
         }
