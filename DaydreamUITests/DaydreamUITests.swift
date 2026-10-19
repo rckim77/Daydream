@@ -17,15 +17,15 @@ final class DaydreamUITests: XCTestCase {
         XCUIDevice.shared.orientation = config.orientation == "landscape" ? .landscapeLeft : .portrait
         let app = XCUIApplication(bundleIdentifier: "com.rckim.Daydream")
         for locale in config.localeProfiles {
-            app.launchEnvironment["DAYDREAM_UI_CAPTURE_CITIES"] = "Tokyo|Paris|New York City|Hong Kong|Rome|Montreal"
+            app.launchEnvironment["DAYDREAM_UI_CAPTURE_CITIES"] = "Tokyo|Paris|New York City|Hong Kong|Rome|Montreal|Lisbon|Antalya"
             app.launchArguments = ["-AppleLanguages", "(\(locale.language))", "-AppleLocale", locale.locale]
             app.launch()
             defer { app.terminate() }
             // Wait for all SDK detail callbacks, including cards below the fold. The SDK owns photo loading.
             let loaded = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "city-loaded-"))
             let deadline = Date().addingTimeInterval(120)
-            while loaded.count < 6 && Date() < deadline { Thread.sleep(forTimeInterval: 0.5) }
-            XCTAssertEqual(loaded.count, 6, "All six SDK city cards must finish loading their details before capture.")
+            while loaded.count < 8 && Date() < deadline { Thread.sleep(forTimeInterval: 0.5) }
+            XCTAssertEqual(loaded.count, 8, "All eight SDK city cards must finish loading their details before capture.")
             XCTAssertTrue(app.staticTexts["Where do you want to go?"].exists)
             Thread.sleep(forTimeInterval: 1)
             let directory = URL(fileURLWithPath: config.outputDirectory, isDirectory: true)

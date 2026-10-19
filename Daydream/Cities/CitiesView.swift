@@ -30,7 +30,7 @@ struct CitiesView: View {
     @Namespace private var zoomNS
     
     // MARK: - Private constants and computed vars
-    private let cityCount = 6
+    private let cityCount = 8
     private let feedbackButtonTransitionID = "feedbackButton"
 
     var body: some View {
