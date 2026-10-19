@@ -21,7 +21,7 @@ Both configurations are required in `config.json`. Base device definitions live 
 
 Capture runs serially. For a focused check, set `VISUAL_QA_DEVICE_PROFILES='configured-device-id:Dedicated Simulator Name'`. Capture reinstalls the app by default; use dedicated simulators to preserve personal app state. `--suite base --clean` deletes only base artifacts; `--suite additional --refresh-dashboard` rebuilds the additional report without capturing.
 
-The dedicated `VisualQA` scheme and `visualqa.xctestplan` keep captures separate from regular unit tests. The capture test supplies a fixed city order through an opt-in Debug launch environment. Tips are not reset. Images use the real Places/cache path, and the test waits for all five photos. Provide the existing ignored `Daydream/Shared/apiKeys.plist` locally. City detail and map screens are outside this suite.
+The dedicated `VisualQA` scheme and `visualqa.xctestplan` keep captures separate from regular unit tests. The capture test supplies a fixed six-city order through an opt-in Debug launch environment. Tips are not reset. Cards use the real Places UI Kit path, and the test waits for all six SDK detail callbacks before capture. The SDK owns photo loading, so a detail callback alone does not prove a photo has rendered; inspect the resulting captures. Provide the existing ignored `Daydream/Shared/apiKeys.plist` locally. City detail and map screens are outside this suite.
 
 ## Places overlay smoke test
 

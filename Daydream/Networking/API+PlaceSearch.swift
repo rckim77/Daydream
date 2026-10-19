@@ -10,7 +10,6 @@ import UIKit
 import CoreLocation
 import GooglePlacesSwift
 import MapKit
-import SwiftUI
 
 enum APIError: Error {
     case biasError
@@ -78,34 +77,6 @@ extension API {
                 print("=== fetchCurrentCityBy(coordinate:) call failed: \(error.localizedDescription)")
                 throw APIError.fetchCurrentCityError
             }
-        }
-        
-        static func fetchPlaceAndImageBy(_ city: RandomCity, horizontalSizeClass: UserInterfaceSizeClass?) async throws -> (Place, UIImage) {
-            let maxAttempts = 2
-            var expoBackoff = 100 // in milliseconds
-            
-            for attempt in 1...maxAttempts {
-                if let place = await API.PlaceSearch.fetchCityBy(city) {
-                    if let photo = place.photos?.first {
-                        let image = try await API.PlaceSearch.fetchImageBy(photo: photo, horizontalSizeClass: horizontalSizeClass)
-                        print("=== got place and image for \(city.city) on attempt \(attempt) ")
-                        return (place, image)
-                    } else {
-                        throw APIError.placeMissingPhotos
-                    }
-                } else {
-                    if attempt < maxAttempts {
-                        print("=== attempting \(city.city) again...")
-                        try? await Task.sleep(for: .milliseconds(expoBackoff))
-                        expoBackoff *= 2
-                        continue
-                    } else {
-                        print("=== unable to get data for \(city.city) after last attempt")
-                    }
-                }
-            }
-            
-            throw APIError.noResults
         }
         
         /// Fetches Place and Image for `placeId`, using `PlacesCache` and `ImageCache` if cached.
@@ -178,21 +149,21 @@ extension API {
         
         /// Uses UIImage cache to fetch by photo hash value, otherwise calls Places SDK and adds to cache
         @MainActor
-        static func fetchImageBy(photo: Photo, horizontalSizeClass: UserInterfaceSizeClass? = nil) async throws -> UIImage {
+        static func fetchImageBy(photo: Photo) async throws -> UIImage {
             let hashKey = String(photo.hashValue)
             if let cachedImage = ImageCache.shared.get(forKey: hashKey) {
                 print("=== hit image cache")
                 return cachedImage
             }
 
-            let maxSize = horizontalSizeClass == .compact ? CGSizeMake(4800, 800) : CGSizeMake(4800, 1600)
+            let maxSize = CGSizeMake(4800, 1600)
             let fetchPhotoRequest = FetchPhotoRequest(photo: photo, maxSize: maxSize)
             switch await PlacesClient.shared.fetchPhoto(with: fetchPhotoRequest) {
             case .success(let image):
                 ImageCache.shared.set(image, forKey: hashKey)
                 return image
             case .failure(let error):
-                print("=== fetchImageBy(photo:horizontalSizeClass:) call failed: \(error.localizedDescription)")
+                print("=== fetchImageBy(photo:) call failed: \(error.localizedDescription)")
                 throw APIError.fetchPhotoError
             }
         }

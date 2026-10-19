@@ -24,7 +24,8 @@ struct CityCardsLayout: Layout {
                 subviews[index].place(
                     at: CGPoint(x: bounds.minX + CGFloat(visualColumn) * (width + spacing), y: y),
                     anchor: .topLeading,
-                    proposal: ProposedViewSize(width: width, height: heights[row])
+                    // Row heights position the next row; each SDK card keeps its intrinsic footer height.
+                    proposal: ProposedViewSize(width: width, height: nil)
                 )
             }
             y += heights[row] + spacing
