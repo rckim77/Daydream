@@ -31,7 +31,7 @@ struct PlacesCarouselView: View {
             ? min(420, available)
             : expandsCards ? min(300, max(210, available * 0.55)) : 210
         ScrollView(.horizontal, showsIndicators: false) {
-            LazyHStack(alignment: .top, spacing: 16) {
+            HStack(alignment: .top, spacing: 16) {
                 if places.isEmpty {
                     ForEach(1...placeholderCount, id: \.self) { _ in
                         PlaceCardView(place: nil, tappedPlace: $tappedPlace, width: cardWidth)
