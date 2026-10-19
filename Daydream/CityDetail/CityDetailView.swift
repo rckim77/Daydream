@@ -15,7 +15,6 @@ struct CityDetailView: View {
 
     // MARK: - State vars
     @State var place: Place
-    @State var image: UIImage?
     @State private var viewState = CityDetailViewState()
 
     // MARK: - Environment and AppStorage vars
@@ -26,41 +25,31 @@ struct CityDetailView: View {
     @AppStorage("lastReviewedAppVersion") private var lastReviewedAppVersion: String = ""
 
     // MARK: - Computed vars
-    private var cityText: String {
-        let countryCode = place.addressComponents?
+    private var countryCode: String? {
+        place.addressComponents?
             .first(where: { $0.types.contains(.country) })?
             .shortName
-        return viewState.cityText(displayName: place.displayName, countryCode: countryCode)
+    }
+
+    private var cityText: String {
+        viewState.cityText(displayName: place.displayName, countryCode: countryCode)
     }
 
     var body: some View {
         NavigationStack {
             CityDetailContentView(place: place, cityText: cityText, viewState: viewState)
             .background {
-                Rectangle()
-                    .fill(.regularMaterial)
-                    .background {
-                        if let image {
-                            Image(uiImage: image)
-                                .resizable()
-                                .scaledToFill()
-                                .blur(radius: 36, opaque: true)
-                        }
-                    }
-                    .clipped()
-                    .ignoresSafeArea()
+                CountryFlagBackground(countryCode: countryCode)
             }
             .toolbar {
-                SearchToolbar { autocompletePlace, autocompleteImage in
+                SearchToolbar { autocompletePlace in
                     place = autocompletePlace
-                    image = autocompleteImage
                     viewState.applySelectedCity(place)
                     Task {
                         await fetchSightsAndEateries(place)
                     }
-                } randomCityReceived: { randomPlace, randomImage in
+                } randomCityReceived: { randomPlace in
                     place = randomPlace
-                    image = randomImage
                     viewState.applySelectedCity(place)
                     Task {
                         await fetchSightsAndEateries(place)
@@ -158,9 +147,8 @@ struct CityDetailView: View {
     }
 
     private func updateToCurrentCity(_ location: CLLocationCoordinate2D) async throws {
-        let (currentPlace, currentImage) = try await API.PlaceSearch.fetchCurrentCityBy(location)
+        let currentPlace = try await API.PlaceSearch.fetchCurrentCityBy(location)
         place = currentPlace
-        image = currentImage
         viewState.applySelectedCity(place)
         await fetchSightsAndEateries(place)
     }

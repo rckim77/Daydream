@@ -31,7 +31,8 @@ This file guides coding agents working in this repository.
 - `CurrentLocationManager` is an `@Observable` object injected into SwiftUI environment.
 - Network/data access is namespaced under `API.PlaceSearch`.
 - Heavy use of async flows with `Task {}` and `async/await`.
-- Caching is already implemented for Places and images (`PlacesCache`, `ImageCache`) and should be reused rather than bypassed.
+- Reuse `PlacesCache` for city place-data requests. Places UI Kit owns photo loading and caching; raw photo fetching and `ImageCache` have been removed.
+- City-detail backgrounds use the static `CountryFlagPalette` table keyed by the country in place address components, with a neutral fallback.
 - Mixed UI stack is intentional:
   - SwiftUI for most screens
   - UIKit + Google Maps (`MapViewController`) where SDK integration is easier
@@ -56,7 +57,7 @@ Select affected scenarios for focused changes; use the full set for dependency o
 3. Verify Top Sights / Top Eateries load.
 4. Open map detail sheet and confirm marker/reviews render.
 5. Trigger current-location flow (with simulator location enabled).
-6. Verify random city flow still navigates and renders image background.
+6. Verify random city flow still navigates and renders the country-flag gradient background.
 
 ## Agent Workflow Expectations
 - If you cannot run validation locally, state that clearly and list unverified paths.

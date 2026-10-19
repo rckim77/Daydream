@@ -6,7 +6,7 @@ struct CityCardView: View {
     let city: RandomCity
     let width: CGFloat
     let minimumHeight: CGFloat
-    let onTap: (Place, UIImage) -> Void
+    let onTap: (Place) -> Void
 
     @State private var placeID: String?
     @State private var loadFailed = false
@@ -129,9 +129,8 @@ struct CityCardView: View {
         Task { @MainActor in
             defer { isOpening = false }
             do {
-                // City details still need an image for their blurred backdrop.
-                let (place, image) = try await API.PlaceSearch.fetchPlaceAndImageBy(placeId: placeID)
-                onTap(place, image)
+                let place = try await API.PlaceSearch.fetchPlaceBy(placeId: placeID)
+                onTap(place)
             } catch {
                 loadFailed = true
             }
