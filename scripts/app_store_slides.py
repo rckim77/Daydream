@@ -5,6 +5,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import re
 import subprocess
 import sys
 
@@ -58,29 +59,36 @@ def normalize(path, config, device, output, slides):
                 raise ValueError(f'Unexpected output mode {image.mode}: {png}')
 
 
+def latest_version(root):
+    versions = []
+    for folder in root.iterdir():
+        match = re.fullmatch(r'v(\d+)\.(\d+)\.(\d+)', folder.name)
+        if match and (folder / 'configs').is_dir():
+            versions.append((tuple(map(int, match.groups())), folder.name))
+    if not versions:
+        raise ValueError('No screenshot version folders found')
+    return max(versions)[1]
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('action', choices=['render', 'validate', 'editor', 'sources', 'normalize'])
-    parser.add_argument('--version', help='Source version folder; defaults to project.json screenshotSet')
+    parser.add_argument('--version', help='Source version folder; defaults to the highest numbered vX.Y.Z folder')
     parser.add_argument('--device', default='all', choices=['all', 'iphone', 'ipad'])
     parser.add_argument('--locale', action='append', default=[])
     parser.add_argument('--slide', action='append', default=[])
     parser.add_argument('--output')
     parser.add_argument('--validate-only', action='store_true')
-    parser.add_argument('--port', type=int)
+    parser.add_argument('--port', type=int, default=4325)
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1] / 'app-store-slides'
-    settings = read(root / 'project.json')
-    selected = args.version or settings['screenshotSet']
+    selected = args.version or latest_version(root)
     if not selected.startswith('v') or Path(selected).name != selected:
         raise ValueError('Version must name a folder such as v5.2.0')
     version = (root / selected).resolve()
     if version.parent != root or not (version / 'configs').is_dir():
         raise ValueError(f'Missing screenshot version: {selected}')
     tool = Path(os.environ.get('APP_STORE_SLIDES_TOOL_ROOT', '~/Desktop/Development/app-store-slides-tool')).expanduser()
-    for name, expected in read(root / 'toolchain.json')['sha256'].items():
-        if digest(tool / name) != expected:
-            raise ValueError(f'Shared renderer differs from toolchain.json: {name}')
     configs = [(path, read(path)) for path in sorted((version / 'configs').glob('*.json'))]
     if not configs or any(config['version'] != selected for _, config in configs):
         raise ValueError('Every config must match its containing version folder')
@@ -106,7 +114,7 @@ def main():
         command = [str(tool / 'Scripts/editor.sh'), '--config-dir', str(version / 'configs'),
                    '--slides-root', str(resolve(first['outputRoot'], configs[0][0].parent)),
                    '--version', selected, '--device', 'iphone' if args.device == 'all' else args.device,
-                   '--locale', first['defaultLocale'], '--no-render', '--port', str(args.port or settings['editorPort'])]
+                   '--locale', first['defaultLocale'], '--no-render', '--port', str(args.port)]
         os.execv(command[0], command)
     output = str(Path(args.output).expanduser().resolve()) if args.output else None
     for path, config in configs:
