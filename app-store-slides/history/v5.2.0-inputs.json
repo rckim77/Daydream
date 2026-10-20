@@ -1,0 +1,70 @@
+{
+  "version": "v5.2.0",
+  "locale": "en_US",
+  "source": "user-provided screenshots in the release input folders",
+  "notes": [
+    "Three slides per device. iPhone: Explore cities, Browse top sights, Dark mode. iPad: Explore cities, Dark mode, Browse top sights.",
+    "Input filenames are preserved; iPad output IDs are sequential despite the original input numbering.",
+    "Original 5.1.0 provenance remains in iphone-inputs.json and ipad-inputs.json."
+  ],
+  "devices": {
+    "iphone": [
+      {
+        "slide": "01-explore-cities",
+        "source": "/Users/raykim/Desktop/Screenshots/DaydreamAppStore/_inputs/v5.2.0/iphone/en_US/01-explore-cities.png",
+        "dimensions": [
+          1206,
+          2622
+        ],
+        "sha256": "b7515dfa8a60a2b09ff87c90a2f2c07807954a91ac0809bde6e8809ce4a3e9ce"
+      },
+      {
+        "slide": "02-browse-top-sights",
+        "source": "/Users/raykim/Desktop/Screenshots/DaydreamAppStore/_inputs/v5.2.0/iphone/en_US/02-browse-top-sights.png",
+        "dimensions": [
+          1206,
+          2622
+        ],
+        "sha256": "712eb024890719d682f597f50961ffdc1c2236ad5cc5161dc2172d210f4b05bc"
+      },
+      {
+        "slide": "03-dark-mode",
+        "source": "/Users/raykim/Desktop/Screenshots/DaydreamAppStore/_inputs/v5.2.0/iphone/en_US/03-dark-mode.png",
+        "dimensions": [
+          1206,
+          2622
+        ],
+        "sha256": "7ee6e98b6c8de1a20a8af6b11ec677e31c03abc3a26e4f512cdbf840c1526f19"
+      }
+    ],
+    "ipad": [
+      {
+        "slide": "01-explore-cities",
+        "source": "/Users/raykim/Desktop/Screenshots/DaydreamAppStore/_inputs/v5.2.0/ipad/en_US/01-explore-cities.png",
+        "dimensions": [
+          2752,
+          2064
+        ],
+        "sha256": "f13a8428dd252516a546ba19b8d795a2b7f8b527bdc83c684f5ab90a6c72c632"
+      },
+      {
+        "slide": "02-dark-mode",
+        "source": "/Users/raykim/Desktop/Screenshots/DaydreamAppStore/_inputs/v5.2.0/ipad/en_US/04-dark-mode.png",
+        "dimensions": [
+          2752,
+          2064
+        ],
+        "sha256": "87c8e8865c435e3b39f07fb14bf73c57422a05885915dd11fd7667a47c125418"
+      },
+      {
+        "slide": "03-browse-top-sights",
+        "source": "/Users/raykim/Desktop/Screenshots/DaydreamAppStore/_inputs/v5.2.0/ipad/en_US/03-browse-top-sights.png",
+        "dimensions": [
+          2752,
+          2064
+        ],
+        "sha256": "4b0ef1a610bd26c6d352eb9f29e4dec0570338bd1b7b0193ad4e636dd3f2d65a"
+      }
+    ]
+  }
+}

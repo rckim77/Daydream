@@ -2,7 +2,7 @@
   "name": "Daydream",
   "version": "v5.2.0",
   "defaultLocale": "en_US",
-  "outputRoot": "/Users/raykim/Desktop/Screenshots/DaydreamAppStore",
+  "outputRoot": "~/Desktop/Screenshots/DaydreamAppStore",
   "background": {
     "color": "#FEB609"
   },
@@ -23,9 +23,9 @@
         "width": 2732,
         "height": 2048
       },
-      "screenshotRoot": "/Users/raykim/Desktop/Screenshots/DaydreamAppStore/_inputs/v5.2.0/ipad/en_US",
+      "screenshotRoot": "../inputs/ipad/en_US",
       "frame": {
-        "image": "/Users/raykim/Desktop/Screenshots/DaydreamAppStore/_assets/iPad Pro 13 - M4 - Space Gray - Landscape.png",
+        "image": "~/Desktop/Screenshots/DaydreamAppStore/_assets/iPad Pro 13 - M4 - Space Gray - Landscape.png",
         "screen": {
           "x": 124,
           "y": 118,
@@ -50,10 +50,10 @@
       }
     },
     {
-      "id": "02-ai-powered-reviews",
-      "screenshot": "02-ai-powered-reviews.png",
+      "id": "02-dark-mode",
+      "screenshot": "04-dark-mode.png",
       "captions": {
-        "en_US": "AI-powered\nreviews"
+        "en_US": "Dark\nmode"
       },
       "captionPositions": {
         "ipad": "bottom"
@@ -67,16 +67,6 @@
       },
       "captionPositions": {
         "ipad": "top"
-      }
-    },
-    {
-      "id": "04-dark-mode",
-      "screenshot": "04-dark-mode.png",
-      "captions": {
-        "en_US": "Dark mode"
-      },
-      "captionPositions": {
-        "ipad": "bottom"
       }
     }
   ]

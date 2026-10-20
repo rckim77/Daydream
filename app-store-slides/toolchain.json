@@ -1,0 +1,14 @@
+{
+  "baseRevision": "08265e1",
+  "captionFeaturesRevision": "c6cbaa6",
+  "note": "Integrated Duo/local-frame and caption branches in the standard checkout. Content pins cover the actual renderer/editor sources, including uncommitted integration.",
+  "sha256": {
+    "Sources/AppStoreSlidesTool/main.swift": "2fa4c8c3d672b4f798208e706bd489c7f0f1b4ea94859f544092954c0574f641",
+    "Editor/server.js": "e81d6b3d9ce7d593ceaf28278cf0e716f172515588108e1a808f88227c43de99",
+    "Editor/public/editor.js": "e7877d9d66b6ba226f6fd6cec560cf5006d6ee54fc22836894765c8746825f00",
+    "Editor/public/index.html": "5e8e19a01cdfe8678bb49b10d20f2c62d3bf571c4ff73ce5412602f13da2de90",
+    "Editor/public/styles.css": "dd0a2e8b285baa6bfa64ba720b562803787487eb0912ae6d14147ff5a19762e6",
+    "Scripts/project-slides.py": "928585fa26189a115609ccc4397c919ba11e29da11d9278d3828e88582c12b12",
+    "Scripts/render.sh": "8adda31c571e727e3c596a4e603720caf68ef9d97eb6e351035174b6c486b695"
+  }
+}

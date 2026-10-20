@@ -1,65 +1,36 @@
 # Daydream App Store slides
 
-The editable App Store Slides configs reproduce the four Picasso themes for iPhone and landscape iPad: Explore cities, Browse top sights, Dark mode, and AI-powered reviews. The active configs target 5.2.0 with the same captions, colors, frames, and layout as 5.1.0. Its inputs and slide templates currently copy the 5.1.0 captures; fresh screenshots have not been added yet.
+## Authoring and outputs
 
-## Locations
+- `configs/`: canonical editable JSON (captions, placement, colors, frames, and source selection).
+- `sources.json`: current input mapping, dimensions, hashes, and capture provenance notes.
+- `project.json`: current screenshot set and editor port.
+- `toolchain.json`: reviewed source hashes for the shared renderer/editor in `~/Desktop/Development/app-store-slides-tool`.
+- Generated exports: `~/Desktop/Screenshots/DaydreamAppStore/v5.2.0/<device>/<locale>/`.
 
-- Original Picasso project: `/Users/raykim/Desktop/Development/DaydreamAssets/Daydream.pco`
-- Editable configs: [iPhone](configs/iphone-en_US.json) and [iPad](configs/ipad-en_US.json)
-- Active screenshot inputs: `/Users/raykim/Desktop/Screenshots/DaydreamAppStore/_inputs/v5.2.0/<device>/en_US/`
-- Active slide templates and rendered slides: `/Users/raykim/Desktop/Screenshots/DaydreamAppStore/v5.2.0/<device>/en_US/`
-- Preserved 5.1.0 inputs: `/Users/raykim/Desktop/Screenshots/DaydreamAppStore/_inputs/<device>/en_US/`
-- Preserved 5.1.0 slides: `/Users/raykim/Desktop/Screenshots/DaydreamAppStore/v5.1.0/<device>/en_US/`
-- Preserved 5.1.0 config snapshots: `/Users/raykim/Desktop/Screenshots/DaydreamAppStore/v5.1.0/_configs/`
-- Source mapping and original SHA-256 hashes: [sources.json](sources.json)
-- 5.1.0 iPhone screenshot mapping and hashes: [iphone-inputs.json](iphone-inputs.json). The previous iPhone inputs, slides, config, and preview are preserved under `_comparison/iphone-before-refresh/` in the local slide output folder.
-- 5.1.0 iPad screenshot mapping and hashes: [ipad-inputs.json](ipad-inputs.json). The previous iPad inputs, slides, config, and preview are preserved under `_comparison/ipad-before-refresh/`. The supplied `02-ai-powered-previews-ipad.png` maps to the existing `02-ai-powered-reviews` slide; captions and layout are unchanged. Record new provenance when replacing the 5.2.0 inputs.
+Curated PNG inputs are tracked in Git under `inputs/<device>/<locale>/` alongside the configs. The old Screenshots input path is a compatibility link to these files.
 
-Each config keeps its device's original slide order. The iPhone captions alternate top/bottom; iPad Explore and Browse are above the device, while AI reviews and Dark mode are below. iPad Dark mode stays on one line. The iPad Browse wording follows the supplied reference rather than the older “Explore top sights” string stored in Picasso.
+Licensed Apple frame PNGs and licenses stay local under `~/Desktop/Screenshots/DaydreamAppStore/_assets/`; do not add them to Git. Preserve these local assets when cloning or moving the project. Re-import missing frames from Apple Design Resources with the shared tool helpers. Config paths support `~` and paths relative to the config file.
 
-## Set up local inputs
+## Commands
 
-From this repo:
+From the app repository:
 
 ```sh
-python3 scripts/setup_app_store_slides.py
-```
-
-This copies the eight original captures and existing local Apple frame resources to the Screenshots folder, then seeds the active release's input folders from the baseline. Existing inputs are preserved, including screenshots replaced later. The Picasso originals remain unchanged. Raw Apple frames and their license stay outside Git under `_assets/`.
-
-The workflow uses the same App Store Slides checkout as Sudoku: `~/.codex/worktrees/caption-position/app-store-slides-tool`. It supplies named fonts, bottom captions, and device-specific placement. The main tool checkout currently lacks those options. Set `APP_STORE_SLIDES_TOOL_ROOT` to another checkout only when it supports this config schema. No shared tool source was changed for this migration.
-
-## Render and edit
-
-```sh
-# Validate both configs and source files
-scripts/app_store_slides.sh render --validate-only
-
-# Render all eight slides
+scripts/app_store_slides.sh validate
 scripts/app_store_slides.sh render
-
-# Render one updated screenshot
-scripts/app_store_slides.sh render --device iphone --slide 01-explore-cities
-
-# Open the editor server; switch between iPhone and iPad inside the editor
+scripts/app_store_slides.sh render --device iphone --locale en_US
 scripts/app_store_slides.sh editor
+# After deliberately replacing an input, review it and refresh the manifest:
+scripts/app_store_slides.sh sources
 ```
 
-Editor: <http://127.0.0.1:4325/?device=iphone&version=v5.2.0&locale=en_US>. The editor saves directly to the tracked JSON configs. Run the render command after editing to produce final opaque RGB PNGs; this renderer's direct editor exports retain an opaque alpha channel.
+`render --validate-only` also validates without rendering. `--slide ID`, `--version VERSION`, and `--output PATH` support focused renders and disposable previews. Rendering exports opaque RGB PNGs. Editor writes go directly to canonical configs; run `render` after editing for final exports. `normalize` strips only fully opaque alpha from existing exports without changing RGB pixels. This helper never captures, resets, or modifies a simulator.
 
-The render helper uses Xcode 27.1 and the existing bundled Python/Pillow runtime. Override `DEVELOPER_DIR` or `APP_STORE_SLIDES_PYTHON` if those installations move. `--device ipad` limits rendering to iPad. To start a new release, update `version` in both JSON configs and the editor command's `--version` argument; `--version` can also be passed when rendering an output-only preview.
+Use Xcode 27.1 by default. Override `APP_STORE_SLIDES_TOOL_ROOT` only with a checkout matching the content pins; override `APP_STORE_SLIDES_PYTHON` with a Python containing Pillow if the bundled runtime moves. Tool updates should be reviewed and validated before changing the pin. The current pin includes the shared tool integration prepared alongside this organization; that companion tool change must also be retained when setting up another machine.
 
-## Replace screenshots
+## Screenshot history and releases
 
-Replace a PNG in `_inputs/v5.2.0/iphone/en_US/` or `_inputs/v5.2.0/ipad/en_US/` while preserving its filename, then render that device or slide. Use portrait iPhone captures near the original 1206×2622 aspect ratio and landscape iPad captures near 2752×2064. The renderer rejects mismatched aspect ratios rather than stretching the content.
+The six 5.2.0 PNGs use the latest user-supplied screenshots. The original migration mappings are historical records under `history/`; their retired Picasso paths are not runtime dependencies. `python3 scripts/setup_app_store_slides.py` now verifies the current independent sources. Existing 5.1.0 outputs/comparisons remain outside Git.
 
-The filenames describe each slide; iPad order differs from iPhone. Update the provenance when refreshing an input. `sources.json` records the original migration baseline and should remain available for comparison.
-
-Outputs are 1290×2796 for iPhone and 2732×2048 for iPad. The rounded white font and yellow layout follow the supplied references. The background config compensates for the renderer's calibrated RGB conversion to match the reference's sRGB yellow, approximately `#FFC100`. Current Apple iPhone 17 Pro Deep Blue and iPad Pro M4 Space Gray frames replace Picasso's iPhone 16 Pro Black Titanium frame; bezel details and Picasso's subtle text shadow differ slightly.
-
-```sh
-asc screenshots validate --path /Users/raykim/Desktop/Screenshots/DaydreamAppStore/v5.2.0/iphone/en_US --device-type IPHONE_67 --output table
-asc screenshots validate --path /Users/raykim/Desktop/Screenshots/DaydreamAppStore/v5.2.0/ipad/en_US --device-type IPAD_PRO_3GEN_129 --output table
-```
-
-Rendering and editing are local. Screenshot upload is a separate action after the app captures are refreshed and reviewed.
+Screenshot-set versions describe the assets, independently of the app release version. Record an app release reusing a set in release metadata rather than copying images or silently relabeling captures. Keep one current capture run and one useful comparison; do not delete historical evidence without approval. Exports, capture runs, temporary previews, licensed frame sources, and restore archives stay outside Git. Rendering does not authorize upload.
