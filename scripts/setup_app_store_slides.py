@@ -25,6 +25,18 @@ for entry in manifest["inputs"]:
     destination.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(source, destination)
 
+# Seed the active release from the baseline without replacing newer screenshots.
+for config_path in (repo / "app-store-slides/configs").glob("*-en_US.json"):
+    config = json.loads(config_path.read_text())
+    for device, settings in config["devices"].items():
+        for slide in config["slides"]:
+            source = output / "_inputs" / device / config["defaultLocale"] / slide["screenshot"]
+            destination = Path(settings["screenshotRoot"]) / slide["screenshot"]
+            if destination.exists():
+                continue
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(source, destination)
+
 for name in [
     "iPhone 17 Pro - Deep Blue - Portrait.png",
     "iPad Pro 13 - M4 - Space Gray - Landscape.png",

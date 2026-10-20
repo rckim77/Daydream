@@ -1,6 +1,6 @@
 {
   "name": "Daydream",
-  "version": "v5.1.0",
+  "version": "v5.2.0",
   "defaultLocale": "en_US",
   "outputRoot": "/Users/raykim/Desktop/Screenshots/DaydreamAppStore",
   "background": {
@@ -23,7 +23,7 @@
         "width": 2732,
         "height": 2048
       },
-      "screenshotRoot": "/Users/raykim/Desktop/Screenshots/DaydreamAppStore/_inputs/ipad/en_US",
+      "screenshotRoot": "/Users/raykim/Desktop/Screenshots/DaydreamAppStore/_inputs/v5.2.0/ipad/en_US",
       "frame": {
         "image": "/Users/raykim/Desktop/Screenshots/DaydreamAppStore/_assets/iPad Pro 13 - M4 - Space Gray - Landscape.png",
         "screen": {

@@ -4,7 +4,7 @@ set -euo pipefail
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TOOL="${APP_STORE_SLIDES_TOOL_ROOT:-$HOME/.codex/worktrees/caption-position/app-store-slides-tool}"
 PYTHON="${APP_STORE_SLIDES_PYTHON:-$HOME/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3}"
-export DEVELOPER_DIR="${DEVELOPER_DIR:-/Applications/Xcode_27.1RC.app/Contents/Developer}"
+export DEVELOPER_DIR="${DEVELOPER_DIR:-/Applications/Xcode_27.1.app/Contents/Developer}"
 
 action="${1:-render}"
 if [[ "$#" -gt 0 ]]; then shift; fi
@@ -26,7 +26,7 @@ case "$action" in
     exec "$TOOL/Scripts/editor.sh" \
       --config-dir "$REPO/app-store-slides/configs" \
       --slides-root "$HOME/Desktop/Screenshots/DaydreamAppStore" \
-      --version v5.1.0 --device "$device" --locale en_US --no-render --port 4325 \
+      --version v5.2.0 --device "$device" --locale en_US --no-render --port 4325 \
       ${args[@]+"${args[@]}"}
     ;;
   render)

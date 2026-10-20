@@ -1,6 +1,6 @@
 {
   "name": "Daydream",
-  "version": "v5.1.0",
+  "version": "v5.2.0",
   "defaultLocale": "en_US",
   "outputRoot": "/Users/raykim/Desktop/Screenshots/DaydreamAppStore",
   "background": {
@@ -23,7 +23,7 @@
         "width": 1290,
         "height": 2796
       },
-      "screenshotRoot": "/Users/raykim/Desktop/Screenshots/DaydreamAppStore/_inputs/iphone/en_US",
+      "screenshotRoot": "/Users/raykim/Desktop/Screenshots/DaydreamAppStore/_inputs/v5.2.0/iphone/en_US",
       "frame": {
         "image": "/Users/raykim/Desktop/Screenshots/DaydreamAppStore/_assets/iPhone 17 Pro - Deep Blue - Portrait.png",
         "screen": {
