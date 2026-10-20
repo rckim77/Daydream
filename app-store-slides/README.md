@@ -1,36 +1,57 @@
 # Daydream App Store slides
 
-## Authoring and outputs
+Each version folder contains one complete screenshot set:
 
-- `configs/`: canonical editable JSON (captions, placement, colors, frames, and source selection).
-- `sources.json`: current input mapping, dimensions, hashes, and capture provenance notes.
-- `project.json`: current screenshot set and editor port.
-- `toolchain.json`: reviewed source hashes for the shared renderer/editor in `~/Desktop/Development/app-store-slides-tool`.
-- Generated exports: `~/Desktop/Screenshots/DaydreamAppStore/v5.2.0/<device>/<locale>/`.
+```text
+app-store-slides/
+  README.md
+  project.json
+  toolchain.json
+  v5.2.0/
+    configs/                 # Editable captions, layout, colors, and input selection
+    inputs/<device>/<locale>/ # Original app screenshot PNGs
+    sources.json             # Input paths, dimensions, and SHA-256 hashes
+```
 
-Curated PNG inputs are tracked in Git under `inputs/<device>/<locale>/` alongside the configs. The old Screenshots input path is a compatibility link to these files.
+The README is a guide, not a runtime dependency. `project.json` selects the active
+screenshot-set version and editor port. `toolchain.json` checks the shared renderer
+and editor source files against reviewed hashes. Those two settings apply across
+versions and stay at the root.
 
-Licensed Apple frame PNGs and licenses stay local under `~/Desktop/Screenshots/DaydreamAppStore/_assets/`; do not add them to Git. Preserve these local assets when cloning or moving the project. Re-import missing frames from Apple Design Resources with the shared tool helpers. Config paths support `~` and paths relative to the config file.
+**Checked into Git:** versioned inputs, configs, source manifests, root settings,
+and the scripts/documentation. The separate history folder was removed; Git retains
+the previous records. The current set contains six supplied 5.2.0 screenshots.
 
-## Commands
+**Local only:** final exports, previews, capture/comparison runs, and licensed Apple
+device frames. Exports stay under
+`~/Desktop/Screenshots/DaydreamAppStore/<version>/<device>/<locale>/`; frames and
+licenses stay in that root's `_assets/`. Re-import missing frames with the shared
+tool's Apple Design Resources import helpers. No Picasso document is required.
 
 From the app repository:
 
 ```sh
 scripts/app_store_slides.sh validate
 scripts/app_store_slides.sh render
-scripts/app_store_slides.sh render --device iphone --locale en_US
 scripts/app_store_slides.sh editor
-# After deliberately replacing an input, review it and refresh the manifest:
-scripts/app_store_slides.sh sources
+scripts/app_store_slides.sh render --version v5.2.0 --device iphone --locale en_US
+# After deliberately replacing an input and reviewing it:
+scripts/app_store_slides.sh sources --version v5.2.0
 ```
 
-`render --validate-only` also validates without rendering. `--slide ID`, `--version VERSION`, and `--output PATH` support focused renders and disposable previews. Rendering exports opaque RGB PNGs. Editor writes go directly to canonical configs; run `render` after editing for final exports. `normalize` strips only fully opaque alpha from existing exports without changing RGB pixels. This helper never captures, resets, or modifies a simulator.
+`--version` selects the source version folder; omitting it uses `project.json`.
+`--slide ID` limits a render and `--output PATH` writes a disposable preview.
+The editor saves into the selected version's configs. Run `render` afterward for
+opaque RGB exports. `render --validate-only` checks without generating images.
 
-Use Xcode 27.1 by default. Override `APP_STORE_SLIDES_TOOL_ROOT` only with a checkout matching the content pins; override `APP_STORE_SLIDES_PYTHON` with a Python containing Pillow if the bundled runtime moves. Tool updates should be reviewed and validated before changing the pin. The current pin includes the shared tool integration prepared alongside this organization; that companion tool change must also be retained when setting up another machine.
+For a new screenshot set, copy the previous version folder, update `version` in
+its configs, replace the intended inputs, run `sources --version <new-version>`,
+and validate before selecting it in `project.json`. Leave older version folders
+unchanged. A later app release may reuse an existing screenshot set.
 
-## Screenshot history and releases
-
-The six 5.2.0 PNGs use the latest user-supplied screenshots. The original migration mappings are historical records under `history/`; their retired Picasso paths are not runtime dependencies. `python3 scripts/setup_app_store_slides.py` now verifies the current independent sources. Existing 5.1.0 outputs/comparisons remain outside Git.
-
-Screenshot-set versions describe the assets, independently of the app release version. Record an app release reusing a set in release metadata rather than copying images or silently relabeling captures. Keep one current capture run and one useful comparison; do not delete historical evidence without approval. Exports, capture runs, temporary previews, licensed frame sources, and restore archives stay outside Git. Rendering does not authorize upload.
+The shared renderer lives at `~/Desktop/Development/app-store-slides-tool`.
+Use Xcode 27.1 by default; overrides are `APP_STORE_SLIDES_TOOL_ROOT` and
+`APP_STORE_SLIDES_PYTHON` (a Python with Pillow). The pinned shared renderer
+integration still needs its separate tool-repo commit when setting up another
+machine. This workflow never captures or modifies a simulator, and rendering does
+not authorize upload.

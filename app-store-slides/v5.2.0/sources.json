@@ -50,9 +50,5 @@
         2622
       ]
     }
-  },
-  "historicalProvenance": [
-    "history/v5.2.0-inputs.json",
-    "history/sources.json"
-  ]
+  }
 }
