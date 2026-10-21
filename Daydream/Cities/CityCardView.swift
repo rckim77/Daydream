@@ -92,7 +92,7 @@ struct CityCardView: View {
                             .multilineTextAlignment(.leading)
                             .foregroundStyle(.white)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.leading, 12)
+                            .padding(.leading, usesCompactTitle ? 12 : 16)
                             .padding(.trailing, 68)
                             .padding(.top, usesCompactTitle ? 10 : 12)
                             .padding(.bottom, usesCompactTitle ? 10 : 20)
@@ -127,10 +127,11 @@ struct CityCardView: View {
         }
         .frame(width: width)
         .overlay(alignment: .topTrailing) {
-            WishlistButton(cityName: city.city, isSaved: isSaved, action: onWishlistToggle)
+            WishlistButton(cityName: city.city, isSaved: isSaved,
+                           iconSize: usesCompactTitle ? 20 : 30, action: onWishlistToggle)
                 .padding(1)
                 // Align the heart glyph with the larger title's first line, keeping its full tap target.
-                .padding(.top, usesCompactTitle ? 0 : 5)
+                .padding(.top, usesCompactTitle ? 0 : 10)
         }
         .task(id: currentRequest) {
             #if DEBUG
