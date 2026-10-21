@@ -29,6 +29,7 @@ struct WishlistContinentFilterBar: View {
                     }
                 }
             }
+            .padding(.vertical, 4)
         }
         .scrollIndicators(.hidden)
         .contentMargins(.horizontal, 20, for: .scrollContent)
