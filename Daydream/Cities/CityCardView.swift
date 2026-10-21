@@ -94,7 +94,8 @@ struct CityCardView: View {
                             .foregroundStyle(.white)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.leading, horizontalInset)
-                            .padding(.trailing, 68)
+                            // Leave a 4-point gap before the heart's 44-point tap target.
+                            .padding(.trailing, horizontalInset + 44 + 4)
                             .padding(.top, usesCompactTitle ? 10 : 12)
                             .padding(.bottom, usesCompactTitle ? 10 : 20)
                             .background(LinearGradient(colors: [.black.opacity(0.65), .clear], startPoint: .top, endPoint: .bottom))
