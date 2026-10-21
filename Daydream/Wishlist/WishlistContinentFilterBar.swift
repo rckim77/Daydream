@@ -6,8 +6,8 @@ struct WishlistContinentFilterBar: View {
 
     var body: some View {
         ScrollView(.horizontal) {
-            GlassEffectContainer(spacing: 8) {
-                HStack(spacing: 8) {
+            GlassEffectContainer(spacing: 12) {
+                HStack(spacing: 12) {
                     ForEach(WishlistContinentFilter.allCases) { filter in
                         let isSelected = selection == filter
                         Button {
