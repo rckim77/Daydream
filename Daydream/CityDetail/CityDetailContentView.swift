@@ -37,6 +37,7 @@ struct CityDetailContentView: View {
                                 } label: {
                                     Image(systemName: isSaved ? "heart.fill" : "heart")
                                         .font(.title2.weight(.semibold))
+                                        .imageScale(.large)
                                         .foregroundStyle(isSaved ? Color.pink : Color.primary)
                                         .frame(minWidth: 44, minHeight: 44)
                                         .contentShape(Rectangle())
