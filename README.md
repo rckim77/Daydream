@@ -51,6 +51,8 @@ For iOS 26 compatibility, also run the plan on an available iOS 26 simulator (lo
 
 For the wishlist interaction test, use scheme `VisualQA`, test plan `visualqa`, and `-only-testing:DaydreamUITests/WishlistUITests`. The test uses an isolated preferences suite and disables discovery photo requests so saving, restoring, and removing are independent of network access. Existing favorites are preserved. Set `TEST_RUNNER_DAYDREAM_LIVE_PLACES_UI_TESTS=1` to also verify opening a saved city with the local Places configuration.
 
+For deterministic wishlist screenshots, a Debug-only capture route renders the actual wishlist and native Back control without starting discovery or requesting Google data. Set `DAYDREAM_UI_CAPTURE_WISHLIST=1` and `DAYDREAM_UI_WISHLIST_SUITE` to a fresh `Daydream.UITests.`-prefixed suite. Seed favorites with `DAYDREAM_UI_CAPTURE_SAVED_CITIES` (curated city names separated by `|`, or empty for the empty state), select a filter with `DAYDREAM_UI_CAPTURE_CONTINENT` (for example `All` or `Asia`), and optionally set `DAYDREAM_UI_CAPTURE_APPEARANCE` to `light` or `dark`. Use a fresh suite for each fixture state to preserve personal favorites. These captures verify rendering, not live Google integration or city-opening behavior.
+
 ## CI
 CI uses the GitHub Actions `xcode-27` runner with Xcode 27.1 and an iPhone 18 Pro running iOS 27.0. Pull requests run tests on GitHub Actions via:
 - `.github/workflows/pr-tests.yml`
