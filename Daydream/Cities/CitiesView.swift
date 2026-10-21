@@ -18,6 +18,16 @@ struct CitiesView: View {
     @State private var selectedCity: CityRoute?
     @State private var showFeedbackModal = false
     @State private var showErrorAlert = false
+    @State private var wishlist: WishlistStore = {
+        #if DEBUG
+        // Isolate UI-test favorites without resetting a personal simulator's saved cities.
+        if let suite = ProcessInfo.processInfo.environment["DAYDREAM_UI_WISHLIST_SUITE"],
+           suite.hasPrefix("Daydream.UITests."), let defaults = UserDefaults(suiteName: suite) {
+            return WishlistStore(defaults: defaults)
+        }
+        #endif
+        return WishlistStore()
+    }()
     
     // MARK: - Current Location
     /// This ensures navigation to current location city is gated behind user interaction.
@@ -54,8 +64,9 @@ struct CitiesView: View {
                         .padding(.bottom, 4)
                         .modifier(TopScrollTransition())
                     CityCardsLayout(columns: columns, spacing: spacing, layoutDirection: layoutDirection) {
-                        ForEach(cities, id: \.city) { city in
-                            CityCardView(city: city, width: cardWidth, minimumHeight: minimumCardHeight) { place in
+                        ForEach(cities) { city in
+                            CityCardView(city: city, width: cardWidth, minimumHeight: minimumCardHeight,
+                                         isSaved: wishlist.contains(city), onWishlistToggle: { wishlist.toggle(city) }) { place in
                                 selectedCity = CityRoute(name: city.city, place: place)
                             }
                             .matchedTransitionSource(id: city.city, in: zoomNS) { source in
@@ -74,6 +85,18 @@ struct CitiesView: View {
                 .frame(maxWidth: .infinity)
             }
             .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    NavigationLink {
+                        WishlistView(wishlist: wishlist)
+                    } label: {
+                        HStack(spacing: 6) {
+                            Image(systemName: "heart")
+                            Text("Wishlist")
+                        }
+                    }
+                    .accessibilityLabel("Wishlist")
+                    .accessibilityIdentifier("wishlist-button")
+                }
                 SearchToolbar { place in
                     selectedCity = CityRoute(name: place.description, place: place)
                 } randomCityReceived: { place in

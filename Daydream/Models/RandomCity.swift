@@ -6,7 +6,7 @@
 //  Copyright © 2020 Raymond Kim. All rights reserved.
 //
 
-struct RandomCity: Codable {
+struct RandomCity: Codable, Equatable, Identifiable {
     let city: String
     let country: String
     /// center latitude of city
@@ -15,4 +15,7 @@ struct RandomCity: Codable {
     let longitude: Double
     /// in kilometers
     let radius: Double
+
+    /// Keep identity stable across launches and distinguish cities with the same name.
+    var id: String { "\(country)|\(city)|\(latitude)|\(longitude)" }
 }

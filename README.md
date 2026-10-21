@@ -1,6 +1,10 @@
 # [Daydream](https://apps.apple.com/us/app/daydream-explore-cities/id1366747814)
 Explore cities around the world
 
+## Wishlist
+
+Tap the heart beneath a discovery city card to save it, even while its photo is loading or unavailable. Open **Wishlist** at the top of the Cities screen to explore a saved city, swipe to remove it, or use **Edit** to reorder your destinations. New favorites appear first; your custom order and saved cities stay on this device between launches. Browsing and editing the list work offline; opening city details requires Places access. This first version saves cities from the discovery grid.
+
 [Download on the App Store](https://apps.apple.com/us/app/daydream-explore-cities/id1366747814)
 
 [Privacy Policy](https://rckim77.github.io/Daydream-Site/)
@@ -43,7 +47,9 @@ The project includes a shared test plan at `unittests.xctestplan` and a Swift Te
 xcodebuild test -project Daydream.xcodeproj -scheme Daydream -testPlan unittests -destination 'platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0' CODE_SIGNING_ALLOWED=NO
 ```
 
-For iOS 26 compatibility, also run the plan on an available iOS 26 simulator (locally: `iPhone 17 Pro,OS=26.5`). To target the existing suite, append `-only-testing:DaydreamTests/CityDetailViewStateTests`.
+For iOS 26 compatibility, also run the plan on an available iOS 26 simulator (locally: `iPhone 17 Pro,OS=26.5`). To target the existing suite, append `-only-testing:DaydreamTests/CityDetailViewStateTests`. Wishlist persistence and ordering are covered by `WishlistStoreTests`.
+
+For the wishlist interaction test, use scheme `VisualQA`, test plan `visualqa`, and `-only-testing:DaydreamUITests/WishlistUITests`. The test uses an isolated preferences suite and disables discovery photo requests so saving, restoring, and editing are independent of network access. Existing favorites are preserved. Set `TEST_RUNNER_DAYDREAM_LIVE_PLACES_UI_TESTS=1` to also verify opening a saved city with the local Places configuration.
 
 ## CI
 CI uses the GitHub Actions `xcode-27` runner with Xcode 27.1 and an iPhone 18 Pro running iOS 27.0. Pull requests run tests on GitHub Actions via:

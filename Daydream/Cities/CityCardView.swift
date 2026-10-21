@@ -6,6 +6,8 @@ struct CityCardView: View {
     let city: RandomCity
     let width: CGFloat
     let minimumHeight: CGFloat
+    let isSaved: Bool
+    let onWishlistToggle: () -> Void
     let onTap: (Place) -> Void
 
     @State private var placeID: String?
@@ -36,85 +38,103 @@ struct CityCardView: View {
             return theme
         }()
 
-        Group {
-            if loadFailed {
-                VStack(spacing: 12) {
-                    Text(city.city)
-                        .font(usesCompactTitle ? .title3.bold() : .largeTitle.bold())
-                    Button("Try Again", systemImage: "arrow.clockwise") {
-                        placeID = nil
-                        loadFailed = false
-                        hasLoaded = false
-                        requestID = UUID()
-                    }
-                }
-                .frame(maxWidth: .infinity, minHeight: minimumHeight)
-                .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 20))
-            } else if let placeID {
-                AdvancedPlaceDetailsCompactView(
-                    orientation: .vertical,
-                    query: .constant(PlaceDetailsQuery(identifier: .placeID(placeID))),
-                    configuration: AdvancedPlaceDetailsCompactConfiguration(content: [.media()], theme: theme),
-                    placeDetailsCallback: { result in
-                        guard requestID == currentRequest else { return }
-                        loadFailed = result.error != nil
-                        hasLoaded = result.place != nil && result.error == nil
-                    }
-                )
-                .cornerActions { _ in [] }
-                .mainActions { _ in [] }
-                .id(currentRequest)
-                // Bound the SDK's cached intrinsic width after resizing; keep its full footer height.
-                .frame(width: width, alignment: .leading)
-                .frame(minHeight: minimumHeight, alignment: .top)
-                // Balance the visible attribution glyphs, whose baseline sits below the SDK row's center.
-                .padding(.bottom, 3)
-                .background(Color(.systemBackground))
-                .clipShape(RoundedRectangle(cornerRadius: 20))
-                .overlay {
-                    RoundedRectangle(cornerRadius: 20)
-                        .strokeBorder(.primary.opacity(0.2), lineWidth: 0.5)
-                        .allowsHitTesting(false)
-                }
-                .overlay(alignment: .top) {
-                    Button {
-                        openCity(placeID: placeID)
-                    } label: {
+        VStack(spacing: 0) {
+            Group {
+                if loadFailed {
+                    VStack(spacing: 12) {
                         Text(city.city)
                             .font(usesCompactTitle ? .title3.bold() : .largeTitle.bold())
-                            .lineLimit(2)
-                            .minimumScaleFactor(0.75)
-                            .multilineTextAlignment(.center)
-                            .foregroundStyle(.white)
-                            .frame(maxWidth: .infinity)
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, usesCompactTitle ? 10 : 20)
-                            .background(LinearGradient(colors: [.black.opacity(0.65), .clear], startPoint: .top, endPoint: .bottom))
-                            .clipShape(UnevenRoundedRectangle(topLeadingRadius: 20, topTrailingRadius: 20))
+                        Button("Try Again", systemImage: "arrow.clockwise") {
+                            placeID = nil
+                            loadFailed = false
+                            hasLoaded = false
+                            requestID = UUID()
+                        }
                     }
-                    .buttonStyle(.plain)
-                    .disabled(isOpening)
-                    .accessibilityLabel("Explore \(city.city)")
-                    .accessibilityIdentifier("city-\(hasLoaded ? "loaded" : "loading")-\(city.city)")
-                }
-                .overlay {
-                    if isOpening {
-                        ProgressView()
-                            .padding(16)
-                            .background(.regularMaterial, in: Circle())
-                    }
-                }
-                .contentShape(RoundedRectangle(cornerRadius: 20))
-                .onTapGesture { openCity(placeID: placeID) }
-            } else {
-                ProgressView()
                     .frame(maxWidth: .infinity, minHeight: minimumHeight)
                     .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 20))
+                } else if let placeID {
+                    AdvancedPlaceDetailsCompactView(
+                        orientation: .vertical,
+                        query: .constant(PlaceDetailsQuery(identifier: .placeID(placeID))),
+                        configuration: AdvancedPlaceDetailsCompactConfiguration(content: [.media()], theme: theme),
+                        placeDetailsCallback: { result in
+                            guard requestID == currentRequest else { return }
+                            loadFailed = result.error != nil
+                            hasLoaded = result.place != nil && result.error == nil
+                        }
+                    )
+                    .cornerActions { _ in [] }
+                    .mainActions { _ in [] }
+                    .id(currentRequest)
+                    // Bound the SDK's cached intrinsic width after resizing; keep its full footer height.
+                    .frame(width: width, alignment: .leading)
+                    .frame(minHeight: minimumHeight, alignment: .top)
+                    // Balance the visible attribution glyphs, whose baseline sits below the SDK row's center.
+                    .padding(.bottom, 3)
+                    .background(Color(.systemBackground))
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 20)
+                            .strokeBorder(.primary.opacity(0.2), lineWidth: 0.5)
+                            .allowsHitTesting(false)
+                    }
+                    .overlay(alignment: .top) {
+                        Button {
+                            openCity(placeID: placeID)
+                        } label: {
+                            Text(city.city)
+                                .font(usesCompactTitle ? .title3.bold() : .largeTitle.bold())
+                                .lineLimit(2)
+                                .minimumScaleFactor(0.75)
+                                .multilineTextAlignment(.center)
+                                .foregroundStyle(.white)
+                                .frame(maxWidth: .infinity)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, usesCompactTitle ? 10 : 20)
+                                .background(LinearGradient(colors: [.black.opacity(0.65), .clear], startPoint: .top, endPoint: .bottom))
+                                .clipShape(UnevenRoundedRectangle(topLeadingRadius: 20, topTrailingRadius: 20))
+                        }
+                        .buttonStyle(.plain)
+                        .disabled(isOpening)
+                        .accessibilityLabel("Explore \(city.city)")
+                        .accessibilityIdentifier("city-\(hasLoaded ? "loaded" : "loading")-\(city.city)")
+                    }
+                    .overlay {
+                        if isOpening {
+                            ProgressView()
+                                .padding(16)
+                                .background(.regularMaterial, in: Circle())
+                        }
+                    }
+                    .contentShape(RoundedRectangle(cornerRadius: 20))
+                    .onTapGesture { openCity(placeID: placeID) }
+                } else {
+                    VStack(spacing: 12) {
+                        Text(city.city)
+                            .font(usesCompactTitle ? .title3.bold() : .largeTitle.bold())
+                        ProgressView()
+                    }
+                    .frame(maxWidth: .infinity, minHeight: minimumHeight)
+                    .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 20))
+                }
             }
+            HStack(spacing: 4) {
+                Text(city.country)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+                Spacer(minLength: 0)
+                WishlistButton(cityName: city.city, isSaved: isSaved, action: onWishlistToggle)
+            }
+            .padding(.leading, 8)
         }
         .frame(width: width)
-        .accessibilityIdentifier("compact-city-\(city.city)")
         .task(id: currentRequest) {
+            #if DEBUG
+            // Exercise offline wishlist interactions without depending on discovery's live SDK requests.
+            guard ProcessInfo.processInfo.environment["DAYDREAM_UI_SKIP_CITY_LOADING"] != "1" else { return }
+            #endif
             guard placeID == nil, !loadFailed else { return }
             let place = await API.PlaceSearch.fetchCityBy(city)
             guard !Task.isCancelled, requestID == currentRequest else { return }
