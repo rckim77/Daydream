@@ -15,21 +15,13 @@ struct WishlistContinentFilterBar: View {
                                 selection = filter
                             }
                         } label: {
-                            HStack(spacing: 6) {
-                                if isSelected {
-                                    Image(systemName: "checkmark")
-                                        .accessibilityHidden(true)
-                                        .transition(.opacity)
-                                }
-                                Text(filter.rawValue)
-                            }
-                            .font(.subheadline.weight(.semibold))
-                            .fixedSize(horizontal: true, vertical: false)
-                            .padding(.horizontal, 4)
+                            Text(filter.rawValue)
+                                .font(.subheadline.weight(.semibold))
+                                .fixedSize(horizontal: true, vertical: false)
                         }
                         .buttonStyle(.glass)
                         .buttonBorderShape(.capsule)
-                        .controlSize(.large)
+                        .controlSize(.small)
                         .tint(isSelected ? Color.accentColor : nil)
                         .accessibilityLabel(filter.name)
                         .accessibilityAddTraits(isSelected ? .isSelected : [])
