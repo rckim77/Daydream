@@ -18,7 +18,8 @@ struct CityCardView: View {
 
     var body: some View {
         let currentRequest = requestID
-        let usesCompactTitle = UIDevice.current.userInterfaceIdiom == .phone
+        // Grow titles with the card when unfolding or resizing, keeping narrow portrait cards compact.
+        let usesCompactTitle = width < 300
         let theme: PlacesMaterialTheme = {
             var theme = PlacesMaterialTheme()
             theme.shape.cornerRadius = 20
