@@ -94,7 +94,8 @@ struct CityCardView: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.leading, 12)
                             .padding(.trailing, 68)
-                            .padding(.vertical, usesCompactTitle ? 10 : 20)
+                            .padding(.top, usesCompactTitle ? 10 : 12)
+                            .padding(.bottom, usesCompactTitle ? 10 : 20)
                             .background(LinearGradient(colors: [.black.opacity(0.65), .clear], startPoint: .top, endPoint: .bottom))
                             .clipShape(UnevenRoundedRectangle(topLeadingRadius: 20, topTrailingRadius: 20))
                     }
@@ -128,6 +129,8 @@ struct CityCardView: View {
         .overlay(alignment: .topTrailing) {
             WishlistButton(cityName: city.city, isSaved: isSaved, action: onWishlistToggle)
                 .padding(1)
+                // Align the heart glyph with the larger title's first line, keeping its full tap target.
+                .padding(.top, usesCompactTitle ? 0 : 5)
         }
         .task(id: currentRequest) {
             #if DEBUG
