@@ -48,6 +48,7 @@ struct WishlistView: View {
                                 .accessibilityHidden(true)
                         }
                         Text(section.country)
+                            .foregroundStyle(.primary)
                     }
                     .textCase(nil)
                     .accessibilityElement(children: .combine)
@@ -60,6 +61,7 @@ struct WishlistView: View {
                 }
             }
         }
+        .scrollEdgeEffectStyle(.soft, for: .top)
         .disabled(openingCity != nil)
         .overlay {
             if wishlist.cities.isEmpty {

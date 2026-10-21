@@ -126,7 +126,7 @@ struct CityCardView: View {
         .frame(width: width)
         .overlay(alignment: .topTrailing) {
             WishlistButton(cityName: city.city, isSaved: isSaved, action: onWishlistToggle)
-                .padding(8)
+                .padding(1)
         }
         .task(id: currentRequest) {
             #if DEBUG
