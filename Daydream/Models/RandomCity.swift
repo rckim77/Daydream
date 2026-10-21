@@ -15,7 +15,7 @@ struct RandomCity: Codable, Hashable, Identifiable {
     let longitude: Double
     /// in kilometers
     let radius: Double
-    /// Present for cities saved from Places search rather than the curated discovery dataset.
+    /// Available for cities saved from Places search.
     let placeID: String?
     let countryCode: String?
 
@@ -30,6 +30,5 @@ struct RandomCity: Codable, Hashable, Identifiable {
         self.countryCode = countryCode
     }
 
-    /// Keep identity stable across launches and distinguish cities with the same name.
     var id: String { "\(country)|\(city)|\(latitude)|\(longitude)" }
 }

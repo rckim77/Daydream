@@ -18,7 +18,6 @@ struct CityCardView: View {
 
     var body: some View {
         let currentRequest = requestID
-        // Grow titles with the card when unfolding or resizing, keeping narrow portrait cards compact.
         let usesCompactTitle = width < 300
         let horizontalInset: CGFloat = usesCompactTitle ? 12 : 16
         let theme: PlacesMaterialTheme = {
@@ -94,7 +93,6 @@ struct CityCardView: View {
                             .foregroundStyle(.white)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.leading, horizontalInset)
-                            // Leave a 4-point gap before the heart's 44-point tap target.
                             .padding(.trailing, horizontalInset + 44 + 4)
                             .padding(.top, usesCompactTitle ? 10 : 12)
                             .padding(.bottom, usesCompactTitle ? 10 : 20)
@@ -132,12 +130,11 @@ struct CityCardView: View {
             WishlistButton(cityName: city.city, isSaved: isSaved,
                            iconSize: usesCompactTitle ? 20 : 30, action: onWishlistToggle)
                 .padding(.trailing, horizontalInset)
-                // Align the heart glyph with the larger title's first line, keeping its full tap target.
+                // Align the glyph with the title while preserving its tap target.
                 .padding(.top, usesCompactTitle ? 1 : 11)
         }
         .task(id: currentRequest) {
             #if DEBUG
-            // Exercise offline wishlist interactions without depending on discovery's live SDK requests.
             guard ProcessInfo.processInfo.environment["DAYDREAM_UI_SKIP_CITY_LOADING"] != "1" else { return }
             #endif
             guard placeID == nil, !loadFailed else { return }

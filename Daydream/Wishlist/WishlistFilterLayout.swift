@@ -1,6 +1,5 @@
 import SwiftUI
 
-/// Packs natural-width tags into rows while preserving each button's identity as the window resizes.
 struct WishlistFilterLayout: Layout {
     var spacing: CGFloat
     var layoutDirection: LayoutDirection

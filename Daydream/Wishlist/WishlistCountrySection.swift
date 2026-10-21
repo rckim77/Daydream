@@ -6,7 +6,6 @@ struct WishlistCountrySection: Identifiable, Equatable {
 
     var id: String { country }
     var countryCode: String? {
-        // Curated countries already have flag codes; searched cities carry their ISO country code.
         if let flag = Self.flags[country] {
             let scalars = flag.unicodeScalars.compactMap { Unicode.Scalar($0.value - 127397) }
             return String(String.UnicodeScalarView(scalars))
@@ -33,7 +32,6 @@ struct WishlistCountrySection: Identifiable, Equatable {
 
     static func group(_ cities: [RandomCity]) -> [Self] {
         let groups = Dictionary(grouping: cities) { city in
-            // The seed data contains both abbreviated and full country names.
             countryName(city.country)
         }
         return groups.map { country, cities in
@@ -43,7 +41,6 @@ struct WishlistCountrySection: Identifiable, Equatable {
         }.sorted { $0.country.localizedStandardCompare($1.country) == .orderedAscending }
     }
 
-    // Explicit flags cover the curated dataset without depending on the device's language.
     private static let flags = [
         "Argentina": "🇦🇷", "Australia": "🇦🇺", "Austria": "🇦🇹", "Azerbaijan": "🇦🇿",
         "Belgium": "🇧🇪", "Brazil": "🇧🇷", "Bulgaria": "🇧🇬", "Cambodia": "🇰🇭",

@@ -1,7 +1,7 @@
 #if DEBUG
 import SwiftUI
 
-/// Renders the real wishlist with isolated fixtures, without starting discovery or making Google requests.
+/// Captures the real wishlist with isolated fixtures and no Google requests.
 struct WishlistCaptureView: View {
     @State private var wishlist: WishlistStore
     @State private var path = ["wishlist"]
@@ -38,7 +38,7 @@ struct WishlistCaptureView: View {
 
     var body: some View {
         NavigationStack(path: $path) {
-            // Preserve the real pushed screen and native Back control without loading the discovery screen.
+            // Keep native Back navigation without loading discovery.
             Color(uiColor: .systemGroupedBackground)
                 .navigationDestination(for: String.self) { _ in
                     WishlistView(wishlist: wishlist, initialContinent: initialContinent)

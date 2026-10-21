@@ -2,7 +2,7 @@ import CoreLocation
 import Foundation
 import Observation
 
-/// Stores city metadata only. Photos and Google place responses remain transient.
+/// Persists city metadata, never Google responses or photos.
 @MainActor
 @Observable
 final class WishlistStore {
@@ -33,7 +33,7 @@ final class WishlistStore {
     }
 
     func resolve(_ city: RandomCity, sourceCity: RandomCity? = nil) -> RandomCity {
-        // Preserve a card/list route's identity even when Places uses a different city name or center.
+        // Preserve route identity when Places changes the city name or center.
         if let sourceCity { return sourceCity }
         if let placeID = city.placeID,
            let saved = cities.first(where: { $0.placeID == placeID }) { return saved }
@@ -43,7 +43,7 @@ final class WishlistStore {
             WishlistCountrySection.countryName($0.country) == WishlistCountrySection.countryName(city.country)
                 && Self.matchingName($0.city) == Self.matchingName(city.city)
         }
-        // Searches can return a slightly different center; reuse the saved/curated identity within its city radius.
+        // Match nearby centers without merging distant namesakes.
         if let match = candidates.min(by: {
             location.distance(from: CLLocation(latitude: $0.latitude, longitude: $0.longitude))
                 < location.distance(from: CLLocation(latitude: $1.latitude, longitude: $1.longitude))

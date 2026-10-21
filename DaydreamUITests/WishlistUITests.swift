@@ -8,7 +8,7 @@ final class WishlistUITests: XCTestCase {
         app.launchEnvironment["DAYDREAM_UI_CAPTURE_CITIES"] = "Tokyo|Paris|New York City|Hong Kong|Rome|Montreal|Lisbon|Antalya"
         app.launchEnvironment["DAYDREAM_UI_WISHLIST_SUITE"] = "Daydream.UITests.\(UUID().uuidString)"
         app.launchEnvironment["DAYDREAM_UI_SKIP_CITY_LOADING"] = "1"
-        // Keep personal review history intact and prevent StoreKit prompts from interrupting the flow.
+        // Suppress review prompts without changing stored review history.
         app.launchArguments = ["-reviewsViewedCount", "0", "-lastReviewedAppVersion", "5.3.0"]
         app.launch()
         defer { app.terminate() }
@@ -25,7 +25,6 @@ final class WishlistUITests: XCTestCase {
         XCTAssertTrue(tokyo.waitForExistence(timeout: 15))
         tokyo.tap()
         XCTAssertEqual(tokyo.value as? String, "Saved")
-        // A heart must save without opening the city or requiring the photo to finish loading.
         XCTAssertTrue(wishlist.exists)
         app.buttons["wishlist-toggle-Paris"].tap()
         capture("wishlist-home")
@@ -69,7 +68,7 @@ final class WishlistUITests: XCTestCase {
 
     @MainActor
     private func returnToCities(_ app: XCUIApplication) {
-        // Native edge-back navigation also works when Duo exposes its Back control as an unlabeled Other.
+        // Duo can expose Back as an unlabeled Other; use the native edge gesture.
         let edge = app.coordinate(withNormalizedOffset: CGVector(dx: 0.01, dy: 0.5))
         let destination = app.coordinate(withNormalizedOffset: CGVector(dx: 0.8, dy: 0.5))
         edge.press(forDuration: 0.05, thenDragTo: destination)

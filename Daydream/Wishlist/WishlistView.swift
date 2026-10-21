@@ -109,7 +109,7 @@ struct WishlistView: View {
         .task(id: openingCity?.id) {
             guard let city = openingCity else { return }
             defer { openingCity = nil }
-            // Navigation belongs to this screen's task, so leaving cancels a pending presentation.
+            // Leaving this screen cancels pending navigation.
             let place: Place?
             if let placeID = city.placeID {
                 place = try? await API.PlaceSearch.fetchPlaceBy(placeId: placeID)

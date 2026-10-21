@@ -29,10 +29,9 @@ enum WishlistContinentFilter: String, CaseIterable, Identifiable {
 
     static func continent(for countryCode: String) -> Self? {
         let code = countryCode.uppercased()
-        // Keep Antarctica out of the continent filters even when the system groups it into a broader region.
         guard code != "AQ" else { return nil }
         let region = Locale.Region(code)
-        // Foundation uses the UN region hierarchy: Central America and the Caribbean belong to North America.
+        // UN regions group Central America and the Caribbean under North America.
         switch region.continent?.identifier {
         case "142": return .asia
         case "150": return .europe
