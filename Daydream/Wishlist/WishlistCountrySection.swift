@@ -5,10 +5,19 @@ struct WishlistCountrySection: Identifiable, Equatable {
     let cities: [RandomCity]
 
     var id: String { country }
+    var countryCode: String? {
+        // Curated countries already have flag codes; searched cities carry their ISO country code.
+        if let flag = Self.flags[country] {
+            let scalars = flag.unicodeScalars.compactMap { Unicode.Scalar($0.value - 127397) }
+            return String(String.UnicodeScalarView(scalars))
+        }
+        return cities.compactMap(\.countryCode).map { $0.uppercased() }.first {
+            $0.utf8.count == 2 && $0.utf8.allSatisfy { (65...90).contains($0) }
+        }
+    }
+
     var flag: String? {
-        if let flag = Self.flags[country] { return flag }
-        guard let code = cities.compactMap(\.countryCode).first?.uppercased(), code.utf8.count == 2,
-              code.utf8.allSatisfy({ (65...90).contains($0) }) else { return nil }
+        guard let code = countryCode else { return nil }
         return String(String.UnicodeScalarView(code.unicodeScalars.compactMap { Unicode.Scalar(127397 + $0.value) }))
     }
 

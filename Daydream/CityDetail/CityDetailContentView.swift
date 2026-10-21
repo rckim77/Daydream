@@ -29,7 +29,7 @@ struct CityDetailContentView: View {
             ScrollView(showsIndicators: false) {
                 layout {
                     VStack(alignment: .leading, spacing: 4) {
-                        HStack(alignment: .firstTextBaseline, spacing: 8) {
+                        HStack(alignment: .center, spacing: 0) {
                             if let city = wishlistCity {
                                 let isSaved = wishlist.contains(city)
                                 Button {

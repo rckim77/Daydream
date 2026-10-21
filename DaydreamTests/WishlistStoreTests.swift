@@ -196,4 +196,21 @@ struct WishlistStoreTests {
             #expect(store.contains(store.resolve(paris)))
         }
     }
+
+    @Test("deleting from a continent filter preserves hidden favorites and reflects later additions")
+    func filteredDeletion() throws {
+        try withDefaults { defaults in
+            let store = WishlistStore(defaults: defaults)
+            store.toggle(paris)
+            store.toggle(tokyo)
+            let visibleSections = WishlistContinentFilter.europe.sections(from: store.countrySections)
+            let france = try #require(visibleSections.first)
+            store.remove([france.cities[0]])
+            #expect(WishlistContinentFilter.europe.sections(from: store.countrySections).isEmpty)
+            #expect(store.contains(tokyo))
+            #expect(WishlistStore(defaults: defaults).cities == [tokyo])
+            store.toggle(paris)
+            #expect(WishlistContinentFilter.europe.sections(from: store.countrySections).first?.cities == [paris])
+        }
+    }
 }
