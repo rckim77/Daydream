@@ -48,7 +48,7 @@ struct WishlistView: View {
                                 .accessibilityHidden(true)
                         }
                         Text(section.country)
-                            .foregroundStyle(.primary)
+                            .foregroundStyle(Color(uiColor: .label))
                     }
                     .textCase(nil)
                     .accessibilityElement(children: .combine)
@@ -74,7 +74,7 @@ struct WishlistView: View {
         }
         .navigationTitle("Wishlist")
         .fullScreenCover(item: $selectedCity) { route in
-            CityDetailView(place: route.place)
+            CityDetailView(place: route.place, wishlist: wishlist, sourceCity: route.wishlistCity)
         }
         .alert("Couldn’t open city", isPresented: $showOpenError) {
             Button("OK", role: .cancel) {}
@@ -85,12 +85,18 @@ struct WishlistView: View {
             guard let city = openingCity else { return }
             defer { openingCity = nil }
             // Navigation belongs to this screen's task, so leaving cancels a pending presentation.
-            guard let place = await API.PlaceSearch.fetchCityBy(city) else {
+            let place: Place?
+            if let placeID = city.placeID {
+                place = try? await API.PlaceSearch.fetchPlaceBy(placeId: placeID)
+            } else {
+                place = await API.PlaceSearch.fetchCityBy(city)
+            }
+            guard let place else {
                 if !Task.isCancelled { showOpenError = true }
                 return
             }
             guard !Task.isCancelled else { return }
-            selectedCity = CityRoute(name: city.city, place: place)
+            selectedCity = CityRoute(name: city.city, place: place, wishlistCity: city)
         }
     }
 }

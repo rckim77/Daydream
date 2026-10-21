@@ -116,4 +116,84 @@ struct WishlistStoreTests {
             #expect(defaults.data(forKey: "wishlist.cities.v1") == invalid)
         }
     }
+
+    @Test("detail routes keep the original favorite identity despite Places naming differences")
+    func detailSourceIdentity() throws {
+        try withDefaults { defaults in
+            let store = WishlistStore(defaults: defaults)
+            store.toggle(paris)
+            let placeCity = RandomCity(city: "Paris Centre", country: "France", latitude: 48.86, longitude: 2.36,
+                                       radius: 10, placeID: "paris-place", countryCode: "FR")
+            let detailCity = store.resolve(placeCity, sourceCity: paris)
+            #expect(store.contains(detailCity))
+            store.toggle(detailCity)
+            #expect(!store.contains(paris))
+            store.toggle(detailCity)
+            #expect(WishlistStore(defaults: defaults).cities == [paris])
+        }
+    }
+
+    @Test("searched cities reuse curated identities and favorites across slightly different centers")
+    func searchedCuratedIdentity() throws {
+        try withDefaults { defaults in
+            let url = try #require(Bundle.main.url(forResource: "randomCitiesJSON", withExtension: "json"))
+            let curated = try JSONDecoder().decode([RandomCity].self, from: Data(contentsOf: url))
+            let newYork = try #require(curated.first { $0.city == "New York City" })
+            let store = WishlistStore(defaults: defaults)
+            let search = RandomCity(city: "New York", country: "United States", latitude: newYork.latitude + 0.001,
+                                    longitude: newYork.longitude, radius: 10, placeID: "new-york-place", countryCode: "US")
+            let resolved = store.resolve(search)
+            #expect(resolved.id == newYork.id)
+            store.toggle(resolved)
+            #expect(store.contains(newYork))
+            let restored = WishlistStore(defaults: defaults)
+            restored.toggle(restored.resolve(search))
+            #expect(restored.cities.isEmpty)
+        }
+    }
+
+    @Test("cities outside discovery retain their place IDs and flags across launches")
+    func searchedCityPersistence() throws {
+        try withDefaults { defaults in
+            let reykjavik = RandomCity(city: "Reykjavík", country: "Iceland", latitude: 64.1466, longitude: -21.9426,
+                                      radius: 10, placeID: "reykjavik-place", countryCode: "IS")
+            let store = WishlistStore(defaults: defaults)
+            store.toggle(store.resolve(reykjavik))
+            let restored = WishlistStore(defaults: defaults)
+            #expect(restored.cities == [reykjavik])
+            #expect(restored.countrySections.first?.flag == "🇮🇸")
+            let updatedPlace = RandomCity(city: "Reykjavik", country: "Iceland", latitude: 64.15, longitude: -21.95,
+                                         radius: 10, placeID: "reykjavik-place", countryCode: "IS")
+            let detailCity = restored.resolve(updatedPlace)
+            #expect(restored.contains(detailCity))
+            restored.toggle(detailCity)
+            #expect(WishlistStore(defaults: defaults).cities.isEmpty)
+        }
+    }
+
+    @Test("city matching distinguishes distant namesakes and folds accents for nearby saved cities")
+    func searchedNamesakes() throws {
+        try withDefaults { defaults in
+            let store = WishlistStore(defaults: defaults)
+            let saved = RandomCity(city: "San José", country: "Costa Rica", latitude: 9.93, longitude: -84.08, radius: 10)
+            store.toggle(saved)
+            let nearby = RandomCity(city: "San Jose", country: "Costa Rica", latitude: 9.931, longitude: -84.081, radius: 10)
+            #expect(store.resolve(nearby).id == saved.id)
+            let distant = RandomCity(city: "San Jose", country: "Costa Rica", latitude: 10.5, longitude: -85.0, radius: 10)
+            #expect(store.resolve(distant).id == distant.id)
+            #expect(!store.contains(store.resolve(distant)))
+        }
+    }
+
+    @Test("favorites saved before detail support still decode with the same identity")
+    func legacyFavoriteCompatibility() throws {
+        try withDefaults { defaults in
+            let json = #"[{"city":"Paris","country":"France","latitude":48.85,"longitude":2.35,"radius":10}]"#
+            defaults.set(Data(json.utf8), forKey: "wishlist.cities.v1")
+            let store = WishlistStore(defaults: defaults)
+            #expect(store.cities == [paris])
+            #expect(store.cities.first?.placeID == nil)
+            #expect(store.contains(store.resolve(paris)))
+        }
+    }
 }

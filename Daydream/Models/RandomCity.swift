@@ -6,7 +6,7 @@
 //  Copyright © 2020 Raymond Kim. All rights reserved.
 //
 
-struct RandomCity: Codable, Equatable, Identifiable {
+struct RandomCity: Codable, Hashable, Identifiable {
     let city: String
     let country: String
     /// center latitude of city
@@ -15,6 +15,20 @@ struct RandomCity: Codable, Equatable, Identifiable {
     let longitude: Double
     /// in kilometers
     let radius: Double
+    /// Present for cities saved from Places search rather than the curated discovery dataset.
+    let placeID: String?
+    let countryCode: String?
+
+    init(city: String, country: String, latitude: Double, longitude: Double, radius: Double,
+         placeID: String? = nil, countryCode: String? = nil) {
+        self.city = city
+        self.country = country
+        self.latitude = latitude
+        self.longitude = longitude
+        self.radius = radius
+        self.placeID = placeID
+        self.countryCode = countryCode
+    }
 
     /// Keep identity stable across launches and distinguish cities with the same name.
     var id: String { "\(country)|\(city)|\(latitude)|\(longitude)" }

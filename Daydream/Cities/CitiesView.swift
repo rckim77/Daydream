@@ -67,7 +67,7 @@ struct CitiesView: View {
                         ForEach(cities) { city in
                             CityCardView(city: city, width: cardWidth, minimumHeight: minimumCardHeight,
                                          isSaved: wishlist.contains(city), onWishlistToggle: { wishlist.toggle(city) }) { place in
-                                selectedCity = CityRoute(name: city.city, place: place)
+                                selectedCity = CityRoute(name: city.city, place: place, wishlistCity: city)
                             }
                             .matchedTransitionSource(id: city.city, in: zoomNS) { source in
                                 source
@@ -123,7 +123,7 @@ struct CitiesView: View {
                 }
             }
             .fullScreenCover(item: $selectedCity) { item in
-                CityDetailView(place: item.place)
+                CityDetailView(place: item.place, wishlist: wishlist, sourceCity: item.wishlistCity)
                     .navigationTransition(.zoom(sourceID: item.name, in: zoomNS))
             }
         }

@@ -4,6 +4,8 @@ import SwiftUI
 struct CityDetailContentView: View {
     let place: Place
     let cityText: String
+    let wishlistCity: RandomCity?
+    let wishlist: WishlistStore
     @Bindable var viewState: CityDetailViewState
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.verticalSizeClass) private var verticalSizeClass
@@ -27,9 +29,28 @@ struct CityDetailContentView: View {
             ScrollView(showsIndicators: false) {
                 layout {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(cityText)
-                            .font(.largeTitle)
-                            .padding(.horizontal, 24)
+                        HStack(alignment: .firstTextBaseline, spacing: 8) {
+                            if let city = wishlistCity {
+                                let isSaved = wishlist.contains(city)
+                                Button {
+                                    wishlist.toggle(city)
+                                } label: {
+                                    Image(systemName: isSaved ? "heart.fill" : "heart")
+                                        .font(.title2.weight(.semibold))
+                                        .foregroundStyle(isSaved ? Color.pink : Color.primary)
+                                        .frame(minWidth: 44, minHeight: 44)
+                                        .contentShape(Rectangle())
+                                }
+                                .buttonStyle(.plain)
+                                .accessibilityLabel(isSaved ? "Remove \(city.city) from wishlist" : "Save \(city.city) to wishlist")
+                                .accessibilityValue(isSaved ? "Saved" : "Not saved")
+                                .accessibilityIdentifier("city-detail-wishlist-button")
+                                .sensoryFeedback(.selection, trigger: isSaved)
+                            }
+                            Text(cityText)
+                                .font(.largeTitle)
+                        }
+                        .padding(.horizontal, 24)
                         SummaryView(cityText: cityText)
                         MapCardView(mapPosition: $viewState.mapPosition, place: place, height: expanded ? nil : 190)
                     }

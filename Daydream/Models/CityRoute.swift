@@ -14,4 +14,11 @@ struct CityRoute: Identifiable, Hashable {
     /// Used for zoom transition
     let name: String
     let place: Place
+    let wishlistCity: RandomCity?
+
+    init(name: String, place: Place, wishlistCity: RandomCity? = nil) {
+        self.name = name
+        self.place = place
+        self.wishlistCity = wishlistCity
+    }
 }

@@ -28,6 +28,11 @@ final class CityDetailViewState {
     var tappedCardPlace: IdentifiablePlace?
     var tappedSheetPlace: IdentifiablePlace?
     var showErrorAlert = false
+    var wishlistSourceCity: RandomCity?
+
+    init(wishlistSourceCity: RandomCity? = nil) {
+        self.wishlistSourceCity = wishlistSourceCity
+    }
 
     /// This ensures navigation to current location city is gated behind user interaction.
     var currentLocationButtonTapped = false
@@ -61,8 +66,9 @@ final class CityDetailViewState {
         .region(MKCoordinateRegion(center: location, span: .init(latitudeDelta: 0.07, longitudeDelta: 0.07)))
     }
 
-    func applySelectedCity(_ place: Place) {
+    func applySelectedCity(_ place: Place, wishlistSourceCity: RandomCity? = nil) {
         mapPosition = createMapPosition(place.location)
+        self.wishlistSourceCity = wishlistSourceCity
     }
 
     func presentMap(_ place: IdentifiablePlace?, asSheet: Bool) {

@@ -5,17 +5,27 @@ struct WishlistCountrySection: Identifiable, Equatable {
     let cities: [RandomCity]
 
     var id: String { country }
-    var flag: String? { Self.flags[country] }
+    var flag: String? {
+        if let flag = Self.flags[country] { return flag }
+        guard let code = cities.compactMap(\.countryCode).first?.uppercased(), code.utf8.count == 2,
+              code.utf8.allSatisfy({ (65...90).contains($0) }) else { return nil }
+        return String(String.UnicodeScalarView(code.unicodeScalars.compactMap { Unicode.Scalar(127397 + $0.value) }))
+    }
+
+    static func countryName(_ country: String) -> String {
+        switch country {
+        case "UK": "United Kingdom"
+        case "USA": "United States"
+        case "UAE": "United Arab Emirates"
+        case "Czechia": "Czech Republic"
+        default: country
+        }
+    }
 
     static func group(_ cities: [RandomCity]) -> [Self] {
         let groups = Dictionary(grouping: cities) { city in
             // The seed data contains both abbreviated and full country names.
-            switch city.country {
-            case "UK": "United Kingdom"
-            case "USA": "United States"
-            case "UAE": "United Arab Emirates"
-            default: city.country
-            }
+            countryName(city.country)
         }
         return groups.map { country, cities in
             Self(country: country, cities: cities.sorted {

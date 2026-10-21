@@ -15,7 +15,14 @@ struct CityDetailView: View {
 
     // MARK: - State vars
     @State var place: Place
-    @State private var viewState = CityDetailViewState()
+    @State private var viewState: CityDetailViewState
+    let wishlist: WishlistStore
+
+    init(place: Place, wishlist: WishlistStore, sourceCity: RandomCity? = nil) {
+        _place = State(initialValue: place)
+        _viewState = State(initialValue: CityDetailViewState(wishlistSourceCity: sourceCity))
+        self.wishlist = wishlist
+    }
 
     // MARK: - Environment and AppStorage vars
     @Environment(\.dismiss) var dismiss
@@ -35,9 +42,19 @@ struct CityDetailView: View {
         viewState.cityText(displayName: place.displayName, countryCode: countryCode)
     }
 
+    private var wishlistCity: RandomCity? {
+        guard let name = place.displayName, !name.isEmpty else { return nil }
+        let country = place.addressComponents?.first(where: { $0.types.contains(.country) })
+        let city = RandomCity(city: name, country: country?.name ?? "Other destinations",
+                              latitude: place.location.latitude, longitude: place.location.longitude, radius: 10,
+                              placeID: place.placeID, countryCode: countryCode)
+        return wishlist.resolve(city, sourceCity: viewState.wishlistSourceCity)
+    }
+
     var body: some View {
         NavigationStack {
-            CityDetailContentView(place: place, cityText: cityText, viewState: viewState)
+            CityDetailContentView(place: place, cityText: cityText, wishlistCity: wishlistCity,
+                                  wishlist: wishlist, viewState: viewState)
             .background {
                 CountryFlagBackground(countryCode: countryCode)
             }
@@ -76,7 +93,7 @@ struct CityDetailView: View {
                 }
             }
             .task {
-                viewState.applySelectedCity(place)
+                viewState.applySelectedCity(place, wishlistSourceCity: viewState.wishlistSourceCity)
                 await fetchSightsAndEateries(place)
                 viewState.seedPreviousCurrentLocation(locationManager.location)
             }
