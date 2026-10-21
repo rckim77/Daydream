@@ -66,6 +66,8 @@ struct WishlistView: View {
                     }
                 }
             }
+            .scrollContentBackground(.hidden)
+            .background(Color(uiColor: .systemGroupedBackground))
             .scrollEdgeEffectStyle(.soft, for: .top)
             .disabled(openingCity != nil)
             .overlay {
@@ -75,12 +77,17 @@ struct WishlistView: View {
                     } description: {
                         Text("Tap the heart on a city to keep it in your wishlist.")
                     }
+                    .background(Color(uiColor: .systemGroupedBackground))
+                    .transition(.opacity)
                 } else if sections.isEmpty {
                     ContentUnavailableView {
                         Label("No saved cities in \(selectedContinent.name)", systemImage: "heart")
                     } description: {
                         Text("Save a city in this continent or choose another filter.")
                     }
+                    .background(Color(uiColor: .systemGroupedBackground))
+                    .id(selectedContinent)
+                    .transition(.opacity)
                 }
             }
         }
