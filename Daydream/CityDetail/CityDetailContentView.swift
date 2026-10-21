@@ -29,7 +29,9 @@ struct CityDetailContentView: View {
             ScrollView(showsIndicators: false) {
                 layout {
                     VStack(alignment: .leading, spacing: 4) {
-                        HStack(alignment: .center, spacing: 0) {
+                        HStack(alignment: .center, spacing: 8) {
+                            Text(cityText)
+                                .font(.largeTitle)
                             if let city = wishlistCity {
                                 let isSaved = wishlist.contains(city)
                                 Button {
@@ -39,17 +41,17 @@ struct CityDetailContentView: View {
                                         .font(.title2.weight(.semibold))
                                         .imageScale(.large)
                                         .foregroundStyle(isSaved ? Color.pink : Color.primary)
-                                        .frame(minWidth: 44, minHeight: 44)
-                                        .contentShape(Rectangle())
+                                        .frame(width: 28, height: 28)
                                 }
-                                .buttonStyle(.plain)
+                                .buttonStyle(.glass)
+                                .buttonBorderShape(.circle)
+                                .controlSize(.large)
+                                .fixedSize()
                                 .accessibilityLabel(isSaved ? "Remove \(city.city) from wishlist" : "Save \(city.city) to wishlist")
                                 .accessibilityValue(isSaved ? "Saved" : "Not saved")
                                 .accessibilityIdentifier("city-detail-wishlist-button")
                                 .sensoryFeedback(.selection, trigger: isSaved)
                             }
-                            Text(cityText)
-                                .font(.largeTitle)
                         }
                         .padding(.horizontal, 24)
                         SummaryView(cityText: cityText)
