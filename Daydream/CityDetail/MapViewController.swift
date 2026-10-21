@@ -16,25 +16,55 @@ final class MapViewController: UIViewController {
 
     // Reserve room for Google's selected-marker callout on short landscape maps.
     private static let markerInfoWindowHeadroom: CGFloat = 80
+    private static let defaultZoom: Float = 16
+    private static let buildingZoom: Float = 18
+    private var zoomBefore3D: Float?
     private var place: Place
     private var dynamicMapView: GMSMapView?
     private var dynamicMarker: GMSMarker?
-    private weak var reviewsView: UIView?
+    private var placeDetailCardController: UIHostingController<MapPlaceDetailCardView>?
+    private var usesAccessibleDetails = false
+    private var selectedAddress: String?
     /// Used to provide more accurate location when deeplinking to Google Maps
     private var dynamicMarkerPlaceId: String?
     /// Object that updates map review SwiftUI code
-    private var mapReviewContext = MapReviewContext(place: nil)
+    private let reviewsState = MapReviewsViewState()
 
     var isViewingDarkMode: Bool {
         didSet {
             guard isViewingDarkMode != oldValue else { return }
+            placeDetailCardController?.rootView.isViewingDarkMode = isViewingDarkMode
             dynamicMapView?.configureMapStyle(isDark: isViewingDarkMode)
         }
     }
 
-    init(place: Place, isViewingDarkMode: Bool) {
+    var isViewing3D: Bool {
+        didSet {
+            guard isViewing3D != oldValue, let mapView = dynamicMapView else { return }
+            let camera = mapView.camera
+            let zoom: Float
+            if isViewing3D {
+                zoomBefore3D = camera.zoom
+                zoom = max(camera.zoom, Self.buildingZoom)
+            } else {
+                zoom = zoomBefore3D ?? Self.defaultZoom
+                zoomBefore3D = nil
+            }
+            mapView.isBuildingsEnabled = isViewing3D
+            // Animate zoom and tilt together while keeping the user's center and bearing.
+            mapView.animate(to: GMSCameraPosition(
+                target: camera.target,
+                zoom: zoom,
+                bearing: camera.bearing,
+                viewingAngle: isViewing3D ? 60 : 0
+            ))
+        }
+    }
+
+    init(place: Place, isViewingDarkMode: Bool, isViewing3D: Bool) {
         self.place = place
         self.isViewingDarkMode = isViewingDarkMode
+        self.isViewing3D = isViewing3D
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -53,15 +83,22 @@ final class MapViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        if let dynamicMapView, let reviewsView {
-            // Move the camera's visible center above the reviews after every resize.
-            let reviewsFrame = dynamicMapView.convert(reviewsView.bounds, from: reviewsView)
-            dynamicMapView.padding = UIEdgeInsets(
-                top: max(dynamicMapView.safeAreaInsets.top, Self.markerInfoWindowHeadroom),
+        let accessibleDetails = traitCollection.preferredContentSizeCategory.isAccessibilityCategory
+        if usesAccessibleDetails != accessibleDetails {
+            usesAccessibleDetails = accessibleDetails
+            updateMarkerPresentation()
+        }
+
+        if let dynamicMapView, let placeDetailCardView = placeDetailCardController?.view {
+            // Keep map attribution and the selected place above the content-sized card.
+            let cardFrame = dynamicMapView.convert(placeDetailCardView.bounds, from: placeDetailCardView)
+            let padding = UIEdgeInsets(
+                top: max(dynamicMapView.safeAreaInsets.top, usesAccessibleDetails ? 0 : Self.markerInfoWindowHeadroom),
                 left: dynamicMapView.safeAreaInsets.left,
-                bottom: max(dynamicMapView.safeAreaInsets.bottom, dynamicMapView.bounds.maxY - reviewsFrame.minY),
+                bottom: max(dynamicMapView.safeAreaInsets.bottom, dynamicMapView.bounds.maxY - cardFrame.minY),
                 right: dynamicMapView.safeAreaInsets.right
             )
+            if dynamicMapView.padding != padding { dynamicMapView.padding = padding }
         }
     }
 
@@ -71,17 +108,31 @@ final class MapViewController: UIViewController {
     }
 
     private func addProgrammaticViews() {
-        let reviewsCarouselVC = UIHostingController(rootView: MapReviewsCarousel(context: mapReviewContext))
-        addChild(reviewsCarouselVC)
-        view.addSubview(reviewsCarouselVC.view)
-        reviewsView = reviewsCarouselVC.view
-        reviewsCarouselVC.view.backgroundColor = .clear
-        reviewsCarouselVC.didMove(toParent: self)
-        
-        reviewsCarouselVC.view.snp.makeConstraints { make in
-            make.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+        let placeDetailCardController = UIHostingController(rootView: MapPlaceDetailCardView(
+            state: reviewsState,
+            isViewingDarkMode: isViewingDarkMode,
+            onPlaceLoaded: { [weak self] result in
+                // The overlay validates request identity before delivering this callback.
+                guard let self else { return }
+                self.selectedAddress = result.formattedAddress
+                self.updateMarkerPresentation()
+            }
+        ))
+        // UIKit positions the card inside its safe area; SwiftUI only measures the content.
+        placeDetailCardController.safeAreaRegions = []
+        placeDetailCardController.sizingOptions = .intrinsicContentSize
+        addChild(placeDetailCardController)
+        view.addSubview(placeDetailCardController.view)
+        self.placeDetailCardController = placeDetailCardController
+        placeDetailCardController.view.backgroundColor = .clear
+        placeDetailCardController.didMove(toParent: self)
+
+        placeDetailCardController.view.snp.makeConstraints { make in
+            make.centerX.equalTo(view.safeAreaLayoutGuide)
+            make.width.equalTo(view.safeAreaLayoutGuide).offset(-24).priority(.high)
+            make.width.lessThanOrEqualTo(450)
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(12)
-            make.height.equalTo(200)
+            make.top.greaterThanOrEqualTo(view.safeAreaLayoutGuide).offset(12)
         }
     }
 
@@ -89,9 +140,14 @@ final class MapViewController: UIViewController {
         guard let placeId = placeId, let name = name, let location = location else {
             return
         }
-        let camera = GMSCameraPosition.camera(withLatitude: location.latitude,
-                                              longitude: location.longitude,
-                                              zoom: 16.0)
+        zoomBefore3D = isViewing3D ? Self.defaultZoom : nil
+        let camera = GMSCameraPosition(
+            latitude: location.latitude,
+            longitude: location.longitude,
+            zoom: isViewing3D ? Self.buildingZoom : Self.defaultZoom,
+            bearing: 0,
+            viewingAngle: isViewing3D ? 60 : 0
+        )
 
         if let dynamicMapView = dynamicMapView {
             dynamicMapView.animate(to: camera)
@@ -101,6 +157,7 @@ final class MapViewController: UIViewController {
             options.camera = camera
             options.frame = .zero
             let mapViewNew = GMSMapView(options: options)
+            mapViewNew.isBuildingsEnabled = isViewing3D
             dynamicMapView = mapViewNew
 
             guard let dynamicMapView = dynamicMapView else {
@@ -140,26 +197,22 @@ final class MapViewController: UIViewController {
 
         dynamicMarkerPlaceId = placeId
 
-        guard let dynamicMarker = dynamicMarker else {
-            return
-        }
+        guard dynamicMarker != nil else { return }
 
-        mapView.selectedMarker = dynamicMarker
-
-        dynamicMarker.tracksInfoWindowChanges = true
-
-        Task {
-            guard let result = await API.PlaceSearch.fetchPlaceWithReviewsBy(placeId: placeId) else {
-                return
-            }
-
-            dynamicMarker.snippet = result.formattedAddress
-            dynamicMarker.tracksInfoWindowChanges = false
-            place = result
-            mapReviewContext.place = result
-        }
+        selectedAddress = nil
+        reviewsState.select(placeID: placeId, name: name)
+        updateMarkerPresentation()
     }
 
+    /// The provided overlay carries place context at large accessibility sizes, where map callouts clip.
+    private func updateMarkerPresentation() {
+        guard let marker = dynamicMarker, let mapView = dynamicMapView else { return }
+        marker.title = usesAccessibleDetails ? nil : reviewsState.placeName
+        marker.snippet = usesAccessibleDetails ? nil : selectedAddress
+        marker.accessibilityLabel = reviewsState.placeName
+        let selectedMarker = usesAccessibleDetails ? nil : marker
+        if mapView.selectedMarker !== selectedMarker { mapView.selectedMarker = selectedMarker }
+    }
 }
 
 extension MapViewController: GMSMapViewDelegate {
@@ -179,7 +232,7 @@ extension MapViewController: GMSMapViewDelegate {
         // lat/lon coordinates. Strings must be URL-encoded so make sure to convert chars like commas.
         if let placeId = dynamicMarkerPlaceId {
             components.queryItems?.append(URLQueryItem(name: "query_place_id", value: placeId))
-            components.queryItems?.append(URLQueryItem(name: "query", value: marker.title))
+            components.queryItems?.append(URLQueryItem(name: "query", value: reviewsState.placeName))
         } else {
             var query = "\(marker.position.latitude), \(marker.position.longitude)"
             if let name = marker.title {

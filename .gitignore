@@ -53,3 +53,8 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots
 fastlane/test_output
+
+# App Store slides: source configs/curated inputs belong in Git; local assets/output do not.
+app-store-slides/_assets/
+app-store-slides/_work/
+app-store-slides/exports/

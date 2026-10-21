@@ -1,8 +1,8 @@
 {
   "name": "Daydream",
-  "version": "v5.1.0",
+  "version": "v5.2.0",
   "defaultLocale": "en_US",
-  "outputRoot": "/Users/raykim/Desktop/Screenshots/DaydreamAppStore",
+  "outputRoot": "~/Desktop/Screenshots/DaydreamAppStore",
   "background": {
     "color": "#FEB609"
   },
@@ -23,9 +23,9 @@
         "width": 1290,
         "height": 2796
       },
-      "screenshotRoot": "/Users/raykim/Desktop/Screenshots/DaydreamAppStore/_inputs/iphone/en_US",
+      "screenshotRoot": "../inputs/iphone/en_US",
       "frame": {
-        "image": "/Users/raykim/Desktop/Screenshots/DaydreamAppStore/_assets/iPhone 17 Pro - Deep Blue - Portrait.png",
+        "image": "~/Desktop/Screenshots/DaydreamAppStore/_assets/iPhone 17 Pro - Deep Blue - Portrait.png",
         "screen": {
           "x": 72,
           "y": 69,
@@ -67,16 +67,6 @@
       },
       "captionPositions": {
         "iphone": "top"
-      }
-    },
-    {
-      "id": "04-ai-powered-reviews",
-      "screenshot": "04-ai-powered-reviews.png",
-      "captions": {
-        "en_US": "AI-powered\nreviews"
-      },
-      "captionPositions": {
-        "iphone": "bottom"
       }
     }
   ]

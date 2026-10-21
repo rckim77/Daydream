@@ -26,19 +26,22 @@ struct CitiesView: View {
     @State private var prevCurrentLocation: CLLocationCoordinate2D?
 
     // MARK: - Layout/Animation vars
-    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.layoutDirection) private var layoutDirection
     @Namespace private var zoomNS
     
     // MARK: - Private constants and computed vars
-    private let cityCount = 6
+    private let cityCount = 8
     private let feedbackButtonTransitionID = "feedbackButton"
 
     var body: some View {
         NavigationStack {
             GeometryReader { geometry in
                 let width = min(geometry.size.width, 1100)
-                let columns = width >= 640 && !dynamicTypeSize.isAccessibilitySize ? 2 : 1
+                let columns = 2
+                let spacing: CGFloat = UIDevice.current.userInterfaceIdiom == .phone ? 6 : 20
+                let cardWidth = max(0, (width - 32 - CGFloat(columns - 1) * spacing) / CGFloat(columns))
+                let gridWidth = cardWidth * CGFloat(columns) + CGFloat(columns - 1) * spacing
+                let minimumCardHeight = min(260, cardWidth * 2 / 3)
                 ScrollView {
                     Text("Where do you want to go?")
                         .font(.largeTitle)
@@ -50,32 +53,31 @@ struct CitiesView: View {
                         .padding(.horizontal, 16)
                         .padding(.bottom, 4)
                         .modifier(TopScrollTransition())
-                    CityCardsLayout(columns: columns, spacing: columns == 1 && !dynamicTypeSize.isAccessibilitySize ? -60 : 20, layoutDirection: layoutDirection) {
+                    CityCardsLayout(columns: columns, spacing: spacing, layoutDirection: layoutDirection) {
                         ForEach(cities, id: \.city) { city in
-                            CityCardView(city: city, height: columns == 1 ? 220 : 260) { place, image in
-                                guard let place, let image else {
-                                    return
-                                }
-                                selectedCity = CityRoute(name: city.city, place: place, image: image)
+                            CityCardView(city: city, width: cardWidth, minimumHeight: minimumCardHeight) { place in
+                                selectedCity = CityRoute(name: city.city, place: place)
                             }
                             .matchedTransitionSource(id: city.city, in: zoomNS) { source in
                                 source
-                                    .clipShape(RoundedRectangle(cornerRadius: 32))
+                                    .clipShape(RoundedRectangle(cornerRadius: 20))
                             }
                             .modifier(TopScrollTransition())
                         }
                     }
-                    .padding(.horizontal, 16)
+                    .frame(width: gridWidth)
+                    .frame(maxWidth: .infinity)
+                    .padding(.horizontal, 12)
                 }
                 .scrollIndicators(.never)
                 .frame(width: width)
                 .frame(maxWidth: .infinity)
             }
             .toolbar {
-                SearchToolbar { place, image in
-                    selectedCity = CityRoute(name: place.description, place: place, image: image)
-                } randomCityReceived: { place, image in
-                    selectedCity = CityRoute(name: place.description, place: place, image: image)
+                SearchToolbar { place in
+                    selectedCity = CityRoute(name: place.description, place: place)
+                } randomCityReceived: { place in
+                    selectedCity = CityRoute(name: place.description, place: place)
                 } currentLocationTapped: {
                     currentLocationButtonTapped = true
                     guard let prevCurrentLocation = prevCurrentLocation,
@@ -100,7 +102,7 @@ struct CitiesView: View {
                 }
             }
             .fullScreenCover(item: $selectedCity) { item in
-                CityDetailView(place: item.place, image: item.image)
+                CityDetailView(place: item.place)
                     .navigationTransition(.zoom(sourceID: item.name, in: zoomNS))
             }
         }
@@ -150,8 +152,8 @@ struct CitiesView: View {
     }
     
     private func fetchCityRoute(_ location: CLLocationCoordinate2D) async throws -> CityRoute {
-        let (place, image) = try await API.PlaceSearch.fetchCurrentCityBy(location)
-        return CityRoute(name: place.description, place: place, image: image)
+        let place = try await API.PlaceSearch.fetchCurrentCityBy(location)
+        return CityRoute(name: place.description, place: place)
     }
 }
 

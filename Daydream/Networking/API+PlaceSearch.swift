@@ -6,21 +6,16 @@
 //  Copyright © 2020 Raymond Kim. All rights reserved.
 //
 
-import UIKit
+import Foundation
 import CoreLocation
 import GooglePlacesSwift
-import MapKit
-import SwiftUI
 
 enum APIError: Error {
     case biasError
     case bundleError
     case fetchCurrentCityError
-    case fetchPhotoError
-    case imageDataError
     case missingViewport
     case noResults
-    case placeMissingPhotos
 }
 
 extension API {
@@ -30,9 +25,8 @@ extension API {
             case sights, eateries
         }
         
-        /// Convenience function that will pick a random city, fetch `Place` data, and also return
-        /// a `UIImage` representation of the first photo.
-        static func fetchRandomCity() async throws -> (Place, UIImage) {
+        /// Picks a random city and fetches its place data, including the country for its backdrop.
+        static func fetchRandomCity() async throws -> Place {
             guard let path = Bundle.main.path(forResource: "randomCitiesJSON", ofType: "json") else {
                 throw APIError.bundleError
             }
@@ -46,19 +40,14 @@ extension API {
                 throw APIError.noResults
             }
             
-            if let photo = place.photos?.first {
-                let image = try await API.PlaceSearch.fetchImageBy(photo: photo)
-                return (place, image)
-            } else {
-                throw APIError.placeMissingPhotos
-            }
+            return place
         }
 
         @MainActor
-        static func fetchCurrentCityBy(_ coordinate: CLLocationCoordinate2D) async throws -> (Place, UIImage) {
+        static func fetchCurrentCityBy(_ coordinate: CLLocationCoordinate2D) async throws -> Place {
             let center = CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)
             let restriction = CircularCoordinateRegion(center: center, radius: 1000)
-            let placeProps: [PlaceProperty] = [.displayName, .formattedAddress, .coordinate, .photos, .placeID, .addressComponents]
+            let placeProps: [PlaceProperty] = [.displayName, .formattedAddress, .coordinate, .placeID, .addressComponents]
             let request = SearchNearbyRequest(
                 locationRestriction: restriction,
                 placeProperties: placeProps,
@@ -68,11 +57,10 @@ extension API {
 
             switch await PlacesClient.shared.responseForSearchNearby(with: request) {
             case .success(let response):
-                if let place = response.places?.first, let photo = place.photos?.first {
-                    let image = try await API.PlaceSearch.fetchImageBy(photo: photo)
-                    return (place, image)
+                if let place = response.places?.first {
+                    return place
                 } else {
-                    throw APIError.placeMissingPhotos
+                    throw APIError.noResults
                 }
             case .failure(let error):
                 print("=== fetchCurrentCityBy(coordinate:) call failed: \(error.localizedDescription)")
@@ -80,86 +68,33 @@ extension API {
             }
         }
         
-        static func fetchPlaceAndImageBy(_ city: RandomCity, horizontalSizeClass: UserInterfaceSizeClass?) async throws -> (Place, UIImage) {
-            let maxAttempts = 2
-            var expoBackoff = 100 // in milliseconds
-            
-            for attempt in 1...maxAttempts {
-                if let place = await API.PlaceSearch.fetchCityBy(city) {
-                    if let photo = place.photos?.first {
-                        let image = try await API.PlaceSearch.fetchImageBy(photo: photo, horizontalSizeClass: horizontalSizeClass)
-                        print("=== got place and image for \(city.city) on attempt \(attempt) ")
-                        return (place, image)
-                    } else {
-                        throw APIError.placeMissingPhotos
-                    }
-                } else {
-                    if attempt < maxAttempts {
-                        print("=== attempting \(city.city) again...")
-                        try? await Task.sleep(for: .milliseconds(expoBackoff))
-                        expoBackoff *= 2
-                        continue
-                    } else {
-                        print("=== unable to get data for \(city.city) after last attempt")
-                    }
-                }
-            }
-            
-            throw APIError.noResults
-        }
-        
-        /// Fetches Place and Image for `placeId`, using `PlacesCache` and `ImageCache` if cached.
+        /// Fetches city details, including address components for the country backdrop, using PlacesCache.
         @MainActor
-        static func fetchPlaceAndImageBy(placeId: String) async throws -> (Place, UIImage) {
-            if let cachedPlace = PlacesCache.shared.get(forKey: placeId),
-                let photo = cachedPlace.photos?.first {
-                let image: UIImage
-                if let cachedImage = ImageCache.shared.get(forKey: String(photo.hashValue)) {
-                    print("=== used cached place and cached image")
-                    image = cachedImage
-                } else {
-                    image = try await API.PlaceSearch.fetchImageBy(photo: photo)
-                    ImageCache.shared.set(image, forKey: String(photo.hashValue))
-                    print("=== used cached place, fetched and then cached image")
-                }
-                return (cachedPlace, image)
-            } else {
-                let fetchPlaceRequest = FetchPlaceRequest(
-                    placeID: placeId,
-                    placeProperties: [.placeID, .coordinate, .photos, .displayName, .reviewSummary]
-                )
+        static func fetchPlaceBy(placeId: String) async throws -> Place {
+            if let cachedPlace = PlacesCache.shared.get(forKey: placeId) {
+                return cachedPlace
+            }
 
-                switch await PlacesClient.shared.fetchPlace(with: fetchPlaceRequest) {
-                case .success(let place):
-                    PlacesCache.shared.set(place, forKey: placeId)
-                    if let photo = place.photos?.first {
-                        let hashKey = String(photo.hashValue)
-                        let image: UIImage
-                        if let cachedImage = ImageCache.shared.get(forKey: hashKey) {
-                            print("=== fetched and then cached place, and used cached image")
-                            image = cachedImage
-                        } else {
-                            image = try await API.PlaceSearch.fetchImageBy(photo: photo)
-                            print("=== fetched and then cached place, and fetched and then cached image")
-                            ImageCache.shared.set(image, forKey: hashKey)
-                        }
-                        return (place, image)
-                    } else {
-                        throw APIError.noResults
-                    }
-                case .failure(let error):
-                    print("=== fetchPlaceAndImageBy(placeId:) call failed: \(error.localizedDescription)")
-                    throw APIError.noResults
-                }
+            let request = FetchPlaceRequest(
+                placeID: placeId,
+                placeProperties: [.placeID, .coordinate, .displayName, .formattedAddress, .addressComponents, .reviewSummary]
+            )
+            switch await PlacesClient.shared.fetchPlace(with: request) {
+            case .success(let place):
+                PlacesCache.shared.set(place, forKey: placeId)
+                return place
+            case .failure(let error):
+                print("=== fetchPlaceBy(placeId:) call failed: \(error.localizedDescription)")
+                throw error
             }
         }
-        
+
         // Keep the SDK request lifetime on the main actor, including teardown after awaiting its response.
         @MainActor
         static func fetchCityBy(_ city: RandomCity) async -> Place? {
             let center = CLLocationCoordinate2D(latitude: city.latitude, longitude: city.longitude)
             let restriction = CircularCoordinateRegion(center: center, radius: city.radius * 1000)
-            let placeProps: [PlaceProperty] = [.displayName, .formattedAddress, .coordinate, .photos, .placeID, .addressComponents]
+            let placeProps: [PlaceProperty] = [.displayName, .formattedAddress, .coordinate, .placeID, .addressComponents]
             let request = SearchNearbyRequest(
                 locationRestriction: restriction,
                 placeProperties: placeProps,
@@ -173,43 +108,6 @@ extension API {
             case .failure(let error):
                 print("=== fetchCityBy(name:) call failed: \(error.localizedDescription)")
                 return nil
-            }
-        }
-        
-        @MainActor
-        static func fetchPlaceWithReviewsBy(placeId: String) async -> Place? {
-            let fetchPlaceRequest = FetchPlaceRequest(
-                placeID: placeId,
-                placeProperties: [.placeID, .coordinate, .reviews, .reviewSummary, .formattedAddress, .displayName]
-            )
-            
-            switch await PlacesClient.shared.fetchPlace(with: fetchPlaceRequest) {
-            case .success(let place):
-                return place
-            case .failure(let error):
-                print("=== fetchPlaceWithReviewsBy(placeId:) call failed: \(error.localizedDescription)")
-                return nil
-            }
-        }
-        
-        /// Uses UIImage cache to fetch by photo hash value, otherwise calls Places SDK and adds to cache
-        @MainActor
-        static func fetchImageBy(photo: Photo, horizontalSizeClass: UserInterfaceSizeClass? = nil) async throws -> UIImage {
-            let hashKey = String(photo.hashValue)
-            if let cachedImage = ImageCache.shared.get(forKey: hashKey) {
-                print("=== hit image cache")
-                return cachedImage
-            }
-
-            let maxSize = horizontalSizeClass == .compact ? CGSizeMake(4800, 800) : CGSizeMake(4800, 1600)
-            let fetchPhotoRequest = FetchPhotoRequest(photo: photo, maxSize: maxSize)
-            switch await PlacesClient.shared.fetchPhoto(with: fetchPhotoRequest) {
-            case .success(let image):
-                ImageCache.shared.set(image, forKey: hashKey)
-                return image
-            case .failure(let error):
-                print("=== fetchImageBy(photo:horizontalSizeClass:) call failed: \(error.localizedDescription)")
-                throw APIError.fetchPhotoError
             }
         }
         
@@ -228,11 +126,11 @@ extension API {
                 let excludedTypes: Set<PlaceType>
                 switch type {
                 case .sights:
-                    placeProps = [.photos, .displayName, .placeID, .coordinate, .reviewSummary]
+                    placeProps = [.displayName, .placeID, .coordinate]
                     includedTypes = [.touristAttraction, .park, .museum]
                     excludedTypes = [.restaurant, .bar, .cafe, .bakery]
                 case .eateries:
-                    placeProps = [.photos, .displayName, .placeID, .coordinate, .priceLevel, .reviewSummary]
+                    placeProps = [.displayName, .placeID, .coordinate, .priceLevel]
                     includedTypes = [.restaurant, .bar, .bakery]
                     excludedTypes = [.touristAttraction, .park, .museum, .stadium]
                 }

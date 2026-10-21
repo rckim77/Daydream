@@ -6,7 +6,7 @@
 //  Copyright © 2025 Raymond Kim. All rights reserved.
 //
 
-import UIKit
+import Foundation
 import GooglePlacesSwift
 
 struct CityRoute: Identifiable, Hashable {
@@ -14,5 +14,4 @@ struct CityRoute: Identifiable, Hashable {
     /// Used for zoom transition
     let name: String
     let place: Place
-    let image: UIImage?
 }

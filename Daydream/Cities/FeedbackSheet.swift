@@ -27,7 +27,6 @@ struct FeedbackSheet: View {
             .padding(.bottom, 16)
             Button("Clear cached data") {
                 Task {
-                    ImageCache.shared.clear()
                     PlacesCache.shared.clear()
                 }
                 showAlert = true

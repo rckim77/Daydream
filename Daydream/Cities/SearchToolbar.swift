@@ -11,8 +11,8 @@ import GooglePlacesSwift
 
 struct SearchToolbar<Content: ToolbarContent>: ToolbarContent {
     
-    var autocompleteTapped: (Place, UIImage?) -> Void
-    var randomCityReceived: (Place, UIImage) -> Void
+    var autocompleteTapped: (Place) -> Void
+    var randomCityReceived: (Place) -> Void
     var currentLocationTapped: () -> Void
 
     @ToolbarContentBuilder let additionalViews: Content
@@ -28,8 +28,8 @@ struct SearchToolbar<Content: ToolbarContent>: ToolbarContent {
             .placeAutocomplete(filter: AutocompleteFilter(types: [.cities]), show: $showAutocompleteWidget) { suggestion, _ in
                 Task {
                     do {
-                        let result = try await API.PlaceSearch.fetchPlaceAndImageBy(placeId: suggestion.placeID)
-                        autocompleteTapped(result.0, result.1)
+                        let place = try await API.PlaceSearch.fetchPlaceBy(placeId: suggestion.placeID)
+                        autocompleteTapped(place)
                     } catch {
                         print(error.localizedDescription)
                     }
@@ -40,8 +40,8 @@ struct SearchToolbar<Content: ToolbarContent>: ToolbarContent {
         }
         ToolbarSpacer(.fixed, placement: .bottomBar)
         ToolbarItem(placement: .bottomBar) {
-            RandomCityButton { place, image in
-                randomCityReceived(place, image)
+            RandomCityButton { place in
+                randomCityReceived(place)
             }
         }
         .adaptsToVerticalToolbar()
