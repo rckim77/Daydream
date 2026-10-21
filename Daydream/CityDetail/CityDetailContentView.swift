@@ -33,19 +33,19 @@ struct CityDetailContentView: View {
                             Text(cityText)
                                 .font(.largeTitle)
                             if let city = wishlistCity {
+                                Spacer(minLength: 8)
                                 let isSaved = wishlist.contains(city)
                                 Button {
                                     wishlist.toggle(city)
                                 } label: {
                                     Image(systemName: isSaved ? "heart.fill" : "heart")
-                                        .font(.title2.weight(.semibold))
-                                        .imageScale(.large)
+                                        .font(.system(size: 20, weight: .semibold))
                                         .foregroundStyle(isSaved ? Color.pink : Color.primary)
-                                        .frame(width: 28, height: 28)
+                                        .frame(width: 44, height: 44)
+                                        .contentShape(Circle())
                                 }
-                                .buttonStyle(.glass)
-                                .buttonBorderShape(.circle)
-                                .controlSize(.large)
+                                .buttonStyle(.plain)
+                                .glassEffect(.regular.interactive(), in: .circle)
                                 .fixedSize()
                                 .accessibilityLabel(isSaved ? "Remove \(city.city) from wishlist" : "Save \(city.city) to wishlist")
                                 .accessibilityValue(isSaved ? "Saved" : "Not saved")
