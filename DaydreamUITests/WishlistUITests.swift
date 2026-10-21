@@ -18,7 +18,8 @@ final class WishlistUITests: XCTestCase {
         wishlist.tap()
         XCTAssertTrue(app.staticTexts["Your next adventure starts here"].waitForExistence(timeout: 5))
         capture("wishlist-empty")
-        app.buttons["Explore Cities"].tap()
+        XCTAssertFalse(app.buttons["Explore Cities"].exists)
+        returnToCities(app)
 
         let tokyo = app.buttons["wishlist-toggle-Tokyo"]
         XCTAssertTrue(tokyo.waitForExistence(timeout: 15))
@@ -31,6 +32,9 @@ final class WishlistUITests: XCTestCase {
         wishlist.tap()
         XCTAssertTrue(app.buttons["wishlist-city-Tokyo"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.buttons["wishlist-city-Paris"].exists)
+        XCTAssertTrue(app.descendants(matching: .any)["wishlist-country-France"].exists)
+        XCTAssertTrue(app.descendants(matching: .any)["wishlist-country-Japan"].exists)
+        XCTAssertFalse(app.buttons["Edit"].exists)
         capture("wishlist-saved")
 
         app.terminate()
@@ -51,15 +55,24 @@ final class WishlistUITests: XCTestCase {
         savedTokyo.swipeLeft()
         app.buttons["Delete"].tap()
         XCTAssertFalse(savedTokyo.exists)
-        app.buttons["Edit"].tap()
-        capture("wishlist-edit")
-        app.buttons["Done"].tap()
+        XCTAssertFalse(app.buttons["Edit"].exists)
+        XCTAssertFalse(app.descendants(matching: .any)["wishlist-country-Japan"].exists)
+        XCTAssertTrue(app.descendants(matching: .any)["wishlist-country-France"].exists)
         app.buttons["wishlist-city-Paris"].swipeLeft()
         app.buttons["Delete"].tap()
         XCTAssertTrue(app.staticTexts["Your next adventure starts here"].waitForExistence(timeout: 5))
-        app.buttons["Explore Cities"].tap()
+        XCTAssertFalse(app.buttons["Explore Cities"].exists)
+        returnToCities(app)
         XCTAssertEqual(app.buttons["wishlist-toggle-Tokyo"].value as? String, "Not saved")
         XCTAssertEqual(app.buttons["wishlist-toggle-Paris"].value as? String, "Not saved")
+    }
+
+    @MainActor
+    private func returnToCities(_ app: XCUIApplication) {
+        // Native edge-back navigation also works when Duo exposes its Back control as an unlabeled Other.
+        let edge = app.coordinate(withNormalizedOffset: CGVector(dx: 0.01, dy: 0.5))
+        let destination = app.coordinate(withNormalizedOffset: CGVector(dx: 0.8, dy: 0.5))
+        edge.press(forDuration: 0.05, thenDragTo: destination)
     }
 
     @MainActor

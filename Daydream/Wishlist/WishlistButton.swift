@@ -8,9 +8,10 @@ struct WishlistButton: View {
     var body: some View {
         Button(action: action) {
             Image(systemName: isSaved ? "heart.fill" : "heart")
-                .font(.title3)
-                .foregroundStyle(isSaved ? Color.pink : Color.primary)
-                .frame(minWidth: 44, minHeight: 44)
+                .font(.system(size: 28, weight: .semibold))
+                .foregroundStyle(isSaved ? Color.pink : Color.white)
+                .frame(width: 48, height: 48)
+                .background(.black.opacity(0.5), in: Circle())
                 .contentShape(Circle())
         }
         .buttonStyle(.plain)

@@ -53,7 +53,7 @@ struct WishlistStoreTests {
         }
     }
 
-    @Test("reordering and deleting several rows persist")
+    @Test("deleting several cities by identity persists")
     func manageList() throws {
         try withDefaults { defaults in
             let rome = RandomCity(city: "Rome", country: "Italy", latitude: 41.9, longitude: 12.5, radius: 10)
@@ -61,12 +61,41 @@ struct WishlistStoreTests {
             store.toggle(paris)
             store.toggle(tokyo)
             store.toggle(rome)
-            store.move(from: IndexSet(integer: 2), to: 0)
-            #expect(WishlistStore(defaults: defaults).cities == [paris, rome, tokyo])
-            store.remove(at: IndexSet([0, 2]))
+            store.remove([paris, tokyo])
             #expect(WishlistStore(defaults: defaults).cities == [rome])
-            store.remove(at: IndexSet(integer: 0))
+            store.remove([rome])
             #expect(WishlistStore(defaults: defaults).cities.isEmpty)
+        }
+    }
+
+    @Test("country sections merge aliases and sort countries and cities alphabetically")
+    func countryGrouping() throws {
+        try withDefaults { defaults in
+            let london = RandomCity(city: "London", country: "UK", latitude: 51.5, longitude: -0.1, radius: 10)
+            let edinburgh = RandomCity(city: "Edinburgh", country: "United Kingdom", latitude: 55.95, longitude: -3.19, radius: 10)
+            let store = WishlistStore(defaults: defaults)
+            for city in [london, paris, edinburgh, tokyo] { store.toggle(city) }
+            #expect(store.countrySections.map(\.country) == ["France", "Japan", "United Kingdom"])
+            let uk = try #require(store.countrySections.last)
+            #expect(uk.flag == "🇬🇧")
+            #expect(uk.cities == [edinburgh, london])
+            // A section's order differs from persisted insertion order.
+            store.remove([uk.cities[0]])
+            let restored = WishlistStore(defaults: defaults)
+            #expect(!restored.contains(edinburgh))
+            #expect(restored.contains(london))
+            #expect(restored.countrySections.last?.cities == [london])
+            store.remove([london])
+            #expect(store.countrySections.map(\.country) == ["France", "Japan"])
+        }
+    }
+
+    @Test("all curated city countries have flags")
+    func curatedCountryFlags() throws {
+        let url = try #require(Bundle.main.url(forResource: "randomCitiesJSON", withExtension: "json"))
+        let cities = try JSONDecoder().decode([RandomCity].self, from: Data(contentsOf: url))
+        for section in WishlistCountrySection.group(cities) {
+            #expect(section.flag != nil, "Missing flag for \(section.country)")
         }
     }
 

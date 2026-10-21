@@ -4,32 +4,22 @@ import SwiftUI
 struct WishlistView: View {
     let wishlist: WishlistStore
 
-    @Environment(\.dismiss) private var dismiss
     @State private var openingCity: RandomCity?
     @State private var selectedCity: CityRoute?
     @State private var showOpenError = false
 
     var body: some View {
         List {
-            if !wishlist.cities.isEmpty {
+            ForEach(wishlist.countrySections) { section in
                 Section {
-                    ForEach(wishlist.cities) { city in
+                    ForEach(section.cities) { city in
                         Button {
                             openingCity = city
                         } label: {
                             HStack(spacing: 16) {
-                                Image(systemName: "heart.fill")
-                                    .foregroundStyle(.pink)
-                                    .frame(width: 32, height: 44)
-                                    .accessibilityHidden(true)
-                                VStack(alignment: .leading, spacing: 4) {
-                                    Text(city.city)
-                                        .font(.headline)
-                                        .foregroundStyle(.primary)
-                                    Text(city.country)
-                                        .font(.subheadline)
-                                        .foregroundStyle(.secondary)
-                                }
+                                Text(city.city)
+                                    .font(.headline)
+                                    .foregroundStyle(.primary)
                                 Spacer(minLength: 8)
                                 if openingCity?.id == city.id {
                                     ProgressView()
@@ -41,19 +31,32 @@ struct WishlistView: View {
                                         .accessibilityHidden(true)
                                 }
                             }
-                            .padding(.vertical, 4)
+                            .frame(minHeight: 44)
                             .contentShape(Rectangle())
                         }
                         .buttonStyle(.plain)
-                        .accessibilityLabel("Explore \(city.city), \(city.country)")
+                        .accessibilityLabel("Explore \(city.city), \(section.country)")
                         .accessibilityIdentifier("wishlist-city-\(city.city)")
                     }
-                    .onDelete(perform: wishlist.remove)
-                    .onMove(perform: wishlist.move)
+                    .onDelete { offsets in
+                        wishlist.remove(offsets.map { section.cities[$0] })
+                    }
                 } header: {
-                    Text("Places you want to go")
+                    HStack(spacing: 8) {
+                        if let flag = section.flag {
+                            Text(flag)
+                                .accessibilityHidden(true)
+                        }
+                        Text(section.country)
+                    }
+                    .textCase(nil)
+                    .accessibilityElement(children: .combine)
+                    .accessibilityLabel(section.country)
+                    .accessibilityIdentifier("wishlist-country-\(section.country)")
                 } footer: {
-                    Text("Tap a city to explore. Swipe to remove, or use Edit to change the order. Saved on this device.")
+                    if section.id == wishlist.countrySections.last?.id {
+                        Text("Tap a city to explore. Swipe to remove. Saved on this device.")
+                    }
                 }
             }
         }
@@ -63,22 +66,11 @@ struct WishlistView: View {
                 ContentUnavailableView {
                     Label("Your next adventure starts here", systemImage: "heart")
                 } description: {
-                    Text("Tap the heart beside a city to keep it in your wishlist.")
-                } actions: {
-                    Button("Explore Cities") { dismiss() }
-                        .buttonStyle(.borderedProminent)
+                    Text("Tap the heart on a city to keep it in your wishlist.")
                 }
             }
         }
         .navigationTitle("Wishlist")
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                if !wishlist.cities.isEmpty {
-                    EditButton()
-                        .disabled(openingCity != nil)
-                }
-            }
-        }
         .fullScreenCover(item: $selectedCity) { route in
             CityDetailView(place: route.place)
         }

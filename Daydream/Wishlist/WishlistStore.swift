@@ -1,12 +1,12 @@
 import Foundation
 import Observation
-import SwiftUI
 
 /// Stores only Daydream's curated city data. Photos and Google place responses remain transient.
 @MainActor
 @Observable
 final class WishlistStore {
     private(set) var cities: [RandomCity]
+    private(set) var countrySections: [WishlistCountrySection]
 
     @ObservationIgnored private let defaults: UserDefaults
     private static let storageKey = "wishlist.cities.v1"
@@ -16,7 +16,9 @@ final class WishlistStore {
         let saved = defaults.data(forKey: Self.storageKey)
             .flatMap { try? JSONDecoder().decode([RandomCity].self, from: $0) } ?? []
         var seen = Set<RandomCity.ID>()
-        cities = saved.filter { seen.insert($0.id).inserted }
+        let uniqueCities = saved.filter { seen.insert($0.id).inserted }
+        cities = uniqueCities
+        countrySections = WishlistCountrySection.group(uniqueCities)
     }
 
     func contains(_ city: RandomCity) -> Bool {
@@ -32,17 +34,15 @@ final class WishlistStore {
         persist()
     }
 
-    func remove(at offsets: IndexSet) {
-        cities.remove(atOffsets: offsets)
-        persist()
-    }
-
-    func move(from offsets: IndexSet, to destination: Int) {
-        cities.move(fromOffsets: offsets, toOffset: destination)
+    func remove(_ removedCities: [RandomCity]) {
+        // Section offsets differ from storage order, so remove by stable city identity.
+        let removedIDs = Set(removedCities.map(\.id))
+        cities.removeAll { removedIDs.contains($0.id) }
         persist()
     }
 
     private func persist() {
+        countrySections = WishlistCountrySection.group(cities)
         guard let data = try? JSONEncoder().encode(cities) else { return }
         defaults.set(data, forKey: Self.storageKey)
     }

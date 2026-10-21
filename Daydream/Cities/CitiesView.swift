@@ -85,18 +85,6 @@ struct CitiesView: View {
                 .frame(maxWidth: .infinity)
             }
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink {
-                        WishlistView(wishlist: wishlist)
-                    } label: {
-                        HStack(spacing: 6) {
-                            Image(systemName: "heart")
-                            Text("Wishlist")
-                        }
-                    }
-                    .accessibilityLabel("Wishlist")
-                    .accessibilityIdentifier("wishlist-button")
-                }
                 SearchToolbar { place in
                     selectedCity = CityRoute(name: place.description, place: place)
                 } randomCityReceived: { place in
@@ -116,6 +104,16 @@ struct CitiesView: View {
                         }
                     }
                 } additionalViews: {
+                    ToolbarItem(placement: .bottomBar) {
+                        NavigationLink {
+                            WishlistView(wishlist: wishlist)
+                        } label: {
+                            Label("Wishlist", systemImage: "heart")
+                                .labelStyle(.iconOnly)
+                        }
+                        .accessibilityIdentifier("wishlist-button")
+                    }
+                    .adaptsToVerticalToolbar()
                     ToolbarItem(placement: .bottomBar) {
                         FeedbackButton {
                             showFeedbackModal = true
