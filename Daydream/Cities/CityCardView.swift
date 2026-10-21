@@ -20,6 +20,7 @@ struct CityCardView: View {
         let currentRequest = requestID
         // Grow titles with the card when unfolding or resizing, keeping narrow portrait cards compact.
         let usesCompactTitle = width < 300
+        let horizontalInset: CGFloat = usesCompactTitle ? 12 : 16
         let theme: PlacesMaterialTheme = {
             var theme = PlacesMaterialTheme()
             theme.shape.cornerRadius = 20
@@ -92,7 +93,7 @@ struct CityCardView: View {
                             .multilineTextAlignment(.leading)
                             .foregroundStyle(.white)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.leading, usesCompactTitle ? 12 : 16)
+                            .padding(.leading, horizontalInset)
                             .padding(.trailing, 68)
                             .padding(.top, usesCompactTitle ? 10 : 12)
                             .padding(.bottom, usesCompactTitle ? 10 : 20)
@@ -129,9 +130,9 @@ struct CityCardView: View {
         .overlay(alignment: .topTrailing) {
             WishlistButton(cityName: city.city, isSaved: isSaved,
                            iconSize: usesCompactTitle ? 20 : 30, action: onWishlistToggle)
-                .padding(1)
+                .padding(.trailing, horizontalInset)
                 // Align the heart glyph with the larger title's first line, keeping its full tap target.
-                .padding(.top, usesCompactTitle ? 0 : 10)
+                .padding(.top, usesCompactTitle ? 1 : 11)
         }
         .task(id: currentRequest) {
             #if DEBUG

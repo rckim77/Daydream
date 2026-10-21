@@ -12,7 +12,7 @@ struct WishlistButton: View {
                 .font(.system(size: iconSize, weight: .semibold))
                 .foregroundStyle(isSaved ? Color.pink : Color.white)
                 .shadow(color: .black.opacity(0.6), radius: 2, y: 1)
-                .frame(width: 44, height: 44)
+                .frame(width: 44, height: 44, alignment: .trailing)
                 .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
