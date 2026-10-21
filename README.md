@@ -3,7 +3,7 @@ Explore cities around the world
 
 ## Wishlist
 
-Tap the large heart at the top-right of a discovery city image to save it, even while its photo is loading or unavailable. Open the heart in the Cities toolbar to view your wishlist, grouped alphabetically by country with country flags and alphabetical city names. Tap a saved city to explore it, or swipe to remove it. Saved cities stay on this device between launches. Browsing and removing favorites work offline; opening city details requires Places access. The icon-only toolbar adapts to iPhone Duo’s vertical toolbar. This version saves cities from the discovery grid.
+Tap the large heart at the top-right of a discovery city image to save it, even while its photo is loading or unavailable. Open the heart at the top of the Cities toolbar to view your wishlist, grouped alphabetically by country with country flags and alphabetical city names. Tap a saved city to explore it, or swipe to remove it. Saved cities stay on this device between launches. Browsing and removing favorites work offline; opening city details requires Places access. The icon-only toolbar item appears at the top of iPhone Duo’s vertical toolbar. This version saves cities from the discovery grid.
 
 [Download on the App Store](https://apps.apple.com/us/app/daydream-explore-cities/id1366747814)
 

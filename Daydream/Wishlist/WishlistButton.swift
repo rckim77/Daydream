@@ -8,11 +8,11 @@ struct WishlistButton: View {
     var body: some View {
         Button(action: action) {
             Image(systemName: isSaved ? "heart.fill" : "heart")
-                .font(.system(size: 28, weight: .semibold))
+                .font(.system(size: 24, weight: .semibold))
                 .foregroundStyle(isSaved ? Color.pink : Color.white)
-                .frame(width: 48, height: 48)
-                .background(.black.opacity(0.5), in: Circle())
-                .contentShape(Circle())
+                .shadow(color: .black.opacity(0.6), radius: 2, y: 1)
+                .frame(width: 44, height: 44)
+                .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
         .accessibilityLabel(isSaved ? "Remove \(cityName) from wishlist" : "Save \(cityName) to wishlist")

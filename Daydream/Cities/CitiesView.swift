@@ -104,7 +104,7 @@ struct CitiesView: View {
                         }
                     }
                 } additionalViews: {
-                    ToolbarItem(placement: .bottomBar) {
+                    ToolbarItem(placement: .topBarTrailing) {
                         NavigationLink {
                             WishlistView(wishlist: wishlist)
                         } label: {
