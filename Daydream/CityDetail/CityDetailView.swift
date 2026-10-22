@@ -20,7 +20,7 @@ struct CityDetailView: View {
 
     init(place: Place, wishlist: WishlistStore, sourceCity: RandomCity? = nil) {
         _place = State(initialValue: place)
-        _viewState = State(initialValue: CityDetailViewState(wishlistSourceCity: sourceCity))
+        _viewState = State(initialValue: CityDetailViewState(wishlistCity: sourceCity))
         self.wishlist = wishlist
     }
 
@@ -48,7 +48,7 @@ struct CityDetailView: View {
         let city = RandomCity(city: name, country: country?.name ?? "Other destinations",
                               latitude: place.location.latitude, longitude: place.location.longitude, radius: 10,
                               placeID: place.placeID, countryCode: countryCode)
-        return wishlist.resolve(city, sourceCity: viewState.wishlistSourceCity)
+        return wishlist.resolve(city, sourceCity: viewState.wishlistCity)
     }
 
     var body: some View {
@@ -93,7 +93,7 @@ struct CityDetailView: View {
                 }
             }
             .task {
-                viewState.applySelectedCity(place, wishlistSourceCity: viewState.wishlistSourceCity)
+                viewState.applySelectedCity(place, wishlistCity: viewState.wishlistCity)
                 await fetchSightsAndEateries(place)
                 viewState.seedPreviousCurrentLocation(locationManager.location)
             }
