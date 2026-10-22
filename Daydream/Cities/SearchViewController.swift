@@ -17,25 +17,7 @@ final class SearchViewController: UIViewController {
         super.viewDidLoad()
 
         let locationManager = CurrentLocationManager()
-        #if DEBUG
-        let capture = WishlistCaptureView.fromEnvironment()
-        #endif
-        let citiesVC = UIHostingController(rootView: Group {
-            #if DEBUG
-            if let capture {
-                capture
-            } else {
-                CitiesView()
-            }
-            #else
-            CitiesView()
-            #endif
-        }.environment(locationManager))
-        #if DEBUG
-        if let appearance = capture?.appearance {
-            citiesVC.overrideUserInterfaceStyle = appearance == .dark ? .dark : .light
-        }
-        #endif
+        let citiesVC = UIHostingController(rootView: CitiesView().environment(locationManager))
         addChild(citiesVC)
         view.addSubview(citiesVC.view)
         citiesVC.didMove(toParent: self)

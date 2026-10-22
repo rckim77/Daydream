@@ -134,9 +134,6 @@ struct CityCardView: View {
                 .padding(.top, usesCompactTitle ? 1 : 11)
         }
         .task(id: currentRequest) {
-            #if DEBUG
-            guard ProcessInfo.processInfo.environment["DAYDREAM_UI_SKIP_CITY_LOADING"] != "1" else { return }
-            #endif
             guard placeID == nil, !loadFailed else { return }
             let place = await API.PlaceSearch.fetchCityBy(city)
             guard !Task.isCancelled, requestID == currentRequest else { return }

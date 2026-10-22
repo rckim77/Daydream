@@ -9,11 +9,6 @@ struct WishlistView: View {
     @State private var selectedCity: CityRoute?
     @State private var showOpenError = false
 
-    init(wishlist: WishlistStore, initialContinent: WishlistContinentFilter = .all) {
-        self.wishlist = wishlist
-        _selectedContinent = State(initialValue: initialContinent)
-    }
-
     var body: some View {
         let sections = selectedContinent.sections(from: wishlist.countrySections)
 
