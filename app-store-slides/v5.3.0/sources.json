@@ -26,8 +26,8 @@
         2064
       ]
     },
-    "iphone/en_US/01-explore-cities.png": {
-      "path": "inputs/iphone/en_US/01-explore-cities.png",
+    "iphone/en_US/01-explore-cities-copy-3-copy-2.png": {
+      "path": "inputs/iphone/en_US/01-explore-cities-copy-3-copy-2.png",
       "sha256": "b7515dfa8a60a2b09ff87c90a2f2c07807954a91ac0809bde6e8809ce4a3e9ce",
       "dimensions": [
         1206,
@@ -37,6 +37,14 @@
     "iphone/en_US/02-browse-top-sights.png": {
       "path": "inputs/iphone/en_US/02-browse-top-sights.png",
       "sha256": "712eb024890719d682f597f50961ffdc1c2236ad5cc5161dc2172d210f4b05bc",
+      "dimensions": [
+        1206,
+        2622
+      ]
+    },
+    "iphone/en_US/01-explore-cities-copy-3-copy-2-copy.png": {
+      "path": "inputs/iphone/en_US/01-explore-cities-copy-3-copy-2-copy.png",
+      "sha256": "b7515dfa8a60a2b09ff87c90a2f2c07807954a91ac0809bde6e8809ce4a3e9ce",
       "dimensions": [
         1206,
         2622
