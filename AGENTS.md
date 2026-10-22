@@ -77,6 +77,7 @@ Select affected scenarios for focused changes; use the full set for dependency o
   - Export options should use `method=app-store-connect` and `destination=upload`.
   - When asked to upload a new TestFlight build, after a successful upload also commit the version/build number change (and related release metadata changes, if any) unless explicitly told not to.
   - After committing that TestFlight version/build bump, push the branch so the repo reflects the uploaded build metadata.
+  - For Daydream, omit TestFlight notes files (including `metadata/testflight/<version>/en-US.txt`) and leave What to Test empty unless explicitly requested.
 - When removing files or refactoring structure, run a quick build immediately to catch missing references.
 - Keep the Xcode project folder-based (no groups); use filesystem-synchronized folders only.
 - If I ask to build and run on device, do not build for the simulator first. Make it as fast as possible.

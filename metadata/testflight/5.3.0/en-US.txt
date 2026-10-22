@@ -1,8 +1,0 @@
-Wishlist testing:
-- Save and remove cities using hearts on discovery cards and beside the city-detail title.
-- Open Wishlist, check country names and flags, and try every continent filter.
-- Relaunch the app to check persistence. Swipe to remove cities and verify both empty states.
-- Rotate iPhone/iPad and fold/unfold iPhone Duo to check wrapping glass filters, soft scroll edges, and city-title/heart sizing and alignment.
-- Check live search, random city, current location, sights/eateries, maps, and reviews.
-
-Known issue under investigation: live Google Places Nearby requests can occasionally crash during discovery. Please report the city and steps if reproduced. This build uses live Google services; screenshot-only fixtures are excluded from Release builds.
