@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreLocation
+import GooglePlaces
 import GooglePlacesSwift
 
 enum APIError: Error {
@@ -86,6 +87,29 @@ extension API {
             case .failure(let error):
                 print("=== fetchPlaceBy(placeId:) call failed: \(error.localizedDescription)")
                 throw error
+            }
+        }
+
+        @MainActor
+        static func fetchCityPlaceID(_ city: RandomCity) async -> String? {
+            guard !Task.isCancelled else { return nil }
+
+            // Call the callback API directly so the SDK starts Nearby Search on the main thread.
+            return await withCheckedContinuation { continuation in
+                let center = CLLocationCoordinate2D(latitude: city.latitude, longitude: city.longitude)
+                let request = GMSPlaceSearchNearbyRequest(
+                    locationRestriction: GMSPlaceCircularLocationOption(center, city.radius * 1000),
+                    placeProperties: [GMSPlaceProperty.placeID.rawValue]
+                )
+                request.includedPrimaryTypes = ["locality"]
+                request.maxResultCount = 2
+
+                GMSPlacesClient.shared().searchNearby(with: request) { response, error in
+                    if let error {
+                        print("=== fetchCityPlaceID(name:) call failed: \(error.localizedDescription)")
+                    }
+                    continuation.resume(returning: error == nil ? response?.places?.first?.placeID : nil)
+                }
             }
         }
 
