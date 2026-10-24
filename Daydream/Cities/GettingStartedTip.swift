@@ -15,6 +15,6 @@ struct GettingStartedTip: Tip {
     }
     
     var message: Text? {
-        Text("Tap below to explore new cities or search for your own!")
+        Text("Explore a city, search for your own, or tap a heart to save it for later.")
     }
 }

@@ -6,6 +6,8 @@ struct CityCardView: View {
     let city: RandomCity
     let width: CGFloat
     let minimumHeight: CGFloat
+    let isSaved: Bool
+    let onWishlistToggle: () -> Void
     let onTap: (Place) -> Void
 
     @State private var placeID: String?
@@ -16,7 +18,8 @@ struct CityCardView: View {
 
     var body: some View {
         let currentRequest = requestID
-        let usesCompactTitle = UIDevice.current.userInterfaceIdiom == .phone
+        let usesCompactTitle = width < 300
+        let horizontalInset: CGFloat = usesCompactTitle ? 12 : 16
         let theme: PlacesMaterialTheme = {
             var theme = PlacesMaterialTheme()
             theme.shape.cornerRadius = 20
@@ -48,6 +51,8 @@ struct CityCardView: View {
                         requestID = UUID()
                     }
                 }
+                .padding(.top, 56)
+                .padding(.horizontal, 12)
                 .frame(maxWidth: .infinity, minHeight: minimumHeight)
                 .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 20))
             } else if let placeID {
@@ -82,13 +87,15 @@ struct CityCardView: View {
                     } label: {
                         Text(city.city)
                             .font(usesCompactTitle ? .title3.bold() : .largeTitle.bold())
-                            .lineLimit(2)
+                            .lineLimit(3)
                             .minimumScaleFactor(0.75)
-                            .multilineTextAlignment(.center)
+                            .multilineTextAlignment(.leading)
                             .foregroundStyle(.white)
-                            .frame(maxWidth: .infinity)
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, usesCompactTitle ? 10 : 20)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.leading, horizontalInset)
+                            .padding(.trailing, horizontalInset + 44 + 4)
+                            .padding(.top, usesCompactTitle ? 10 : 12)
+                            .padding(.bottom, usesCompactTitle ? 10 : 20)
                             .background(LinearGradient(colors: [.black.opacity(0.65), .clear], startPoint: .top, endPoint: .bottom))
                             .clipShape(UnevenRoundedRectangle(topLeadingRadius: 20, topTrailingRadius: 20))
                     }
@@ -107,13 +114,25 @@ struct CityCardView: View {
                 .contentShape(RoundedRectangle(cornerRadius: 20))
                 .onTapGesture { openCity(placeID: placeID) }
             } else {
-                ProgressView()
-                    .frame(maxWidth: .infinity, minHeight: minimumHeight)
-                    .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 20))
+                VStack(spacing: 12) {
+                    Text(city.city)
+                        .font(usesCompactTitle ? .title3.bold() : .largeTitle.bold())
+                    ProgressView()
+                }
+                .padding(.top, 56)
+                .padding(.horizontal, 12)
+                .frame(maxWidth: .infinity, minHeight: minimumHeight)
+                .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 20))
             }
         }
         .frame(width: width)
-        .accessibilityIdentifier("compact-city-\(city.city)")
+        .overlay(alignment: .topTrailing) {
+            WishlistButton(cityName: city.city, isSaved: isSaved,
+                           iconSize: usesCompactTitle ? 20 : 30, action: onWishlistToggle)
+                .padding(.trailing, horizontalInset)
+                // Align the glyph with the title while preserving its tap target.
+                .padding(.top, usesCompactTitle ? 1 : 11)
+        }
         .task(id: currentRequest) {
             guard placeID == nil, !loadFailed else { return }
             let place = await API.PlaceSearch.fetchCityBy(city)

@@ -1,6 +1,10 @@
 # [Daydream](https://apps.apple.com/us/app/daydream-explore-cities/id1366747814)
 Explore cities around the world
 
+## Wishlist
+
+Tap the heart at the top-right of a discovery city image to save it, even while its photo is loading or unavailable. In city details, the circular glass heart at the trailing edge of the city name and flag row shows whether it is saved; tap it to add or remove that city, including cities opened through search, random selection, or current location. Open the heart at the top of the Cities toolbar to view your wishlist, grouped alphabetically by country with country flags and alphabetical city names. Use the wrapping tags above the list to show All, Asia, North America, South America, Europe, Africa, or Oceania. Country groups stay alphabetical within the selected continent. Tap a saved city to explore it, or swipe to remove it. Saved cities stay on this device between launches. Browsing and removing favorites work offline; opening city details requires Places access. The icon-only toolbar item appears at the top of iPhone Duo’s vertical toolbar.
+
 [Download on the App Store](https://apps.apple.com/us/app/daydream-explore-cities/id1366747814)
 
 [Privacy Policy](https://rckim77.github.io/Daydream-Site/)
@@ -43,7 +47,7 @@ The project includes a shared test plan at `unittests.xctestplan` and a Swift Te
 xcodebuild test -project Daydream.xcodeproj -scheme Daydream -testPlan unittests -destination 'platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0' CODE_SIGNING_ALLOWED=NO
 ```
 
-For iOS 26 compatibility, also run the plan on an available iOS 26 simulator (locally: `iPhone 17 Pro,OS=26.5`). To target the existing suite, append `-only-testing:DaydreamTests/CityDetailViewStateTests`.
+For iOS 26 compatibility, also run the plan on an available iOS 26 simulator (locally: `iPhone 17 Pro,OS=26.5`). To target the existing suite, append `-only-testing:DaydreamTests/CityDetailViewStateTests`. Wishlist persistence, country grouping, and removal are covered by `WishlistStoreTests`.
 
 ## CI
 CI uses the GitHub Actions `xcode-27` runner with Xcode 27.1 and an iPhone 18 Pro running iOS 27.0. Pull requests run tests on GitHub Actions via:

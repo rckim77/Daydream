@@ -4,6 +4,8 @@ import SwiftUI
 struct CityDetailContentView: View {
     let place: Place
     let cityText: String
+    let wishlistCity: RandomCity?
+    let wishlist: WishlistStore
     @Bindable var viewState: CityDetailViewState
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.verticalSizeClass) private var verticalSizeClass
@@ -27,9 +29,31 @@ struct CityDetailContentView: View {
             ScrollView(showsIndicators: false) {
                 layout {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(cityText)
-                            .font(.largeTitle)
-                            .padding(.horizontal, 24)
+                        HStack(alignment: .center, spacing: 8) {
+                            Text(cityText)
+                                .font(.largeTitle)
+                            if let city = wishlistCity {
+                                Spacer(minLength: 8)
+                                let isSaved = wishlist.contains(city)
+                                Button {
+                                    wishlist.toggle(city)
+                                } label: {
+                                    Image(systemName: isSaved ? "heart.fill" : "heart")
+                                        .font(.system(size: 20, weight: .semibold))
+                                        .foregroundStyle(isSaved ? Color.pink : Color.primary)
+                                        .frame(width: 44, height: 44)
+                                        .contentShape(Circle())
+                                }
+                                .buttonStyle(.plain)
+                                .glassEffect(.regular.interactive(), in: .circle)
+                                .fixedSize()
+                                .accessibilityLabel(isSaved ? "Remove \(city.city) from wishlist" : "Save \(city.city) to wishlist")
+                                .accessibilityValue(isSaved ? "Saved" : "Not saved")
+                                .accessibilityIdentifier("city-detail-wishlist-button")
+                                .sensoryFeedback(.selection, trigger: isSaved)
+                            }
+                        }
+                        .padding(.horizontal, 24)
                         SummaryView(cityText: cityText)
                         MapCardView(mapPosition: $viewState.mapPosition, place: place, height: expanded ? nil : 190)
                     }

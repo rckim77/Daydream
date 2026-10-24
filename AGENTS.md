@@ -15,6 +15,7 @@ This file guides coding agents working in this repository.
 - `Daydream/CityDetail/` city detail UI, map card, place carousels, map reviews
 - `Daydream/Networking/` API namespace and Google Places data fetching
 - `Daydream/Models/` domain models (`RandomCity`, `CityRoute`, etc.)
+- `Daydream/Wishlist/` device-local favorites store, heart control, and wishlist management screen
 - `Daydream/Shared/` reusable UI, extensions, caches, location manager, JSON data
 - `Daydream/Shared/randomCitiesJSON.json` seed city dataset used for random city flows
 - `Daydream.xcodeproj/` project/scheme/package resolution
@@ -32,6 +33,7 @@ This file guides coding agents working in this repository.
 - Network/data access is namespaced under `API.PlaceSearch`.
 - Heavy use of async flows with `Task {}` and `async/await`.
 - Reuse `PlacesCache` for city place-data requests. Places UI Kit owns photo loading and caching; raw photo fetching and `ImageCache` have been removed.
+- `WishlistStore` persists curated `RandomCity` values in UserDefaults (`wishlist.cities.v1`). Do not persist Google place responses or photos. City identity includes name, country, and coordinates. Wishlist presentation groups country aliases together, adds flags, and sorts countries/cities alphabetically; there is no manual reordering.
 - City-detail backgrounds use the static `CountryFlagPalette` table keyed by the country in place address components, with a neutral fallback.
 - Mixed UI stack is intentional:
   - SwiftUI for most screens
@@ -58,6 +60,7 @@ Select affected scenarios for focused changes; use the full set for dependency o
 4. Open map detail sheet and confirm marker/reviews render.
 5. Trigger current-location flow (with simulator location enabled).
 6. Verify random city flow still navigates and renders the country-flag gradient background.
+7. Save a discovery city with its heart, open Wishlist, verify relaunch persistence, then verify country sections/flags, open a saved city, and remove it. City-detail favoriting is not part of this version.
 
 ## Agent Workflow Expectations
 - If you cannot run validation locally, state that clearly and list unverified paths.
@@ -74,6 +77,7 @@ Select affected scenarios for focused changes; use the full set for dependency o
   - Export options should use `method=app-store-connect` and `destination=upload`.
   - When asked to upload a new TestFlight build, after a successful upload also commit the version/build number change (and related release metadata changes, if any) unless explicitly told not to.
   - After committing that TestFlight version/build bump, push the branch so the repo reflects the uploaded build metadata.
+  - For Daydream, omit TestFlight notes files (including `metadata/testflight/<version>/en-US.txt`) and leave What to Test empty unless explicitly requested.
 - When removing files or refactoring structure, run a quick build immediately to catch missing references.
 - Keep the Xcode project folder-based (no groups); use filesystem-synchronized folders only.
 - If I ask to build and run on device, do not build for the simulator first. Make it as fast as possible.

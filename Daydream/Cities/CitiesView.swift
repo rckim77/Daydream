@@ -18,6 +18,7 @@ struct CitiesView: View {
     @State private var selectedCity: CityRoute?
     @State private var showFeedbackModal = false
     @State private var showErrorAlert = false
+    @State private var wishlist = WishlistStore()
     
     // MARK: - Current Location
     /// This ensures navigation to current location city is gated behind user interaction.
@@ -54,9 +55,10 @@ struct CitiesView: View {
                         .padding(.bottom, 4)
                         .modifier(TopScrollTransition())
                     CityCardsLayout(columns: columns, spacing: spacing, layoutDirection: layoutDirection) {
-                        ForEach(cities, id: \.city) { city in
-                            CityCardView(city: city, width: cardWidth, minimumHeight: minimumCardHeight) { place in
-                                selectedCity = CityRoute(name: city.city, place: place)
+                        ForEach(cities) { city in
+                            CityCardView(city: city, width: cardWidth, minimumHeight: minimumCardHeight,
+                                         isSaved: wishlist.contains(city), onWishlistToggle: { wishlist.toggle(city) }) { place in
+                                selectedCity = CityRoute(name: city.city, place: place, wishlistCity: city)
                             }
                             .matchedTransitionSource(id: city.city, in: zoomNS) { source in
                                 source
@@ -93,6 +95,16 @@ struct CitiesView: View {
                         }
                     }
                 } additionalViews: {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        NavigationLink {
+                            WishlistView(wishlist: wishlist)
+                        } label: {
+                            Label("Wishlist", systemImage: "heart")
+                                .labelStyle(.iconOnly)
+                        }
+                        .accessibilityIdentifier("wishlist-button")
+                    }
+                    .adaptsToVerticalToolbar()
                     ToolbarItem(placement: .bottomBar) {
                         FeedbackButton {
                             showFeedbackModal = true
@@ -102,7 +114,7 @@ struct CitiesView: View {
                 }
             }
             .fullScreenCover(item: $selectedCity) { item in
-                CityDetailView(place: item.place)
+                CityDetailView(place: item.place, wishlist: wishlist, sourceCity: item.wishlistCity)
                     .navigationTransition(.zoom(sourceID: item.name, in: zoomNS))
             }
         }
