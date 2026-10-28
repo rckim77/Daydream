@@ -4,15 +4,15 @@
   "inputs": {
     "ipad/en_US/01-explore-cities.png": {
       "path": "inputs/ipad/en_US/01-explore-cities.png",
-      "sha256": "f13a8428dd252516a546ba19b8d795a2b7f8b527bdc83c684f5ab90a6c72c632",
+      "sha256": "2c7b0af77f8b90f8995d318e2134fb72436f56b4170057c6b8c624dae9a5b337",
       "dimensions": [
         2752,
         2064
       ]
     },
-    "ipad/en_US/04-dark-mode.png": {
-      "path": "inputs/ipad/en_US/04-dark-mode.png",
-      "sha256": "87c8e8865c435e3b39f07fb14bf73c57422a05885915dd11fd7667a47c125418",
+    "ipad/en_US/02-create-wishlist.png": {
+      "path": "inputs/ipad/en_US/02-create-wishlist.png",
+      "sha256": "9619d73403e35097799d2137cc68b58a407c3ff73382614ecc3406960da991f9",
       "dimensions": [
         2752,
         2064
@@ -20,15 +20,23 @@
     },
     "ipad/en_US/03-browse-top-sights.png": {
       "path": "inputs/ipad/en_US/03-browse-top-sights.png",
-      "sha256": "4b0ef1a610bd26c6d352eb9f29e4dec0570338bd1b7b0193ad4e636dd3f2d65a",
+      "sha256": "1dc083bb81cb6d72661efe918ecf6866a22a188a994c8a7efc40ea4d81cae30f",
       "dimensions": [
         2752,
         2064
       ]
     },
-    "iphone/en_US/01-explore-cities-copy-3-copy-2.png": {
-      "path": "inputs/iphone/en_US/01-explore-cities-copy-3-copy-2.png",
-      "sha256": "b7515dfa8a60a2b09ff87c90a2f2c07807954a91ac0809bde6e8809ce4a3e9ce",
+    "ipad/en_US/04-dark-mode.png": {
+      "path": "inputs/ipad/en_US/04-dark-mode.png",
+      "sha256": "937c1ea761e9947ca269d89ea087a9a513e9f50edc213892e005111446932627",
+      "dimensions": [
+        2752,
+        2064
+      ]
+    },
+    "iphone/en_US/01-explore-cities.png": {
+      "path": "inputs/iphone/en_US/01-explore-cities.png",
+      "sha256": "16bf3ff19da18decb3d9be8cafac8c09cd73a465522e3864a0eff63caac78d62",
       "dimensions": [
         1206,
         2622
@@ -36,22 +44,22 @@
     },
     "iphone/en_US/02-browse-top-sights.png": {
       "path": "inputs/iphone/en_US/02-browse-top-sights.png",
-      "sha256": "712eb024890719d682f597f50961ffdc1c2236ad5cc5161dc2172d210f4b05bc",
+      "sha256": "6f397cad9a975ed01f0a65b311780def13207ffc5e8858e9d13c3bb1f862abbe",
       "dimensions": [
         1206,
         2622
       ]
     },
-    "iphone/en_US/01-explore-cities-copy-3-copy-2-copy.png": {
-      "path": "inputs/iphone/en_US/01-explore-cities-copy-3-copy-2-copy.png",
-      "sha256": "b7515dfa8a60a2b09ff87c90a2f2c07807954a91ac0809bde6e8809ce4a3e9ce",
+    "iphone/en_US/03-create-wishlist.png": {
+      "path": "inputs/iphone/en_US/03-create-wishlist.png",
+      "sha256": "b5559178d6f05a7a79b480a93aef5338d44142ca1d92a415034611a410b215a2",
       "dimensions": [
         1206,
         2622
       ]
     },
-    "iphone/en_US/03-dark-mode.png": {
-      "path": "inputs/iphone/en_US/03-dark-mode.png",
+    "iphone/en_US/04-dark-mode.png": {
+      "path": "inputs/iphone/en_US/04-dark-mode.png",
       "sha256": "7ee6e98b6c8de1a20a8af6b11ec677e31c03abc3a26e4f512cdbf840c1526f19",
       "dimensions": [
         1206,
