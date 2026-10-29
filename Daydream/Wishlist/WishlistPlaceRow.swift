@@ -1,11 +1,10 @@
-import GooglePlacesSwift
 import SwiftUI
 
 struct WishlistPlaceRow: View {
     let savedPlace: WishlistPlace
-    let onOpen: (Place) -> Void
+    let onOpen: (MapPlace) -> Void
     let onRemove: () -> Void
-    @State private var place: Place?
+    @State private var place: MapPlace?
     @State private var isLoading = true
     @State private var retryID = 0
 
@@ -58,7 +57,7 @@ struct WishlistPlaceRow: View {
         }
         .task(id: retryID) {
             isLoading = true
-            let result = try? await API.PlaceSearch.fetchPlaceBy(placeId: savedPlace.placeID)
+            let result = try? await API.PlaceSearch.fetchWishlistPlaceBy(placeID: savedPlace.placeID)
             guard !Task.isCancelled else { return }
             place = result
             isLoading = false

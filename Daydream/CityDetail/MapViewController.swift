@@ -19,7 +19,7 @@ final class MapViewController: UIViewController {
     private static let defaultZoom: Float = 16
     private static let buildingZoom: Float = 18
     private var zoomBefore3D: Float?
-    private var place: Place
+    private let place: MapPlace
     private var dynamicMapView: GMSMapView?
     private var dynamicMarker: GMSMarker?
     private var placeDetailCardController: UIHostingController<MapPlaceDetailCardView>?
@@ -61,7 +61,7 @@ final class MapViewController: UIViewController {
         }
     }
 
-    init(place: Place, isViewingDarkMode: Bool, isViewing3D: Bool) {
+    init(place: MapPlace, isViewingDarkMode: Bool, isViewing3D: Bool) {
         self.place = place
         self.isViewingDarkMode = isViewingDarkMode
         self.isViewing3D = isViewing3D

@@ -8,7 +8,7 @@ struct WishlistView: View {
     @State private var openingCity: RandomCity?
     @State private var selectedCity: CityRoute?
     @State private var showOpenError = false
-    @State private var selectedPlace: IdentifiablePlace?
+    @State private var selectedPlace: MapPlace?
     @State private var removingCity: RandomCity?
 
     var body: some View {
@@ -21,7 +21,7 @@ struct WishlistView: View {
                         WishlistCityRow(city: city, wishlist: wishlist, isOpening: openingCity?.id == city.id) {
                             openingCity = city
                         } onOpenPlace: { place in
-                            selectedPlace = IdentifiablePlace(place: place)
+                            selectedPlace = place
                         } onRemoveCity: {
                             if wishlist.places(in: city).isEmpty {
                                 wishlist.remove([city])
@@ -83,7 +83,7 @@ struct WishlistView: View {
             CityDetailView(place: route.place, wishlist: wishlist, sourceCity: route.wishlistCity)
         }
         .fullScreenCover(item: $selectedPlace) { place in
-            MapDetailView(place: place.place)
+            MapDetailView(mapPlace: place)
         }
         .confirmationDialog("Remove city and its saved places?", isPresented: Binding(
             get: { removingCity != nil },

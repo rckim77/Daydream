@@ -95,15 +95,18 @@ final class WishlistPlacesUITests: XCTestCase {
         XCTAssertTrue(firstEatery.waitForExistence(timeout: 30))
         reveal(firstEatery)
         raiseForCapture(firstEatery)
-        // Prefer an observed restaurant for captures; Nearby can also return multi-use businesses.
-        let restaurant = app.buttons["place-wishlist-eatery-ChIJF0WZ2-uLGGAR9kfXM51Wfxk"]
+        // Prefer observed eateries for captures; Nearby can also return multi-use businesses.
+        let restaurant = app.buttons.matching(NSPredicate(
+            format: "identifier BEGINSWITH %@ AND (label CONTAINS[c] %@ OR label CONTAINS[c] %@ OR label CONTAINS[c] %@ OR label CONTAINS[c] %@ OR label CONTAINS[c] %@)",
+            "place-wishlist-eatery-", "Ichiran", "Kura Sushi", "Tsujihan", "pain", "Age.3"
+        )).firstMatch
         let eatery = restaurant.exists ? restaurant : firstEatery
         if restaurant.exists {
             let carousel = try XCTUnwrap(app.scrollViews.containing(.button, identifier: restaurant.identifier)
                 .allElementsBoundByIndex.last)
             for _ in 0..<8 {
                 let frame = restaurant.frame
-                if restaurant.isHittable, frame.minX >= 16, frame.maxX <= window.frame.width - 16 { break }
+                if frame.minX >= 16, frame.maxX <= window.frame.width - 16, restaurant.isHittable { break }
                 carousel.coordinate(withNormalizedOffset: CGVector(dx: 0.85, dy: 0.5))
                     .press(forDuration: 0.05, thenDragTo:
                         carousel.coordinate(withNormalizedOffset: CGVector(dx: 0.15, dy: 0.5)))

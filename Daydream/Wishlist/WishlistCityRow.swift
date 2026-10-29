@@ -1,4 +1,3 @@
-import GooglePlacesSwift
 import SwiftUI
 
 struct WishlistCityRow: View {
@@ -6,7 +5,7 @@ struct WishlistCityRow: View {
     let wishlist: WishlistStore
     let isOpening: Bool
     let onOpenCity: () -> Void
-    let onOpenPlace: (Place) -> Void
+    let onOpenPlace: (MapPlace) -> Void
     let onRemoveCity: () -> Void
     @State private var isExpanded = true
 
