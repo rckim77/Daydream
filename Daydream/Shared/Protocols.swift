@@ -9,28 +9,6 @@
 import UIKit
 import CoreLocation
 
-protocol RandomCitySelectable {
-    func getRandomCity() -> RandomCity?
-}
-
-extension RandomCitySelectable {
-    func getRandomCity() -> RandomCity? {
-        guard let path = Bundle.main.path(forResource: "randomCitiesJSON", ofType: "json") else {
-            return nil
-        }
-
-        do {
-            let url = URL(fileURLWithPath: path)
-            let data = try Data(contentsOf: url, options: .mappedIfSafe)
-            let randomCities = try JSONCustomDecoder().decode([RandomCity].self, from: data)
-            let randomIndex = Int(arc4random_uniform(UInt32(randomCities.count)))
-            return randomCities[randomIndex]
-        } catch {
-            return nil
-        }
-    }
-}
-
 protocol ImageViewFadeable {
     func fadeInImage(_ image: UIImage, forImageView imageView: UIImageView)
 }

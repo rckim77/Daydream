@@ -41,7 +41,7 @@
   "slides": [
     {
       "id": "01-explore-cities-copy-3-copy-2",
-      "screenshot": "01-explore-cities-copy-3-copy-2.png",
+      "screenshot": "01-explore-cities.png",
       "captions": {
         "en_US": "Explore\ncities"
       },
@@ -61,7 +61,7 @@
     },
     {
       "id": "01-explore-cities-copy-3-copy-2-copy",
-      "screenshot": "01-explore-cities-copy-3-copy-2-copy.png",
+      "screenshot": "03-create-wishlist.png",
       "captions": {
         "en_US": "Create\nyour wishlist"
       },
@@ -71,7 +71,7 @@
     },
     {
       "id": "03-dark-mode",
-      "screenshot": "03-dark-mode.png",
+      "screenshot": "04-dark-mode.png",
       "captions": {
         "en_US": "Dark\nmode"
       },

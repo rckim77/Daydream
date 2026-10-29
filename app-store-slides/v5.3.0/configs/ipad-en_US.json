@@ -50,13 +50,13 @@
       }
     },
     {
-      "id": "02-dark-mode",
-      "screenshot": "04-dark-mode.png",
+      "id": "02-dark-mode-copy",
+      "screenshot": "02-create-wishlist.png",
       "captions": {
-        "en_US": "Dark\nmode"
+        "en_US": "Create\nyour wishlist"
       },
       "captionPositions": {
-        "ipad": "bottom"
+        "ipad": "top"
       }
     },
     {
@@ -64,6 +64,16 @@
       "screenshot": "03-browse-top-sights.png",
       "captions": {
         "en_US": "Browse\ntop sights"
+      },
+      "captionPositions": {
+        "ipad": "top"
+      }
+    },
+    {
+      "id": "02-dark-mode",
+      "screenshot": "04-dark-mode.png",
+      "captions": {
+        "en_US": "Dark\nmode"
       },
       "captionPositions": {
         "ipad": "top"

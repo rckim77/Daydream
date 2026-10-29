@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreLocation
+import GooglePlaces
 import GooglePlacesSwift
 
 enum APIError: Error {
@@ -27,16 +28,8 @@ extension API {
         
         /// Picks a random city and fetches its place data, including the country for its backdrop.
         static func fetchRandomCity() async throws -> Place {
-            guard let path = Bundle.main.path(forResource: "randomCitiesJSON", ofType: "json") else {
-                throw APIError.bundleError
-            }
-
-            let url = URL(fileURLWithPath: path)
-            let data = try Data(contentsOf: url, options: .mappedIfSafe)
-            let randomCities = try JSONCustomDecoder().decode([RandomCity].self, from: data)
-            let randomIndex = Int(arc4random_uniform(UInt32(randomCities.count)))
-            
-            guard let place = await API.PlaceSearch.fetchCityBy(randomCities[randomIndex]) else {
+            guard let city = try RandomCityCatalog.load().randomCity,
+                  let place = await API.PlaceSearch.fetchCityBy(city) else {
                 throw APIError.noResults
             }
             
@@ -89,26 +82,34 @@ extension API {
             }
         }
 
-        // Keep the SDK request lifetime on the main actor, including teardown after awaiting its response.
+        @MainActor
+        static func fetchCityPlaceID(_ city: RandomCity) async -> String? {
+            guard !Task.isCancelled else { return nil }
+
+            // Call the callback API directly so the SDK starts Nearby Search on the main thread.
+            return await withCheckedContinuation { continuation in
+                let center = CLLocationCoordinate2D(latitude: city.latitude, longitude: city.longitude)
+                let request = GMSPlaceSearchNearbyRequest(
+                    locationRestriction: GMSPlaceCircularLocationOption(center, city.radius * 1000),
+                    placeProperties: [GMSPlaceProperty.placeID.rawValue]
+                )
+                request.includedPrimaryTypes = ["locality"]
+                request.maxResultCount = 2
+
+                GMSPlacesClient.shared().searchNearby(with: request) { response, error in
+                    if let error {
+                        print("=== fetchCityPlaceID(name:) call failed: \(error.localizedDescription)")
+                    }
+                    continuation.resume(returning: error == nil ? response?.places?.first?.placeID : nil)
+                }
+            }
+        }
+
         @MainActor
         static func fetchCityBy(_ city: RandomCity) async -> Place? {
-            let center = CLLocationCoordinate2D(latitude: city.latitude, longitude: city.longitude)
-            let restriction = CircularCoordinateRegion(center: center, radius: city.radius * 1000)
-            let placeProps: [PlaceProperty] = [.displayName, .formattedAddress, .coordinate, .placeID, .addressComponents]
-            let request = SearchNearbyRequest(
-                locationRestriction: restriction,
-                placeProperties: placeProps,
-                includedPrimaryTypes: [.locality],
-                maxResultCount: 2
-            )
-
-            switch await PlacesClient.shared.responseForSearchNearby(with: request) {
-            case .success(let response):
-                return response.places?.first
-            case .failure(let error):
-                print("=== fetchCityBy(name:) call failed: \(error.localizedDescription)")
-                return nil
-            }
+            // Random-city and Wishlist routes need the same main-thread Nearby bridge as discovery.
+            guard let placeID = await fetchCityPlaceID(city), !Task.isCancelled else { return nil }
+            return try? await fetchPlaceBy(placeId: placeID)
         }
         
         @MainActor

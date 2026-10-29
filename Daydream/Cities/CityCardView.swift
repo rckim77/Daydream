@@ -135,9 +135,9 @@ struct CityCardView: View {
         }
         .task(id: currentRequest) {
             guard placeID == nil, !loadFailed else { return }
-            let place = await API.PlaceSearch.fetchCityBy(city)
+            let fetchedID = await API.PlaceSearch.fetchCityPlaceID(city)
             guard !Task.isCancelled, requestID == currentRequest else { return }
-            placeID = place?.placeID
+            placeID = fetchedID
             loadFailed = placeID == nil
         }
     }
