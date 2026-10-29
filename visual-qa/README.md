@@ -31,7 +31,7 @@ The check uses bounded waits and at most five edge swipes per navigation step. I
 
 ## Wishlist places verification
 
-`WishlistPlacesUITests/testSavedPlacesAndCollapsibleCities` is an opt-in live-service check for saving sights/eateries, automatically saving their city, expanding/collapsing the city's Wishlist section, opening map/reviews, relaunch persistence, and removing places/cities. It verifies the **Are you sure?** alert from discovery, city detail, and Wishlist, with cancellation preserving children and confirmed city removal clearing them. Each run uses a separate Debug-only wishlist defaults domain, preserving the simulator's personal favorites. It reuses the installed app and existing simulator without uninstalling, resetting, or cloning it.
+`WishlistPlacesUITests/testSavedPlacesAndCollapsibleCities` is an opt-in live-service check for saving sights/eateries, automatically saving their city, expanding/collapsing the city's Wishlist section, opening map/reviews, relaunch persistence, and removing places/cities. It checks that the city glass button opens a collapsed city independently without expanding it, and that both the place name and its glass map button open map/reviews. It verifies the **Are you sure?** alert from discovery, city detail, and Wishlist, with cancellation preserving children and confirmed city removal clearing them. Each run uses a separate Debug-only wishlist defaults domain, preserving the simulator's personal favorites. It reuses the installed app and existing simulator without uninstalling, resetting, or cloning it.
 
 Enable a focused run with an expiring host configuration:
 

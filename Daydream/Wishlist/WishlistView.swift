@@ -50,6 +50,7 @@ struct WishlistView: View {
                 }
             }
         }
+        .environment(\.defaultMinListRowHeight, 0)
         .scrollContentBackground(.hidden)
         .background(Color(uiColor: .systemGroupedBackground))
         .scrollEdgeEffectStyle(.soft, for: .top)

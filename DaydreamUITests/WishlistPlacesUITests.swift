@@ -174,21 +174,34 @@ final class WishlistPlacesUITests: XCTestCase {
         let header = app.descendants(matching: .any).matching(identifier: "wishlist-city-section-Tokyo").firstMatch
         XCTAssertTrue(header.waitForExistence(timeout: 5))
         header.tap()
-        XCTAssertFalse(explore.exists)
+        XCTAssertTrue(explore.exists, "The city glass button stays available while collapsed")
+        XCTAssertTrue(explore.isHittable)
         XCTAssertFalse(savedSight.exists)
         try capture("04-wishlist-collapsed")
+
+        explore.tap()
+        XCTAssertTrue(cityHeart.waitForExistence(timeout: 10), "The glass city button opens city details")
+        waitForSaved(cityHeart)
+        app.buttons["home-button"].tap()
+        XCTAssertTrue(app.navigationBars["Wishlist"].waitForExistence(timeout: 10))
+        XCTAssertTrue(explore.exists)
+        XCTAssertFalse(savedSight.exists, "Opening a collapsed city must not expand its places")
         header.tap()
         XCTAssertTrue(explore.waitForExistence(timeout: 5))
         XCTAssertTrue(savedSight.waitForExistence(timeout: 5))
 
-        savedSight.tap()
-        let overlay = app.descendants(matching: .any).matching(identifier: "map-reviews-overlay").firstMatch
-        XCTAssertTrue(overlay.waitForExistence(timeout: 15))
-        let reviewsLoaded = NSPredicate { _, _ in overlay.value as? String == "loaded" }
-        XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: reviewsLoaded, object: nil)],
-                                     timeout: 30), .completed)
-        app.buttons["map-close-button"].tap()
-        XCTAssertTrue(explore.waitForExistence(timeout: 10))
+        let mapButton = app.buttons["wishlist-place-map-\(sightID)"]
+        XCTAssertTrue(mapButton.waitForExistence(timeout: 10))
+        for control in [mapButton, savedSight] {
+            control.tap()
+            let overlay = app.descendants(matching: .any).matching(identifier: "map-reviews-overlay").firstMatch
+            XCTAssertTrue(overlay.waitForExistence(timeout: 15))
+            let reviewsLoaded = NSPredicate { _, _ in overlay.value as? String == "loaded" }
+            XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: reviewsLoaded, object: nil)],
+                                         timeout: 30), .completed)
+            app.buttons["map-close-button"].tap()
+            XCTAssertTrue(explore.waitForExistence(timeout: 10))
+        }
 
         app.terminate()
         app.launch()

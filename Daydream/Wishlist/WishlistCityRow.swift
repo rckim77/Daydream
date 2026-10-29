@@ -40,22 +40,14 @@ struct WishlistCityRow: View {
             }
         } else {
             DisclosureGroup(isExpanded: $isExpanded) {
-                Button(action: onOpenCity) {
-                    HStack {
-                        Label("Explore city", systemImage: "building.2")
-                        Spacer()
-                        if isOpening { ProgressView() }
-                    }
-                    .frame(minHeight: 44)
-                }
-                .accessibilityIdentifier("wishlist-explore-\(city.city)")
                 ForEach(WishlistPlace.Kind.allCases, id: \.self) { kind in
                     let savedPlaces = places.filter { $0.kind == kind }
                     if !savedPlaces.isEmpty {
                         Text(kind == .sight ? "Sights" : "Eateries")
-                            .font(.subheadline.weight(.semibold))
+                            .font(.caption.weight(.semibold))
                             .foregroundStyle(.secondary)
                             .accessibilityAddTraits(.isHeader)
+                            .listRowInsets(EdgeInsets(top: 6, leading: 32, bottom: 2, trailing: 16))
                         ForEach(savedPlaces) { savedPlace in
                             WishlistPlaceRow(savedPlace: savedPlace, onOpen: onOpenPlace) {
                                 wishlist.removePlace(placeID: savedPlace.placeID, from: city)
@@ -64,17 +56,38 @@ struct WishlistCityRow: View {
                     }
                 }
             } label: {
-                VStack(alignment: .leading, spacing: 6) {
-                    Text(city.city)
-                        .font(.headline)
-                        .foregroundStyle(.primary)
-                    Text("Sights: \(places.filter { $0.kind == .sight }.count) · Eateries: \(places.filter { $0.kind == .eatery }.count)")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                HStack(spacing: 12) {
+                    VStack(alignment: .leading, spacing: 3) {
+                        Text(city.city)
+                            .font(.headline)
+                            .foregroundStyle(.primary)
+                        Text("Sights: \(places.filter { $0.kind == .sight }.count) · Eateries: \(places.filter { $0.kind == .eatery }.count)")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityElement(children: .combine)
+                    .accessibilityIdentifier("wishlist-city-section-\(city.city)")
+                    Button(action: onOpenCity) {
+                        Group {
+                            if isOpening {
+                                ProgressView()
+                            } else {
+                                Image(systemName: "building.2")
+                                    .font(.system(size: 20, weight: .semibold))
+                                    .foregroundStyle(.primary)
+                            }
+                        }
+                        .frame(width: 44, height: 44)
+                        .contentShape(Circle())
+                    }
+                    .buttonStyle(.plain)
+                    .glassEffect(.regular.interactive(), in: .circle)
+                    .fixedSize()
+                    .accessibilityLabel("Explore \(city.city)")
+                    .accessibilityIdentifier("wishlist-explore-\(city.city)")
                 }
-                .padding(.vertical, 8)
-                .accessibilityElement(children: .combine)
-                .accessibilityIdentifier("wishlist-city-section-\(city.city)")
+                .padding(.vertical, 4)
             }
             .swipeActions {
                 // A destructive swipe optimistically deletes one row before confirmation,
