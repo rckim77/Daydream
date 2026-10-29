@@ -10,24 +10,12 @@ struct WishlistCityRow: View {
 
     var body: some View {
         let places = wishlist.places(in: city)
-        HStack(spacing: 12) {
-            Button(action: onOpenCity) {
-                VStack(alignment: .leading, spacing: 3) {
-                    Text(city.city)
-                        .font(.headline)
-                        .foregroundStyle(.primary)
-                    if !places.isEmpty {
-                        Text("Sights: \(places.filter { $0.kind == .sight }.count) · Eateries: \(places.filter { $0.kind == .eatery }.count)")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-                .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel("Explore \(city.city)")
-            .accessibilityIdentifier("wishlist-city-section-\(city.city)")
-            Button(action: onOpenCity) {
+        Button(action: onOpenCity) {
+            HStack(spacing: 12) {
+                Text(city.city)
+                    .font(.headline)
+                    .foregroundStyle(.primary)
+                Spacer(minLength: 4)
                 Group {
                     if isOpening {
                         ProgressView()
@@ -38,15 +26,17 @@ struct WishlistCityRow: View {
                     }
                 }
                 .frame(width: 44, height: 44)
-                .contentShape(Circle())
+                .accessibilityHidden(true)
             }
-            .buttonStyle(.plain)
-            .glassEffect(.regular.interactive(), in: .circle)
-            .fixedSize()
-            .accessibilityLabel("Explore \(city.city)")
-            .accessibilityIdentifier("wishlist-explore-\(city.city)")
+            .padding(.horizontal, 16)
+            .padding(.vertical, 4)
+            .frame(maxWidth: .infinity)
+            .contentShape(Rectangle())
         }
-        .padding(.vertical, 4)
+        .buttonStyle(.plain)
+        .accessibilityLabel("Explore \(city.city)")
+        .accessibilityIdentifier("wishlist-city-section-\(city.city)")
+        .listRowInsets(EdgeInsets())
         .swipeActions {
             // Let the confirmation and data update drive deletion of the city and its places.
             Button("Remove city", systemImage: "heart.slash", action: onRemoveCity)

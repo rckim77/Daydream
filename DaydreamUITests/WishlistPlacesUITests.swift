@@ -58,9 +58,11 @@ final class WishlistPlacesUITests: XCTestCase {
         }
 
         func waitForSaved(_ button: XCUIElement) {
-            let saved = NSPredicate(format: "value == %@", "Saved")
-            XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: saved, object: button)],
-                                         timeout: 5), .completed)
+            let identifier = button.identifier
+            // Places photo updates can invalidate the original first-match accessibility snapshot.
+            let saved = NSPredicate { _, _ in app.buttons[identifier].value as? String == "Saved" }
+            XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: saved, object: nil)],
+                                         timeout: 10), .completed)
         }
 
         func openWishlist() {
@@ -89,6 +91,32 @@ final class WishlistPlacesUITests: XCTestCase {
                 .press(forDuration: 0.05, thenDragTo:
                     header.coordinate(withNormalizedOffset: CGVector(dx: 0.35, dy: 0.5)))
             app.buttons["Remove city"].tap()
+        }
+
+        func rowTapTargets(_ row: XCUIElement) throws -> [(name: String, offset: CGVector)] {
+            let cell = app.cells.containing(.button, identifier: row.identifier).firstMatch
+            XCTAssertTrue(cell.exists)
+            let frame = row.frame
+            XCTAssertEqual(frame.minX, cell.frame.minX, accuracy: 1, "The button includes leading cell padding")
+            XCTAssertEqual(frame.maxX, cell.frame.maxX, accuracy: 1, "The button includes trailing cell padding")
+            XCTAssertEqual(frame.height, cell.frame.height, accuracy: 1, "The button includes vertical cell padding")
+            XCTAssertGreaterThanOrEqual(frame.height, 44)
+            let text = row.staticTexts.allElementsBoundByIndex.first
+            // A single city label can merge into its button. Tokyo's observed text is inside
+            // the leading 100 points; retain one accessible control and tap that same region.
+            let textFrame = text?.frame ?? CGRect(x: frame.minX + 16, y: frame.minY,
+                                                  width: 84, height: frame.height)
+            let textX = (textFrame.midX - frame.minX) / frame.width
+            // The trailing decorative icon occupies 44 points, inside 16-point padding.
+            let blankEnd = frame.maxX - 60
+            XCTAssertGreaterThan(blankEnd - textFrame.maxX, 4, "The fixture must expose blank space beside its text")
+            let blankX = ((textFrame.maxX + blankEnd) / 2 - frame.minX) / frame.width
+            return [
+                ("text", CGVector(dx: textX, dy: 0.5)),
+                ("blank space", CGVector(dx: blankX, dy: 0.5)),
+                ("trailing icon", CGVector(dx: 0.90, dy: 0.5)),
+                ("edge padding", CGVector(dx: 0.99, dy: 0.5))
+            ]
         }
 
         let city = app.buttons["city-loaded-Tokyo"]
@@ -172,9 +200,8 @@ final class WishlistPlacesUITests: XCTestCase {
         }
         openWishlist()
         try capture("wishlist-before-check")
-        let explore = app.buttons["wishlist-explore-Tokyo"]
-        XCTAssertTrue(explore.waitForExistence(timeout: 10))
         let tokyo = app.buttons["wishlist-city-section-Tokyo"]
+        XCTAssertTrue(tokyo.waitForExistence(timeout: 10))
         let osaka = app.buttons["wishlist-city-section-Osaka"]
         let paris = app.buttons["wishlist-city-section-Paris"]
         let japan = app.buttons["wishlist-country-Japan"]
@@ -193,7 +220,11 @@ final class WishlistPlacesUITests: XCTestCase {
         XCTAssertFalse(savedEatery.label.contains("Saved eatery"), "Wishlist should show the live place name")
         XCTAssertFalse(app.staticTexts["Sights"].exists)
         XCTAssertFalse(app.staticTexts["Eateries"].exists)
+        XCTAssertFalse(app.staticTexts.matching(NSPredicate(format: "label BEGINSWITH %@", "Sights:")).firstMatch.exists)
+        XCTAssertFalse(app.staticTexts.matching(NSPredicate(format: "label BEGINSWITH %@", "Eateries:")).firstMatch.exists)
         XCTAssertFalse(app.staticTexts["Google Maps"].exists, "Wishlist has no repeated per-place attribution captions")
+        XCTAssertFalse(app.buttons["wishlist-explore-Tokyo"].exists, "City icons are decorative parts of the row")
+        XCTAssertFalse(app.buttons["wishlist-place-map-\(sightID)"].exists, "Map icons are decorative parts of the row")
         try capture("03-wishlist-expanded")
 
         japan.tap()
@@ -201,7 +232,6 @@ final class WishlistPlacesUITests: XCTestCase {
         waitForCountry(japan, value: "Collapsed")
         XCTAssertFalse(tokyo.exists)
         XCTAssertFalse(osaka.exists)
-        XCTAssertFalse(explore.exists)
         XCTAssertFalse(savedSight.exists)
         XCTAssertFalse(savedEatery.exists)
         XCTAssertTrue(france.exists)
@@ -231,9 +261,10 @@ final class WishlistPlacesUITests: XCTestCase {
         XCTAssertTrue(paris.waitForExistence(timeout: 5))
         XCTAssertTrue(tokyo.exists)
 
-        for control in [tokyo, explore] {
-            control.tap()
-            XCTAssertTrue(cityHeart.waitForExistence(timeout: 10), "City names and their arrow buttons open city details")
+        for target in try rowTapTargets(tokyo) {
+            print("Wishlist full-row city tap: \(target.name)")
+            tokyo.coordinate(withNormalizedOffset: target.offset).tap()
+            XCTAssertTrue(cityHeart.waitForExistence(timeout: 10), "Every city-row area opens city details")
             waitForSaved(cityHeart)
             app.buttons["home-button"].tap()
             XCTAssertTrue(app.navigationBars["Wishlist"].waitForExistence(timeout: 10))
@@ -242,17 +273,22 @@ final class WishlistPlacesUITests: XCTestCase {
             XCTAssertTrue(savedSight.waitForExistence(timeout: 5), "Opening a city never collapses its country")
         }
 
-        let mapButton = app.buttons["wishlist-place-map-\(sightID)"]
-        XCTAssertTrue(mapButton.waitForExistence(timeout: 10))
-        for control in [mapButton, savedSight] {
-            control.tap()
-            let overlay = app.descendants(matching: .any).matching(identifier: "map-reviews-overlay").firstMatch
-            XCTAssertTrue(overlay.waitForExistence(timeout: 15))
-            let reviewsLoaded = NSPredicate { _, _ in overlay.value as? String == "loaded" }
-            XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: reviewsLoaded, object: nil)],
+        for row in [savedSight, savedEatery] {
+            XCTAssertTrue(row.waitForExistence(timeout: 10))
+            let enabled = NSPredicate(format: "enabled == true")
+            XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: enabled, object: row)],
                                          timeout: 30), .completed)
-            app.buttons["map-close-button"].tap()
-            XCTAssertTrue(explore.waitForExistence(timeout: 10))
+            for target in try rowTapTargets(row) {
+                print("Wishlist full-row place tap: \(row.identifier), \(target.name)")
+                row.coordinate(withNormalizedOffset: target.offset).tap()
+                let overlay = app.descendants(matching: .any).matching(identifier: "map-reviews-overlay").firstMatch
+                XCTAssertTrue(overlay.waitForExistence(timeout: 15))
+                let reviewsLoaded = NSPredicate { _, _ in overlay.value as? String == "loaded" }
+                XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: reviewsLoaded, object: nil)],
+                                             timeout: 30), .completed)
+                app.buttons["map-close-button"].tap()
+                XCTAssertTrue(tokyo.waitForExistence(timeout: 10))
+            }
         }
 
         app.terminate()
