@@ -10,6 +10,7 @@ struct WishlistView: View {
     @State private var showOpenError = false
     @State private var selectedPlace: MapPlace?
     @State private var removingCity: RandomCity?
+    @State private var collapsedCountries: Set<WishlistCountrySection.ID> = []
 
     var body: some View {
         let sections = selectedContinent.sections(from: wishlist.countrySections)
@@ -17,35 +18,56 @@ struct WishlistView: View {
         List {
             ForEach(sections) { section in
                 Section {
-                    ForEach(section.cities) { city in
-                        WishlistCityRow(city: city, wishlist: wishlist, isOpening: openingCity?.id == city.id) {
-                            openingCity = city
-                        } onOpenPlace: { place in
-                            selectedPlace = place
-                        } onRemoveCity: {
-                            if wishlist.places(in: city).isEmpty {
-                                wishlist.remove([city])
-                            } else {
-                                removingCity = city
+                    if !collapsedCountries.contains(section.id) {
+                        ForEach(section.cities) { city in
+                            WishlistCityRow(city: city, wishlist: wishlist, isOpening: openingCity?.id == city.id) {
+                                openingCity = city
+                            } onOpenPlace: { place in
+                                selectedPlace = place
+                            } onRemoveCity: {
+                                if wishlist.places(in: city).isEmpty {
+                                    wishlist.remove([city])
+                                } else {
+                                    removingCity = city
+                                }
                             }
                         }
                     }
                 } header: {
-                    HStack(spacing: 8) {
-                        if let flag = section.flag {
-                            Text(flag)
+                    let isCollapsed = collapsedCountries.contains(section.id)
+                    Button {
+                        withAnimation {
+                            if isCollapsed {
+                                collapsedCountries.remove(section.id)
+                            } else {
+                                collapsedCountries.insert(section.id)
+                            }
+                        }
+                    } label: {
+                        HStack(spacing: 8) {
+                            if let flag = section.flag {
+                                Text(flag)
+                                    .accessibilityHidden(true)
+                            }
+                            Text(section.country)
+                                .foregroundStyle(Color(uiColor: .label))
+                            Spacer(minLength: 8)
+                            Image(systemName: isCollapsed ? "chevron.right" : "chevron.down")
+                                .font(.footnote.weight(.semibold))
+                                .foregroundStyle(.secondary)
                                 .accessibilityHidden(true)
                         }
-                        Text(section.country)
-                            .foregroundStyle(Color(uiColor: .label))
+                        .frame(minHeight: 44)
+                        .contentShape(Rectangle())
                     }
+                    .buttonStyle(.plain)
                     .textCase(nil)
-                    .accessibilityElement(children: .combine)
                     .accessibilityLabel(section.country)
+                    .accessibilityValue(isCollapsed ? "Collapsed" : "Expanded")
                     .accessibilityIdentifier("wishlist-country-\(section.country)")
                 } footer: {
                     if section.id == sections.last?.id {
-                        Text("Tap a city with saved places to expand or collapse it. Swipe to remove a place or city. Saved on this device.")
+                        Text("Tap a country to expand or collapse its cities and saved places. Swipe to remove a place or city. Saved on this device.")
                     }
                 }
             }

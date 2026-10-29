@@ -20,9 +20,6 @@ struct WishlistPlaceRow: View {
                         if let name = place?.displayName {
                             Text(name)
                                 .foregroundStyle(.primary)
-                            Text("Google Maps")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
                         } else {
                             Text(savedPlace.kind == .sight ? "Saved sight" : "Saved eatery")
                                 .foregroundStyle(.primary)

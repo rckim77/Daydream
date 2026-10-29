@@ -15,7 +15,7 @@ final class WishlistPlacesUITests: XCTestCase {
         app.launchArguments = ["-AppleLanguages", "(en)", "-AppleLocale", "en_US",
                                "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryL",
                                "-reviewsViewedCount", "0"]
-        app.launchEnvironment["DAYDREAM_UI_CAPTURE_CITIES"] = "Tokyo|Paris|New York City|Hong Kong|Rome|Montreal|Lisbon|Antalya"
+        app.launchEnvironment["DAYDREAM_UI_CAPTURE_CITIES"] = "Tokyo|Osaka|Paris|New York City|Hong Kong|Rome|Montreal|Lisbon"
         app.launchEnvironment["DAYDREAM_WISHLIST_TEST_SUITE"] = "Daydream.WishlistUITests.\(UUID().uuidString)"
         XCUIDevice.shared.orientation = .portrait
         app.launch()
@@ -68,6 +68,13 @@ final class WishlistPlacesUITests: XCTestCase {
             XCTAssertTrue(button.waitForExistence(timeout: 10))
             button.tap()
             XCTAssertTrue(app.navigationBars["Wishlist"].waitForExistence(timeout: 5))
+        }
+
+        func waitForCountry(_ header: XCUIElement, value: String) {
+            XCTAssertTrue(header.waitForExistence(timeout: 5), "Country headers remain available when collapsed")
+            let predicate = NSPredicate(format: "value == %@", value)
+            XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: predicate, object: header)],
+                                         timeout: 5), .completed)
         }
 
         func removalAlert() -> XCUIElement {
@@ -156,10 +163,25 @@ final class WishlistPlacesUITests: XCTestCase {
         discoveryHeart.tap()
         removalAlert().buttons["Cancel"].tap()
         waitForSaved(discoveryHeart)
+        for cityName in ["Osaka", "Paris"] {
+            let heart = app.buttons["wishlist-toggle-\(cityName)"]
+            XCTAssertTrue(heart.waitForExistence(timeout: 10))
+            reveal(heart)
+            heart.tap()
+            waitForSaved(heart)
+        }
         openWishlist()
         try capture("wishlist-before-check")
         let explore = app.buttons["wishlist-explore-Tokyo"]
-        XCTAssertTrue(explore.waitForExistence(timeout: 10), "Cities with saved places begin expanded")
+        XCTAssertTrue(explore.waitForExistence(timeout: 10))
+        let tokyo = app.buttons["wishlist-city-section-Tokyo"]
+        let osaka = app.buttons["wishlist-city-section-Osaka"]
+        let paris = app.buttons["wishlist-city-section-Paris"]
+        let japan = app.buttons["wishlist-country-Japan"]
+        let france = app.buttons["wishlist-country-France"]
+        XCTAssertTrue(osaka.waitForExistence(timeout: 5))
+        XCTAssertTrue(paris.waitForExistence(timeout: 5))
+        waitForCountry(japan, value: "Expanded")
         let savedSight = app.buttons["wishlist-place-\(sightID)"]
         let savedEatery = app.buttons["wishlist-place-\(eateryID)"]
         XCTAssertTrue(savedSight.waitForExistence(timeout: 10))
@@ -169,26 +191,56 @@ final class WishlistPlacesUITests: XCTestCase {
                                      timeout: 30), .completed)
         XCTAssertFalse(savedSight.label.contains("Saved sight"), "Wishlist should show the live place name")
         XCTAssertFalse(savedEatery.label.contains("Saved eatery"), "Wishlist should show the live place name")
+        XCTAssertFalse(app.staticTexts["Sights"].exists)
+        XCTAssertFalse(app.staticTexts["Eateries"].exists)
+        XCTAssertFalse(app.staticTexts["Google Maps"].exists, "Wishlist has no repeated per-place attribution captions")
         try capture("03-wishlist-expanded")
 
-        let header = app.descendants(matching: .any).matching(identifier: "wishlist-city-section-Tokyo").firstMatch
-        XCTAssertTrue(header.waitForExistence(timeout: 5))
-        header.tap()
-        XCTAssertTrue(explore.exists, "The city glass button stays available while collapsed")
-        XCTAssertTrue(explore.isHittable)
-        XCTAssertFalse(savedSight.exists)
+        japan.tap()
         try capture("04-wishlist-collapsed")
+        waitForCountry(japan, value: "Collapsed")
+        XCTAssertFalse(tokyo.exists)
+        XCTAssertFalse(osaka.exists)
+        XCTAssertFalse(explore.exists)
+        XCTAssertFalse(savedSight.exists)
+        XCTAssertFalse(savedEatery.exists)
+        XCTAssertTrue(france.exists)
+        XCTAssertTrue(paris.exists, "Collapsing Japan must preserve France's visible cities")
 
-        explore.tap()
-        XCTAssertTrue(cityHeart.waitForExistence(timeout: 10), "The glass city button opens city details")
-        waitForSaved(cityHeart)
-        app.buttons["home-button"].tap()
-        XCTAssertTrue(app.navigationBars["Wishlist"].waitForExistence(timeout: 10))
-        XCTAssertTrue(explore.exists)
-        XCTAssertFalse(savedSight.exists, "Opening a collapsed city must not expand its places")
-        header.tap()
-        XCTAssertTrue(explore.waitForExistence(timeout: 5))
+        app.buttons["Europe"].tap()
+        XCTAssertFalse(japan.exists)
+        XCTAssertTrue(paris.exists)
+        app.buttons["All"].tap()
+        waitForCountry(japan, value: "Collapsed")
+        XCTAssertFalse(tokyo.exists, "Country collapse state survives continent filtering")
+        XCTAssertFalse(osaka.exists)
+        japan.tap()
+        waitForCountry(japan, value: "Expanded")
+        XCTAssertTrue(osaka.waitForExistence(timeout: 5))
         XCTAssertTrue(savedSight.waitForExistence(timeout: 5))
+
+        france.tap()
+        try capture("france-collapsed")
+        waitForCountry(france, value: "Collapsed")
+        XCTAssertFalse(paris.exists, "A country without a footer can collapse to its header")
+        XCTAssertTrue(tokyo.exists)
+        XCTAssertTrue(osaka.exists)
+        XCTAssertTrue(savedSight.exists)
+        france.tap()
+        waitForCountry(france, value: "Expanded")
+        XCTAssertTrue(paris.waitForExistence(timeout: 5))
+        XCTAssertTrue(tokyo.exists)
+
+        for control in [tokyo, explore] {
+            control.tap()
+            XCTAssertTrue(cityHeart.waitForExistence(timeout: 10), "City names and their arrow buttons open city details")
+            waitForSaved(cityHeart)
+            app.buttons["home-button"].tap()
+            XCTAssertTrue(app.navigationBars["Wishlist"].waitForExistence(timeout: 10))
+            waitForCountry(japan, value: "Expanded")
+            XCTAssertTrue(osaka.exists)
+            XCTAssertTrue(savedSight.waitForExistence(timeout: 5), "Opening a city never collapses its country")
+        }
 
         let mapButton = app.buttons["wishlist-place-map-\(sightID)"]
         XCTAssertTrue(mapButton.waitForExistence(timeout: 10))
@@ -209,7 +261,7 @@ final class WishlistPlacesUITests: XCTestCase {
         XCTAssertTrue(savedSight.waitForExistence(timeout: 10), "Sight persists across relaunch")
         XCTAssertTrue(savedEatery.waitForExistence(timeout: 10), "Eatery persists across relaunch")
 
-        revealCityRemoval(header)
+        revealCityRemoval(tokyo)
         let wishlistAlert = removalAlert()
         try capture("05-city-removal-confirmation")
         wishlistAlert.buttons["Cancel"].tap()
@@ -223,9 +275,14 @@ final class WishlistPlacesUITests: XCTestCase {
         XCTAssertFalse(savedSight.exists)
         XCTAssertTrue(savedEatery.exists)
 
-        revealCityRemoval(header)
+        revealCityRemoval(tokyo)
         removalAlert().buttons["Remove city"].tap()
-        XCTAssertTrue(app.staticTexts["Your next adventure starts here"].waitForExistence(timeout: 5))
+        XCTAssertFalse(tokyo.exists)
+        XCTAssertFalse(savedSight.exists)
+        XCTAssertFalse(savedEatery.exists)
+        XCTAssertTrue(osaka.exists, "Removing Tokyo preserves another city in Japan")
+        XCTAssertTrue(paris.exists, "Removing Tokyo preserves cities in other countries")
+        waitForCountry(japan, value: "Expanded")
     }
 }
 
