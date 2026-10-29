@@ -36,7 +36,11 @@ struct CityDetailContentView: View {
                                 Spacer(minLength: 8)
                                 let isSaved = wishlist.contains(city)
                                 Button {
-                                    wishlist.toggle(city)
+                                    if isSaved, !wishlist.places(in: city).isEmpty {
+                                        viewState.removingWishlistCity = city
+                                    } else {
+                                        wishlist.toggle(city)
+                                    }
                                 } label: {
                                     Image(systemName: isSaved ? "heart.fill" : "heart")
                                         .font(.system(size: 20, weight: .semibold))
@@ -85,5 +89,6 @@ struct CityDetailContentView: View {
             .frame(maxWidth: .infinity, alignment: expanded ? .trailing : .center)
         }
         .toolbarVisibility(verticalSizeClass == .compact ? .hidden : .automatic, for: .navigationBar)
+        .modifier(WishlistCityRemovalConfirmation(city: $viewState.removingWishlistCity, wishlist: wishlist))
     }
 }

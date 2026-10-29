@@ -85,18 +85,7 @@ struct WishlistView: View {
         .fullScreenCover(item: $selectedPlace) { place in
             MapDetailView(mapPlace: place)
         }
-        .confirmationDialog("Remove city and its saved places?", isPresented: Binding(
-            get: { removingCity != nil },
-            set: { if !$0 { removingCity = nil } }
-        ), titleVisibility: .visible) {
-            if let city = removingCity {
-                Button("Remove \(city.city) and saved places", role: .destructive) {
-                    wishlist.remove([city])
-                    removingCity = nil
-                }
-            }
-            Button("Cancel", role: .cancel) { removingCity = nil }
-        }
+        .modifier(WishlistCityRemovalConfirmation(city: $removingCity, wishlist: wishlist))
         .alert("Couldn’t open city", isPresented: $showOpenError) {
             Button("OK", role: .cancel) {}
         } message: {

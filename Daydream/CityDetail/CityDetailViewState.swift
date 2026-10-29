@@ -29,6 +29,7 @@ final class CityDetailViewState {
     var tappedSheetPlace: IdentifiablePlace?
     var showErrorAlert = false
     var wishlistCity: RandomCity?
+    var removingWishlistCity: RandomCity?
     @ObservationIgnored private var placesRequestID = UUID()
 
     init(wishlistCity: RandomCity? = nil) {

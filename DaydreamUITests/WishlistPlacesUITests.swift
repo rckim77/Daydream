@@ -34,11 +34,15 @@ final class WishlistPlacesUITests: XCTestCase {
 
         func reveal(_ element: XCUIElement) {
             for _ in 0..<7 {
-                if element.isHittable { return }
+                let frame = element.frame
+                if frame.minY >= window.frame.height * 0.12,
+                   frame.maxY <= window.frame.height * 0.8, element.isHittable { return }
                 // Scroll beside the embedded map and horizontally scrolling place cards.
-                window.coordinate(withNormalizedOffset: CGVector(dx: 0.02, dy: 0.8))
+                let start: CGFloat = frame.midY > window.frame.midY ? 0.8 : 0.3
+                let end: CGFloat = frame.midY > window.frame.midY ? 0.3 : 0.8
+                window.coordinate(withNormalizedOffset: CGVector(dx: 0.02, dy: start))
                     .press(forDuration: 0.05, thenDragTo:
-                        window.coordinate(withNormalizedOffset: CGVector(dx: 0.02, dy: 0.25)))
+                        window.coordinate(withNormalizedOffset: CGVector(dx: 0.02, dy: end)))
             }
             XCTAssertTrue(element.isHittable, "Expected control to be visible: \(element.identifier)")
         }
@@ -64,6 +68,20 @@ final class WishlistPlacesUITests: XCTestCase {
             XCTAssertTrue(button.waitForExistence(timeout: 10))
             button.tap()
             XCTAssertTrue(app.navigationBars["Wishlist"].waitForExistence(timeout: 5))
+        }
+
+        func removalAlert() -> XCUIElement {
+            let alert = app.alerts["Are you sure?"]
+            XCTAssertTrue(alert.waitForExistence(timeout: 5))
+            XCTAssertTrue(alert.staticTexts["Unfavoriting Tokyo will also clear all of its favorited sights and eateries."].exists)
+            return alert
+        }
+
+        func revealCityRemoval(_ header: XCUIElement) {
+            header.coordinate(withNormalizedOffset: CGVector(dx: 0.85, dy: 0.5))
+                .press(forDuration: 0.05, thenDragTo:
+                    header.coordinate(withNormalizedOffset: CGVector(dx: 0.35, dy: 0.5)))
+            app.buttons["Remove city"].tap()
         }
 
         let city = app.buttons["city-loaded-Tokyo"]
@@ -107,9 +125,12 @@ final class WishlistPlacesUITests: XCTestCase {
             for _ in 0..<8 {
                 let frame = restaurant.frame
                 if frame.minX >= 16, frame.maxX <= window.frame.width - 16, restaurant.isHittable { break }
-                carousel.coordinate(withNormalizedOffset: CGVector(dx: 0.85, dy: 0.5))
+                let delta = max(-0.75, min(0.75, (window.frame.midX - frame.midX) / carousel.frame.width))
+                let start: CGFloat = delta < 0 ? 0.875 : 0.125
+                carousel.coordinate(withNormalizedOffset: CGVector(dx: start, dy: 0.5))
                     .press(forDuration: 0.05, thenDragTo:
-                        carousel.coordinate(withNormalizedOffset: CGVector(dx: 0.15, dy: 0.5)))
+                        carousel.coordinate(withNormalizedOffset: CGVector(dx: start + delta, dy: 0.5)),
+                        withVelocity: .slow, thenHoldForDuration: 0.1)
             }
             XCTAssertTrue(restaurant.isHittable, "Preferred restaurant must be reachable in its carousel")
         }
@@ -121,7 +142,20 @@ final class WishlistPlacesUITests: XCTestCase {
         raiseForCapture(eatery)
         try capture("02-saved-eatery")
 
+        reveal(cityHeart)
+        cityHeart.tap()
+        removalAlert().buttons["Cancel"].tap()
+        waitForSaved(cityHeart)
+        waitForSaved(sight)
+        waitForSaved(eatery)
+
         app.buttons["home-button"].tap()
+        let discoveryHeart = app.buttons["wishlist-toggle-Tokyo"]
+        XCTAssertTrue(discoveryHeart.waitForExistence(timeout: 10))
+        reveal(discoveryHeart)
+        discoveryHeart.tap()
+        removalAlert().buttons["Cancel"].tap()
+        waitForSaved(discoveryHeart)
         openWishlist()
         try capture("wishlist-before-check")
         let explore = app.buttons["wishlist-explore-Tokyo"]
@@ -162,6 +196,13 @@ final class WishlistPlacesUITests: XCTestCase {
         XCTAssertTrue(savedSight.waitForExistence(timeout: 10), "Sight persists across relaunch")
         XCTAssertTrue(savedEatery.waitForExistence(timeout: 10), "Eatery persists across relaunch")
 
+        revealCityRemoval(header)
+        let wishlistAlert = removalAlert()
+        try capture("05-city-removal-confirmation")
+        wishlistAlert.buttons["Cancel"].tap()
+        XCTAssertTrue(savedSight.waitForExistence(timeout: 5), "Cancelling city removal preserves its sights")
+        XCTAssertTrue(savedEatery.waitForExistence(timeout: 5), "Cancelling city removal preserves its eateries")
+
         savedSight.coordinate(withNormalizedOffset: CGVector(dx: 0.85, dy: 0.5))
             .press(forDuration: 0.05, thenDragTo:
                 savedSight.coordinate(withNormalizedOffset: CGVector(dx: 0.35, dy: 0.5)))
@@ -169,13 +210,8 @@ final class WishlistPlacesUITests: XCTestCase {
         XCTAssertFalse(savedSight.exists)
         XCTAssertTrue(savedEatery.exists)
 
-        header.coordinate(withNormalizedOffset: CGVector(dx: 0.85, dy: 0.5))
-            .press(forDuration: 0.05, thenDragTo:
-                header.coordinate(withNormalizedOffset: CGVector(dx: 0.35, dy: 0.5)))
-        app.buttons["Remove city"].tap()
-        let removeCity = app.buttons["Remove Tokyo and saved places"]
-        XCTAssertTrue(removeCity.waitForExistence(timeout: 5))
-        removeCity.tap()
+        revealCityRemoval(header)
+        removalAlert().buttons["Remove city"].tap()
         XCTAssertTrue(app.staticTexts["Your next adventure starts here"].waitForExistence(timeout: 5))
     }
 }

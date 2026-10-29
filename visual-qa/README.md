@@ -31,7 +31,7 @@ The check uses bounded waits and at most five edge swipes per navigation step. I
 
 ## Wishlist places verification
 
-`WishlistPlacesUITests/testSavedPlacesAndCollapsibleCities` is an opt-in live-service check for saving sights/eateries, automatically saving their city, expanding/collapsing the city's Wishlist section, opening map/reviews, relaunch persistence, and removing places/cities. Each run uses a separate Debug-only wishlist defaults domain, preserving the simulator's personal favorites. It reuses the installed app and existing simulator without uninstalling, resetting, or cloning it.
+`WishlistPlacesUITests/testSavedPlacesAndCollapsibleCities` is an opt-in live-service check for saving sights/eateries, automatically saving their city, expanding/collapsing the city's Wishlist section, opening map/reviews, relaunch persistence, and removing places/cities. It verifies the **Are you sure?** alert from discovery, city detail, and Wishlist, with cancellation preserving children and confirmed city removal clearing them. Each run uses a separate Debug-only wishlist defaults domain, preserving the simulator's personal favorites. It reuses the installed app and existing simulator without uninstalling, resetting, or cloning it.
 
 Enable a focused run with an expiring host configuration:
 
@@ -52,4 +52,4 @@ DEVELOPER_DIR=/Applications/Xcode_27.1.app/Contents/Developer xcodebuild test \
   -parallel-testing-enabled NO -jobs 2 CODE_SIGNING_ALLOWED=NO
 ```
 
-Omit `outputDirectory` to run without saving screenshots. When set, the test captures the saved sight/eatery controls and expanded/collapsed Wishlist with matching accessibility hierarchies. Reuse the same output directory for the current capture run, preserving existing standalone evidence. Inspect the PNGs after capture; successful assertions alone do not verify layout or rendered photos. Remove the temporary configuration after the run to disable it.
+Omit `outputDirectory` to run without saving screenshots. When set, the test captures the saved sight/eatery controls, expanded/collapsed Wishlist, and city removal confirmation with matching accessibility hierarchies. Reuse the same output directory for the current capture run, preserving existing standalone evidence. Inspect the PNGs after capture; successful assertions alone do not verify layout or rendered photos. Remove the temporary configuration after the run to disable it.

@@ -18,6 +18,7 @@ struct CitiesView: View {
     @State private var selectedCity: CityRoute?
     @State private var showFeedbackModal = false
     @State private var showErrorAlert = false
+    @State private var removingCity: RandomCity?
     @State private var wishlist: WishlistStore
 
     init() {
@@ -69,7 +70,13 @@ struct CitiesView: View {
                     CityCardsLayout(columns: columns, spacing: spacing, layoutDirection: layoutDirection) {
                         ForEach(cities) { city in
                             CityCardView(city: city, width: cardWidth, minimumHeight: minimumCardHeight,
-                                         isSaved: wishlist.contains(city), onWishlistToggle: { wishlist.toggle(city) }) { place in
+                                         isSaved: wishlist.contains(city), onWishlistToggle: {
+                                if wishlist.contains(city), !wishlist.places(in: city).isEmpty {
+                                    removingCity = city
+                                } else {
+                                    wishlist.toggle(city)
+                                }
+                            }) { place in
                                 selectedCity = CityRoute(name: city.city, place: place, wishlistCity: city)
                             }
                             .matchedTransitionSource(id: city.city, in: zoomNS) { source in
@@ -130,6 +137,7 @@ struct CitiesView: View {
                     .navigationTransition(.zoom(sourceID: item.name, in: zoomNS))
             }
         }
+        .modifier(WishlistCityRemovalConfirmation(city: $removingCity, wishlist: wishlist))
         .sheet(isPresented: $showFeedbackModal) {
             FeedbackSheet()
                 .presentationDetents([.medium])
