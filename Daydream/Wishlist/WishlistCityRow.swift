@@ -35,7 +35,8 @@ struct WishlistCityRow: View {
             .accessibilityLabel("Explore \(city.city), \(city.country)")
             .accessibilityIdentifier("wishlist-city-\(city.city)")
             .swipeActions {
-                Button("Remove", systemImage: "heart.slash", role: .destructive, action: onRemoveCity)
+                Button("Remove", systemImage: "heart.slash", action: onRemoveCity)
+                    .tint(.red)
             }
         } else {
             DisclosureGroup(isExpanded: $isExpanded) {
@@ -76,7 +77,10 @@ struct WishlistCityRow: View {
                 .accessibilityIdentifier("wishlist-city-section-\(city.city)")
             }
             .swipeActions {
-                Button("Remove city", systemImage: "heart.slash", role: .destructive, action: onRemoveCity)
+                // A destructive swipe optimistically deletes one row before confirmation,
+                // which conflicts with this disclosure group's dynamically expanded children.
+                Button("Remove city", systemImage: "heart.slash", action: onRemoveCity)
+                    .tint(.red)
             }
         }
     }

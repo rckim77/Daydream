@@ -53,7 +53,8 @@ struct WishlistPlaceRow: View {
         .accessibilityIdentifier("wishlist-place-\(savedPlace.placeID)")
         .accessibilityHint(place == nil ? "Retry loading place details" : "Open map and reviews")
         .swipeActions {
-            Button("Remove", systemImage: "heart.slash", role: .destructive, action: onRemove)
+            Button("Remove", systemImage: "heart.slash", action: onRemove)
+                .tint(.red)
         }
         .task(id: retryID) {
             isLoading = true
