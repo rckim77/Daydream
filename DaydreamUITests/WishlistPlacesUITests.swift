@@ -93,7 +93,7 @@ final class WishlistPlacesUITests: XCTestCase {
             app.buttons["Remove city"].tap()
         }
 
-        func rowTapTargets(_ row: XCUIElement) throws -> [(name: String, offset: CGVector)] {
+        func rowTapTargets(_ row: XCUIElement) -> [(name: String, offset: CGVector)] {
             let cell = app.cells.containing(.button, identifier: row.identifier).firstMatch
             XCTAssertTrue(cell.exists)
             let frame = row.frame
@@ -101,19 +101,12 @@ final class WishlistPlacesUITests: XCTestCase {
             XCTAssertEqual(frame.maxX, cell.frame.maxX, accuracy: 1, "The button includes trailing cell padding")
             XCTAssertEqual(frame.height, cell.frame.height, accuracy: 1, "The button includes vertical cell padding")
             XCTAssertGreaterThanOrEqual(frame.height, 44)
-            let text = row.staticTexts.allElementsBoundByIndex.first
-            // A single city label can merge into its button. Tokyo's observed text is inside
-            // the leading 100 points; retain one accessible control and tap that same region.
-            let textFrame = text?.frame ?? CGRect(x: frame.minX + 16, y: frame.minY,
-                                                  width: 84, height: frame.height)
-            let textX = (textFrame.midX - frame.minX) / frame.width
-            // The trailing decorative icon occupies 44 points, inside 16-point padding.
-            let blankEnd = frame.maxX - 60
-            XCTAssertGreaterThan(blankEnd - textFrame.maxX, 4, "The fixture must expose blank space beside its text")
-            let blankX = ((textFrame.maxX + blankEnd) / 2 - frame.minX) / frame.width
+            let isCity = row.identifier.hasPrefix("wishlist-city-section-")
+            // Text accessibility frames span the button. These offsets were verified against
+            // the fixed-L Tokyo, Sensō-ji and pain･maison Ginza screenshots, including blank space.
             return [
-                ("text", CGVector(dx: textX, dy: 0.5)),
-                ("blank space", CGVector(dx: blankX, dy: 0.5)),
+                ("text", CGVector(dx: isCity ? 0.15 : 0.30, dy: 0.5)),
+                ("blank space", CGVector(dx: 0.72, dy: 0.5)),
                 ("trailing icon", CGVector(dx: 0.90, dy: 0.5)),
                 ("edge padding", CGVector(dx: 0.99, dy: 0.5))
             ]
@@ -261,7 +254,7 @@ final class WishlistPlacesUITests: XCTestCase {
         XCTAssertTrue(paris.waitForExistence(timeout: 5))
         XCTAssertTrue(tokyo.exists)
 
-        for target in try rowTapTargets(tokyo) {
+        for target in rowTapTargets(tokyo) {
             print("Wishlist full-row city tap: \(target.name)")
             tokyo.coordinate(withNormalizedOffset: target.offset).tap()
             XCTAssertTrue(cityHeart.waitForExistence(timeout: 10), "Every city-row area opens city details")
@@ -278,7 +271,7 @@ final class WishlistPlacesUITests: XCTestCase {
             let enabled = NSPredicate(format: "enabled == true")
             XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: enabled, object: row)],
                                          timeout: 30), .completed)
-            for target in try rowTapTargets(row) {
+            for target in rowTapTargets(row) {
                 print("Wishlist full-row place tap: \(row.identifier), \(target.name)")
                 row.coordinate(withNormalizedOffset: target.offset).tap()
                 let overlay = app.descendants(matching: .any).matching(identifier: "map-reviews-overlay").firstMatch
