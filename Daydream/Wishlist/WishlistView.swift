@@ -8,6 +8,8 @@ struct WishlistView: View {
     @State private var openingCity: RandomCity?
     @State private var selectedCity: CityRoute?
     @State private var showOpenError = false
+    @State private var selectedPlace: IdentifiablePlace?
+    @State private var removingCity: RandomCity?
 
     var body: some View {
         let sections = selectedContinent.sections(from: wishlist.countrySections)
@@ -16,33 +18,17 @@ struct WishlistView: View {
             ForEach(sections) { section in
                 Section {
                     ForEach(section.cities) { city in
-                        Button {
+                        WishlistCityRow(city: city, wishlist: wishlist, isOpening: openingCity?.id == city.id) {
                             openingCity = city
-                        } label: {
-                            HStack(spacing: 16) {
-                                Text(city.city)
-                                    .font(.headline)
-                                    .foregroundStyle(.primary)
-                                Spacer(minLength: 8)
-                                if openingCity?.id == city.id {
-                                    ProgressView()
-                                        .accessibilityLabel("Opening city")
-                                } else {
-                                    Image(systemName: "chevron.right")
-                                        .font(.footnote.weight(.semibold))
-                                        .foregroundStyle(.tertiary)
-                                        .accessibilityHidden(true)
-                                }
+                        } onOpenPlace: { place in
+                            selectedPlace = IdentifiablePlace(place: place)
+                        } onRemoveCity: {
+                            if wishlist.places(in: city).isEmpty {
+                                wishlist.remove([city])
+                            } else {
+                                removingCity = city
                             }
-                            .frame(minHeight: 44)
-                            .contentShape(Rectangle())
                         }
-                        .buttonStyle(.plain)
-                        .accessibilityLabel("Explore \(city.city), \(section.country)")
-                        .accessibilityIdentifier("wishlist-city-\(city.city)")
-                    }
-                    .onDelete { offsets in
-                        wishlist.remove(offsets.map { section.cities[$0] })
                     }
                 } header: {
                     HStack(spacing: 8) {
@@ -59,7 +45,7 @@ struct WishlistView: View {
                     .accessibilityIdentifier("wishlist-country-\(section.country)")
                 } footer: {
                     if section.id == sections.last?.id {
-                        Text("Tap a city to explore. Swipe to remove. Saved on this device.")
+                        Text("Tap a city with saved places to expand or collapse it. Swipe to remove a place or city. Saved on this device.")
                     }
                 }
             }
@@ -73,7 +59,7 @@ struct WishlistView: View {
                 ContentUnavailableView {
                     Label("Your next adventure starts here", systemImage: "heart")
                 } description: {
-                    Text("Tap the heart on a city to keep it in your wishlist.")
+                    Text("Tap the heart on a city, sight, or eatery to keep it in your wishlist.")
                 }
                 .background(Color(uiColor: .systemGroupedBackground))
                 .transition(.opacity)
@@ -95,6 +81,21 @@ struct WishlistView: View {
         .navigationTitle("Wishlist")
         .fullScreenCover(item: $selectedCity) { route in
             CityDetailView(place: route.place, wishlist: wishlist, sourceCity: route.wishlistCity)
+        }
+        .fullScreenCover(item: $selectedPlace) { place in
+            MapDetailView(place: place.place)
+        }
+        .confirmationDialog("Remove city and its saved places?", isPresented: Binding(
+            get: { removingCity != nil },
+            set: { if !$0 { removingCity = nil } }
+        ), titleVisibility: .visible) {
+            if let city = removingCity {
+                Button("Remove \(city.city) and saved places", role: .destructive) {
+                    wishlist.remove([city])
+                    removingCity = nil
+                }
+            }
+            Button("Cancel", role: .cancel) { removingCity = nil }
         }
         .alert("Couldn’t open city", isPresented: $showOpenError) {
             Button("OK", role: .cancel) {}

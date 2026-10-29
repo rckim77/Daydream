@@ -100,4 +100,21 @@ struct CityDetailViewStateTests {
 
         #expect(recorder.calls.isEmpty)
     }
+
+    @Test("an earlier city request cannot continue loading after a newer request")
+    func cityChangeInvalidatesOldPlaces() async {
+        let viewState = CityDetailViewState()
+        let recorder = PlaceFetchRecorder()
+        await viewState.loadSightsAndEateries(placeId: "old-city") { placeId, type, maxCount in
+            recorder.calls.append((placeId, type, maxCount))
+            // Simulate a city change while the first request is suspended.
+            await viewState.loadSightsAndEateries(placeId: "new-city") { placeId, type, maxCount in
+                recorder.calls.append((placeId, type, maxCount))
+                return []
+            }
+            return []
+        }
+        #expect(recorder.calls.map(\.placeId) == ["old-city", "new-city", "new-city"])
+        #expect(recorder.calls.map(\.type) == [.sights, .sights, .eateries])
+    }
 }

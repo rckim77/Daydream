@@ -28,3 +28,28 @@ The dedicated `VisualQA` scheme and `visualqa.xctestplan` keep captures separate
 `PlacesReviewsOverlayUITests/testGoogleReviewsOverlay` runs one live-service smoke check in portrait with standard text: open a place card, wait for it to load, and dismiss the map. Set `DAYDREAM_LIVE_PLACES_UI_TESTS=1` in the test runner's environment to enable it; otherwise it skips. Existing local keys must permit Places UI Kit.
 
 The check uses bounded waits and at most five edge swipes per navigation step. It does not capture screenshots, write files, sweep devices/orientations, or inspect Google's review/photo content. Use one dedicated simulator with two build jobs and serial tests. No credentials or Cloud settings are changed.
+
+## Wishlist places verification
+
+`WishlistPlacesUITests/testSavedPlacesAndCollapsibleCities` is an opt-in live-service check for saving sights/eateries, automatically saving their city, expanding/collapsing the city's Wishlist section, opening map/reviews, relaunch persistence, and removing places/cities. Each run uses a separate Debug-only wishlist defaults domain, preserving the simulator's personal favorites. It reuses the installed app and existing simulator without uninstalling, resetting, or cloning it.
+
+Enable a focused run with an expiring host configuration:
+
+```bash
+python3 - <<'PY'
+import json, time
+from pathlib import Path
+Path('/tmp/daydream-wishlist-ui-config.json').write_text(json.dumps({
+    'enabled': True,
+    'expiresAt': time.time() + 3600,
+    'outputDirectory': '/Users/raykim/Desktop/Screenshots/DaydreamWishlist'
+}))
+PY
+DEVELOPER_DIR=/Applications/Xcode_27.1.app/Contents/Developer xcodebuild test \
+  -project Daydream.xcodeproj -scheme VisualQA -testPlan visualqa \
+  -destination 'platform=iOS Simulator,id=EXISTING_DEVICE_UDID' \
+  -only-testing:DaydreamUITests/WishlistPlacesUITests \
+  -parallel-testing-enabled NO -jobs 2 CODE_SIGNING_ALLOWED=NO
+```
+
+Omit `outputDirectory` to run without saving screenshots. When set, the test captures the saved sight/eatery controls and expanded/collapsed Wishlist with matching accessibility hierarchies. Reuse the same output directory for the current capture run, preserving existing standalone evidence. Inspect the PNGs after capture; successful assertions alone do not verify layout or rendered photos. Remove the temporary configuration after the run to disable it.

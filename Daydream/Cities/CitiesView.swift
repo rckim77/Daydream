@@ -18,7 +18,19 @@ struct CitiesView: View {
     @State private var selectedCity: CityRoute?
     @State private var showFeedbackModal = false
     @State private var showErrorAlert = false
-    @State private var wishlist = WishlistStore()
+    @State private var wishlist: WishlistStore
+
+    init() {
+        var defaults = UserDefaults.standard
+        #if DEBUG
+        // UI runs use their own domain, preserving personal simulator favorites.
+        if let suite = ProcessInfo.processInfo.environment["DAYDREAM_WISHLIST_TEST_SUITE"],
+           suite.hasPrefix("Daydream.WishlistUITests."), let isolated = UserDefaults(suiteName: suite) {
+            defaults = isolated
+        }
+        #endif
+        _wishlist = State(initialValue: WishlistStore(defaults: defaults))
+    }
     
     // MARK: - Current Location
     /// This ensures navigation to current location city is gated behind user interaction.

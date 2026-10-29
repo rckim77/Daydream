@@ -3,7 +3,11 @@ Explore cities around the world
 
 ## Wishlist
 
-Tap the heart at the top-right of a discovery city image to save it, even while its photo is loading or unavailable. In city details, the circular glass heart at the trailing edge of the city name and flag row shows whether it is saved; tap it to add or remove that city, including cities opened through search, random selection, or current location. Open the heart at the top of the Cities toolbar to view your wishlist, grouped alphabetically by country with country flags and alphabetical city names. Use the wrapping tags above the list to show All, Asia, North America, South America, Europe, Africa, or Oceania. Country groups stay alphabetical within the selected continent. Tap a saved city to explore it, or swipe to remove it. Saved cities stay on this device between launches. Browsing and removing favorites work offline; opening city details requires Places access. The icon-only toolbar item appears at the top of iPhone Duo’s vertical toolbar.
+Tap a city's heart to save it from discovery or city details. Each sight and eatery card also has a **Save to wishlist** heart below its Google content. Saving a place automatically saves its city if needed, including cities opened through search, random selection, or current location.
+
+Open the heart in the Cities toolbar to see favorites grouped alphabetically by country, with country flags and continent filters. Cities with saved places show sight/eatery counts and start expanded. Tap the city header to collapse or expand its places; use **Explore city** to open city details. Tap a saved place to open its map and reviews. Swipe a place to remove it; removing the last place keeps the city saved. Removing a city also removes its places; swiping a city with saved places asks for confirmation.
+
+Favorites stay on this device between launches, and existing city favorites are retained. Place bookmarks persist only a place ID and the user's sight/eatery category, following [Google's Places storage policy](https://developers.google.com/maps/documentation/places/ios-sdk/policies). Names and details are loaded when displayed, with Google Maps attribution. Offline, you can still see counts and remove bookmarks; unavailable details show a retry action. Opening city or place details requires Places access.
 
 [Download on the App Store](https://apps.apple.com/us/app/daydream-explore-cities/id1366747814)
 

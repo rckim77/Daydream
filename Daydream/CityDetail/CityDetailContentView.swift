@@ -63,6 +63,8 @@ struct CityDetailContentView: View {
                     CityDiscoveriesView(
                         sights: viewState.sights,
                         eateries: viewState.eateries,
+                        wishlistCity: wishlistCity,
+                        wishlist: wishlist,
                         tappedPlace: Binding(
                             get: { viewState.tappedSheetPlace ?? viewState.tappedCardPlace },
                             set: { viewState.presentMap($0, asSheet: isLandscape) }

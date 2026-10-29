@@ -29,6 +29,7 @@ final class CityDetailViewState {
     var tappedSheetPlace: IdentifiablePlace?
     var showErrorAlert = false
     var wishlistCity: RandomCity?
+    @ObservationIgnored private var placesRequestID = UUID()
 
     init(wishlistCity: RandomCity? = nil) {
         self.wishlistCity = wishlistCity
@@ -67,6 +68,10 @@ final class CityDetailViewState {
     }
 
     func applySelectedCity(_ place: Place, wishlistCity: RandomCity? = nil) {
+        // Old cards must disappear before favorites can be added under the next city.
+        placesRequestID = UUID()
+        sights = []
+        eateries = []
         mapPosition = createMapPosition(place.location)
         self.wishlistCity = wishlistCity
     }
@@ -102,6 +107,8 @@ final class CityDetailViewState {
         placeId: String?,
         fetchPlaces: (String, API.PlaceSearch.PlaceSearchType, Int) async throws -> [Place]
     ) async {
+        let requestID = UUID()
+        placesRequestID = requestID
         guard let placeId else {
             return
         }
@@ -110,8 +117,12 @@ final class CityDetailViewState {
         let maxResultCount = 12
 
         do {
-            sights = try await fetchPlaces(placeId, .sights, maxResultCount)
-            eateries = try await fetchPlaces(placeId, .eateries, maxResultCount)
+            let newSights = try await fetchPlaces(placeId, .sights, maxResultCount)
+            guard !Task.isCancelled, placesRequestID == requestID else { return }
+            sights = newSights
+            let newEateries = try await fetchPlaces(placeId, .eateries, maxResultCount)
+            guard !Task.isCancelled, placesRequestID == requestID else { return }
+            eateries = newEateries
         } catch {
             return
         }

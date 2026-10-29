@@ -213,4 +213,107 @@ struct WishlistStoreTests {
             #expect(WishlistContinentFilter.europe.sections(from: store.countrySections).first?.cities == [paris])
         }
     }
+
+    @Test("saving a sight or eatery also saves its city and restores both together")
+    func placeAutoSavesCity() throws {
+        try withDefaults { defaults in
+            let store = WishlistStore(defaults: defaults)
+            store.togglePlace(placeID: "tower", kind: .sight, in: paris)
+            store.togglePlace(placeID: "cafe", kind: .eatery, in: paris)
+            #expect(store.cities == [paris])
+            let restored = WishlistStore(defaults: defaults)
+            #expect(restored.contains(paris))
+            #expect(restored.places(in: paris) == [
+                WishlistPlace(placeID: "tower", kind: .sight),
+                WishlistPlace(placeID: "cafe", kind: .eatery)
+            ])
+        }
+    }
+
+    @Test("removing the last place keeps its city favorited across relaunch")
+    func removeLastPlace() throws {
+        try withDefaults { defaults in
+            let store = WishlistStore(defaults: defaults)
+            store.togglePlace(placeID: "tower", kind: .sight, in: paris)
+            store.togglePlace(placeID: "tower", kind: .sight, in: paris)
+            let restored = WishlistStore(defaults: defaults)
+            #expect(restored.contains(paris))
+            #expect(restored.places(in: paris).isEmpty)
+        }
+    }
+
+    @Test("place identity is unique within a city and remains scoped to that city")
+    func placeIdentityAndCityScope() throws {
+        try withDefaults { defaults in
+            let store = WishlistStore(defaults: defaults)
+            store.togglePlace(placeID: "shared", kind: .sight, in: paris)
+            store.togglePlace(placeID: "shared", kind: .eatery, in: tokyo)
+            #expect(store.contains(placeID: "shared", in: paris))
+            #expect(store.contains(placeID: "shared", in: tokyo))
+            // The same place appearing in another carousel toggles the existing bookmark.
+            store.togglePlace(placeID: "shared", kind: .eatery, in: paris)
+            #expect(store.places(in: paris).isEmpty)
+            #expect(store.places(in: tokyo).count == 1)
+        }
+    }
+
+    @Test("removing a city removes its places without changing another city")
+    func cascadingCityRemoval() throws {
+        try withDefaults { defaults in
+            let store = WishlistStore(defaults: defaults)
+            store.togglePlace(placeID: "tower", kind: .sight, in: paris)
+            store.togglePlace(placeID: "cafe", kind: .eatery, in: tokyo)
+            store.remove([paris])
+            let restored = WishlistStore(defaults: defaults)
+            #expect(restored.cities == [tokyo])
+            #expect(restored.places(in: paris).isEmpty)
+            #expect(restored.contains(placeID: "cafe", in: tokyo))
+            // Re-adding a removed city must not resurrect its old bookmarks.
+            restored.toggle(paris)
+            #expect(restored.places(in: paris).isEmpty)
+            restored.toggle(tokyo)
+            #expect(WishlistStore(defaults: defaults).places(in: tokyo).isEmpty)
+        }
+    }
+
+    @Test("adding places migrates legacy city favorites without losing them")
+    func migrateLegacyCities() throws {
+        try withDefaults { defaults in
+            defaults.set(try JSONEncoder().encode([tokyo, paris]), forKey: "wishlist.cities.v1")
+            let store = WishlistStore(defaults: defaults)
+            store.togglePlace(placeID: "tower", kind: .sight, in: paris)
+            let restored = WishlistStore(defaults: defaults)
+            #expect(restored.cities == [tokyo, paris])
+            #expect(restored.contains(placeID: "tower", in: paris))
+            #expect(defaults.data(forKey: "wishlist.v2") != nil)
+            restored.remove([tokyo, paris])
+            let empty = WishlistStore(defaults: defaults)
+            #expect(empty.cities.isEmpty, "A migrated empty wishlist must not resurrect legacy favorites")
+            #expect(empty.placesByCity.isEmpty)
+        }
+    }
+
+    @Test("empty place IDs cannot create bookmarks or automatically favorite a city")
+    func invalidPlaceID() throws {
+        try withDefaults { defaults in
+            let store = WishlistStore(defaults: defaults)
+            store.togglePlace(placeID: "  ", kind: .sight, in: paris)
+            #expect(store.cities.isEmpty)
+            #expect(store.placesByCity.isEmpty)
+        }
+    }
+
+    @Test("bookmark storage contains only the place ID and user category")
+    func bookmarkStorageFields() throws {
+        try withDefaults { defaults in
+            let store = WishlistStore(defaults: defaults)
+            store.togglePlace(placeID: "tower", kind: .sight, in: paris)
+            let data = try #require(defaults.data(forKey: "wishlist.v2"))
+            let json = try #require(JSONSerialization.jsonObject(with: data) as? [String: Any])
+            let cities = try #require(json["placesByCity"] as? [String: [[String: Any]]])
+            let bookmark = try #require(cities[paris.id]?.first)
+            #expect(Set(bookmark.keys) == ["placeID", "kind"])
+        }
+    }
+
 }
