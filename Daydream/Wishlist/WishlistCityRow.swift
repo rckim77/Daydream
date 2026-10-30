@@ -21,8 +21,8 @@ struct WishlistCityRow: View {
                         ProgressView()
                     } else {
                         Image(systemName: "arrow.up.right")
-                            .font(.system(size: 20, weight: .semibold))
-                            .foregroundStyle(.primary)
+                            .font(.body)
+                            .foregroundStyle(.secondary)
                     }
                 }
                 .frame(width: 44, height: 44)

@@ -33,8 +33,8 @@ struct WishlistPlaceRow: View {
                         ProgressView()
                     } else {
                         Image(systemName: place == nil ? "arrow.clockwise" : "map")
-                            .font(.system(size: 20, weight: .semibold))
-                            .foregroundStyle(.primary)
+                            .font(.body)
+                            .foregroundStyle(.secondary)
                     }
                 }
                 .frame(width: 44, height: 44)
