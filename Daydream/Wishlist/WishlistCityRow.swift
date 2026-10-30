@@ -26,6 +26,7 @@ struct WishlistCityRow: View {
                     }
                 }
                 .frame(width: 44, height: 44)
+                .glassEffect(.regular.interactive(), in: .circle)
                 .accessibilityHidden(true)
             }
             .padding(.horizontal, 16)

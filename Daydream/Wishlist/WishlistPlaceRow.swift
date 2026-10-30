@@ -38,6 +38,7 @@ struct WishlistPlaceRow: View {
                     }
                 }
                 .frame(width: 44, height: 44)
+                .glassEffect(.regular.interactive(), in: .circle)
                 .accessibilityHidden(true)
             }
             .padding(EdgeInsets(top: 4, leading: 32, bottom: 4, trailing: 16))
