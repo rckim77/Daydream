@@ -161,7 +161,6 @@ struct CityDetailView: View {
     }
 
     private func selectCity(_ selectedPlace: Place) {
-        // Keep the current cards and in-flight request when the city has not changed.
         if let currentID = place.placeID, !currentID.isEmpty,
            currentID == selectedPlace.placeID {
             return

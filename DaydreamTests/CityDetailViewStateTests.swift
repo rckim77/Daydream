@@ -107,7 +107,6 @@ struct CityDetailViewStateTests {
         let recorder = PlaceFetchRecorder()
         await viewState.loadSightsAndEateries(placeId: "old-city") { placeId, type, maxCount in
             recorder.calls.append((placeId, type, maxCount))
-            // Simulate a city change while the first request is suspended.
             await viewState.loadSightsAndEateries(placeId: "new-city") { placeId, type, maxCount in
                 recorder.calls.append((placeId, type, maxCount))
                 return []

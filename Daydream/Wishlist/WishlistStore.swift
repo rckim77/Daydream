@@ -88,7 +88,6 @@ final class WishlistStore {
     }
 
     func remove(_ removedCities: [RandomCity]) {
-        // Section offsets differ from storage order, so remove by stable city identity.
         let removedIDs = Set(removedCities.map(\.id))
         cities.removeAll { removedIDs.contains($0.id) }
         placesByCity = placesByCity.filter { !removedIDs.contains($0.key) }
@@ -109,7 +108,6 @@ final class WishlistStore {
             removePlace(placeID: placeID, from: city)
             return
         }
-        // Save the parent and bookmark together so a relaunch cannot leave orphaned places.
         if !contains(city) { cities.insert(city, at: 0) }
         placesByCity[city.id, default: []].append(WishlistPlace(placeID: placeID, kind: kind))
         persist()
@@ -117,7 +115,6 @@ final class WishlistStore {
 
     func removePlace(placeID: String, from city: RandomCity) {
         placesByCity[city.id]?.removeAll { $0.placeID == placeID }
-        // Removing the last place keeps the city the user has already saved.
         if placesByCity[city.id]?.isEmpty == true { placesByCity[city.id] = nil }
         persist()
     }

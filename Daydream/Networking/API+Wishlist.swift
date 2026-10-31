@@ -5,8 +5,7 @@ extension API.PlaceSearch {
     @MainActor
     static func fetchWishlistPlaceBy(placeID: String) async throws -> MapPlace {
         try Task.checkCancellation()
-        // The Swift SDK's async fetch can hop off-main inside its Obj-C bridge. Start the
-        // callback API on main and return only value data needed for the bookmark and map.
+        // Use the main-thread callback API to avoid the Swift SDK's async bridge thread hop.
         return try await withCheckedThrowingContinuation { continuation in
             let request = GMSFetchPlaceRequest(
                 placeID: placeID,

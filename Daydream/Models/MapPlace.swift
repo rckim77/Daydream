@@ -2,7 +2,6 @@ import CoreLocation
 import Foundation
 import GooglePlacesSwift
 
-/// In-memory map context shared by Swift Places results and callback-based bookmark lookups.
 struct MapPlace: Identifiable, Sendable {
     let id = UUID()
     let placeID: String?

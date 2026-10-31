@@ -38,7 +38,7 @@ struct WishlistCityRow: View {
         .accessibilityIdentifier("wishlist-city-section-\(city.city)")
         .listRowInsets(EdgeInsets())
         .swipeActions {
-            // Let the confirmation and data update drive deletion of the city and its places.
+            // Avoid destructive swipe actions deleting rows before confirmation.
             Button("Remove city", systemImage: "heart.slash", action: onRemoveCity)
                 .tint(.red)
         }

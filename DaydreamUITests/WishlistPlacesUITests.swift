@@ -102,8 +102,7 @@ final class WishlistPlacesUITests: XCTestCase {
             XCTAssertEqual(frame.height, cell.frame.height, accuracy: 1, "The button includes vertical cell padding")
             XCTAssertGreaterThanOrEqual(frame.height, 44)
             let isCity = row.identifier.hasPrefix("wishlist-city-section-")
-            // Text accessibility frames span the button. These offsets were verified against
-            // the fixed-L Tokyo, Sensō-ji and pain･maison Ginza screenshots, including blank space.
+            // Text accessibility frames span the button, so use offsets for each tap target.
             return [
                 ("text", CGVector(dx: isCity ? 0.15 : 0.30, dy: 0.5)),
                 ("blank space", CGVector(dx: 0.72, dy: 0.5)),

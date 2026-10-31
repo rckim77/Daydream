@@ -250,7 +250,6 @@ struct WishlistStoreTests {
             store.togglePlace(placeID: "shared", kind: .eatery, in: tokyo)
             #expect(store.contains(placeID: "shared", in: paris))
             #expect(store.contains(placeID: "shared", in: tokyo))
-            // The same place appearing in another carousel toggles the existing bookmark.
             store.togglePlace(placeID: "shared", kind: .eatery, in: paris)
             #expect(store.places(in: paris).isEmpty)
             #expect(store.places(in: tokyo).count == 1)
@@ -268,7 +267,6 @@ struct WishlistStoreTests {
             #expect(restored.cities == [tokyo])
             #expect(restored.places(in: paris).isEmpty)
             #expect(restored.contains(placeID: "cafe", in: tokyo))
-            // Re-adding a removed city must not resurrect its old bookmarks.
             restored.toggle(paris)
             #expect(restored.places(in: paris).isEmpty)
             restored.toggle(tokyo)

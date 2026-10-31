@@ -1,6 +1,5 @@
 import SwiftUI
 
-/// Use the same destructive confirmation wherever a city can be unfavorited.
 struct WishlistCityRemovalConfirmation: ViewModifier {
     @Binding var city: RandomCity?
     let wishlist: WishlistStore

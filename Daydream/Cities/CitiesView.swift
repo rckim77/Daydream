@@ -24,7 +24,6 @@ struct CitiesView: View {
     init() {
         var defaults = UserDefaults.standard
         #if DEBUG
-        // UI runs use their own domain, preserving personal simulator favorites.
         if let suite = ProcessInfo.processInfo.environment["DAYDREAM_WISHLIST_TEST_SUITE"],
            suite.hasPrefix("Daydream.WishlistUITests."), let isolated = UserDefaults(suiteName: suite) {
             defaults = isolated
