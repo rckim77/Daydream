@@ -20,13 +20,11 @@ struct WishlistCityRow: View {
                     if isOpening {
                         ProgressView()
                     } else {
-                        Image(systemName: "arrow.up.right")
+                        Image(systemName: "chevron.right")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                     }
                 }
-                .frame(width: 32, height: 32)
-                .glassEffect(.regular.interactive(), in: .circle)
                 .frame(width: 44, height: 44)
                 .accessibilityHidden(true)
             }

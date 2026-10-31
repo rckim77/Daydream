@@ -32,13 +32,11 @@ struct WishlistPlaceRow: View {
                     if isLoading {
                         ProgressView()
                     } else {
-                        Image(systemName: place == nil ? "arrow.clockwise" : "map")
+                        Image(systemName: "chevron.right")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                     }
                 }
-                .frame(width: 32, height: 32)
-                .glassEffect(.regular.interactive(), in: .circle)
                 .frame(width: 44, height: 44)
                 .accessibilityHidden(true)
             }
