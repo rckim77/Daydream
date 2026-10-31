@@ -22,24 +22,26 @@ struct PlaceCardView: View {
                     onViewMap: { tappedPlace = IdentifiablePlace(place: place) }
                 )
                 .id(placeID)
-                if let city = wishlistCity {
-                    let isSaved = wishlist.contains(placeID: placeID, in: city)
-                    Button {
-                        wishlist.togglePlace(placeID: placeID, kind: kind, in: city)
-                    } label: {
-                        Label(isSaved ? "Saved" : "Save to wishlist", systemImage: isSaved ? "heart.fill" : "heart")
-                            .font(.subheadline.weight(.semibold))
-                            .foregroundStyle(isSaved ? Color.pink : Color.primary)
-                            .frame(maxWidth: .infinity, minHeight: 44)
-                            .contentShape(Rectangle())
+                .overlay(alignment: .topLeading) {
+                    if let city = wishlistCity {
+                        let isSaved = wishlist.contains(placeID: placeID, in: city)
+                        Button {
+                            wishlist.togglePlace(placeID: placeID, kind: kind, in: city)
+                        } label: {
+                            Image(systemName: isSaved ? "heart.fill" : "heart")
+                                .font(.system(size: 20, weight: .semibold))
+                                .foregroundStyle(isSaved ? Color.pink : Color.primary)
+                                .frame(width: 44, height: 44)
+                                .contentShape(Circle())
+                        }
+                        .buttonStyle(.plain)
+                        .glassEffect(.regular.interactive(), in: .circle)
+                        .accessibilityLabel(isSaved ? "Remove \(place.displayName ?? "place") from wishlist" : "Save \(place.displayName ?? "place") to wishlist")
+                        .accessibilityValue(isSaved ? "Saved" : "Not saved")
+                        .accessibilityIdentifier("place-wishlist-\(kind.rawValue)-\(placeID)")
+                        .sensoryFeedback(.selection, trigger: isSaved)
+                        .padding(12)
                     }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel(isSaved ? "Remove \(place.displayName ?? "place") from wishlist" : "Save \(place.displayName ?? "place") to wishlist")
-                    .accessibilityValue(isSaved ? "Saved" : "Not saved")
-                    .accessibilityIdentifier("place-wishlist-\(kind.rawValue)-\(placeID)")
-                    .sensoryFeedback(.selection, trigger: isSaved)
-                    .padding(.horizontal, 8)
-                    .padding(.bottom, 8)
                 }
             } else {
                 RoundedRectangle(cornerRadius: 16)
