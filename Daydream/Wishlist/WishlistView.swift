@@ -45,6 +45,11 @@ struct WishlistView: View {
                         }
                     } label: {
                         HStack(spacing: 8) {
+                            Image(systemName: isCollapsed ? "arrowtriangle.right.fill" : "arrowtriangle.down.fill")
+                                .font(.system(size: 10))
+                                .foregroundStyle(.secondary)
+                                .frame(width: 12)
+                                .accessibilityHidden(true)
                             if let flag = section.flag {
                                 Text(flag)
                                     .accessibilityHidden(true)
@@ -52,10 +57,6 @@ struct WishlistView: View {
                             Text(section.country)
                                 .foregroundStyle(Color(uiColor: .label))
                             Spacer(minLength: 8)
-                            Image(systemName: isCollapsed ? "chevron.right" : "chevron.down")
-                                .font(.footnote.weight(.semibold))
-                                .foregroundStyle(.secondary)
-                                .accessibilityHidden(true)
                         }
                         .frame(minHeight: 44)
                         .contentShape(Rectangle())
