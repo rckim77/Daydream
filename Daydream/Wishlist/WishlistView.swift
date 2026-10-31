@@ -3,6 +3,7 @@ import SwiftUI
 
 struct WishlistView: View {
     let wishlist: WishlistStore
+    @Namespace private var zoomNS
 
     @State private var selectedContinent: WishlistContinentFilter = .all
     @State private var openingCity: RandomCity?
@@ -20,7 +21,8 @@ struct WishlistView: View {
                 Section {
                     if !collapsedCountries.contains(section.id) {
                         ForEach(section.cities) { city in
-                            WishlistCityRow(city: city, wishlist: wishlist, isOpening: openingCity?.id == city.id) {
+                            WishlistCityRow(city: city, wishlist: wishlist, zoomNamespace: zoomNS,
+                                            isOpening: openingCity?.id == city.id) {
                                 openingCity = city
                             } onOpenPlace: { place in
                                 selectedPlace = place
@@ -106,6 +108,7 @@ struct WishlistView: View {
         .navigationTitle("Wishlist")
         .fullScreenCover(item: $selectedCity) { route in
             CityDetailView(place: route.place, wishlist: wishlist, sourceCity: route.wishlistCity)
+                .navigationTransition(.zoom(sourceID: route.wishlistCity?.id ?? route.name, in: zoomNS))
         }
         .fullScreenCover(item: $selectedPlace) { place in
             MapDetailView(mapPlace: place)

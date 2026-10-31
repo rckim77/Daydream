@@ -3,6 +3,7 @@ import SwiftUI
 struct WishlistCityRow: View {
     let city: RandomCity
     let wishlist: WishlistStore
+    let zoomNamespace: Namespace.ID
     let isOpening: Bool
     let onOpenCity: () -> Void
     let onOpenPlace: (MapPlace) -> Void
@@ -36,6 +37,9 @@ struct WishlistCityRow: View {
         .buttonStyle(.plain)
         .accessibilityLabel("Explore \(city.city)")
         .accessibilityIdentifier("wishlist-city-section-\(city.city)")
+        .matchedTransitionSource(id: city.id, in: zoomNamespace) { source in
+            source.clipShape(RoundedRectangle(cornerRadius: 20))
+        }
         .listRowInsets(EdgeInsets())
         .swipeActions {
             // Avoid destructive swipe actions deleting rows before confirmation.
