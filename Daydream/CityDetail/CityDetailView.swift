@@ -60,17 +60,9 @@ struct CityDetailView: View {
             }
             .toolbar {
                 SearchToolbar { autocompletePlace in
-                    place = autocompletePlace
-                    viewState.applySelectedCity(place)
-                    Task {
-                        await fetchSightsAndEateries(place)
-                    }
+                    selectCity(autocompletePlace)
                 } randomCityReceived: { randomPlace in
-                    place = randomPlace
-                    viewState.applySelectedCity(place)
-                    Task {
-                        await fetchSightsAndEateries(place)
-                    }
+                    selectCity(randomPlace)
                 } currentLocationTapped: {
                     viewState.markCurrentLocationTapped()
                     guard let currentLocation = viewState.currentLocationToLoadImmediately(currentLocation: locationManager.location) else {
@@ -92,7 +84,7 @@ struct CityDetailView: View {
                     }
                 }
             }
-            .task {
+            .task(id: place.placeID) {
                 viewState.applySelectedCity(place, wishlistCity: viewState.wishlistCity)
                 await fetchSightsAndEateries(place)
                 viewState.seedPreviousCurrentLocation(locationManager.location)
@@ -165,8 +157,15 @@ struct CityDetailView: View {
 
     private func updateToCurrentCity(_ location: CLLocationCoordinate2D) async throws {
         let currentPlace = try await API.PlaceSearch.fetchCurrentCityBy(location)
-        place = currentPlace
-        viewState.applySelectedCity(place)
-        await fetchSightsAndEateries(place)
+        selectCity(currentPlace)
+    }
+
+    private func selectCity(_ selectedPlace: Place) {
+        if let currentID = place.placeID, !currentID.isEmpty,
+           currentID == selectedPlace.placeID {
+            return
+        }
+        place = selectedPlace
+        viewState.applySelectedCity(selectedPlace)
     }
 }

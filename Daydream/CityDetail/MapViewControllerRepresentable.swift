@@ -13,7 +13,7 @@ struct MapViewControllerRepresentable: UIViewControllerRepresentable {
 
     typealias UIViewControllerType = MapViewController
     
-    let place: Place
+    let place: MapPlace
     let isViewingDarkMode: Bool
     let isViewing3D: Bool
 

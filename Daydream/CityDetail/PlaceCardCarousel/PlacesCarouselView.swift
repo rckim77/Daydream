@@ -12,6 +12,9 @@ import GooglePlacesSwift
 struct PlacesCarouselView: View {
     
     let places: [Place]
+    let wishlistCity: RandomCity?
+    let wishlist: WishlistStore
+    let kind: WishlistPlace.Kind
     @Binding var tappedPlace: IdentifiablePlace?
     let fadesLeadingEdge: Bool
     var expandsCards = false
@@ -34,11 +37,13 @@ struct PlacesCarouselView: View {
             HStack(alignment: .top, spacing: 16) {
                 if places.isEmpty {
                     ForEach(1...placeholderCount, id: \.self) { _ in
-                        PlaceCardView(place: nil, tappedPlace: $tappedPlace, width: cardWidth)
+                        PlaceCardView(place: nil, wishlistCity: wishlistCity, wishlist: wishlist, kind: kind,
+                                      tappedPlace: $tappedPlace, width: cardWidth)
                     }
                 } else {
                     ForEach(places, id: \.placeID) { place in
-                        PlaceCardView(place: place, tappedPlace: $tappedPlace, width: cardWidth)
+                        PlaceCardView(place: place, wishlistCity: wishlistCity, wishlist: wishlist, kind: kind,
+                                      tappedPlace: $tappedPlace, width: cardWidth)
                     }
                 }
             }

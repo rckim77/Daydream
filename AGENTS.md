@@ -33,7 +33,7 @@ This file guides coding agents working in this repository.
 - Network/data access is namespaced under `API.PlaceSearch`.
 - Heavy use of async flows with `Task {}` and `async/await`.
 - Reuse `PlacesCache` for city place-data requests. Places UI Kit owns photo loading and caching; raw photo fetching and `ImageCache` have been removed.
-- `WishlistStore` persists curated `RandomCity` values in UserDefaults (`wishlist.cities.v1`). Do not persist Google place responses or photos. City identity includes name, country, and coordinates. Wishlist presentation groups country aliases together, adds flags, and sorts countries/cities alphabetically; there is no manual reordering.
+- `WishlistStore` persists `RandomCity` values and per-city place bookmarks atomically in UserDefaults (`wishlist.v2`), reading legacy `wishlist.cities.v1` favorites on first use. Place bookmarks contain only a place ID and the user-selected sight/eatery category. Do not persist Google place responses, names, or photos. Saved-place lookups use `API+Wishlist.swift` and the main-thread Objective-C callback API, returning transient `MapPlace` values instead of using the Swift async fetch bridge. Saving a place also saves its city; removing a city removes its places, while removing the last place keeps its city. All city unfavorite UI actions must show the shared `WishlistCityRemovalConfirmation` alert titled `Are you sure?` when the city has saved sights/eateries, explaining that those favorites will also be cleared. City identity includes name, country, and coordinates. Wishlist presentation groups country aliases together, adds flags, and sorts countries/cities alphabetically; there is no manual reordering. Country headers collapse/expand their cities and saved places together, with a filled right/down triangle before the flag and country label. Cities are not collapsible; saved places have compact name-only rows without sight/eatery counts or section headings. City and saved-place rows are full-width plain buttons with plain gray right disclosure chevrons; tapping anywhere in a row opens city details or the place map/reviews. Saved-city details use the same native zoom transition as discovery cards, with the city row matched by stable city ID so background-pan dismissal returns to Wishlist.
 - City-detail backgrounds use the static `CountryFlagPalette` table keyed by the country in place address components, with a neutral fallback.
 - Mixed UI stack is intentional:
   - SwiftUI for most screens
@@ -60,7 +60,7 @@ Select affected scenarios for focused changes; use the full set for dependency o
 4. Open map detail sheet and confirm marker/reviews render.
 5. Trigger current-location flow (with simulator location enabled).
 6. Verify random city flow still navigates and renders the country-flag gradient background.
-7. Save a discovery city with its heart, open Wishlist, verify relaunch persistence, then verify country sections/flags, open a saved city, and remove it. City-detail favoriting is not part of this version.
+7. Save a discovery city with its heart, open Wishlist, verify relaunch persistence, then verify country sections/flags, open a saved city, and remove it. Save a sight and an eatery from city details, verify the city is automatically saved, expand/collapse its Wishlist section, open a saved place's map/reviews, and verify removal and relaunch persistence.
 
 ## Agent Workflow Expectations
 - If you cannot run validation locally, state that clearly and list unverified paths.

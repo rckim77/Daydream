@@ -2,11 +2,19 @@ import GooglePlacesSwift
 import SwiftUI
 
 struct MapDetailView: View {
-    let place: Place
+    let place: MapPlace
     @Environment(\.dismiss) private var dismiss
     @Environment(\.colorScheme) private var colorScheme
     @State private var mapAppearanceOverride: Bool?
     @State private var isViewing3D = true
+
+    init(place: Place) {
+        self.place = MapPlace(place: place)
+    }
+
+    init(mapPlace: MapPlace) {
+        place = mapPlace
+    }
 
     var body: some View {
         let isViewingDarkMode = mapAppearanceOverride ?? (colorScheme == .dark)
