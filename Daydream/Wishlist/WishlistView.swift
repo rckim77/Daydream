@@ -71,6 +71,7 @@ struct WishlistView: View {
                         Text("Tap a country to expand or collapse its cities and saved places. Swipe to remove a place or city. Saved on this device.")
                     }
                 }
+                .listSectionMargins(.vertical, collapsedCountries.contains(section.id) ? 0 : nil)
             }
         }
         .environment(\.defaultMinListRowHeight, 0)
