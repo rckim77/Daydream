@@ -60,11 +60,9 @@ struct CityDetailView: View {
             }
             .toolbar {
                 SearchToolbar { autocompletePlace in
-                    place = autocompletePlace
-                    viewState.applySelectedCity(place)
+                    selectCity(autocompletePlace)
                 } randomCityReceived: { randomPlace in
-                    place = randomPlace
-                    viewState.applySelectedCity(place)
+                    selectCity(randomPlace)
                 } currentLocationTapped: {
                     viewState.markCurrentLocationTapped()
                     guard let currentLocation = viewState.currentLocationToLoadImmediately(currentLocation: locationManager.location) else {
@@ -159,7 +157,16 @@ struct CityDetailView: View {
 
     private func updateToCurrentCity(_ location: CLLocationCoordinate2D) async throws {
         let currentPlace = try await API.PlaceSearch.fetchCurrentCityBy(location)
-        place = currentPlace
-        viewState.applySelectedCity(place)
+        selectCity(currentPlace)
+    }
+
+    private func selectCity(_ selectedPlace: Place) {
+        // Keep the current cards and in-flight request when the city has not changed.
+        if let currentID = place.placeID, !currentID.isEmpty,
+           currentID == selectedPlace.placeID {
+            return
+        }
+        place = selectedPlace
+        viewState.applySelectedCity(selectedPlace)
     }
 }
