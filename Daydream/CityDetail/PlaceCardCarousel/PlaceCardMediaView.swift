@@ -55,7 +55,7 @@ struct PlaceCardMediaView: View {
                 .accessibilityAction(named: "View map and reviews", onViewMap)
             }
         }
-        .overlay(alignment: .topTrailing) {
+        .overlay(alignment: .topLeading) {
             Button(action: onViewMap) {
                 Image(systemName: "map")
                     .font(.system(size: 20, weight: .semibold))

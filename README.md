@@ -3,7 +3,7 @@ Explore cities around the world
 
 ## Wishlist
 
-Tap a city's heart to save it from discovery or city details. Each sight and eatery card also has a circular glass heart in its top-left corner, matching the map button at the top right. Saving a place automatically saves its city if needed, including cities opened through search, random selection, or current location.
+Tap a city's heart to save it from discovery or city details. Each sight and eatery card also has a circular glass heart in its top-right corner, matching the map button at the top left. Saving a place automatically saves its city if needed, including cities opened through search, random selection, or current location.
 
 Open the heart in the Cities toolbar to see favorites grouped alphabetically by country, with country flags and continent filters. Countries start expanded; a filled triangle before each flag indicates whether its cities and saved places are expanded or collapsed. Tap the country header to toggle them. Cities keep their saved places visible while the country is expanded, without counts or separate category headings. City and saved-place rows show a plain gray right disclosure chevron. Saved places use compact name-only rows with category icons. Tap anywhere in a city row to explore it, or anywhere in a saved-place row to open its map and reviews. Swipe a place to remove it; removing the last place keeps the city saved. Unfavoriting a city with saved places shows an **Are you sure?** alert from every city heart and the Wishlist remove action. The alert explains that its favorited sights and eateries will also be cleared. Cancel keeps everything; **Remove city** removes the city and all its places. Cities without saved places can be removed immediately.
 

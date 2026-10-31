@@ -22,7 +22,7 @@ struct PlaceCardView: View {
                     onViewMap: { tappedPlace = IdentifiablePlace(place: place) }
                 )
                 .id(placeID)
-                .overlay(alignment: .topLeading) {
+                .overlay(alignment: .topTrailing) {
                     if let city = wishlistCity {
                         let isSaved = wishlist.contains(placeID: placeID, in: city)
                         Button {
